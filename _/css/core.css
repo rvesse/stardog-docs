@@ -1,0 +1,433 @@
+/*-  BASE STYLES
+----------------------------------------------------------------------*/
+
+/*- self-clearing floats ----------*/
+
+.mod:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+/*- fluid images and objects ----------*/
+
+img,
+object,
+embed {max-width: 100%;}
+
+
+/*- optional vanity styles ----------*/
+
+::selection {background: #c80000;}
+::-moz-selection {background: #c80000;}
+
+img::selection {background: transparent;}
+img::-moz-selection {background: transparent;}
+
+@media only screen and (max-device-width: 480px) {
+
+	html {-webkit-text-size-adjust: none}
+	a {-webkit-tap-highlight-color: rgba(200,0,0,0.4);}
+
+}
+
+/*- Paul Irish's Bulletproof @font-face syntax: http://mky.be/font-face/bulletproof/ ----------*/
+
+/* @font-face {
+  font-family: 'Graublau Web';
+  src: url('GraublauWeb.eot');
+  src: local('☺'),
+         url('GraublauWeb.woff') format('woff'), url('GraublauWeb.ttf') format('truetype');
+}
+  */
+
+
+/*- LET'S GET STARTED!
+----------------------------------------------------------------------*/
+
+body {
+	background-color: white;
+	color: #595454; 
+	margin-left: 72px;
+  margin-right: 144px;
+  margin-top: 144px;
+	padding: 0;
+}
+
+a:visited {color: #03738C;}
+a:link {color: #8C031C; text-decoration: none;}
+
+header { 
+  text-align: center; 
+}
+
+#block {
+  width: 75%;
+  display: -webkit-box;
+  -webkit-box-orientation: vertical;
+}
+
+footer {text-align: center; padding-top: 80px; }
+
+article, header {
+  background-color: white; 
+  padding: 8px;
+  }
+
+p { font-size: 22pt;
+    line-height: 125%;
+    margin-top: 18px;}
+
+#copyright { margin-top: 144px; text-align: left; font-size: 12pt;}
+
+abbr {
+	cursor: help;
+}
+
+table{
+  border: 1px solid #F0F8FF;
+}
+th, td{
+  padding: 4px;
+}
+th{
+ color: #fff;
+ background-color: #aaa
+}
+tr:nth-of-type(odd) td{
+ background-color:#F0F8FF;
+ color: #black;
+}​
+
+/** @subsection forms
+--------------------------------------------------------------------------------- */
+
+/**
+ * Inputs: Text-style inputs
+ * Use for inputs or textareas. Can even give a generic tag (div) faux input styling.
+ * <input class="inp" >
+ */
+.inp {
+    background: #fff;
+    border:1px solid #e3e3e3;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    border-radius: 3px;
+    display: -moz-inline-box;
+    display: inline-block;
+    font-size: 13px;
+    line-height: normal;
+    padding: 3px;
+    vertical-align: middle;
+}
+input.inp {
+    height: 17px;
+    line-height: 13px;
+}
+/**
+ * Alternate style
+ * Used in header login form
+ */
+.inp.style-b {
+    background: #fff;
+    border-color: #b5b5b5;
+    font-size: 11px;
+    padding: 2px;
+    margin: 0;
+}
+input.inp.style-b {
+    height: 16px;
+    line-height: 11px;
+}
+/**
+ * Alternate style used in contact form
+ */
+.inp.style-c {
+    background: #f9f9f9;
+    border-color: #ccc;
+    margin: 0;
+}
+.inp.big {
+    -moz-border-radius: 4px; /* FF1+ */
+    -webkit-border-radius: 4px; /* Saf3+, Chrome */
+    -khtml-border-radius: 4px; /* Konqueror */
+    border-radius: 4px; /* Standard. IE9 */
+    font-size: 18px;
+    height: auto;
+    line-height: 18px;
+    padding: 6px 9px;
+}
+/**
+ * Full-width inputs and textareas
+ * Wrap the input or textarea with an element that has the input utility class.
+ * Example use: <div class="inp inp-full"><input type="text" /></div>
+ */
+.inp.inp-full {
+    display: block;
+}
+.inp input,
+.inp textarea {
+    background: transparent;
+    border: 0;
+    font-size: 13px;
+    line-height: normal;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+.inp input {
+    height: 17px;
+    line-height: 13px;
+}
+
+/**
+ * Placeholder text
+ */
+input.cfp-placeholder {
+    color: #aaa !important;
+}
+
+/**
+ * Butttons
+ * <a class="btn"> or <input class="btn"> or <label for="foo" class="btn">
+ */
+.btn {
+    background: #dedede url(../../img/ui/buttons-sprite.gif) repeat-x 0 0;
+    border: 1px solid #ccc;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    border-radius: 3px;
+    color:#234759;
+    cursor:pointer;
+    display: -moz-inline-box;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: normal;
+    padding: 3px 16px;
+    vertical-align: middle;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+    text-decoration: none !important;
+}
+.btn:hover,
+.btn:focus {
+    background-color: #cecece;
+    background-position:0 -200px;
+    border-color: #bbb;
+    color: #193343;
+}
+.btn:active {
+    background-color: #bbb;
+    background-position:0 -400px;
+    border-color: #a1a1a1;
+}
+.btn.big {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 13px;
+    padding: 5px 22px;
+}
+.btn.huge {
+    background-position: 0 -2000px;
+    border-color: #ececec;
+    -moz-border-radius: 5px; /* FF1+ */
+    -webkit-border-radius: 5px; /* Saf3+, Chrome */
+    -khtml-border-radius: 5px; /* Konqueror */
+    border-radius: 5px; /* Standard. IE9 */
+    -moz-box-shadow: 0 1px 2px #ccc;
+    -webkit-box-shadow: 0 1px 2px #ccc;
+    box-shadow: 0 1px 2px #ccc;
+    color: #666;
+    font-size: 20px;
+    font-weight: normal;
+    padding: 18px 25px;
+}
+.btn.huge b {
+    color: #3e606f;
+    font-weight: normal;
+}
+.btn.huge:hover {
+    background-position: 0 -2200px;
+}
+.btn.huge:active {
+    background-position: 0 -2400px;
+}
+.btn.huge img {
+    vertical-align: middle;
+}
+.btn.small {
+    font-size: 9px;
+    font-weight: normal;
+    padding: 1px 4px;
+}
+.btn.huge.width-ab {
+    width: 560px;
+    text-align: center;
+}
+/**
+ * Large green-blue button
+ * Used on downloads
+ */
+.btn.btn-major {
+    background-color: #3e6170;
+    background-position: 0 -600px;
+    border-color: #193441;
+    -moz-border-radius: 5px; /* FF1+ */
+    -webkit-border-radius: 5px; /* Saf3+, Chrome */
+    -khtml-border-radius: 5px; /* Konqueror */
+    border-radius: 5px; /* Standard. IE9 */
+    color: #fff;
+    font-size: 15px;
+    line-height: 18px;
+    letter-spacing: 0.1em;
+    padding:9px 12px;
+    text-transform: uppercase;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .5);
+}
+.btn.btn-major:hover {
+    background-color: #193344;
+    background-position: 0 -800px;
+    border-color: #000;
+}
+.btn.btn-major:active {
+    background-color: #000;
+    background-position: 0 -1000px;
+}
+/**
+ * @see .ico (above)
+ */
+.btn.btn-major .ico.ico-download {
+    background-image: url(../../img/ui/buttons-sprite.gif);
+    background-position:0 -781px;
+    height: 19px;
+    width: 19px;
+}
+.btn.btn-major:hover .ico.ico-download {
+    background-position:0 -981px;
+}
+.btn.btn-major:active .ico.ico-download {
+    background-position:0 -1181px;
+}
+/**
+ * Mini green-blue button
+ */
+.btn.style-b {
+    background-color: #355462;
+    background-position: 0 -1200px;
+    border-color: #1C2B34;
+    color: #ebebeb;
+    font-weight: normal;
+    font-size: 10px;
+    height: 20px;
+    padding: 3px 8px;
+    text-transform: uppercase;
+    text-shadow: 0 -1px 1px rgba(0, 0, 0, .8);
+}
+.btn.style-b:hover,
+.btn.style-b:focus {
+    background-position: 0 -1400px;
+    background-color: #204151;
+}
+.btn.style-b:active {
+    background-position: 0 -1600px;
+    background-color: #193340;
+}
+/**
+ * Large green-blue button
+ * Used on contact form and store
+ */
+.btn.style-c {
+    background-color: #3e6170;
+    background-position: 0 -600px;
+    border-color: #193441;
+    -moz-border-radius: 5px; /* FF1+ */
+    -webkit-border-radius: 5px; /* Saf3+, Chrome */
+    -khtml-border-radius: 5px; /* Konqueror */
+    border-radius: 5px; /* Standard. IE9 */
+    color: #fff;
+    font-size: 15px;
+    line-height: 18px;
+    padding: 5px 24px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .5);
+}
+.btn.style-c:hover {
+    background-color: #193344;
+    background-position: 0 -800px;
+    border-color: #000;
+}
+.btn.style-c:active {
+    background-color: #000;
+    background-position: 0 -1000px;
+}
+
+.sel {
+    display: -moz-inline-box;
+    display: inline-block;
+    position: relative;
+}
+.sel .value {
+    background: #fff url(../../img/ui/select-arrows.gif) no-repeat right center;
+    border: 1px solid #e3e3e3;
+    -moz-border-radius: 4px; /* FF1+ */
+    -webkit-border-radius: 4px; /* Saf3+, Chrome */
+    -khtml-border-radius: 4px; /* Konqueror */
+    border-radius: 4px; /* Standard. IE9 */
+    color: #193441;
+    cursor: pointer;
+    display: block;
+    overflow: hidden;
+    padding: 3px 24px 3px 8px;
+    position: relative;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    z-index: 4;
+}
+.sel:hover .value {
+    border-bottom-color: #fff;
+    -moz-border-radius-bottomleft: 0; /* FF1+ */
+    -webkit-border-bottom-left-radius: 0; /* Saf3+, Chrome */
+    -khtml-border-bottom-left-radius: 0; /* Konqueror */
+    border-bottom-left-radius: 0; /* Standard. IE9 */
+    -moz-border-radius-bottomright: 0; /* FF1+ */
+    -webkit-border-bottom-right-radius: 0; /* Saf3+, Chrome */
+    -khtml-border-bottom-right-radius: 0; /* Konqueror */
+    border-bottom-right-radius: 0; /* Standard. IE9 */
+}
+.sel ul {
+    background: #fff;
+    border: 1px solid #e3e3e3;
+    border-top-color: #eee;
+    -moz-border-radius: 4px; /* FF1+ */
+    -webkit-border-radius: 4px; /* Saf3+, Chrome */
+    -khtml-border-radius: 4px; /* Konqueror */
+    border-radius: 4px; /* Standard. IE9 */
+    -moz-border-radius-topleft: 0; /* FF1+ */
+    -webkit-border-top-left-radius: 0; /* Saf3+, Chrome */
+    -khtml-border-top-left-radius: 0; /* Konqueror */
+    border-top-left-radius: 0; /* Standard. IE9 */
+    list-style: none;
+    left: -32000px;
+    margin: -1px 0 0;
+    min-width: 110%;
+    position: absolute;
+    text-align: left;
+    z-index: 5;
+}
+.sel:hover ul {
+    left: auto;
+}
+.sel ul li {
+    cursor: pointer;
+    margin: 0;
+    padding: 3px 8px;
+}
+.sel ul li:hover {
+    background: #f3f3f3;
+}
+

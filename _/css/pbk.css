@@ -1,0 +1,260 @@
+/* typography */
+
+body, .w a, .inherit {
+  font: medium/1.75;
+  word-spacing: 0.1em;
+  text-align: justify;
+}
+pre, kbd, samp, code, var, .b, pre span {
+    font: small/2.154;
+    word-spacing: 0;
+}
+.u {
+  font: medium/1.75;
+}
+pre .u, td .u, pre .u span, .a, tr + tr th:first-child {
+  font: medium/1.75;
+  color: #222;
+}
+
+abbr {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+}
+.q {
+  text-align: right;
+  font-style: oblique;
+}
+.q span {
+  font-size: large;
+}
+.note {
+  margin: 3.5em 4.94em;
+}
+.note span {
+  display: block;
+  float: left;
+  font-size: xx-large;
+  line-height: 0.875;
+  margin: 0 0.22em 0 -1.22em;
+  color: steelblue;
+}
+.c, w, .w a, .d {
+  line-height: 2.154;
+}
+.f:first-letter {
+  float: left;
+  color: lightsteelblue;
+  padding: 0.11em 4px 0 0;
+  font: normal 4em/0.68 serif;
+  text-shadow: steelblue 1px 1px 1px;
+}
+p, ul, ol {
+  margin: 1.75em 0;
+  font-size: medium;
+}
+
+/* basics */
+
+html {
+  background: #fff;
+  color: #222;
+}
+body {
+  margin: 1.75em 28px;
+}
+.c, .a, .xxxl {
+  clear: both;
+  text-align: center;
+}
+.c {
+  margin: 2.154em 0;
+}
+.a {
+  font-size: xx-large;
+  line-height: .875;
+  color: #82b445;
+}
+form div, #level {
+  float: right;
+}
+.todo {
+  color: #ddd;
+}
+#level span {
+  color: #82b445;
+}
+.pf,.fr {
+  border: 1px solid;
+}
+.pf {
+  padding: 0 1.75em;
+}
+.xxxl {
+  font-size:1000%;
+  font-weight:bold;
+  line-height:1;
+  margin:0.7em 0;
+}
+.ss {
+  float: right;
+  margin: 0 0 1.75em 1.75em;
+}
+
+/* links */
+
+a {
+  text-decoration: none;
+  border-bottom: 1px dotted;
+}
+a:hover {
+  border-bottom: 1px solid;
+}
+a:link, .w a {
+  color: steelblue;
+}
+a:visited {
+  color: #b44582;
+}
+.c a {
+  color: inherit;
+}
+a.hl:link, a.hl:visited {
+  color: #fff;
+  padding-left: 0.2em;
+  text-decoration: none;
+  border: 0;
+}
+a.hl:hover, h2[id]:hover a.hl, h3[id]:hover a.hl {
+  background: transparent;
+  color: gainsboro;
+}
+
+/* code blocks */
+
+pre {
+  padding-left: 2.154em;
+  border-left: 1px solid #ddd;
+}
+.w {
+  float: left;
+}
+.c, .w, .w a, .d {
+  font-size: small;
+}
+.b, ol, p, blockquote, h1, h2, h3 {
+  clear: left;
+}
+pre a, .w a {
+  padding: 0.4375em 0;
+}
+.w a {
+  text-decoration: underline;
+}
+dfn {
+  font-style: inherit;
+}
+mark {
+  font-weight: bold;
+  display: inline-block;
+  width: 100%;
+  background: #ff8;
+}
+pre span, .p {
+  color: #667;
+}
+
+/* tables */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  width: 45%;
+  padding: 0 0.5em;
+  border: 1px solid #bbb;
+}
+th {
+  text-align: left;
+  vertical-align: baseline;
+}
+td {
+  vertical-align: top;
+}
+th:first-child {
+  width: 10%;
+  text-align: center;
+}
+td pre {
+  padding: 0;
+}
+
+/* overrides */
+
+li ol, .q, th, td, td pre {
+  margin: 0;
+}
+code, var, samp {
+  line-height: inherit !important;
+}
+pre a, td code a, .w a, pre a:hover, td a:link, td a:visited, td pre {
+  border: 0;
+}
+
+/* headers and pullquotes */
+
+h1 {
+  width: 100%;
+  margin: 1.49em 0;
+  counter-reset: h2;
+}
+
+h1.feed:before {
+   content: "";
+}
+
+h1.feed {
+    border: none;
+    margin: .49 em 0;
+    width: 100%
+}
+
+h1.fn:before {
+    content: "";
+}
+
+h1.fn {
+    border-bottom: 2px solid black;
+    margin: .49em 0;
+    border-top: 2px solid black;
+    width: 100%;
+    }
+
+h1:before {
+  content: "Chapter " counter(h1) ". ";
+}
+
+h2:before {
+  counter-increment: h2;
+  content: counter(h1) "." counter(h2) ". ";
+}
+h2 {
+  counter-reset: h3;
+}
+#toc + h2:before {
+  content: "";
+}
+h3:before {
+  counter-increment: h3;
+  content: counter(h1) "." counter(h2) "." counter(h3) ". ";
+}
+
+span.figcaption:before{
+  content: "Figure " counter(h1) ".";
+}
+
+span.figcaption {
+  text-decoration: underline;
+}

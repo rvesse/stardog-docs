@@ -1,0 +1,31 @@
+/* @import url("reset.css"); */
+
+.disqus, #disqus_thread, .dsq-brlink, #chapter-bq {
+  display: none;
+}
+
+body {
+  width: 100%;
+  margin: 0;
+  float: none;
+  background: white;
+}
+
+a:link:after {
+  content: " (" attr(href) ") ";
+  font-size: 9pt;
+}
+
+a:link {
+  font-weight: bold;
+  text-decoration: underline;
+  color: #06c;
+}
+
+p {
+  font-size: 11pt;
+}
+
+.fn {
+  page-break-before: always;
+}

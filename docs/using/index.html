@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Stardog: Documentation: Using</title>
+    <script type="text/javascript" src="http://use.typekit.com/muj3mlu.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <link media="screen" rel="stylesheet" href="/_/css/ps.css"/>
+    <link media="print" rel="stylesheet" href="/_/css/print.css"/>
+    <link media="screen" rel="stylesheet" href="/_/css/simplegrid.css"/>
+    
+  </head>
+
+<body>
+
+<div class="grid grid-pad">
+
+<div id="masthead">
+
+  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>  
+
+  <div id="chaptertitle" class="col-9-12">
+      <blockquote>
+        <b>The string is a stark data structure and everywhere it is passed there is much duplication of process. It is a perfect vehicle for hiding information.</b>&mdash;<cite>Alan Perlis, Epigrams in Programming</cite>
+      </blockquote>
+      <h1 id="title">Stardog <span id="subtitle">Admin</span></h1>
+  </div>
+
+</div>
+
+</div>
+
+<div class="grid grid-pad">
+
+<div id="contentbody">
+
+  <div class="col-3-12" id="left-gutter">
+    <div id="tocblock"></div>
+  </div>
+
+  <div class="col-9-12" id="main-channel">
+  
+  <section id="using-stardog"><header><h1 id='chapter'>Using Stardog</h1></header>
+
+    <p>While Stardog is a full-featured RDF database, its
+primary purpose is to execute queries against RDF data which it has under
+direct management.<n>This implies that Stardog will not retrieve data from
+the Web or from any other network via HTTP URLs in order to query that data.
+If you want to query data using Stardog, you must add that data to a new or
+existing Stardog database. Note: A future version of Stardog will support <a
+href="http://weblog.clarkparsia.com/2011/03/07/sdq-information-integration-i
+n-the-real-world/">SDQ</a>, a distributed query system, that will
+lift this restriction.</n> Stardog supports the <a
+href="http://www.cambridgesemantics.com/2008/09/sparql-by-example">SPARQL</a
+> query language, a W3C standard.</p>
+
+  </section>
+  
+      <section id="query"><header><h1 id='chapter'>Querying a Database</h1></header>
+  
+  <p>Stardog currently supports all of the <a href="http://www.w3.org/TR/sparql11-query/">SPARQL 1.1 Query language</a>.  Support
+	  is planned for <a href="http://www.w3.org/TR/2012/PR-sparql11-update-20121108">SPARQL 1.1 Update</a> in a future release.  Stardog
+	  does not support SPARQL 1.1 federation (the SERVICE keyword).  Stardog also supports the
+	  <a href="http://www.w3.org/TR/2012/CR-sparql11-entailment-20121108/">OWL 2 Direct Semantics entailment regime</a>.
+		  </p>
+
+	<p>To execute a SPARQL query against a Stardog database, use the <tt>query</tt> subcommand.</p>
+
+    <table>
+      <caption>Options for the Stardog <tt>query</tt> subcommand.</caption>
+      <thead>
+        <tr>
+          <th width="10%">Name</th>
+          <th>Description</th>
+          <th width="30%">Arg values</th>
+          <th width="30%">Default</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <th width="10%">Name</th>
+          <th>Description</th>
+          <th width="30%">Arg values</th>
+          <th width="30%">Default</th>
+        </tr>
+      </tfoot>
+      <tbody><!-- add a colgroup -->
+        <tr>
+          <td><tt>--format</tt>, <tt>-f</tt></td>
+          <td>Controls the format type of the query results, either RDF or variable bindings, depending on the SPARQL query form used.</td>
+          <td>RDF: <tt>N-TRIPLES, RDFXML, TURTLE</tt>; variable bindings: <tt>SPARQL<n>This is the XML results format.</n>, JSON, TEXT</tt></td>
+          <td>For RDF, <tt>??</tt>; for variable bindings, <tt>SPARQL</tt></td>
+        </tr>
+        <tr>
+          <td><tt>--query</tt>, <tt>-q</tt></td>
+          <td>An appropriately-escaped SPARQL query.</td>
+          <td>A valid SPARQL query that's appropriately escaped</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td><tt>--bind</tt>, <tt>-b</tt></td>
+          <td>One or more variable bindings for use in parameterized queries; each binding is a <tt>var=value</tt> pair; multiple bindings should be separated by whitespace.</td>
+          <td>A whitespace separated list of bindings where the value is a valid RDF term expression in Turtle syntax.</td>
+          <td>None</td>
+      </tbody>
+      
+    </table>
+
+    <p>For example,</p>
+
+    <pre><code>$ ./stardog query -c "http://localhost:8989/sp2b_10k" \
+      -q "SELECT DISTINCT ?s { ?s ?p ?o } LIMIT 10"</code></pre>
+
+    <p>Which will return up to 10 unique resource identifiers from the <tt>sp2b_10k</tt> database.</p>
+
+    <h2>Known Limitations</h2>
+
+    <p>See <a href="/docs/#bugs">Known Issues</a> for the complete list of
+known issues or limits in Stardog. With respect to SPARQL query evaluation:</p>
+
+    <ul>
+
+      <li> queries with <code>FROM NAMED</code> with a named graph that is
+<em>not</em> in Stardog will <b>not</b> cause Stardog to believe that it is,
+in fact, Maven, i.e., to automagically download the data from an arbitrary
+HTTP URL and include it in the query. Stardog will <em>only</em> evaluate
+queries over data that has been loaded into it.</li>
+
+      <li>Regular expressions in SPARQL queries aren't optimized; we
+recommend using the <a href="#search">Search</a>
+service described below.</li>
+
+      <li>SPARQL queries without a context or named graph are executed
+against the default, unnamed graph. In Stardog, the default graph is
+<em>not</em> the union of all the named graphs and the default graph.</li>
+    </ul>
+
+  </section>
+
+    <section id="add-remove"><header><h1 id='chapter'>Adding and Removing</h1></header>
+
+    <p>The most efficient way to load data into Stardog is at database creation time. See the
+    <a href="/docs/admin/#create">Creating a Database</a> section for bulk loading data at
+    database creation time. 
+    To add data to an existing Stardog database, use the <tt>add</tt> command:</p>
+
+    <pre><code>$ stardog add -c snarl://server/myDatabase 1.rdf 2.rdf 3.rdf</code></pre>
+
+    <p>The optional arguments are <tt>-f</tt> (or <tt>--format</tt>) to
+specify the RDF serialization type of the files to be loaded; if you specify
+the wrong type, <tt>add</tt> will fail. If you don't specify a type, Stardog
+will try to determine the type on its own based on the file extension. For
+example, the files that have names ending with '.ttl' will be parsed with
+Turtle syntax. If you specify a type, then all the files being loaded must of that same type.</p>
+
+  <p>If you want to add data to a named graph, specify it via the
+  <tt>--graph-uri</tt> or <tt>-g</tt> options.</p>
+   
+  <p>To remove data from a Stardog database, <tt>remove</tt> is used by specifying&mdash;</p>
+
+    <ol>
+      <li>one Named Graph, OR</li>
+      <li>one or more files containing RDF (in some recognized serialization format, i.e., RDF/XML, Turtle, Trig), OR</li>
+      <li>one Named Graph and one or more RDF files.</li>
+    </ol>
+
+    <p>For example,</p>
+
+    <pre><code>$ stardog remove -c snarl://server/myDatabase -g http://foo</code></pre>
+
+    <p>will remove the named graph <tt>http://foo</tt> and all its triples from
+<tt>myDatabase</tt>.</p>
+
+    <pre><code>$ stardog remove -c snarl://server/myDatabase 1.rdf</code></pre>
+
+    <p>will remove the triples in <tt>1.rdf</tt> from (the default graph of) <tt>myDatabase</tt>.</p>
+
+    <pre><code>$ stardog remove -c snarl://server/myDatabase -g http://foo -f TURTLE 2.rdf 3.rdf</code></pre>
+
+    <p>will remove the triples in the Turtle files <tt>2.rdf</tt> and
+<tt>3.rdf</tt> from the named graph <tt>http://foo</tt> 
+of <tt>myDatabase</tt>.</p>
+
+<p>Strict or loose parsing may be set for the input payload by using <tt>--strict-parsing=TRUE|FALSE</tt>.</p>  
+
+<h2>How Stardog Handles RDF Parsing</h3>
+
+    <p>RDF parsing in Stardog is strict: it requires typed RDF literals to
+match their explicit datatypes, URIs to be well-formed, etc. In some cases,
+strict parsing isn't ideal, so it may be disabled using the 
+<tt>--strict-parsing=FALSE</tt> to disable it.
+
+    <p>However, even with strict parsing disabled, Stardog's RDF parser may
+encounter parse errors from which it cannot recover. And loading data in lax
+mode may lead to unexpected SPARQL query results. For example, malformed
+literals (<tt>"2.5"^^xsd:int</tt>) used in filter evaluation may lead to
+undesired results.</p>
+
+</section>
+    
+    <section id="export"><header><h1 id='chapter'>Exporting a Database</h1></header>
+
+  <p>To export data from a Stardog database back to RDF, <tt>export</tt> is used by specifying&mdash;</p>
+  <ol>
+    <li>the connection string of the database to export</li>
+    <li>the export format: <tt>N-TRIPLES, RDFXML, TURTLE, TRIG</tt>.  default is 'N-TRIPLES'&mdash; 'TRIG' must be used when exporting the entire database if the database contains triples inside named graphs.</li>
+    <li>optionally, the URI of the named graph to export if you wish to export a single named graph only.</li>
+    <li>the file to export to</li>
+  </ol>
+
+  <p>For example,</p>
+
+  <pre><code>$ stardog export -c myDatabase --format TURTLE myDatabase_output.ttl</code></pre>
+  <pre><code>$ stardog export -c myDatabase --graph-uri http://example.org/context myDatabase_output.nt</code></pre>
+
+  </section>
+  
+  <section id="search"><header><h1 id='chapter'>Searching</h1></header>
+
+  <p>Stardog includes an RDF-aware semantic search 
+capability: it will index  RDF literals and supports information retrieval-style
+queries over indexed data.</p>
+
+  <h2>Indexing Strategy</h2>
+
+  <p>The indexing strategy creates a "search document" per RDF literal. Each document consists of the following fields: literal ID; literal value; and contexts.</p>
+
+  <h2>Search in SPARQL</h2>
+
+  <p>We use the predicate <tt>http://jena.hpl.hp.com/ARQ/property#textMatch</tt> to access the search index in a SPARQL query.</p>
+
+  <p>For example,</p>
+
+  <pre><code>SELECT DISTINCT ?s ?score 
+WHERE {
+?s ?p ?l.
+( ?l ?score ) &lt;http://jena.hpl.hp.com/ARQ/property#textMatch&gt; ( 'mac' 0.5 50 ). 
+}</code></pre>
+
+	  <p>This query selects the top 50 literals, and their scores, which match 'mac' and whose scores are above a threshold of 0.5.
+		  These literals are then joined with the generic BGP <code>?s ?p ?l</code> to get the resources (?s) that have those literals.
+		  Alternatively, you could use <code>?s rdf:type ex:Book</code> if you only wanted to select the books which reference the
+		  search criteria; you can include as many other BGP's as you like to enhance your initial search results.</p>
+
+  <h2>Searching with the Command Line</h2>
+
+  <p>First, check out the CLI help for the search subcommand...I'll wait.</p>
+
+  <pre><code>$ stardog help search</code></pre>
+
+  <p>Okay, now let's do a search over the O'Reilly book catalog in RDF for everything mentioning "html":</p>
+
+  <pre><code>$ stardog search -c "snarl://127.0.0.1:5820/catalog" -q "html" -l 10</code></pre>
+
+  <p>The results?</p>
+
+  <pre>Index    Score    Hit
+====================
+0    6.422    urn:x-domain:oreilly.com:product:9780596527402.IP
+1    6.422    urn:x-domain:oreilly.com:product:9780596003166.IP
+2    6.422    urn:x-domain:oreilly.com:product:9781565924949.IP
+3    6.422    urn:x-domain:oreilly.com:product:9780596002251.IP
+4    6.422    urn:x-domain:oreilly.com:product:9780596101978.IP
+5    6.422    urn:x-domain:oreilly.com:product:9780596154066.IP
+6    6.422    urn:x-domain:oreilly.com:product:9780596157616.IP
+7    6.422    urn:x-domain:oreilly.com:product:9780596805876.IP
+8    6.422    urn:x-domain:oreilly.com:product:9780596527273.IP
+9    6.422    urn:x-domain:oreilly.com:product:9780596002961.IP</pre>
+
+
+  <h2>Query Syntax</h2>
+
+  <p>Stardog search is based on
+Lucene 3.4.0: we support all of the <a
+href="http://lucene.apache.org/java/3_4_0/queryparsersyntax.html">search
+modifiers</a> that Lucene supports, with the exception of fields.</p>
+
+  <ul>
+    <li>wildcards: <tt>?</tt> and <tt>*</tt></li>
+    <li>fuzzy: <tt>~</tt> and <tt>~</tt> with similarity weights (e.g. <tt>foo~0.8</tt>)</li>
+    <li>proximities: <tt>"semantic web"~5</tt></li>
+    <li>term boosting</li>
+    <li>booleans: <tt>OR</tt>, <tt>AND</tt>, <tt>+</tt>, <tt>NOT</tt>, and <tt>-</tt>.</li>
+    <li>grouping</li>
+  </ul>
+
+  <p>For a more detailed discussion, see the <a
+href="http://lucene.apache.org/java/3_3_0/queryparsersyntax.html">Lucene
+docs</a>.</p>
+</section>
+
+<section id="fn">
+  <header>  <h1 class="fn">Notes</h1></header>
+  <ol id="notes">
+    <!-- footnotes get pub'd here -->
+  </ol>
+
+  </section>
+
+ </div>
+</div>
+</div>
+
+  <div class="grid grid-pad">
+  <div class="col-1-1">
+  <nav><p><a class="top" href="#" title="Back to top"><span style="font-size: 48px">&#8962;</a></a></p></nav>
+        <!-- <header><h1 class=disqus>Comments</h1></header> -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'stardog'; // required: replace example with your forum shortname
+
+    // The following are highly recommended additional parameters. Remove the slashes in front to use.
+    //var disqus_identifier = 'stardog____unique_dynamic_id_1234';
+    //var disqus_url = window.location.pathname;
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+  <footer>
+    <p id="thefooter"></p>
+  </footer>
+  </div>
+  </div>
+  <script src="/_/js/pbk.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      nodeName = "";
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-1719955-3']);
+      _gaq.push(['_setDomainName', 'stardog.com']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+<script src="/_/js/sticky.js" type="text/javascript"></script>
+
+<script>
+  $(document).ready(function(){
+    $("#tocblock").sticky({topSpacing:4});
+  });
+</script>
+
+  </body>
+</html>
+
+

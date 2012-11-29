@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html lang="en" class="no-js">
+<!-- the "no-js" class is for Modernizr. -->
+
+<head class="html5reset-kitchensink-commented">
+
+	<meta charset="utf-8" />
+	
+	<!-- This prevents the conditional comments below from holding up the page load
+		 www.phpied.com/conditional-comments-block-downloads/ -->
+	<!--[if IE]><![endif]-->
+	
+	<title>Stardog: The RDF Database: Enterprise, Developer, and Community</title>
+	
+  <meta name="description" content="Stardog is a commercial RDF database:
+fast, lightweight, pure Java, transactional, with world class OWL 2
+reasoning support." />
+
+	<meta name="author" content="Clark & Parsia, LLC" />
+	<meta name="copyright" content="Copyright Clark & Parsia, LLC 2011. All Rights Reserved." />
+	<meta name="DC.title" content="Stardog" />
+	<meta name="viewport" content="width=device-width, user-scalable=yes" />
+  <link rel="stylesheet" href="/_/css/main.css" />
+
+  <style>
+		
+	#pricing-table {
+		margin: 100px auto;
+		text-align: center;
+		width: 928px; /* total computed width */
+		zoom: 1;
+	}
+
+	#pricing-table:before, #pricing-table:after {
+	  content: "";
+	  display: table
+	}
+
+	#pricing-table:after {
+	  clear: both
+	}
+
+	/* --------------- */	
+
+	#pricing-table .plan {
+		font: 14px 'Chaparral Pro';
+		background: #fff;      
+		border: 1px solid #ddd;
+		color: #595454;
+		padding: 20px;
+		width: 180px;
+		float: left;
+		_display: inline; /* IE6 double margin fix */
+		position: relative;
+		margin: 0 5px;
+		-moz-box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);
+		-webkit-box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);
+		box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);		
+	}
+
+	#pricing-table .plan:after {
+	  z-index: -1; 
+	  position: absolute; 
+	  content: "";
+	  bottom: 10px;
+	  right: 4px;
+	  width: 80%; 
+	  top: 80%; 
+	  -webkit-box-shadow: 0 12px 5px rgba(0, 0, 0, .3);   
+	  -moz-box-shadow: 0 12px 5px rgba(0, 0, 0, .3);
+	  box-shadow: 0 12px 5px rgba(0, 0, 0, .3);
+	  -webkit-transform: rotate(3deg);    
+	  -moz-transform: rotate(3deg);   
+	  -o-transform: rotate(3deg);
+	  -ms-transform: rotate(3deg);
+	  transform: rotate(3deg);	
+	}	
+	
+	#pricing-table .popular-plan {
+		top: -20px;
+		padding: 40px 20px;   
+	}
+	
+	/* --------------- */	
+
+	#pricing-table .header {
+		position: relative;
+		font-size: 20px;
+		font-weight: normal;
+		text-transform: uppercase;
+		padding: 40px;
+		margin: -20px -20px 20px -20px;
+		border-bottom: 8px solid;
+		background-color: #eee;
+		background-image: -moz-linear-gradient(#fff,#eee);
+		background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee));    
+		background-image: -webkit-linear-gradient(#fff, #eee);
+		background-image: -o-linear-gradient(#fff, #eee);
+		background-image: -ms-linear-gradient(#fff, #eee);
+		background-image: linear-gradient(#fff, #eee);
+	}
+
+	#pricing-table .header:after {
+		position: absolute;
+		bottom: -8px; left: 0;
+		height: 3px; width: 100%;
+		content: '';
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAADCAYAAABfwxXFAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2RpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpGOEE3MTBFRDVCQ0NFMTExODcxMEJBRjhFNUY2ODdCRSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpGMjQxOTc0MUNFNUUxMUUxQjczN0Q4QzY3MDc4MjkxOCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpGMjQxOTc0MENFNUUxMUUxQjczN0Q4QzY3MDc4MjkxOCIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0RDMxQTYxREVCQ0RFMTExQUI1NjlDMTg5OTUyMzNDNyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpGOEE3MTBFRDVCQ0NFMTExODcxMEJBRjhFNUY2ODdCRSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqOCuVUAAAArSURBVHjaYvj//z8DFPMA8UkoDRZjQJJs/w8B7eiSKkD8Eyr5E8pnAAgwAIiWROlhTpC8AAAAAElFTkSuQmCC); 
+	}
+	
+	#pricing-table .popular-plan .header {
+		margin-top: -40px;
+		padding-top: 60px;		
+	}
+
+	#pricing-table .plan1 .header{
+		border-bottom-color: #03738C;
+	}
+
+	#pricing-table .plan2 .header{
+		border-bottom-color: #03738C;
+	}
+
+	#pricing-table .plan3 .header{
+		border-bottom-color: #03738C;
+	}
+
+	#pricing-table .plan4 .header{
+		border-bottom-color: #45D0DA;
+	}			
+	
+	/* --------------- */
+
+	#pricing-table .price{
+		font-size: 45px;
+	}
+
+	#pricing-table .monthly{
+		font-size: 13px;
+		margin-bottom: 20px;
+		text-transform: uppercase;
+		color: #999;
+	}
+
+	/* --------------- */
+
+  #pricing-table ul {
+		font: 14px 'Chaparral Pro';
+		margin: 20px 0;
+    padding: 0;
+		list-style: none;
+	}
+
+	#pricing-table li {
+		padding: 10px 0;
+	}
+	
+	/* --------------- */
+		
+	#pricing-table .signup {
+		position: relative;
+    padding: 10px 20px;
+		color: white;
+		font: bold 14px "Chaparral Pro"; 
+		text-transform: uppercase;
+		text-decoration: none;
+		display: inline-block;       
+		background-color: #8C031C;
+		-moz-border-radius: 3px;
+		-webkit-border-radius: 3px;
+		border-radius: 3px;     
+		text-shadow: 0 -1px 0 rgba(0,0,0,.15);
+		opacity: .9;       
+	}
+
+	#pricing-table .signup:hover {
+		opacity: 1;       
+	}
+
+	#pricing-table .signup:active {
+		-moz-box-shadow: 0 2px 2px rgba(0,0,0,.3) inset;
+		-webkit-box-shadow: 0 2px 2px rgba(0,0,0,.3) inset;
+		box-shadow: 0 2px 2px rgba(0,0,0,.3) inset;       
+	}			
+
+	#pricing-table .plan1 .signup{
+		background: #8C031C;
+	}
+
+	#pricing-table .plan2 .signup{
+		background: #8C031C;
+	}
+
+	#pricing-table .plan3 .signup{
+		background: #8C031C;
+	}
+
+	#pricing-table .plan4 .signup{
+		background: #45D0DA;
+	}	
+	
+</style>
+
+	<!-- These are IE-specific conditional style sheets. 
+		 You might consider removing the ones you don't end up using. -->
+		 
+	<!--[if IE]>
+	<link rel="stylesheet" href="_/css/patches/win-ie-all.css" />
+	<![endif]-->
+
+  <!-- head.js rocks -->
+  <script src="/_/js/head.min.js"></script>
+  <script>
+    head.js("/_/js/modernizr-1.6.min.js");
+    /* .js("http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js") */
+  </script>
+  <script type="text/javascript" src="http://use.typekit.com/cxd7dex.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+
+	<script type="text/javascript">
+
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-1719955-3']);
+		_gaq.push(['_setDomainName', 'stardog.com']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+
+	</script>
+
+<link href="https://plus.google.com/106999552208745998290/" rel="publisher" />
+<script src="//cdn.optimizely.com/js/81332176.js"></script>
+</head>
+
+<body id="stardog-com">
+
+<div id="block">
+
+	<header><a href="/"><img src="/_/img/sdog.png" /></a></header>
+	
+  <article>
+
+<div id="pricing-table">
+    <div class="plan plan1">
+      <div class="header"><b>Enterprise</b></div>
+      <div class="monthly"><b>Licensed Per Machine</b></div>
+        <ul>
+          <!-- <li><b>Unlimited</b> databases, db size, reasoning, ICV, &amp; security</li> -->
+            <li><b>No data limits</b></li>
+            <li><b>Server Management</b> module</li>
+            <li><b>Priority Support</b> by phone &amp; email</li>
+            <li>May be used for <b>any purpose</b></li>
+        </ul>
+        <a class="signup" href="mailto:sales@clarkparsia.com?Subject=Stardog+Enterprise">Contact Us</a><br />
+    </div>
+    <div class="plan plan2 popular-plan"> <!-- popular-plan -->
+      <div class="header"><b>Developer</b></div>
+      <div class="monthly"><b>Licensed Per Developer</b></div>
+        <ul>
+           <li><b>No data limits</b></li>
+           <li><b>Support</b> by email</li>
+           <li>May be used on <b>unlimited</b> machines for any use except production</li>
+           <li>&nbsp;</li>
+        </ul>
+        <a class="signup" href="/dl">Try It</a><br />
+    </div>
+    <div class="plan plan3">
+      <div class="header"><b>Community</b></div>
+      <div class="monthly"><b>Licensed Per Developer</b></div>
+        <!-- <div class="monthly">one time</div>-->
+        <ul>
+          <li><b>10</b> databases, <b>25M</b> triples per</li>
+          <li><b>8</b> concurrent db connections</li>
+            <li><b>10,000</b> OWL axioms; <b>20</b> ICV constraints; <b>4</b> users; <b>4</b> roles</li>
+            <li><b>No</b> license fees</li>
+        </ul>
+      <a class="signup" href="/dl">Try It</a>
+    </div>
+</div>
+  <p><a href="mailto:sales@clarkparsia.com?Subject=Stardog+Quote">Request a quote</a> for Stardog licensing.</p>
+
+</article>
+
+</div>
+
+<footer>
+<p><a href="http://clarkparsia.com/"><img width="210" height="21" src="http://weblog.clarkparsia.com/img/cp.png"/></a></p>
+</footer>
+
+<!--  <footer>
+  <p id="copyright">&copy; Copyright <a href="http://clarkparsia.com/">Clark &amp; Parsia, LLC</a> 2010&ndash;2011. All Rights Reserved.</p>
+	</footer>
+  -->
+</body>
+</html>
