@@ -184,6 +184,10 @@ a.hl:hover, h2[id]:hover a.hl, h3[id]:hover a.hl {
   color: gainsboro;
 }
 
+.qfaq {font-style: italic;}
+
+.afaq {}
+
 /* code blocks */
 
 pre {
