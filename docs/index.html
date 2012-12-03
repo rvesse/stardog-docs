@@ -54,8 +54,7 @@
   <header>
   <h1 id=chapter>Introduction</h1></header>
 
-<p>Stardog is a <a href="/docs/performance">fast</a>, lightweight, commercial RDF database for mission-critical apps: it uses <a
-href="http://www.w3.org/TR/rdf-sparql-query/">SPARQL</a><n>Stardog 1.0 supports SPARQL; Stardog 1.1 will support SPARQL 1.1.</n>; HTTP and the SNARL protocol for
+<p>Stardog is a <a href="/docs/performance">fast</a>, lightweight, commercial RDF database for mission-critical apps: it supports <a href="http://www.w3.org/TR/2012/WD-sparql11-query-20120105/">SPARQL 1.1</a>;<n>As of @@VERSION@@, Stardog's SPARQL 1.1 support does not include: UPDATE query language; service description and federation; UPDATE protocol; no entailment regimes other than OWL 2 Direct Semantics. We will address these in upcoming 1.1.x releases.</n> HTTP and the SNARL protocol for
 remote access and control; <a href="http://www.w3.org/RDF/">RDF</a> as a
 data model; and <a href="http://www.w3.org/TR/owl2-overview/">OWL 2</a> for
 inference and data analytics.</p>
@@ -185,11 +184,26 @@ href="mailto:stardog@clarkparsia.com">stardog@clarkparsia.com</a>, is the place 
     issues include:</p>
 
     <ol>
-     <li>When creating a database through Stardog CLI with one or more input
-files, the operation will succeed even if some of those files fail to be
-loaded. Stardog will load all the files it can and continue with creating
-the index, even if there are no triples loaded. An error message will be
-printed on the console for each file that failed to load.</li>
+
+      <li>multi-reader, single writer concurrency.</li>
+
+      <li>Asking for all individuals with reasoning via the query <tt>{?s a owl:Thing}</tt>
+might also retrieve some classes and properties. <b>WILLFIX</b></li>
+
+      <li>Schema queries do not bind graph variables.</li>
+
+      <li>Two query bugs due to its dependence on Sesame's SPARQL parser:
+   <a href="https://openrdf.atlassian.net/browse/SES-1119">SES-1119</a> and <a href="https://openrdf.atlassian.net/browse/SES-1121">SES-1121</a>. <b>WILLFIX</b> </li>
+
+<li>Read/Write permissions for the database metadata and read/write
+permissions to ICV constraints are not independent. Granting read/write
+permission to database metadata will grant the same permissions for ICV. <b>Work around:</b> Remove the permissions on the db metadata and assign only ICV. <b>WILLFIX</b> </li>
+
+<li>Dropping a database with the CLI will also delete all the data
+files on your Stardog home directory associated with that database. If
+you want to keep the data files but only remove the database from the
+system catalog, then you need to manually copy these files to another
+location before deleting the database.</li>
 
 <li>If relative URIs exist in the data files passed to create, add, or
 remove commands, then they will be resolved using the constant base URI
@@ -197,7 +211,17 @@ remove commands, then they will be resolved using the constant base URI
 base URIs. Turtle and RDF/XML formats allows base URIs but N-Triples format
 doesn't allow base URIs and relative URIs in N-Triples data will cause
 errors.</li>
-    </ol>
+
+  <li> queries with <code>FROM NAMED</code> with a named graph that is
+<em>not</em> in Stardog will <b>not</b> cause Stardog to believe that it is,
+in fact, Maven, i.e., to automagically download the data from an arbitrary
+HTTP URL and include it in the query. Stardog will <em>only</em> evaluate
+queries over data that has been loaded into it.</li>
+     
+  <li>SPARQL queries without a context or named graph are executed
+against the default, unnamed graph. In Stardog, the default graph is
+<em>not</em> the union of all the named graphs and the default graph. Note: this behavior is configurable via the <tt>query.all.graphs</tt> configuration parameter.</li>
+ </ol>
 
   </section>
 

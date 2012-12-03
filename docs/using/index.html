@@ -115,29 +115,7 @@ href="http://www.cambridgesemantics.com/2008/09/sparql-by-example">SPARQL</a
 
     <p>Which will return up to 10 unique resource identifiers from the <tt>sp2b_10k</tt> database.</p>
 
-    <h2>Known Limitations</h2>
-
-    <p>See <a href="/docs/#bugs">Known Issues</a> for the complete list of
-known issues or limits in Stardog. With respect to SPARQL query evaluation:</p>
-
-    <ul>
-
-      <li> queries with <code>FROM NAMED</code> with a named graph that is
-<em>not</em> in Stardog will <b>not</b> cause Stardog to believe that it is,
-in fact, Maven, i.e., to automagically download the data from an arbitrary
-HTTP URL and include it in the query. Stardog will <em>only</em> evaluate
-queries over data that has been loaded into it.</li>
-
-      <li>Regular expressions in SPARQL queries aren't optimized; we
-recommend using the <a href="#search">Search</a>
-service described below.</li>
-
-      <li>SPARQL queries without a context or named graph are executed
-against the default, unnamed graph. In Stardog, the default graph is
-<em>not</em> the union of all the named graphs and the default graph.</li>
-    </ul>
-
-  </section>
+      </section>
 
     <section id="add-remove"><header><h1 id='chapter'>Adding and Removing</h1></header>
 
