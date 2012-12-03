@@ -45,10 +45,14 @@
  
 <section id="intro"><header><h1 id="chapter">Introduction</h1></header>
 
-<p>Stardog reasoning is based on the <a href="http://www.w3.org/TR/2010/WD-sparql11-entailment-20100126/#id45013">OWL 2 Direct Semantics Entailment Regime</a>. Stardog supports various reasoning levels, which determine the allowed types of axiom that are taken into account for reasoning. The current reasoning levels are:</p>
+  <p>In this chapter we describe <a href="#reasoning">how to use Stardog's reasoning capabilities</a>; we also address some <a href="#trouble">common problems</a> and <a href="#issues">known issues</a>. We also describe <a href="#approach">Stardog's approach to query answering</a> in some detail, as well as a set of <a href="#guidelines">guidelines</a> that contribute to efficient query answering. If you are not familiar with the terminology, you can peruse the section on <a href="#terminology">terminology</a>.</p>
+
+<p>Stardog reasoning is based on the <a href="http://www.w3.org/TR/2010/WD-sparql11-entailment-20100126/#id45013">OWL 2 Direct Semantics Entailment Regime</a>. We dynamically apply a "reasoning level" at query time; part of the query interface presented to the user is to (optionally) choose a reasoning level.</p>
+
+<p>Stardog supports several different reasoning levels; they determine the allowed types of OWL axiom that are taken into account for reasoning in query evaluation. The reasoning levels are</p>
 
 <ul>
-  <li><b>NONE</b>. No axiom is taken into account.</li>
+  <li><b>NONE</b>. No axioms are considered.</li>
   <li><b>RDFS</b>. For the OWL 2 axioms allowed in <a href="http://www.w3.org/TR/rdf-schema/">RDF schema</a> (mainly subclasses, subproperties, domain, and ranges).</li>
   <li><b>QL</b>. For <a href="http://www.w3.org/TR/owl2-profiles/#OWL_2_QL">OWL 2 QL</a> axioms.</li>
   <li><b>RL</b>. For <a href="http://www.w3.org/TR/owl2-profiles/#OWL_2_RL">OWL 2 RL</a> axioms.</li>
@@ -56,50 +60,50 @@
   <li><b>DL</b>. For <a href="http://www.w3.org/TR/owl2-syntax/">OWL 2 DL</a> axioms.</li>
 </ul>
 
-<p>Stardog also supports <a href="#swrl">user-defined rule reasoning</a> (using <a href="http://www.w3.org/Submission/SWRL/">SWRL</a> syntax and bultins).</p>
-
-<p>In this chapter we give a brief overview of <a href="#reasoning">how to use Stardog's reasoning capabilities</a> and we discuss <a href="#trouble">common problems</a> and <a href="#issues">known issues</a>. We also present <a href="#approach">Stardog's approach to query answering</a> in more detail, as well as a set of <a href="#guidelines">guidelines</a> that contribute towards efficient query answering. If you are not familiar with the terminology, you can read our section on <a href="#terminology">terminology</a>.</p>
+<p>Stardog also supports <a href="#swrl">user-defined rule reasoning</a> (using <a href="http://www.w3.org/Submission/SWRL/">SWRL</a> syntax and bultins).<n>SWRL doesn't require a specific reasoning level because it's orthogonal to the reasoning level chosen for a particular query.</n></p>
 
 </section>
 
 <section id="reasoning"><header><h1 id='chapter'>Using Reasoning</h1></header>
 
-<p>In order to do reasoning, Stardog requires a schema (or TBox) to be present in the database. Since schemas are serialized as RDF, they are loaded into a Stardog database in the same way that any RDF is loaded into a database.</p>
+<p>In order to do reasoning, Stardog requires a schema (sometimes called a "TBox") to be present in the database.<n>Note that Stardog does not require a schema to evaluate SPARQL queries; it does require some axioms or rules to do reasoning during query evaluation; those axioms are called the "schema"; but that's very different from the way "schema" is used in an RDBMS.</n> Since schemas are serialized as RDF, they are loaded into a Stardog database in the same way that any RDF is loaded into a Stardog database.</p>
 
-<a id="tbox_extraction"></a><p>We can place the schema in the default graph, in a specific named graph, or in a collection of graphs. We can tell Stardog where the schema is by setting the <code>reasoning.schema.graphs</code> property to a set of named graphs URIs. If we want to take the default graph into account we can use the built-in URI <code>tag:stardog:api:context:default</code>, and if we want to use all named graphs, we can use <code>tag:stardog:api:context:all</code>. The default value for this property is to use the default graph only.</p>
+<a id="tbox_extraction"></a><p>The schema may reside in the default graph, in a specific named graph, or in a collection of graphs. We tell Stardog where the schema is by setting the <code>reasoning.schema.graphs</code> property to one or more named graphs URIs. If we want to take the default graph into account, then we can use the built-in URI <code>tag:stardog:api:context:default</code>; if we want to use all named graphs (that is, to tell Stardog to look for the schema in all named graphs), we can use <code>tag:stardog:api:context:all</code>. The default value for this property is to use the default graph only.</p>
 
 <h2>Query Answering</h2>
 
+<p>All of Stardog's intefaces (API, network, and command-line as of @@VERSION@@) support reasoning during query evaluation.</p>
+
 <h3>Command Line</h3>
 
-<p>In order to pose queries over Stardog using reasoning via the command line, one has to speciy the desired reasoning level in the <a href="/docs/admin/">connection string</a>:</p>
+<p>In order to pose queries over Stardog using reasoning via the command line, a reasoning level is specified in the <a href="/docs/admin/">connection string</a>:</p>
 
 <pre><code>$ ./stardog query -c "http://localhost:5822/myDB;reasoning=QL" \
   -q "SELECT ?s { ?s a :C } LIMIT 10"</code></pre>
 
 <h3>HTTP</h3>
 
-<p>In order to pose a query over Stardog using reasoning via HTTP, one has to specify the desired reasoning level in the request header:</p>
+<p>In order to pose a query over Stardog using reasoning via HTTP, the reasoning level is specified in the request header, <tt>SD-Connection-String</tt>:</p>
 
 <pre><code>$ curl -u admin:admin -X GET -H "SD-Connection-String: reasoning=QL" \
   "http://localhost:5822/myDB/query?query=..."</code></pre>
 
 <h2>Explaining Reasoning Results</h2>
    
-<p>Stardog provides the functionality to explain the inferences it produces. An explanation of an implicit inference is the minimum set of statements explicitly stored in the database. Explanations are useful for debugging and understanding especially when large number of statements interact with each other to infer new statements</p>
+<p>Stardog can explain the inferences (i.e., the results of its reasoning) it produces. An explanation of an inference is the minimum set of statements explicitly stored in the database that together justify or warrant the inference. Explanations are useful for debugging and understanding, especially when large number of statements interact with each other to infer new statements</p>
 
-<p>Explanations can be retrieved using the CLI command 'explain inference' by providing an input file that contains the inference to be explained as in:</p>
+<p>Explanations can be retrieved using the CLI command <tt>explain inference</tt> by providing an input file that contains the inference to be explained:</p>
   
   <pre><code>$ stardog explain inference -c "snarl://localhost/myDB;reasoning=EL" \
     inference_to_explain.ttl </code></pre>
   
-<p>The output is displayed in a concise syntax designed to make long OWL axioms readable but it can be rendered
-  in any one of supported RDF syntaxes if desired. Explanations are also accessible through the 
+<p>The output is displayed in a concise syntax designed to be legible; but it can be rendered
+  in any one of the supported RDF syntaxes if desired. Explanations are also accessible through the 
   <a href="/docs/network/#extended-http">extended HTTP protocol</a> and SNARL API. See the examples included in 
   the distribution for more details about retrieving explanations programmatically.</p>
   
-  <p>Note that, there might be more than one distinct explanation for an inference but Stardog returns a single
-  explanation. We are planning to add support for computing multiple explanations in future versions of Stardog.</p>
+  <p>Note that there is probably more than one distinct explanation for an inference, but Stardog returns a single
+  explanation only. We plan to compute multiple explanations in a future version.</p>
 
 <h2>ReasoningConnection API</h2>
 
@@ -116,26 +120,26 @@
 <p>Here's a few things that you might want to try:</p>
 <ul>
 <li><b>Do you know what to expect?</b> The <a href="http://www.w3.org/TR/owl2-primer/">OWL 2 primer</a> is always a good place to start.</li>
-<li><b>Is the TBox where you think it is?</b> Stardog might be extracting the wrong TBox. You have to tell it where it is. Check <a href="#tbox_extraction">TBox extraction</a> for details.</li>
+<li><b>Is the TBox where you think it is?</b> Stardog might be extracting the wrong TBox. You have to tell Stardog where to find the schema. Check <a href="#tbox_extraction">TBox extraction</a> for details.</li>
 <li><b>Are you using the right reasoning level?</b> Perhaps some of the modeling constructs (a.k.a. axioms) in your database are being ignored. You can find out which axioms are being ignored due to the reasoning level used by simply including the following line in the logging.properties file in <tt>STARDOG_HOME</tt>:
 <pre><code>com.clarkparsia.blackout.level = ALL</code></pre>
 </li>
-<li><b>Are you using DL?</b> Stardog supports schema-only reasoning for OWL 2 DL, which effectively means that only TBox queries&mdash;queries that contain <a href="#query_types">TBox BGPs</a> only&mdash;should be expected to be complete with respect to query results.</li>
+<li><b>Are you using DL?</b> Stardog supports schema-only reasoning for OWL 2 DL, which effectively means that only TBox queries&mdash;queries that contain <a href="#query_types">TBox BGPs</a> only&mdash;will return complete query results.</li>
 </ul>
 
 </section>
 
 <section id="issues"><header><h1 id='chapter'>Known Issues</h1></header>
 
-  <p>Version <b>@@VERSION@@</b> of Stardog does not support the following features:</p>
+  <p>Stardog <b>@@VERSION@@</b> does not</p>
   
   <ul>
   <li>Follow ontology <code>owl:imports</code> statements automatically; any imported OWL
 ontologies that are required for reasoning must be loaded into a Stardog
 database in the normal way.</li>
-  <li>Recursive queries. If recursion is necessary to answer the query with respect to the schema, results will be sound (no wrong answers) but incomplete (some correct answers not returned) with respect to the requested reasoning type.</li>
-  <li>Equality reasoning. Only <i>explicit</i> <code>owl:sameAs</code> and <code>owl:differentFrom</code> data assertions will be taken into account for query answering.</li>
-  <li>Datatype reasoning and user-defined datatypes.</li>
+  <li>Handle recursive queries. If recursion is necessary to answer the query with respect to the schema, results will be sound (no wrong answers) but incomplete (some correct answers not returned) with respect to the requested reasoning type.</li>
+  <li>Perform equality reasoning. Only <i>explicit</i> <code>owl:sameAs</code> and <code>owl:differentFrom</code> data assertions will be taken into account for query answering.</li>
+  <li>Perform datatype reasoning and user-defined datatypes.</li>
   </ul>
 
 </section>
@@ -144,9 +148,9 @@ database in the normal way.</li>
 
 <p>Many reasoning problems may be solved with OWL's axiom-based approach; but, of course, not all reasoning problems are amenable to this approach. A user-defined rules approach complements the OWL axiom-based approach nicely and increases the expressive power of a reasoning system from the user's point of view. Many RDF databases support user-defined rules only. Stardog is one of the only RDF databases that comprehensively supports both axioms and rules.</p>
 
-  <p>Stardog supports reasoning by way of user-defined rules together with a rich set of built-in functions using the <a href="http://www.w3.org/Submission/SWRL/">SWRL</a> syntax and builtin-in libraries. In order to apply user-defined rules in SWRL, you just need to include the rules as part of the database's schema: that is, put your rules where your axioms are, i.e., in the "tbox" or schema. See <a href="#tbox_extraction">Schema Extraction</a> for more details. Once the rules are part of the schema, they will be used for reasoning automatically, unless the reasoning level selected is <tt>NONE</tt>.</p>
+  <p>Stardog supports user-defined rule reasoning together with a rich set of built-in functions using the <a href="http://www.w3.org/Submission/SWRL/">SWRL</a> syntax and builtin-ins library. In order to apply SWRL user-defined rules, you must include the rules as part of the database's schema: that is, put your rules where your axioms are, i.e., in the schema. See <a href="#tbox_extraction">Schema Extraction</a> for more details. Once the rules are part of the schema, they will be used for reasoning automatically, <em>unless the reasoning level selected is </em> <tt>NONE</tt>.</p>
 
-<p>Assertions implied by the rules <i>will not</i> be materialized. Instead, the rules will be used to expand queries just as regular axioms (see <a href="#approach">Stardog's approach to query answering</a>).</p>
+<p>Assertions implied by the rules <i>will not</i> be materialized. Instead, the rules will be used to expand queries just as regular axioms (see <a href="#approach">Stardog's approach to query answering</a>) are used.</p>
 
 <h2>Supported Built-Ins</h2>
 
