@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Stardog: Documentation: Frequently Asked Questions</title>
+    <script type="text/javascript" src="http://use.typekit.com/muj3mlu.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <link media="screen" rel="stylesheet" href="/_/css/ps.css"/>
+    <link media="print" rel="stylesheet" href="/_/css/print.css"/>
+    <link media="screen" rel="stylesheet" href="/_/css/simplegrid.css"/>
+    
+  </head>
+
+  <body>
+
+
+<div class="grid grid-pad">
+
+<div id="masthead">
+
+  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>  
+
+  <div id="chaptertitle" class="col-9-12">
+      <blockquote>
+        <b>Software is under a constant tension. Being symbolic it is arbitrarily perfectible; but also it is arbitrarily changeable.</b>&mdash;<cite>Alan Perlis, Epigrams in Programming</cite>
+      </blockquote>
+      <h1 id="title">Stardog <br><span id="subtitle">FAQ</span></h1>
+  </div>
+
+</div>
+
+</div>
+
+<div class="grid grid-pad">
+
+<div id="contentbody">
+
+  <div class="col-3-12" id="left-gutter">
+    <div id="tocblock"></div>
+  </div>
+
+  <div class="col-9-12" id="main-channel">
+  
+  <section id="faq">
+    <header>
+    <h1 id="chapter">Frequently Asked Questions</h1></header>
+
+    <p>These are the things Stardog users ask frequently and the answers we have to give.</p>
+
+    <h2>Deadlocks and Slowdowns</h2>
+
+    <p class="qfaq"><b>Question:</b> Stardog slows down or deadlocks?! I don't understand why, I'm just trying to send some queries and do something with the results...in a tight inner loop of doom!</p>
+
+    <p class="afaq"><b>Answer:</b> Make sure you are closing result sets
+(<tt>TupleQueryResult</tt> and <tt>GraphQueryResult</tt>; or the Jena
+equivalents) when you are done with them. These hold open resources both
+on the client and on the server and failing to close them when you are
+done will cause files, streams, lions, tigers, and bears to be held open.
+If you do that enough, then you'll eventually exhaust all of the resources in
+their respective     pools, which can cause slowness or ,in some cases,
+deadlocks waiting for     resources to be returned to their pools.</p>
+
+    <p class="afaq">Similarly close your connections when you are done with them. If you don't close things when you're done with them, we won't be held responsible for the harm you will do to yourself as a result.</p>
+
+    <p class="afaq">In short, as they teach us all in grade school, <b>PUT THINGS AWAY WHEN YOU ARE FINISHED PLAYING WITH THEM.</b></p>
+       
+
+    <h2>SPARQL 1.1</h2>
+
+    <p class="qfaq"><b>Question:</b> Does Stardog support SPARQL 1.1?</p>
+
+    <p class="afaq"><b>Answer:</b> Yes. As of Stardog 1.1 (released 14 November 2012), Stardog supports SPARQL 1.1. However, there are still a few odds and ends of SPARQL 1.1 that we don't yet support. See <a href="/docs/#note-1">this footnote</a> for more details.</p>
+
+    <h2>Maven</h2>
+
+    <p class="qfaq"><b>Question:</b> Is there a Maven repository?</p>
+
+    <p class="afaq"><b>Answer:</b> ...</p>
+
+
+     </section>
+
+<section id="fn">
+  <header>  <h1 class="fn">Notes</h1></header>
+  <ol id="notes">
+    <!-- footnotes get pub'd here -->
+  </ol>
+
+  </section>
+
+ </div>
+</div>
+</div>
+
+  <div class="grid grid-pad">
+  <div class="col-1-1">
+  <nav><p><a class="top" href="#" title="Back to top"><span style="font-size: 48px">&#8962;</a></a></p></nav>
+        <!-- <header><h1 class=disqus>Comments</h1></header> -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'stardog'; // required: replace example with your forum shortname
+
+    // The following are highly recommended additional parameters. Remove the slashes in front to use.
+    //var disqus_identifier = 'stardog____unique_dynamic_id_1234';
+    //var disqus_url = window.location.pathname;
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+  <footer>
+    <p id="thefooter"></p>
+  </footer>
+  </div>
+  </div>
+  <script src="/_/js/pbk.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      nodeName = "";
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-1719955-3']);
+      _gaq.push(['_setDomainName', 'stardog.com']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+<script src="/_/js/sticky.js" type="text/javascript"></script>
+
+<script>
+  $(document).ready(function(){
+    $("#tocblock").sticky({topSpacing:4});
+  });
+</script>
+
+  </body>
+</html>
