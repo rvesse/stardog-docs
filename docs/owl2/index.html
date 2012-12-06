@@ -203,6 +203,32 @@ database in the normal way.</li>
 
 <pre><code>:Father(?y) <- :Person(?x), http://www.w3.org/ns/sparql#UUID(?y).</code></pre>
 
+<h2>SWRL Examples</h2>
+
+<p>User-defined rules in SWRL provide a different sort of "user interface" with respect to OWL 2 reasoning in Stardog. Some problems (and some people) are simply a better fit for a rules-based approach to modeling and reasoning than to an axioms-based approach. What follows are a few (trivial and contrived) examples of user-defined rules in SWRL (using Datalog syntax; Stardog requires the canonical RDF serialization of SWRL, however).</p>
+
+<h3>Basic Rules</h3>
+
+<p>A person who's age is between 13 and 19 (inclusive) is a teenager:</p>
+
+<pre><code>:Teenager(?x) <- :Person(?x), swrlb:greaterThanOrEqual(?age, 13),
+                 swrlb:lessThanOrEqual(?age, 19),
+                 :Person(?x, ?age)</code></pre>
+
+<p>A person who's an uncle of a niece:</p>
+
+<pre><code>:UncleOfNiece(?x) <- :Person(?x), :Male(?x), :hasSibling(?x, ?y), 
+                  :isParentOf(?y, ?z), :Female(?z)</code></pre>
+
+<p>A person who's male and has a niece or nephew is an uncle of his niece(s) and nephew(s):</p>
+
+<pre><code>:isUncleOf(?x, ?z) <- :isSiblingOf(?x, ?y), :isParentOf(?y, ?z), :Male(?x)</code></pre>
+
+<p>A super user can read all of the things!</p>
+
+<pre><code>:Role(?z), :hasRole(?x, ?z), :readPermission(?z, ?y) <- :SuperUser(?x)
+                   :Resource(?y), http://www.w3.org/ns/sparql#UUID(?z)</code></pre>
+
 </section>
 
 <section id="approach"><header><h1 id='chapter'>Query Rewriting</h1></header>
