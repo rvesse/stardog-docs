@@ -33,7 +33,7 @@ jQuery(function(){
 /* adding some basic 'go home' nav dynamically */
 jQuery(function(){
   if (nodeName != "head") {
-          $("#title").append('&nbsp;<span style="font-size: 48px"><a title="Back to Stardog Docs Home" href="/docs/">&#8962;</a></span>');
+          $("#title").append('&nbsp;<span style="font-size: 48px"><a title="Back to Stardog Docs Home" href="../">&#8962;</a></span>');
     }
       });
 
