@@ -155,10 +155,10 @@ sufficient privileges for that action.</p>
 
   <p>
 	  This section will describe how to use Stardog ICV via the SNARL APIs.  For more information on using SNARL in general, please refer to the
-	  section on <a href="/docs/java">programming with Stardog in Java</a>.
+	  section on <a href="..docs/java">programming with Stardog in Java</a>.
     </p>
 
-    <p>There is command-line interface support for many of the operations necessary to using ICV with a Stardog database; please see the <a href="/docs/admin">Administration</a> chapter for that documentation.</p>
+    <p>There is command-line interface support for many of the operations necessary to using ICV with a Stardog database; please see the <a href="..docs/admin">Administration</a> chapter for that documentation.</p>
 
   <p>To use ICV in Stardog, one must:</p>
 
@@ -170,11 +170,11 @@ sufficient privileges for that action.</p>
   <h4>Creating Constraints</h4>
 
   <p>
-	  <a href="/docs/java/snarl/com/clarkparsia/stardog/icv/Constraint.html"><code>Constraints</code></a> can be created using the
-	  <a href="/docs/java/snarl/com/clarkparsia/stardog/icv/ConstraintFactory.html"><code>ConstraintFactory</code></a> which provides
+	  <a href="..docs/java/snarl/com/clarkparsia/stardog/icv/Constraint.html"><code>Constraints</code></a> can be created using the
+	  <a href="..docs/java/snarl/com/clarkparsia/stardog/icv/ConstraintFactory.html"><code>ConstraintFactory</code></a> which provides
 	  methods for creating integrity constraints from OWL axioms or from SPARQL select queries.
 	  <code>ConstraintFactory</code> expects your constraints, if they are defined as OWL axioms, as an RDF triple (or graph).  To aid
-	  in authoring constraints in OWL, <a href="/docs/java/snarl/com/clarkparsia/openrdf/util/ExpressionFactory.html"><code>ExpressionFactory</code></a>
+	  in authoring constraints in OWL, <a href="..docs/java/snarl/com/clarkparsia/openrdf/util/ExpressionFactory.html"><code>ExpressionFactory</code></a>
 	  is provided for building the <a href="http://www.w3.org/TR/owl2-mapping-to-rdf/">RDF equivalent</a> of the OWL axioms of your constraint.
   </p>
 
@@ -197,7 +197,7 @@ sufficient privileges for that action.</p>
   <h4>Adding Constraints to Stardog</h4>
 
   <p> The <a
-  href="/docs/java/snarl/com/clarkparsia/stardog/icv/api/ICVConnection.html"><c
+  href="..docs/java/snarl/com/clarkparsia/stardog/icv/api/ICVConnection.html"><c
   ode>ICVConnection</code></a> interface provides programmatic access to
   the ICV support in Stardog. It provides support for adding, removing and
   clearing integrity constraints in your database as well as methods for
@@ -218,10 +218,10 @@ sufficient privileges for that action.</p>
   <h4>IC Validation</h4>
 
   <p>
-	  Checking whether or not the contents of a database are valid is easy.  Once you have an <a href="/docs/java/snarl/com/clarkparsia/stardog/icv/api/ICVConnection.html"><code>ICVConnection</code></a>
-	  you can simply call its <a href="/docs/java/snarl/com/clarkparsia/stardog/icv/api/ICVConnection.html#isValid()"><code>isValid()</code></a>
+	  Checking whether or not the contents of a database are valid is easy.  Once you have an <a href="..docs/java/snarl/com/clarkparsia/stardog/icv/api/ICVConnection.html"><code>ICVConnection</code></a>
+	  you can simply call its <a href="..docs/java/snarl/com/clarkparsia/stardog/icv/api/ICVConnection.html#isValid()"><code>isValid()</code></a>
 	  method which will return whether or not the contents of the database are valid with respect to the constraints associated with
-	  that database.  Similarly, you can provide some <a href="/docs/java/snarl/com/clarkparsia/stardog/icv/Constraint.html"><code>constraints</code></a> to
+	  that database.  Similarly, you can provide some <a href="..docs/java/snarl/com/clarkparsia/stardog/icv/Constraint.html"><code>constraints</code></a> to
 	  the <code>isValid()</code> method to see if the data in the database is invalid for those <b>specific</b> constraints; which can be a subset
 	  of the constraints associated with the database, or they can be new constraints you are working on.
   </p>
@@ -229,10 +229,10 @@ sufficient privileges for that action.</p>
   <p>
 	  If the data is invalid for some constraints&mdash;either the explicit constraints in your database or a new set of constraints you have authored&mdash;you
 	  can get some information about what the violation was from the SNARL IC Connection.
-	  <a href="/docs/java/snarl/com/clarkparsia/stardog/icv/api/ICVConnection.html#getViolationBindings()"><code>ICVConnection.getViolationBindings()</code></a>
+	  <a href="..docs/java/snarl/com/clarkparsia/stardog/icv/api/ICVConnection.html#getViolationBindings()"><code>ICVConnection.getViolationBindings()</code></a>
 	  will return the constraints which are violated, and for each constraint, you can get the violations as the set of bindings that satisfied the constraint
 	  query.  You can turn the bindings into the individuals which are in the violation using
-	  <a href="/docs/java/snarl/com/clarkparsia/stardog/icv/ICV.html#asIndividuals()"><code>ICV.asIndividuals</code></a>.
+	  <a href="..docs/java/snarl/com/clarkparsia/stardog/icv/ICV.html#asIndividuals()"><code>ICV.asIndividuals</code></a>.
   </p>
 
   <h3>ICV and Transactions</h3>
@@ -258,7 +258,7 @@ sufficient privileges for that action.</p>
 		  <script src="https://gist.github.com/1333782.js?file=CreateDiskAndICV.java"></script>
 	  </div>
 	  <p>This illustrates how to create a persistent disk database with ICV guard mode enabled at the QL reasoning type.  Guard mode can also be
-	  enabled when the database is created on the <a href="/docs/admin">command line</a></p>
+	  enabled when the database is created on the <a href="..docs/admin">command line</a></p>
 
   <h2>ICV Examples</h2>
 

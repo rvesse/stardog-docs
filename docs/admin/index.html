@@ -47,7 +47,7 @@
 and Stardog databases, chiefly by way of discussing how to use the
 various Stardog command-line programs. An important part of Stardog
 administration is security, which is discussed in a separate, dedicated <a
-href="/docs/security">chapter</a>.</p>
+href="..docs/security">chapter</a>.</p>
 
     <section id="cli"><header><h1 id="chapter">CLI Overview</h1></header>
 
@@ -82,7 +82,7 @@ considerably tighter access restrictions than <tt>stardog</tt>.</p>
 @@VERSION@@ provides a default user "admin" and password "admin" in
 <tt>stardog-admin</tt> commands if no user or password are given. This
 is obviously <b>not secure</b>; before any serious use of Stardog
-is contemplated, read the <a href="/docs/security">security</a>
+is contemplated, read the <a href="..docs/security">security</a>
 chapter at least twice, and then&mdash;minimally&mdash;change the
 administrative password to something we haven't published on the
 interwebs!</u></blockquote>
@@ -205,7 +205,7 @@ or plain text (both based on ProtocolBuffer message formats); the type of
 logging (audit or access); the logging location (which may be "off disk" or
 even "off machine"<n>Logging to a centralized logging facility requires a
 Java plugin that implements the Stardog Server logging interface; see the
-<a href="/docs/java/">Java Chapter</a> for more information); and the log
+<a href="..docs/java/">Java Chapter</a> for more information); and the log
 rotation policy (file size or time).</p>
 
     </section>
@@ -253,7 +253,7 @@ mutations are subject to IC validation (i.e., "guard mode").</dd>
 <dd> Sets the size in number of RDF triples before the differential indexes are merged to the main indexes.</dd>
 
 <dt>index.literals.canonical</dt>
-<dd> Enables RDF literal canonicalization. See <a href="/docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#CANONICAL_LITERALS">literal canonicalization</a> for details.</dd>
+<dd> Enables RDF literal canonicalization. See <a href="..docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#CANONICAL_LITERALS">literal canonicalization</a> for details.</dd>
 
 <dt>index.named.graphs</dt>
 <dd> Enables optimized index support for named graphs; speeds SPARQL query evaluation with named graphs at the cost of some overhead for database loading and index maintenance.</dd>
@@ -326,115 +326,115 @@ allow some properties to be set while the database remains online.</n></p>
         <td>database.name</td>
         <td>false</td>
         <td>{NO DEFAULT}</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#NAME">DatabaseOptions.NAME</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#NAME">DatabaseOptions.NAME</a></td>
       </tr>
       <tr>
         <td>database.online</td>
         <td>false<n>This may be set at creation time so that the database is created in offline or online status; but it may not be subsequently changed directly, except by using the admin tools to move the database on- or offline.</n></td>
         <td>true</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#ONLINE">DatabaseOptions.ONLINE</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#ONLINE">DatabaseOptions.ONLINE</a></td>
       </tr>
       <tr>
         <td>icv.active.graphs</td>
         <td>false</td>
         <td>default</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#ICV_ACTIVE_GRAPHS">DatabaseOptions.ICV_ACTIVE_GRAPHS</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#ICV_ACTIVE_GRAPHS">DatabaseOptions.ICV_ACTIVE_GRAPHS</a></td>
       </tr>
       <tr>
         <td>icv.enabled</td>
         <td>true</td>
         <td>false</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#ICV_ENABLED">DatabaseOptions.ICV_ENABLED</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#ICV_ENABLED">DatabaseOptions.ICV_ENABLED</a></td>
       </tr>
       <tr>
         <td>icv.reasoning.type</td>
         <td>true</td>
         <td>NONE</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#ICV_REASONING_TYPE">DatabaseOptions.ICV_REASONING_TYPE</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#ICV_REASONING_TYPE">DatabaseOptions.ICV_REASONING_TYPE</a></td>
       </tr>
       <tr>
         <td>index.differential.enable.limit</td>
         <td>true</td>
         <td>1000000</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#DIFF_INDEX_MIN_LIMIT">IndexOptions.DIFF_INDEX_MIN_LIMIT</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#DIFF_INDEX_MIN_LIMIT">IndexOptions.DIFF_INDEX_MIN_LIMIT</a></td>
       </tr>
       <tr>
         <td>index.differential.merge.limit</td>
         <td>true</td>
         <td>10000</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#DIFF_INDEX_MAX_LIMIT">IndexOptions.DIFF_INDEX_MAX_LIMIT</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#DIFF_INDEX_MAX_LIMIT">IndexOptions.DIFF_INDEX_MAX_LIMIT</a></td>
       </tr>
       <tr>
         <td>index.literals.canonical</td>
         <td>false</td>
         <td>true</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#CANONICAL_LITERALS">IndexOptions.CANONICAL_LITERALS</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#CANONICAL_LITERALS">IndexOptions.CANONICAL_LITERALS</a></td>
       </tr>
       <tr>
         <td>index.named.graphs</td>
         <td>false</td>
         <td>true</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#INDEX_NAMED_GRAPHS">IndexOptions.INDEX_NAMED_GRAPHS</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#INDEX_NAMED_GRAPHS">IndexOptions.INDEX_NAMED_GRAPHS</a></td>
       </tr>
       <tr>
         <td>index.persist</td>
         <td>true</td>
         <td>false</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#PERSIST">IndexOptions.PERSIST</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#PERSIST">IndexOptions.PERSIST</a></td>
       </tr>
       <tr>
         <td>index.persist.sync</td>
         <td>true</td>
         <td>true</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#SYNC">IndexOptions.SYNC</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#SYNC">IndexOptions.SYNC</a></td>
       </tr>
       <tr>
         <td>index.statistics.update.automatic</td>
         <td>true</td>
         <td>true</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#AUTO_STATS_UPDATE">IndexOptions.AUTO_STATS_UPDATE</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#AUTO_STATS_UPDATE">IndexOptions.AUTO_STATS_UPDATE</a></td>
       </tr>
       <tr>
         <td>index.type</td>
         <td>false</td>
         <td>Disk</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#INDEX_TYPE">IndexOptions.INDEX_TYPE</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#INDEX_TYPE">IndexOptions.INDEX_TYPE</a></td>
       </tr>
       <tr>
         <td>reasoning.consistency.automatic</td>
         <td>true</td>
         <td>false</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#CONSISTENCY_AUTOMATIC">DatabaseOptions.CONSISTENCY_AUTOMATIC</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#CONSISTENCY_AUTOMATIC">DatabaseOptions.CONSISTENCY_AUTOMATIC</a></td>
       </tr>
       <tr>
         <td>reasoning.punning.enabled</td>
         <td>false</td>
         <td>false</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#PUNNING_ENABLED">DatabaseOptions.PUNNING_ENABLED</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#PUNNING_ENABLED">DatabaseOptions.PUNNING_ENABLED</a></td>
       </tr>
       <tr>
         <td>reasoning.schema.graphs</td>
         <td>true</td>
         <td>default</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#SCHEMA_GRAPHS">DatabaseOptions.SCHEMA_GRAPHS</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#SCHEMA_GRAPHS">DatabaseOptions.SCHEMA_GRAPHS</a></td>
       </tr>
       <tr>
         <td>search.enabled</td>
         <td>false</td>
         <td>false</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#SEARCHABLE">DatabaseOptions.SEARCHABLE</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#SEARCHABLE">DatabaseOptions.SEARCHABLE</a></td>
       </tr>
       <tr>
         <td>search.reindex.mode</td>
         <td>false</td>
         <td>wait</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#SEARCH_REINDEX_MODE">DatabaseOptions.SEARCH_REINDEX_MODE</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#SEARCH_REINDEX_MODE">DatabaseOptions.SEARCH_REINDEX_MODE</a></td>
       </tr>
       <tr>
         <td>transactions.durable</td>
         <td>true</td>
         <td>false</td>
-        <td><a href="/docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#TRANSACTIONS_DURABLE">DatabaseOptions.TRANSACTIONS_DURABLE</a></td>
+        <td><a href="..docs/java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#TRANSACTIONS_DURABLE">DatabaseOptions.TRANSACTIONS_DURABLE</a></td>
       </tr>
     </tbody>
   </table>
@@ -753,7 +753,7 @@ certain!</p>
 mechanism via closed world reasoning. Constraints can be specified in OWL,
 SWRL, and SPARQL.</p>
 
-<p>Please see the <a href="/docs/sdp">ICV chapter</a> for more about using
+<p>Please see the <a href="..docs/sdp">ICV chapter</a> for more about using
 ICV in Stardog programmatically.</p>
 
     <p>The CLI <tt>icv</tt> subcommand can be used to add, delete, or drop
@@ -805,7 +805,7 @@ the following command:</p>
 
     <section id="security"><header><h1 id="chapter">Configuring Security</h1></header>
 
-    <p>See the <a href="/docs/security">Security Chapter</a> for information about Stardog's security system, secure deployment patterns, and more.</p>
+    <p>See the <a href="..docs/security">Security Chapter</a> for information about Stardog's security system, secure deployment patterns, and more.</p>
 
     </section>
 
@@ -813,7 +813,7 @@ the following command:</p>
 
     <h2>Maintaining Search Indexes</h2>
 
-    <p>Stardog's search service is described in the <a href="/docs/using">Using Stardog</a> chapter.</p>
+    <p>Stardog's search service is described in the <a href="..docs/using">Using Stardog</a> chapter.</p>
 
     <p>But managing the reindexing of search indexes is an administrative task.</p>
 
