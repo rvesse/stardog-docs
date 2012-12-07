@@ -45,9 +45,9 @@
 
   <section id="intro"><header><h1 id='chapter'>Network Programming &amp; Stardog</h1></header>
 
-    <p>In the <a href="..docs/java/">Programming with Java</a> chapter, we
+    <p>In the <a href="../java/">Programming with Java</a> chapter, we
 consider interacting with Stardog programatically with Java. In the <a
-href="..docs/programming/">Programming with JVM-based Languages</a> chapter,
+href="../programming/">Programming with JVM-based Languages</a> chapter,
 we consider interacting with Stardog by way of languages other than Java. In
 this chapter we consider interacting with Stardog over a network. In some
 use cases or deployment scenarios, it may be necessary to interact with
@@ -74,8 +74,8 @@ Protocol, the latter is documented below alongside the former.</p>
   <p>In addition to SPARQL Protocol for RDF support, Stardog supports
 an Extended HTTP Protocol with additional resource representations and
 capabilities. <n>Note, as of <b>@@VERSION@@</b>, none of the administrative
-functions are available via HTTP. They're available via <a href="..docs/admin/">command-line</a> and
-<a href="..docs/java/">programmatically</a>; they will also be available via the SNARL protocol.</n></p>
+functions are available via HTTP. They're available via <a href="../admin/">command-line</a> and
+<a href="../java/">programmatically</a>; they will also be available via the SNARL protocol.</n></p>
 
   <h2>Generating URLs</h2>
 
@@ -210,7 +210,7 @@ format in place of <tt>text/plain</tt>.</p>
 <!-- HTTP Admin Protocol documentation -->
 
 <!--
-  <p>See the <a href="..docs/sp-tr-tx">Stored Procedures, Triggers, and Transactions</a>
+  <p>See the <a href="../sp-tr-tx">Stored Procedures, Triggers, and Transactions</a>
 chapter for more on Stardog's transaction support.</p>
 -->
 
@@ -465,7 +465,7 @@ as a wait timeout.</p>
 
 <p> Set options in the database passed through a JSON object specification,
 i.e. JSON Request for option values. Database options can be found <a
-href="..docs/admin/#admin-db">here</a>.</p>
+href="../admin/#admin-db">here</a>.</p>
 
 <p>Expected input:</p>
 
@@ -806,9 +806,9 @@ fraction of that.</p>
         before passing the request to the appropriate handler.</p>
 
     <p>The complete listing of types in the base protocol can be found
-        <a href="..docs/java/snarl/com/clarkparsia/stardog/snarl/shared/PacketType.html">here</a>
+        <a href="../java/snarl/com/clarkparsia/stardog/snarl/shared/PacketType.html">here</a>
     while the packet types for the admin protocol are listed
-        <a href="..docs/java/snarl/com/clarkparsia/stardog/snarl/admin/shared/Admin/PacketType.html">here</a>.</p>
+        <a href="../java/snarl/com/clarkparsia/stardog/snarl/admin/shared/Admin/PacketType.html">here</a>.</p>
 
     <p>BigPacket also contains error information which is specified on response
         packets to indicate to the client that there was a failure which processing

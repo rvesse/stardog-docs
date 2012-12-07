@@ -76,7 +76,7 @@
 
 <h3>Command Line</h3>
 
-<p>In order to pose queries over Stardog using reasoning via the command line, a reasoning level is specified in the <a href="..docs/admin/">connection string</a>:</p>
+<p>In order to pose queries over Stardog using reasoning via the command line, a reasoning level is specified in the <a href="../admin/">connection string</a>:</p>
 
 <pre><code>$ ./stardog query -c "http://localhost:5822/myDB;reasoning=QL" \
   -q "SELECT ?s { ?s a :C } LIMIT 10"</code></pre>
@@ -99,7 +99,7 @@
   
 <p>The output is displayed in a concise syntax designed to be legible; but it can be rendered
   in any one of the supported RDF syntaxes if desired. Explanations are also accessible through the 
-  <a href="..docs/network/#extended-http">extended HTTP protocol</a> and SNARL API. See the examples included in 
+  <a href="../network/#extended-http">extended HTTP protocol</a> and SNARL API. See the examples included in 
   the distribution for more details about retrieving explanations programmatically.</p>
   
   <p>Note that there is probably more than one distinct explanation for an inference, but Stardog returns a single
