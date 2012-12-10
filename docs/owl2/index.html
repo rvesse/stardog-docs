@@ -209,18 +209,18 @@ database in the normal way.</li>
 
 <h3>Basic Rules</h3>
 
-<p>A person who's age is between 13 and 19 (inclusive) is a teenager:</p>
+<p>A person whose age is between 13 and 19 (inclusive) is a teenager:</p>
 
 <pre><code>:Teenager(?x) <- :Person(?x), swrlb:greaterThanOrEqual(?age, 13),
                  swrlb:lessThanOrEqual(?age, 19),
                  :Person(?x, ?age)</code></pre>
 
-<p>A person who's an uncle of a niece:</p>
+<p>A person whose an uncle of a niece:</p>
 
 <pre><code>:UncleOfNiece(?x) <- :Person(?x), :Male(?x), :hasSibling(?x, ?y), 
                   :isParentOf(?y, ?z), :Female(?z)</code></pre>
 
-<p>A person who's male and has a niece or nephew is an uncle of his niece(s) and nephew(s):</p>
+<p>A person whose male and has a niece or nephew is an uncle of his niece(s) and nephew(s):</p>
 
 <pre><code>:isUncleOf(?x, ?z) <- :isSiblingOf(?x, ?y), :isParentOf(?y, ?z), :Male(?x)</code></pre>
 
