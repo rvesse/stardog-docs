@@ -57,7 +57,7 @@ tt {font-weight: bold;
 #toc-title {
   padding: 0px;
   margin-top: -4px;
-  font-size: 20pt;
+  font-size: 18pt;
   font-weight: 300;
 }
 
@@ -81,6 +81,7 @@ tt {font-weight: bold;
 #toc {
  /* list-style: none; */
   margin-left: -18px;
+  font-size: 80%;
 }
 
 #title {
@@ -182,6 +183,10 @@ a.hl:hover, h2[id]:hover a.hl, h3[id]:hover a.hl {
   background: transparent;
   color: gainsboro;
 }
+
+.qfaq {font-style: italic;}
+
+.afaq {}
 
 /* code blocks */
 
