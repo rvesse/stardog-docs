@@ -50,7 +50,35 @@
 
     <h2>Resources</h2>
 
-    <p>A resource is some Stardog entity or service to which access is to be controlled; in Stardog @@VERSION@@, the resource types are <tt>user,   role, database</tt>, and <tt>database metadata</tt>.<n>We will extend the resource types to include named graph in Stardog 1.1.</n> A resource must have an identifier<n>The lexical space of legal identifiers for users, roles, and databases is given by the regular expression, <tt>[A-Za-z_]{1}[A-Za-z0-9_]*</tt>.</n> that is unique among resources of that type.<n>Resources of different types may have the same identifier, of course.</n> Stardog frequently names a resource using both its type and identifier separated by a colon to avoid ambiguity: for example,  <tt>user:admin</tt> and <tt>db:test</tt>. Stardog also has a notion of a "wildcard" resource; i.e., a resource that identifies all resources of a specified type. This is syntactic sugar that will make the database admin's life easier: <tt>user:*</tt> refers to all users, which allows, say, the granting of permissions to all users.</p>
+    <p>A resource is some Stardog entity or service to which access is to be controlled; in Stardog @@VERSION@@, the resource types are <tt>user, role, database</tt>, and <tt>database metadata</tt>.<n>We will extend the resource types to include named graph in Stardog 1.1.</n> A resource must have an identifier<n>The lexical space of legal identifiers for users, roles, and databases is given by the regular expression, <tt>[A-Za-z_]{1}[A-Za-z0-9_]*</tt>.</n> that is unique among resources of that type.<n>Resources of different types may have the same identifier, of course.</n> Stardog frequently names a resource using both its type and identifier separated by a colon to avoid ambiguity: for example,  <tt>user:admin</tt> and <tt>db:test</tt> (see table below for list of prefixes for all resource types). Stardog also has a notion of a "wildcard" resource; i.e., a resource that identifies all resources of a specified type. This is syntactic sugar that will make the database admin's life easier: <tt>user:*</tt> refers to all users, which allows, say, the granting of permissions to all users.</p>
+
+    <table>
+      <caption>Resource types and their prefixes</caption>
+      <thead>
+        <tr>
+          <th>Resource type</th>
+          <th>Prefix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>user</td>
+          <td><tt>user</tt></td>
+        </tr>
+        <tr>
+          <td>role</td>
+          <td><tt>role</tt></td>
+        </tr>
+        <tr>
+          <td>database</td>
+          <td><tt>db</tt></td>
+        </tr>
+        <tr>
+          <td>database metadata</td>
+          <td><tt>metadata</tt></td>
+        </tr>
+      </tbody>
+    </table>
 
     <p>In order to change permissions to a given resource (i.e., grant or revoke permissions), the user must have a permission to the <tt>grant</tt> action to that resource. Effectively, having <tt>grant</tt> permission makes the user an owner of that resource; after all, if a user is missing any permissions to that resource, they always can be granted.</p>
 
@@ -68,7 +96,7 @@
 
       <dl>
         <dt><tt>read</tt></dt>
-        <dd>Permits reading all of the role's properties; for example, all the users that belong to it.</dd>
+        <dd>Permits reading all of the role's properties; for example, all the users that belong to it or what permissions are granted to the role.</dd>
         <dt><tt>write</tt></dt>
         <dd>Permits changing the role's properties.</dd>
         <dt><tt>create</tt></dt>
@@ -83,7 +111,7 @@
 
     <h2>Users</h2>
 
-    <p>A user is an account in Stardog, which typically (but not always) is tied to a person. Users belong to roles and own resources. Users can belong to multiple roles and inherit all the permissions assigned to the roles. Permission inheritance is additive only: if a role grants a specific permission, and a user (say, <tt>Bob</tt> has that role, there is no way to deny that permission to <tt>Bob</tt>.</p>
+    <p>A user is an account in Stardog, which typically (but not always) is tied to a person. Users belong to roles and own resources. Users can belong to multiple roles and inherit all the permissions assigned to the roles. Permission inheritance is additive only: if a role grants a specific permission, and a user (say, <tt>Bob</tt>) has that role, there is no way to deny that permission to <tt>Bob</tt>.</p>
 
     <p>Users have state: they can be disabled or enabled, for example. Note: the system will not allow you to disable the last superuser in the system. A user account's name is the identifier of the user resource: so a user <tt>Bob</tt> is referred to as <tt>user:Bob</tt>. Once a user account is created, it is not possible to change the user identifier.</p>
 
@@ -91,7 +119,7 @@
 
     <dl>
     <dt><tt>read</tt></dt>
-    <dd>Permits reading the properties and other info of the user: is user a superuser, is it enabled or disabled, what roles does it belong to, when was it created, etc.</dd>
+    <dd>Permits reading the properties and other info of the user: is user a superuser, is it enabled or disabled, what roles does it belong to, what the user's permissions are, when was it created, etc.</dd>
     <dt><tt>write</tt></dt>
     <dd>Permits modifying the <em>modifiable</em> properties of the user: enabing or disabling it, changing its roles, etc.</dd>
     <dt><tt>create</tt></dt>
@@ -106,7 +134,7 @@
 
     <p>Some restritions apply: only a superuser can create a new user as a superuser; it's not possible to change the superuser property of a user. Changing a user's password is also subject to special rules: a user can always change its own password, and a superuser can change another users' password.</p>
 
-    <p>A user account initially has no password: it has to be set explicitly. Until the password is set, it is not possible to log into the user account.</p>
+    <p>A user account initially has no password: it has to be set explicitly. Until the password is set, it is not possible to log into the user account. Also it is worth noting, that creation of a new user account (say, <tt>Bob</tt>), does not automatically grant <tt>Bob</tt> the <tt>read</tt> permission to <tt>user:Bob</tt> resource. As the result, <tt>Bob</tt> will not be allowed to get any information about his own account (e.g., to list his own permissions), until that permission is explicitly granted to him.</p>
 
     <p>Finally, assigning a user to a role requires <tt>write</tt> permission to the user account and to the role.</p>
 
@@ -193,11 +221,16 @@
 
   <p>To assign a password to the user <tt>bob</tt>:</p>
 
-  <pre><code> $ stardog-admin passwd -n username -u admin -p admin --server "snarl://server/"</code></pre>
+  <pre><code> $ stardog-admin passwd -n bob -u admin -p admin --server "snarl://server/"</code></pre>
+
+  <p>To grant the newly created user the read permission to his or her own user account (so that the user can get information about the account; e.g., list all permissions):</p>
+
+  <pre><code> $ stardog-admin user grant -n bob -a read -o "user:bob" -u admin -p admin \
+    --server "snarl://server/"</code></pre>
 
   <p>To remove a user, <tt>frank</tt>:</p>
 
-  <pre><code> $ stardog-admin user drop -n frank -u admin -p admin--server "snarl://server/"</code></pre>
+  <pre><code> $ stardog-admin user drop -n frank -u admin -p admin --server "snarl://server/"</code></pre>
 
   <p>To list users:</p>
 
@@ -250,6 +283,8 @@
   <h2>Permissions Management</h2>
 
   <p>You can list a user's assigned and inherited permissions; or you can list the permissions of a role. The syntax is the same for both; they accept <tt>-n</tt> to specify the user or role, respectively, for which the permissions should be listed.</p>
+
+  <p>In order to list permissions of a user or a role, read permission to that user or role is required.</p>
 
   <p>The output is written in tabular form, grouping permissions to the same resource in a single line; for example, for user
 admin:</p>
