@@ -45,11 +45,11 @@ jQuery(function(){
 
 //add title of book to title element as a prefix to what's already there (the
 //chapter title
-jQuery(function() {
-    var theChapter = $("head > title").html();
-    var theTitle = TITLE + TITLE_SEPARATOR + theChapter;
-    $("head > title").html(theTitle);
-  });
+//jQuery(function() {
+// var theChapter = $("head > title").html();
+//    var theTitle = TITLE + TITLE_SEPARATOR + theChapter;
+//    $("head > title").html(theTitle);
+//  });
 
 //handle notes with the <n>foo</n> markup
 jQuery(function() {
