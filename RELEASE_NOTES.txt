@@ -1,3 +1,16 @@
+1.1.1 Changes
+-------------
+
+* FIXED:	Deadlock in Connection.remove().query() when in embedded mode
+* FIXED:	Duplicates in search results caused by repeated addition of a triple to the database
+* FIXED:	Non-termination in evaluation of largely nested filters
+* FIXED:	Non-termination in evaluation of nested optionals within graph patterns
+* FIXED:	Corrected issue in method which finds transactions in logs requiring recovery
+* FIXED:	Error in HTTP client where last byte of payload could be truncated
+* FIXED:	Issue in error code translation in the HTTP client
+* FIXED:	Connections to HTTP server were not getting closed when invalid/supported mime-types were requested for query responses.
+* FIXED:	Resolved issue where filter exists was not using the active graph as specifed in the from/from where clause of the query.
+
 1.1 Changes
 -----------
 * ADDED:	Support for transitivity reasoning.
