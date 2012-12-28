@@ -47,9 +47,9 @@
 
   <p>In this chapter we describe <a href="#reasoning">how to use Stardog's reasoning capabilities</a>; we also address some <a href="#trouble">common problems</a> and <a href="#issues">known issues</a>. We also describe <a href="#approach">Stardog's approach to query answering</a> in some detail, as well as a set of <a href="#guidelines">guidelines</a> that contribute to efficient query answering. If you are not familiar with the terminology, you can peruse the section on <a href="#terminology">terminology</a>.</p>
 
-<p>Stardog reasoning is based on the <a href="http://www.w3.org/TR/2010/WD-sparql11-entailment-20100126/#id45013">OWL 2 Direct Semantics Entailment Regime</a>. We dynamically apply a "reasoning level" at query time; part of the query interface presented to the user is to (optionally) choose a reasoning level.</p>
+<p>Stardog reasoning is based on the <a href="http://www.w3.org/TR/2010/WD-sparql11-entailment-20100126/#id45013">OWL 2 Direct Semantics Entailment Regime</a>. Stardog performs reasoning in a very lazy and late-binding fashion: it does not materialize inferences; but, rather, computes them when they are needed, at query evaluation time, based on a reasoning level chosen at query time. This allows for maximum flexibility, while maintaining excellent performance and scalability. Part of the query interface presented of Stardog is, therefore, to (optionally) choose a reasoning level on a query-by-query (if required) basis.</p>
 
-<p>Stardog supports several different reasoning levels; they determine the allowed types of OWL axiom that are taken into account for reasoning in query evaluation. The reasoning levels are</p>
+<p>Stardog supports several reasoning levels; the reasoning level determines the kinds of inference rules or axioms that are to be considered during query evaluation:</p>
 
 <ul>
   <li><b>NONE</b>. No axioms are considered.</li>
@@ -60,19 +60,19 @@
   <li><b>DL</b>. For <a href="http://www.w3.org/TR/owl2-syntax/">OWL 2 DL</a> axioms.</li>
 </ul>
 
-<p>Stardog also supports <a href="#swrl">user-defined rule reasoning</a> (using <a href="http://www.w3.org/Submission/SWRL/">SWRL</a> syntax and bultins).<n>SWRL doesn't require a specific reasoning level because it's orthogonal to the reasoning level chosen for a particular query.</n></p>
+<p>Stardog also supports <a href="#swrl">user-defined rule reasoning</a> (using <a href="http://www.w3.org/Submission/SWRL/">SWRL</a> syntax and bultins).<n>SWRL doesn't require a specific reasoning level because SWRL rule evaluation is orthogonal to the reasoning level chosen for a particular query.</n></p>
 
 </section>
 
 <section id="reasoning"><header><h1 id='chapter'>Using Reasoning</h1></header>
 
-<p>In order to do reasoning, Stardog requires a schema (sometimes called a "TBox") to be present in the database.<n>Note that Stardog does not require a schema to evaluate SPARQL queries; it does require some axioms or rules to do reasoning during query evaluation; those axioms are called the "schema"; but that's very different from the way "schema" is used in an RDBMS.</n> Since schemas are serialized as RDF, they are loaded into a Stardog database in the same way that any RDF is loaded into a Stardog database.</p>
+<p>In order to do reasoning, Stardog requires a schema (sometimes called a "TBox") to be present in the database.<n>Note that Stardog does not require a schema to evaluate SPARQL queries; it does require some axioms or rules to do reasoning during query evaluation; those axioms are called the "schema"; but that's very different from the way "schema" is used in an RDBMS.</n> Since schemas are serialized as RDF, they are loaded into a Stardog database in the same way that any RDF is loaded into a Stardog database. Also, note, that the schema, since it is just more RDF triples in one sense, the schema may change as needed. It's neither fixed nor compiled in any special way.</p>
 
-<a id="tbox_extraction"></a><p>The schema may reside in the default graph, in a specific named graph, or in a collection of graphs. We tell Stardog where the schema is by setting the <code>reasoning.schema.graphs</code> property to one or more named graphs URIs. If we want to take the default graph into account, then we can use the built-in URI <code>tag:stardog:api:context:default</code>; if we want to use all named graphs (that is, to tell Stardog to look for the schema in all named graphs), we can use <code>tag:stardog:api:context:all</code>. The default value for this property is to use the default graph only.</p>
+<a id="tbox_extraction"></a><p>The schema may reside in the default graph, in a specific named graph, or in a collection of graphs. You simply must tell Stardog where the schema is by setting the <code>reasoning.schema.graphs</code> property to one or more named graphs URIs. If we want the default graph to be considered part of the schema, then we can use the special, built-in URI <code>tag:stardog:api:context:default</code>. Ff we want to use all named graphs (that is, to tell Stardog to look for the schema in all named graphs), we can use <code>tag:stardog:api:context:all</code>. If you need to store your schema in one or more specific named graphs, provide their names to the <code>reasoning.schema.graphs</code> parameter. The default value for this property is to use the default graph only.</p>
 
 <h2>Query Answering</h2>
 
-<p>All of Stardog's intefaces (API, network, and command-line as of @@VERSION@@) support reasoning during query evaluation.</p>
+<p>All of Stardog's interfaces (API, network, and command-line as of @@VERSION@@) support reasoning during query evaluation.</p>
 
 <h3>Command Line</h3>
 
@@ -88,9 +88,19 @@
 <pre><code>$ curl -u admin:admin -X GET -H "SD-Connection-String: reasoning=QL" \
   "http://localhost:5822/myDB/query?query=..."</code></pre>
 
+<p>See the <a href="../java/">Java Programming</a> chapter for details on specifying the reasoning level programmatically.</p>
+
+<h2>ReasoningConnection API</h2>
+
+<p>Currently, this API only has two methods:</p>
+<ul>
+<li>isConsistent(), which can be used to check if the current KB is consistent with respect to the current reasoning level.</li>
+<li>isSatisfiable(URI theURIClass), which can be used to check if the given class if satisfiable with respect to the current KB and reasoning level.</li>
+</ul>
+
 <h2>Explaining Reasoning Results</h2>
    
-<p>Stardog can explain the inferences (i.e., the results of its reasoning) it produces. An explanation of an inference is the minimum set of statements explicitly stored in the database that together justify or warrant the inference. Explanations are useful for debugging and understanding, especially when large number of statements interact with each other to infer new statements</p>
+<p>Stardog can explain the inferences (i.e., the results of its reasoning) it produces. An explanation of an inference is the minimum set of statements explicitly stored in the database that together justify or warrant the inference. Explanations are useful for debugging and understanding, especially when large number of statements interact with each other to infer new statements.</p>
 
 <p>Explanations can be retrieved using the CLI command <tt>explain inference</tt> by providing an input file that contains the inference to be explained:</p>
   
@@ -102,17 +112,9 @@
   <a href="../network/#extended-http">extended HTTP protocol</a> and SNARL API. See the examples included in 
   the distribution for more details about retrieving explanations programmatically.</p>
   
-  <p>Note that there is probably more than one distinct explanation for an inference, but Stardog returns a single
-  explanation only. We plan to compute multiple explanations in a future version.</p>
+  <p>Note that there is probably more than one  explanation for an inference, but Stardog returns only a single
+  explanation. We plan to compute multiple explanations in a future version.</p>
 
-<h2>ReasoningConnection API</h2>
-
-<p>Currently, this API only has two methods:</p>
-<ul>
-<li>isConsistent(), which can be used to check if the current KB is consistent with respect to the current reasoning level.</li>
-<li>isSatisfiable(URI theURIClass), which can be used to check if the given class if satisfiable with respect to the current KB and reasoning level.</li>
-</ul>
-  
 </section>
 
 <section id="trouble"><header><h1 id='chapter'>Not Getting Expected Answers?</h1></header>
@@ -209,18 +211,18 @@ database in the normal way.</li>
 
 <h3>Basic Rules</h3>
 
-<p>A person whose age is between 13 and 19 (inclusive) is a teenager:</p>
+<p>A person between 13 and 19 (inclusive) years of age is a teenager:</p>
 
 <pre><code>:Teenager(?x) <- :Person(?x), swrlb:greaterThanOrEqual(?age, 13),
                  swrlb:lessThanOrEqual(?age, 19),
                  :Person(?x, ?age)</code></pre>
 
-<p>A person whose an uncle of a niece:</p>
+<p>A person who's an uncle of a niece:</p>
 
 <pre><code>:UncleOfNiece(?x) <- :Person(?x), :Male(?x), :hasSibling(?x, ?y), 
                   :isParentOf(?y, ?z), :Female(?z)</code></pre>
 
-<p>A person whose male and has a niece or nephew is an uncle of his niece(s) and nephew(s):</p>
+<p>A person who's male and has a niece or nephew is an uncle of his niece(s) and nephew(s):</p>
 
 <pre><code>:isUncleOf(?x, ?z) <- :isSiblingOf(?x, ?y), :isParentOf(?y, ?z), :Male(?x)</code></pre>
 
@@ -233,9 +235,9 @@ database in the normal way.</li>
 
 <section id="approach"><header><h1 id='chapter'>Query Rewriting</h1></header>
    
-  <p>Query answering with reasoning in Stardog is based on <i>query rewriting</i>. Intuitively, the idea is to expand or rewrite the original query with respect to the knowledge represented in the schema, and then executing the resulting expanded query (EQ) over the data only.</p>
+  <p>Query answering with reasoning in Stardog is based on <i>query rewriting</i>. Stardog rewrites the user's  query with respect to the schema, and then executes the resulting expanded query (EQ) against the data.</p>
   
-  <p>Blackout&mdash;Stardog's internal reasoner&mdash;implements a highly optimized version of the <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.165.786">query rewriting algorithm of Pérez-Urbina et al</a>. As can be seen in Figure 2, the rewriting process involves 5 different phases. For the sake of simplicity we do not treat them separately here; interested readers can refer to the provided paper for a detailed presentation.</p>
+  <p>Stardog's reasoner implements a highly optimized query rewriting algorithm. As can be seen in Figure 2, the rewriting process involves 5 different phases.</p>
   
   <div>
    <img src="/docs/owl2/blackout.png" border=0 />
@@ -244,7 +246,7 @@ database in the normal way.</li>
    <p>Figure 2. Query Rewriting</p>
   </div>
   
-  <p>We illustrate the query answering process by means of an example. Consider an OWL 2 EL DB MyDB<sub>1</sub> containing the following schema axioms:</p>
+  <p>We illustrate the query answering process by means of an example. Consider a Stardog database, MyDB<sub>1</sub>, containing the following schema axioms:</p>
   
   <pre><code>
   :SeniorManager rdfs:subClassOf :manages some :Manager
@@ -252,7 +254,7 @@ database in the normal way.</li>
   :Manager rdfs:subClassOf :Employee
   </pre></code>
   
-  <p>stating that a senior manager manages at least one manager, that every person that manages an employee is a manager, and that every manager is also an employee. Moreover, let us assume MyDB<sub>1</sub> also contains the following data assertions:</p>
+  <p>Which says that a senior manager manages at least one manager, that every person that manages an employee is a manager, and that every manager is also an employee. Moreover, let us assume MyDB<sub>1</sub> also contains the following data assertions:</p>
   
   <pre><code>
   :Bill rdf:type :SeniorManager
@@ -261,15 +263,11 @@ database in the normal way.</li>
   :Lucy rdf:type :Employee
   </pre></code>
   
-  <p>Finally, let us assume that we want to retrieve the set of all employees. We do this by posing the following query over MyDB<sub>1</sub>:</p>
+  <p>Finally, let us assume that we want to retrieve the set of all employees. We do this by posing the following query:</p>
   
-  <pre><code>
-  SELECT ?employee WHERE { ?employee rdf:type :Employee }
-  </pre></code>
+  <pre><code>SELECT ?employee WHERE { ?employee rdf:type :Employee }</pre></code>
   
-  <p>Given the knowledge captured in the schema, we expect all individuals occurring in the data to be part of the answer.</p>
-  
-  <p>In order to answer this query, Stardog first <b>rewrites</b> it using the relevant knowledge in the schema. In this case, it can be shown that the EQ produced by Stardog contains the following queries:</p>
+  <p>Given the knowledge captured in the schema, we expect all individuals occurring in the data to be part of the answer. In order to answer this query, Stardog first <b>rewrites</b> it using the schema. In this case, the original query is rewritten into four queries:</p>
   
   <pre><code>
   SELECT ?employee WHERE { ?employee rdf:type :Employee }
@@ -278,57 +276,25 @@ database in the normal way.</li>
   SELECT ?employee WHERE { ?employee :manages ?x. ?x rdf:type :Employee }
   </pre></code>
   
-  <p>The second and final step consists of executing the EQ over the data by computing the union of the results of the produced queries.</p>
+  <p>The final step consists of executing these four queries over the data.</p>
   
-  <p>The form of the EQ depends on the OWL 2 profile in which the DB is expressed. If the DB is within OWL 2 QL, then every EQ produced by Stardog <em>is guaranteed to be expanded into a set of queries</em>. If the DB is within OWL 2 RL or EL, then the EQ <i>might</i> include a recursive rule; it is important to understand, however, that this is not always the case as demonstrated by the above example.</p>
+  <p>The form of the EQ depends on the reasoning level. For OWL 2 QL, every EQ produced by Stardog <em>is guaranteed to be expanded into a set of queries</em>. If the reasoning level is OWL 2 RL or EL, then the EQ <i>may</i> (but may not) include a recursive rule. If a recursive rule is included, Stardog's answers will be sound but incomplete with respect to the semantics of the requested reasoning level.</p>
 
  <h2>Why Query Rewriting?</h2>
   
-  <p>As explained previously, the query rewriting approach deals with query answering in two separate phases: first, the query is rewritten with respect to the schema in order to get an EQ, and then the EQ is evaluated over the data. Notably, given this separation, it can be shown that the EQ is <em>independent from the data</em>. This independence is important on several levels:</p>
-  
-  <ol>
-  <li>The time it takes to compute the EQ depends on the size of the schema and the original query only, and not on the size of the data. Typically, the size of the schema and the query are much smaller than that of the data.</li>
-  <li>Given the form of the EQ, it can be evaluated over secondary storage. That is, data does not need to be loaded into memory, which makes the query rewriting approach to query answering a suitable reasoning technique for scenarios where the data is too big to fit in memory.</li>
-  <li>The same EQ can be evaluated over different instances of data without having to be recomputed.</li>
-  </ol>
-  
-  <p>An alternative is a technique known as <emp>materialization</emp>. In this approach, it is the data that gets expanded with respect to the schema, not the query. That is, the axioms in the schema are used as rules to generate new triples. For example we could use the axiom <code>:manages some :Employee rdfs:subClassOf :Manager</code> and the data assertions</p>
-  
-  <pre><code>
-  :Ana :manages :Lucy
-  :Lucy rdf:type :Employee
-  </pre></code>
-  
-  <p>to derive the <em>new</em> triple:</p>
-  
-  <pre><code>
-  :Ana rdf:type :Manager
-  </pre></code>
-  
-  <p>which was only implicit before.</p>
-  
-  <p>The materialization phase typically consists in applying all the axioms in the schema to the original data and the inferred triples until no more triples can be generated. After materialization, we can evaluate queries over the new data disregarding the schema altogether. In our example, it can be shown that materializing the data with respect to the schema would eventually produce the following triples:</p>
-  
-  <pre><code>
-  :Bill rdf:type :Employee
-  :Robert rdf:type :Employee
-  :Ana rdf:type :Employee
-  :Lucy rdf:type :Employee
-  </pre></code>
-  
-  <p>Given the fact that query answering over a materialized database does not require to take the schema into account, it is typically faster than query answering via query rewriting. However, materialization introduces several issues:</p>
+  <p>Query rewriting has several advantages over the (primary) alternative technique, i.e., materialization. In this approach, it is the data that gets expanded with respect to the schema, not the query. That is, the axioms in the schema are used as rules to generate new triples. However, materialization introduces some issues:</p>
   
   <ul>
-  <li><b>data freshness</b>. Materialization has to be performed every time the data or the schema change. This is particularly unsuitable for applications where the data changes relatively frequently.</li>
+  <li><b>data freshness</b>. Materialization has to be performed every time the data or the schema change. This is particularly unsuitable for applications where the data changes frequently.</li>
   <li><b>data size</b>. Depending on the schema, materialization can significantly increase the size of the data. A relatively simple class hierarchy with a single level of subclasses can duplicate the size of the data.</li>
   <li><b>OWL 2 profile reasoning</b>. Given the fact that QL, RL, and EL, are not comparable with respect to expressive power, an application that requires reasoning with more than one profile would need to maintain different corresponding materialized versions of the data.</li>
-  <li><b>Resources</b>. Depending on the size of the original data and the complexity of the schema, materialization can be very computationally expensive.</li>
+  <li><b>Resources</b>. Depending on the size of the original data and the complexity of the schema, materialization can be computationally expensive.</li>
   </ul>
 </section>
 
   <section id="guidelines"><header><h1 id='chapter'>Performance Hints</h1></header>
 
-  <p>The <a href="#approach">query rewriting approach implemented by Stardog</a> suggests some guidelines that might contribute to more efficient query answering.</p>
+  <p>The <a href="#approach">query rewriting approach implemented by Stardog</a> implies guidelines that might contribute to more efficient query answering.</p>
 
   <h3>Hierarchies and Queries</h3>
 
