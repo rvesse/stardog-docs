@@ -204,49 +204,45 @@
 
 <section id="special_predicates"><header><h1 id='chapter'>Special Predicates</h1></header>
 
-<h2>Retrieving Direct/Strict Types, Subclasses, and Subproperties</h2>
+<h2>Retrieving Direct Types, and Direct/Strict Subclasses and Subproperties</h2>
 
 <p>Besides the standard RDF(S) predicates <code>rdf:type</code>, <code>rdfs:subClassOf</code> and <code>rdfs:subPropertyOf</code>, Stardog supports the following special built-in predicates:</p>
 
 <ul>
-<li><code>http://pellet.owldl.com/ns/sdle#directType</code></li>
-<li><code>http://pellet.owldl.com/ns/sdle#directSubClassOf</code></li>
-<li><code>http://pellet.owldl.com/ns/sdle#strictSubClassOf</code></li>
-<li><code>http://pellet.owldl.com/ns/sdle#directSubPropertyOf</code></li>
-<li><code>http://pellet.owldl.com/ns/sdle#strictSubPropertyOf</code></li>
+<li><code>sdle:directType</code></li>
+<li><code>sdle:directSubClassOf</code></li>
+<li><code>sdle:strictSubClassOf</code></li>
+<li><code>sdle:directSubPropertyOf</code></li>
+<li><code>sdle:strictSubPropertyOf</code></li>
 </ul>
 
-<p>We define the meaning of these predicates by relating each of them to a SPARQL ASK query that must be true.<n>The predicates <code>http://pellet.owldl.com/ns/sdle#directSubPropertyOf</code> and <code>http://pellet.owldl.com/ns/sdle#strictSubPropertyOf</code> are defined analogously.</n></p>
+<p>Where the <code>sdle</code> prefix stands for <code>http://pellet.owldl.com/ns/sdle#</code>.</p>
 
-<pre><code>ind http://pellet.owldl.com/ns/sdle#directType c1:
+<p>We define the meaning of these predicates by relating each of them to an analogous triple pattern that could be used instead in SELECT, CONSTRUCT, or ASK queries.<n>The predicates <code>sdle:directSubPropertyOf</code> and <code>sdle:strictSubPropertyOf</code> are defined analogously.</n></p>
 
-ASK {
-  ind rdf:type c1 .
-  FILTER NOT EXISTS {
-    ind rdf:type c2 .
-    c2 http://pellet.owldl.com/ns/sdle#strictSubClassOf c1 .
-  }
+<pre><code>:ind sdle:directType :c1 ->
+
+:ind rdf:type :c1 .
+FILTER NOT EXISTS {
+  :ind rdf:type :c2 .
+  :c2 sdle:strictSubClassOf :c1 .
 }
 </pre></code>
 
-<pre><code>c1 http://pellet.owldl.com/ns/sdle#strictSubClassOf c2:
+<pre><code>:c1 sdle:strictSubClassOf :c2 ->
 
-ASK { 
-  c1 rdfs:subClassOf c2 .
-  FILTER NOT EXISTS {
-    c1 owl:equivalentClass c2 .
-  }
+:c1 rdfs:subClassOf :c2 .
+FILTER NOT EXISTS {
+  :c1 owl:equivalentClass :c2 .
 }
 </pre></code>
 
-<pre><code>c1 http://pellet.owldl.com/ns/sdle#directSubClassOf c2:
+<pre><code>:c1 sdle:directSubClassOf :c2 ->
 
-ASK {
-  c1 http://pellet.owldl.com/ns/sdle#strictSubClassOf c2 .
-  FILTER NOT EXISTS {
-    c1 strictSubClassOf c3 .
-    c3 strictSubClassOf c2 .
-  }
+:c1 sdle:strictSubClassOf :c2 .
+FILTER NOT EXISTS {
+  :c1 sdle:strictSubClassOf :c3 .
+  :c3 sdle:strictSubClassOf :c2 .
 }
 </pre></code>
 
