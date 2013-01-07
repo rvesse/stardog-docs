@@ -174,7 +174,79 @@
   </li>
 </ul>
 
-<h2>New Individuals</h2>
+<h2>SWRL Examples</h2>
+
+<p>User-defined rules in SWRL provide a different sort of "user interface" with respect to OWL 2 reasoning in Stardog. Some problems (and some people) are simply a better fit for a rules-based approach to modeling and reasoning than to an axioms-based approach. What follows are a few (trivial and contrived) examples of user-defined rules in SWRL (using Datalog syntax; Stardog requires the canonical RDF serialization of SWRL, however).</p>
+
+<h3>Basic Rules</h3>
+
+<p>A person between 13 and 19 (inclusive) years of age is a teenager:</p>
+
+<pre><code>:Teenager(?x) <- :Person(?x), swrlb:greaterThanOrEqual(?age, 13),
+                 swrlb:lessThanOrEqual(?age, 19),
+                 :hasAge(?x, ?age)</code></pre>
+
+<p>A person who's an uncle of a niece:</p>
+
+<pre><code>:UncleOfNiece(?x) <- :Person(?x), :Male(?x), :hasSibling(?x, ?y), 
+                  :isParentOf(?y, ?z), :Female(?z)</code></pre>
+
+<p>A person who's male and has a niece or nephew is an uncle of his niece(s) and nephew(s):</p>
+
+<pre><code>:isUncleOf(?x, ?z) <- :isSiblingOf(?x, ?y), :isParentOf(?y, ?z), :Male(?x)</code></pre>
+
+<p>A super user can read all of the things!</p>
+
+<pre><code>:Role(?z), :hasRole(?x, ?z), :readPermission(?z, ?y) <- :SuperUser(?x)
+                   :Resource(?y), http://www.w3.org/ns/sparql#UUID(?z)</code></pre>
+
+</section>
+
+<section id="special_predicates"><header><h1 id='chapter'>Special Predicates</h1></header>
+
+<h2>Retrieving Direct Types, and Direct/Strict Subclasses and Subproperties</h2>
+
+<p>Besides the standard RDF(S) predicates <code>rdf:type</code>, <code>rdfs:subClassOf</code> and <code>rdfs:subPropertyOf</code>, Stardog supports the following special built-in predicates:</p>
+
+<ul>
+<li><code>sdle:directType</code></li>
+<li><code>sdle:directSubClassOf</code></li>
+<li><code>sdle:strictSubClassOf</code></li>
+<li><code>sdle:directSubPropertyOf</code></li>
+<li><code>sdle:strictSubPropertyOf</code></li>
+</ul>
+
+<p>Where the <code>sdle</code> prefix stands for <code>http://pellet.owldl.com/ns/sdle#</code>.</p>
+
+<p>We define the meaning of these predicates by relating each of them to an analogous triple pattern that could be used instead in SELECT, CONSTRUCT, or ASK queries.<n>The predicates <code>sdle:directSubPropertyOf</code> and <code>sdle:strictSubPropertyOf</code> are defined analogously.</n></p>
+
+<pre><code>:ind sdle:directType :c1 ->
+
+:ind rdf:type :c1 .
+FILTER NOT EXISTS {
+  :ind rdf:type :c2 .
+  :c2 sdle:strictSubClassOf :c1 .
+}
+</pre></code>
+
+<pre><code>:c1 sdle:strictSubClassOf :c2 ->
+
+:c1 rdfs:subClassOf :c2 .
+FILTER NOT EXISTS {
+  :c1 owl:equivalentClass :c2 .
+}
+</pre></code>
+
+<pre><code>:c1 sdle:directSubClassOf :c2 ->
+
+:c1 sdle:strictSubClassOf :c2 .
+FILTER NOT EXISTS {
+  :c1 sdle:strictSubClassOf :c3 .
+  :c3 sdle:strictSubClassOf :c2 .
+}
+</pre></code>
+
+<h2>Creating New Individuals with SWRL</h2>
 
 <p>One cannot create new individuals (i.e., new instances of classes) using SWRL. This restriction is well-motivated as it can lead to non-termination issues. Stardog weakens this restriction in some crucial aspects, subject to the following restrictions, conditions, and warnings. <b>Note that this support is effectively a gun with which users may shoot themselves in the foot if they do not use it carefully.</b></p>
 
