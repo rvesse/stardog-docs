@@ -132,16 +132,16 @@ SNARL, which is based on Google's Protocol Buffers.</p>
 
     <h2>Configuring Stardog Server Behavior</h2>
 
+    <p><strong>Note</strong>: the properties described in this section control the behavior of the Stardog Server (whether HTTP or SNARL protocols are in use); to set properties or other metadata on individual Stardog <em>databases</em>, see <a href="#admin-database">Administering a Database</a>.</p>
+
     <p>Stardog Server's behavior can be configured via the JVM
 <tt>stardog.home</tt>, which sets Stardog Home, overriding the value of
-<tt>STARDOG_HOME</tt> set as an environment variable.</p>
+<tt>STARDOG_HOME</tt> set as an environment variable. Stardog Server's behavior
+can also be configured via a <tt>stardog.properties</tt>&mdash;which is a Java
+Properties file&mdash;file in <tt>STARDOG_HOME</tt>. To change the behavior of a
+running Stardog Server, it is necessary to shut it down and restart it.</p>
 
-    <p>Stardog Server's behavior can also be configured via a
-<tt>stardog.properties</tt>&mdash;which is a Java Properties file&mdash;file
-in <tt>STARDOG_HOME</tt>. To change the behavior of a running Stardog
-Server, it is necessary to shut it down and restart it.</p>
-
-    <p>The following properties are available in
+    <p>The following properties that determine aspects of Stardog Server's behavior are available in
     <tt>stardog.properties</tt>:</p>
 
     <ol>
@@ -152,7 +152,16 @@ Server, it is necessary to shut it down and restart it.</p>
       <li><tt>http.max.connections</tt>: The next two parameters control the maximum number of simultaneous connections for a client; for more information, see the <a href=" http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html">relevant Apache docs</a>.</li>
       <li><tt>http.max.connections.per.route</tt></li>
       <li><tt>http.max.get.query.length</tt>: The length in characters of the longest SPARQL query that will be serialized via HTTP <tt>GET</tt>; queries longer are serialized via <tt>POST</tt>.</li>
-   </ol>
+      <li><tt>bnode.preserve.id</tt>: Determines how the Stardog parser handles bnode identifiers
+that may be present in (some) RDF input. If this property is enabled (i.e., <tt>TRUE</tt>), parsing
+and data loading performance are improved; but the other effect is that  if distinct input files use
+(randomly or intentionally) the same bnode identifier, that bnode will point to one and the same
+node in the database. If you have input files that use explicit bnode identifiers, and multiple
+files may use the asame bnode idenitifers, and you don't want those bnodes to be smushed into a
+single node in the database, then this configuration option should be disabled (set to
+<tt>FALSE</tt>). </li>
+
+    </ol>
 
     <h2>Starting and Stopping the Server</h2>
     
