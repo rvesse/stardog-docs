@@ -75,7 +75,7 @@ Stardog.</p>
       <pre><code>mvn install:install-file
       -DgroupId=com.clarkparsia.stardog
       -DartifactId=stardog-spring
-      -Dversion=0.0.2
+      -Dversion=1.1.1
       -Dfile=stardog-spring.jar
       -Dpackaging=jar
       -DpomFile=pom.xml</code></pre></li>
@@ -99,12 +99,19 @@ boilerplate away from application developers.</p>
     <li><code>DataImporter</code> for easy bootstrapping of input data into Stardog</li>
   </ol>
   
+  <p>In addition to the core capabilities, Spring for Stardog also integrates with
+    the Spring Batch framework.  Spring Batch enables complex batch processing jobs to be
+    created to accomplish tasks such as ETL or legacy data migration.  The standard ItemReader
+    and ItemWriter interfaces are implemented with a separate callback writing records using
+    the SNARL Adder API.
+  </p>
+  
   <p>Future releases of Spring for Stardog will address other common
-  enterprise capabilities: Spring Batch, Spring Data, etc.</p>
+  enterprise capabilities: Spring Integration, Spring Data, etc.</p>
 
   </section>
 
-  <section id="use"><header><h1 id="chapter">Use</h1></header>
+  <section id="use"><header><h1 id="chapter">Basic Spring</h1></header>
 
   <p>There are three Beans to add to a Spring application context:</p>
 
@@ -133,6 +140,17 @@ Stardog.</p>
 of Stardog's native API, <a href="../java">SNARL</a>, and follows the
 same approach of other Spring template, i.e., <code>JdbcTemplate</code>,
 <code>JmsTemplate</code>, and so on.</p>
+
+<p>Spring for Stardog also comes with convenience mappers, for automatically mapping
+  result set bindings into common data types. The <code>SimpleRowMapper</code> projects the
+  <code>BindingSet</code> as a <code>List<Map<String,String>></code> and a <code>SingleMapper</code>
+  that accepts a constructor parameter for binding a single parameter for a single result set.
+</p>
+
+<p>For example:</p>
+  <div style="font-size: small"><script src="https://gist.github.com/4570152.js"></script></div>
+
+
 
 <p>The key methods on <code>SnarlTemplate</code> include the following:</p>
 
@@ -177,6 +195,22 @@ Spring.</p>
 
 <div style="font-size: small"><script src="https://gist.github.com/1115889.js?file=applicationContext.xml"></script></div>
 
+</section>
+
+  <section id="use"><header><h1 id="chapter">Spring Batch</h1></header>
+  
+  <p>In addition to the base <code>DataSource</code> and <code>SnarlTemplate</code>, Spring Batch support adds the following:</p>
+
+  <ul>
+    <li><code>SnarlItemReader</code>: <tt>com.clarkparsia.stardog.ext.spring.batch.SnarlItemReader</tt></li>
+    <li><code>SnarlItemWriter</code>: <tt>com.clarkparsia.stardog.ext.spring.batch.SnarlItemWriter</tt></li>
+    <li><code>BatchAdderCallback</code>: <tt>com.clarkparsia.stardog.ext.spring.batch.BatchAdderCallback</tt></li>
+  </ul>
+ 
+  <p>These beans can then be used within Spring Batch job definition, for example:</p>
+  <div style="font-size: small"><script src="https://gist.github.com/4570209.js"></script></div>
+   
+  
 </section>
 
   <section id="examples"><header><h1 id='chapter'>Examples</h1></header>
