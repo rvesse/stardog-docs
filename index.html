@@ -232,6 +232,8 @@ queries over data that has been loaded into it.</li>
   <li>SPARQL queries without a context or named graph are executed
 against the default, unnamed graph. In Stardog, the default graph is
 <em>not</em> the union of all the named graphs and the default graph. Note: this behavior is configurable via the <tt>query.all.graphs</tt> configuration parameter.</li>
+
+<li>RDF literals are limited to 8MB (after compression) in Stardog. Input data with literals larger than 8MB (after compression) will raise an exception.</li>
  </ol>
 
   </section>
