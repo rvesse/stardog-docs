@@ -49,9 +49,8 @@
 
   <p><a href="http://http://groovy.codehaus.org//">Groovy</a> is an agile and 
   dynamic programming language for the JVM, making popular programming features such 
-  as Closures available to Java developers. Stardog's Groovy support
-makes life easier for developers who need to work with Semantic
-Web technology&mdash;including RDF, SPARQL, and OWL&mdash;by way of
+  as closures available to Java developers. Stardog's Groovy support
+makes life easier for developers who need to work with RDF, SPARQL, and OWL by way of
 Stardog.</p>
 
   <p>The Groovy for Stardog <a
@@ -68,7 +67,7 @@ Stardog.</p>
 
     <ul>
       <li>edit <tt>build.gradle</tt> to point <tt>stardogLocation</tt> at a Stardog release directory;</li>
-      <li>then run <tt>gradlew build</tt>, which eventually results in a <tt>stardog-groovy.jar</tt> in <tt>build/libs</tt>; finally,</li>
+      <li>run <tt>gradlew build</tt>, which eventually results in a <tt>stardog-groovy.jar</tt> in <tt>build/libs</tt>; finally,</li>
       <li><tt>gradlew install</tt> does a build, generates a POM, and installs the POM in local Maven repo; alternately,</li>
       <li><tt>mvn install</tt> will work, too:
       <pre><code>mvn install:install-file
@@ -87,8 +86,8 @@ Stardog.</p>
   <p>Groovy for Stardog <b>@@SPRING_VERSION@@</b> provides a set of Groovy API wrappers
   for developers to build applications with Stardog and take advantage of native Groovy features.
   For example, you can create a Stardog connection pool in a single line, much 
-  like Groovy SQL support.  In Groovy for Stardog, queries can be iterated over using closures,
-  and transaction safe closures executed over a connection. </p>
+  like Groovy SQL support.  In Groovy for Stardog, queries can be iterated over using closures
+  and transaction safe closures can be executed over a connection. </p>
 
 <p>For the first release, Groovy for Stardog includes <code>com.clarkparsia.stardog.ext.groovy.Stardog</code> 
 with the following methods:</p>
@@ -103,7 +102,7 @@ with the following methods:</p>
   </ol>
   
   <p>In addition to the core capabilities, Groovy for Stardog also integrates with the Spring
-  bindings and can use a DataSource to initialize the constructor.  Combining both together creates
+  bindings and can use a <tt>DataSource</tt> to initialize the constructor.  Combining both together creates
   an easy to use solution for other Groovy environments, such as <a href="http://www.grails.org">Grails</a>.
   </p>
   
