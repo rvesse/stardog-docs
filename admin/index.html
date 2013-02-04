@@ -11,7 +11,7 @@
     <link media="screen" rel="stylesheet" href="/_/css/ps.css"/>
     <link media="print" rel="stylesheet" href="/_/css/print.css"/>
     <link media="screen" rel="stylesheet" href="/_/css/simplegrid.css"/>
-    
+
   </head>
 
   <body>
@@ -20,7 +20,7 @@
 
 <div id="masthead">
 
-  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>  
+  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>
 
   <div id="chaptertitle" class="col-9-12">
       <blockquote>
@@ -164,7 +164,7 @@ single node in the database, then this configuration option should be disabled (
     </ol>
 
     <h2>Starting and Stopping the Server</h2>
-    
+
     <p><b>Note</b>: Unlike the other <tt>stardog-admin</tt> subcommands, starting and stopping the server may only be run locally, i.e., on the same machine as Stardog Server will run on.</p>
 
     <p>The simplest way to start the server&mdash;running on the default ports, detaching to run as a daemon, and writing <tt>stardog.pid</tt> and <tt>stardog.log</tt> to the current working directory&mdash; is</p>
@@ -239,11 +239,11 @@ till you really need to.</p>
 <dd> A legal database name.</dd>
 
 <dt>database.online</dt>
-<dd> The status of the database: online or offline. It may be set so that 
+<dd> The status of the database: online or offline. It may be set so that
 the database is created initially in online or offline status;
 subsequently, it can't be set directly but only by using the relevant admin commands.</dd>
 
-<dt>icv.active.graphs</dt> 
+<dt>icv.active.graphs</dt>
 <dd> Specifies which part of the database, in terms of named graphs, is
 checked with IC validation. to
 validate all the named graphs in the database.</dd>
@@ -271,10 +271,10 @@ mutations are subject to IC validation (i.e., "guard mode").</dd>
 <dd> Enables persistent indexes.</dd>
 
 <dt>index.persist.sync</dt>
-<dd> Enables whether memory indexes are synchronously or asynchronously persisted to disk with respect to a transaction.</dd> 
+<dd> Enables whether memory indexes are synchronously or asynchronously persisted to disk with respect to a transaction.</dd>
 
 <dt>index.statistics.update.automatic</dt>
-<dd> Sets whether statistics are maintained automatically.</dd> 
+<dd> Sets whether statistics are maintained automatically.</dd>
 
 <dt>index.type</dt>
 <dd> Sets the index type (memory or disk).</dt>
@@ -296,7 +296,7 @@ mutations are subject to IC validation (i.e., "guard mode").</dd>
 
 <dt>transactions.durable</dt>
 <dd> Enables durable transactions.</dt>
-        
+
       </dl>
 
       <h4>A Note About Database Status</h4>
@@ -545,8 +545,8 @@ modeling, and other factors.</p>
 database administrators to persist and manage custom namespace prefix
 bindings, which works in the following way:</p>
 
-<ol> 
-  
+<ol>
+
   <li>At database creation time, if data is loaded to the database that
   contains namespace prefixes, then those are persisted for the life of
   the database. Any subsequent queries to the database may simply omit the
@@ -638,13 +638,13 @@ as follows:</p>
         </tr>
       </tfoot>
       <tbody><!-- add a colgroup -->
-        
+
         <tr>
           <td><tt>--durable</tt>, <tt>-d</tt></td>
 
           <td>If present, sets all mutation operations to database as transactionally durable; durability increases the cost of all mutation operations.<n>In a future release, we will allow durability to be overriden or enabled in Connection Strings, rather than set once-for-all at database creation time.</n></td>
-          <td></td> 
-          
+          <td></td>
+
           <td><tt>False</tt></td>
         </tr>
         <tr>
@@ -673,7 +673,7 @@ as follows:</p>
         </tr>
       </tbody>
       <caption>Options for the Stardog <tt>create</tt> command.</caption>
-      
+
     </table>
 
 
@@ -701,7 +701,7 @@ option with caution.</p>
 
 <h3>Differential Indexes</h3>
 
-<p>While Stardog is generally biased in favor of read (i.e., query) performance, write performance is also important in many applications. In order to increase write performance, Stardog may be used, optionally, with a <em>differential index</em>. 
+<p>While Stardog is generally biased in favor of read (i.e., query) performance, write performance is also important in many applications. In order to increase write performance, Stardog may be used, optionally, with a <em>differential index</em>.
 
 <p>Stardog's differential index is used to persist additions and removals
 separately from the main indexes, such that updates to the database can be
@@ -718,7 +718,7 @@ differential index is not used until the main index size reaches
 <tt>DIFF_INDEX_MAX_LIMIT</tt>.</p>
 
 <p>In most cases, the default value of the <tt>DIFF_INDEX_MAX_LIMIT</tt> parameter will work fine and doesn't need to be changed.<n>The corrollary of this claim is that you shouldn't change this value in a production system till you've tested the effects of a change in a non-production system.</n>
-      
+
     <div><span><a name="compressed"></a></span></div>
     <h2>Using Compressed Data</h2>
 
@@ -745,7 +745,7 @@ is determined by their file names as usual. If there is an
 unrecognized file extension (e.g. '.txt') that file will be skipped.</p>
 
     <h2>Dropping a Database</h2>
-  
+
     <p>This command removes a database and all associated files and
 metadata. As with <tt>create</tt>, this command may work against a database
 directly or via a running Stardog server. <tt>drop</tt> operates without
@@ -809,6 +809,33 @@ If you want to get the value for a specific option then you can run
 the following command:</p>
 
   <pre><code>$ stardog-admin get -o index.named.graphs -n my_db_name</code></pre>
+
+<h2>Managing Queries</h2>
+
+<p>Stardog includes the capability to manage queries in-flight according to configurable policies set at run-time; this capability includes support for</p>
+
+<ul>
+  <li><b>listing</b> queries in-flight;</li>
+  <li><b>deleting</b> queries in-flight;</li>
+  <li><b>killing</b> automatically in-flight queries that exceed a threshold;</li>
+  <li><b>logging</b> slow queries for analysis.</li>
+</ul>
+
+<p>Stardog is pre-configured with sensible <i>server-wide</i> defaults for query management parameters; these defaults may be overridden or disabled per database.</p>
+
+<h3>Configuring Query Management</h3>
+
+<h3>Query Metadata</h3>
+
+<h3>Command-line Tools</h3>
+
+<h4>Listing Queries</h4>
+
+<h4>Deleting Queries</h4>
+
+<h4>Automatically Killing Queries</h4>
+
+<h3>Slow Query Logging</h3>
 
     </section>
 
@@ -874,7 +901,7 @@ especially in multi-user workloads.</p>
     memory and disk resource requirements of Stardog.</p>
 
     <h2>Memory usage</h2>
-    
+
     <p>Stardog uses system memory aggressively and the total system
     memory available to Stardog is typically the most important factor in
     performance. Stardog uses both JVM memory (known as heap memory) and
@@ -891,11 +918,11 @@ memory requirements for Stardog:</p>
       <thead>
         <tr>
           <th>Number of triples</th>
-          <th>JVM memory</th>          
+          <th>JVM memory</th>
           <th>System memory</th>
         </tr>
       </thead>
-      <tbody>        
+      <tbody>
         <tr>
           <td>10 million</td>
           <td>2GB</td>
@@ -919,7 +946,7 @@ memory requirements for Stardog:</p>
       </tbody>
       <caption>Recommended memory resources for a Stardog database.</caption>
     </table>
-    
+
     <p>By default, Stardog CLI sets the maximum JVM memory to 2GB. This
     setting works fine for most small to medium database sizes (up to
     100 million triples). As the database size increases, we recommend
@@ -931,7 +958,7 @@ memory requirements for Stardog:</p>
     heap size (<tt>-Xmx</tt> option) as possible.</p>
 
     <h2>Disk usage</h2>
-    
+
     <p>Stardog stores data on disk in a compressed format. The disk space
     needed for a database depends on many factors besides the number of
     triples, including the number of unique resources and literals in the
@@ -947,7 +974,7 @@ memory requirements for Stardog:</p>
           <th>Disk space used</th>
         </tr>
       </thead>
-      <tbody>        
+      <tbody>
         <tr>
           <td>10 million</td>
           <td>700MB - 1GB</td>
@@ -967,7 +994,7 @@ memory requirements for Stardog:</p>
       </tbody>
       <caption>Average amount of disk space used by a Stardog database.</caption>
     </table>
-    
+
     <p>These numbers are given for information purposes and the actual disk
     usage for a database may be significantly different in practice. Also it
     is important to note that the amount of disk space needed at creation
@@ -977,7 +1004,7 @@ memory requirements for Stardog:</p>
 
     <p>Disk space used by a database is non-trivially smaller if <a href="#index-strategies">triples only indexing strategy</a>
     is used. Triples-only indexing reduces overall disk space used by 25% in average; however, please note the tradeoff: SPARQL queries involving named graphs perform significantly better with quads indexing.</p>
-    
+
     <p>The disk space used by Stardog is additive for multiple databases and
     there is very little disk space used outside the databases. To calculate
     the total disk space needed for multiple databases, one can simply sum
@@ -995,7 +1022,7 @@ memory requirements for Stardog:</p>
   always just log to the console. Additionally, when you start a server with
   <code>server start</code>, this does not detach to the background, it will
   run in the current console.</p>
-  
+
   <p>To shut down the server correctly, you should either issue a
   <code>server stop</code> command from another window, or press CTRL-C (and
   then response 'Y' when asked to "Terminate batch job"). <u>Do not under any
@@ -1044,9 +1071,9 @@ executed from a Command Prompt with administrative privileges:</p>
     <li><tt>STARDOG_LOG_PATH</tt>: a path to a directory where the log files should be written (e.g., set <tt>STARDOG_LOG_PATH</tt>=c:\stardog-logs)</li>
   </ul>
 
-  <p><u>Note: if you have changed the default administrator password, you also need to modify <tt>stop-service.bat</tt> and 
-  specify the new username and password there (by passing <tt>-u</tt> and <tt>-p</tt> parameters in the line that invokes 
-  <tt>stardog-admin server stop</tt>). </u> In one of the future releases, an alternative solution will be provided that avoids 
+  <p><u>Note: if you have changed the default administrator password, you also need to modify <tt>stop-service.bat</tt> and
+  specify the new username and password there (by passing <tt>-u</tt> and <tt>-p</tt> parameters in the line that invokes
+  <tt>stardog-admin server stop</tt>). </u> In one of the future releases, an alternative solution will be provided that avoids
   the need to encode the administrator's password in the file.</p>
 
   <h3>Installing Stardog as a Service</h3>
@@ -1071,7 +1098,7 @@ service parameters.</p>
 <tt>uninstall-service.bat</tt> script.</p>
 
   </section>
-  
+
 <section id="fn">
   <header>  <h1 class="fn">Notes</h1></header>
   <ol id="notes">
