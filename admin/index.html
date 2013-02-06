@@ -147,6 +147,7 @@ running Stardog Server, it is necessary to shut it down and restart it.</p>
     <ol>
       <li><tt>strict.parsing</tt>: Controls whether Stardog parses RDF strictly (<tt>TRUE</tt>, the default) or laxly (<tt>FALSE</tt>)</li>
       <li><tt>query.all.graphs</tt>: Controls what Stardog Server queries over; if <tt>true</tt>, it will query over the default graph and the union of all named graphs; if <tt>false</tt> (the default), it will query only over the default graph.</li>
+      <li><tt>query.timeout</tt>: Sets the upper bound for query execution time that's inherited by all databases unless explicitly overriden. See <a href="#manage-queries">Query Management</a> section below for details.</li>
       <li><tt>logging.[access,audit].[enabled,type,file]</tt>: Controls whether and how Stardog logs server events; described in detail below.</li>
       <li><tt>database.connection.timeout.ms</tt>: Controls how long, in milliseconds,connections may idle before being automatically closed by the server. </li>
       <li><tt>http.max.connections</tt>: The next two parameters control the maximum number of simultaneous connections for a client; for more information, see the <a href=" http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html">relevant Apache docs</a>.</li>
@@ -810,13 +811,14 @@ the following command:</p>
 
   <pre><code>$ stardog-admin get -o index.named.graphs -n my_db_name</code></pre>
 
-<h2>Managing Queries</h2>
+<h2 id="manage-queries">Managing Queries</h2>
 
 <p>Stardog includes the capability to manage running queries according to configurable policies set at run-time; this capability includes support for</p>
 
 <ul>
   <li><b>listing</b> running queries;</li>
   <li><b>deleting</b> running queries;</li>
+  <li><b>reading</b> the status of a running query;</li>
   <li><b>killing</b> running queries that exceed a time threshold automatically;</li>
   <li><b>logging</b> slow queries for analysis.</li>
 </ul>
@@ -825,17 +827,84 @@ the following command:</p>
 
 <h3>Configuring Query Management</h3>
 
-<h3>Query Metadata</h3>
+<p>For many uses cases the default configuration will be sufficient. But you may need to tweak the timeout parameter to be longer or shorter, depending on the data load, queries, throughput, etc. The default configuration has a server-wide query timeout value of <tt>query.timeout</tt>, which is inherited by all the databases in the server. You can customize the server-wide timeout value and then set per-database custom values, too. Any database without a custom value inherits the server-wide value. To disable query timeout, set <tt>query.timeout</tt> to <tt>0</tt>.</p>
 
 <h3>Command-line Tools</h3>
 
+<p>The query management command-line tools are simple and easy to use.</p>
+
 <h4>Listing Queries</h4>
+
+<p>To see all running queries, use the <tt>query list</tt> subcommand:</p>
+
+<pre><code>-> % ./stardog-admin query list</code></pre>
+
+<p>The results are formatted tabularly:</p>
+
+<pre><code>+----+----------+-------+--------------+
+| ID | Database | User  | Elapsed time |
++----+----------+-------+--------------+
+| 2  | test     | admin | 00:00:20.165 |
+| 3  | test     | admin | 00:00:16.223 |
+| 4  | test     | admin | 00:00:08.769 |
++----+----------+-------+--------------+
+
+3 queries running</code></pre>
+
+<p>You can see the user who owns the query (superuser's can see all running queries), as well as the elapsed time and the database against which the query is running. The ID column is the key to deleting queries.</p>
 
 <h4>Deleting Queries</h4>
 
+<p>To delete a running query, simply pass its ID to the <tt>query kill</tt> subcommand:</p>
+
+<pre><code>-> % ./stardog-admin query kill 3</code></pre>
+
+<p>The output confirms the query kill completing successfully:</p>
+
+<pre><code>Query 3 killed successfully</code></pre>
+
 <h4>Automatically Killing Queries</h4>
 
+<p>For production use, especially when a Stardog database is exposed to arbitrary query input, some of which may not execute in an acceptable time period, the automatic query killing feature is useful. It will protect a Stardog Server from queries consuming too many resources.</p>
+
+<p>Once the execution time of a query exceeds the value of <tt>query.timeout</tt>, the query will be killed automatically. The client that submitted the query will receive an error message. The value of <tt>query.timeout</tt> may be overriden by setting a different value (smaller or longer) in database options. To disable, set to <tt>query.timeout</tt> to <tt>0</tt>.</p>
+
+<p>The value of <tt>query.timeout</tt> is a positive integer concated with a letter, all of which is interpreted as a time duration: 'h' (for hours), 'm' (for minutes), 's' (for seconds, )or 'ms' (for milliseconds). For example, '1h' for 1 hour, '5m' for 5 minutes, '90s' for 90 seconds, and '500ms' for 500 milliseconds.</p>
+
+<p>The default, out-of-the-box value of <tt>query.timeout</tt> is five minutes.</p>
+
+<h4>Query Status</h4>
+
+<p>To see more detail about one running query, use the <tt>query status</tt> subcommand:</p>
+
+<pre><code>-> % ./stardog-admin query status 1</code></pre>
+
+<p>The resulting output includes query metadata, including the query itself:</p>
+
+<pre><code>Username: admin
+Database: test
+Started : 2013-02-06 09:10:45 AM
+Elapsed : 00:01:19.187
+Query   :
+select ?x ?p ?o1 ?y ?o2
+where {
+  ?x ?p ?o1.
+  ?y ?p ?o2.
+  filter (?o1 > ?o2).
+}
+order by ?o1
+limit 5</code></pre>
+
+<p>
+
 <h3>Slow Query Logging</h3>
+
+<p>Stardog does not log slow queries in the default configuration. To enable slow query logging, set @@XX.</p>
+
+<h3>Protocols and Java API</h3>
+
+<h3>Security and Query Management</h3>
+
 
     </section>
 
