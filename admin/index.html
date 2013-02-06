@@ -145,10 +145,13 @@ running Stardog Server, it is necessary to shut it down and restart it.</p>
     <tt>stardog.properties</tt>:</p>
 
     <ol>
-      <li><tt>strict.parsing</tt>: Controls whether Stardog parses RDF strictly (<tt>TRUE</tt>, the default) or laxly (<tt>FALSE</tt>)</li>
+      <li><tt>strict.parsing</tt>: Controls whether Stardog parses RDF strictly (<tt>true</tt>, the default) or laxly (<tt>false</tt>)</li>
       <li><tt>query.all.graphs</tt>: Controls what Stardog Server queries over; if <tt>true</tt>, it will query over the default graph and the union of all named graphs; if <tt>false</tt> (the default), it will query only over the default graph.</li>
       <li><tt>query.timeout</tt>: Sets the upper bound for query execution time that's inherited by all databases unless explicitly overriden. See <a href="#manage-queries">Query Management</a> section below for details.</li>
       <li><tt>logging.[access,audit].[enabled,type,file]</tt>: Controls whether and how Stardog logs server events; described in detail below.</li>
+      <li><tt>logging.slow_query.enabled</tt></li>
+      <li><tt>logging.slow_query.time</tt></li>
+      <li><tt>logging.slow_query.type</tt>: The three slow query logging options are used in the following way. To enable logging of slow queries, set <tt>enabled</tt> to <tt>true</tt>. To define what counts as a "slow" query, set <tt>time</tt> to a time duration value (positive integer plus "h", "m", "s", or "ms" for hours, minutes, seconds, or milliseconds respectively). To determine the type of logging, set <tt>type</tt> to <tt>text</tt> (the default) or <tt>binary</tt>. <strong>To state the obvious explicitly, a <tt>logging.slow_query.time</tt> that exceeds the value of <tt>query.timeout</tt> will result in null logs.</li>
       <li><tt>database.connection.timeout.ms</tt>: Controls how long, in milliseconds,connections may idle before being automatically closed by the server. </li>
       <li><tt>http.max.connections</tt>: The next two parameters control the maximum number of simultaneous connections for a client; for more information, see the <a href=" http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html">relevant Apache docs</a>.</li>
       <li><tt>http.max.connections.per.route</tt></li>
@@ -899,12 +902,13 @@ limit 5</code></pre>
 
 <h3>Slow Query Logging</h3>
 
-<p>Stardog does not log slow queries in the default configuration. To enable slow query logging, set @@XX.</p>
+<p>Stardog does not log slow queries in the default configuration, primarily because there isn't a sensible default meaning of "slow query", which is entirely relative to queries, access patterns, dataset sizes, etc. While slow query logging has very minimal overhead, what counts as a slow query in some context may be quite acceptable in another. To enable slow query logging, see the Stardog Server Properties discussion above.</p>
 
 <h3>Protocols and Java API</h3>
 
 <h3>Security and Query Management</h3>
 
+<p>
 
     </section>
 
