@@ -76,21 +76,21 @@ deadlocks waiting for     resources to be returned to their pools.</p>
     <p class="afaq"><b>Answer:</b> Yes. As of Stardog 1.1 (released 14 November 2012), Stardog supports SPARQL 1.1. However, there are still a few odds and ends of SPARQL 1.1 that we don't yet support. See <a href="../#note-1">this footnote</a> for more details.</p>
 
 
-  <h2>Write Performance</h2>
+  <h2>Bulk Update Performance</h2>
 
-  <p class="qfaq"><b>Question: I'm writing one triple at a time, in a tight loop, to Stardog and write performance isn't awesome.</p>
+  <p class="qfaq"><b>Question: I'm adding one triple at a time, in a tight loop, to Stardog; is this the ideal strategy with respect to performance?</p>
 
-  <p class="qfaq"><b>Question: I'm writing millions of triples at a time to Stardog and write performance isn't awesome.</p>
+  <p class="qfaq"><b>Question: I'm adding millions of triples to Stardog and I'm wonderinf it that's the best approach?</p>
 
-  <p class="afaq"><b>Answer:</b> The answer to both questions is the same: stop doing that!</p>
+  <p class="afaq"><b>Answer:</b> The answer to both questions is to stop doing that...</p>
 
-  <p class="afaq">In other words, there is a sweet spot for Stardog write performance in terms of bulk update. The best performance for writes isn't found by parsimoniously writing only one or a few triples at a time; or, on the other end of the spectrum, holding writes till there are millions of triples. Generally write performance is best if you write between 1k and 100k triples at a time. You may need to experiment to find the sweet spot with respect to your data, database size, and update frequency.</p>
+  <p class="afaq">In other words, there is a sweet spot for Stardog bulk update performance. The best performance for writes isn't found by parsimoniously writing only one or a few triples at a time; or, on the other end of the spectrum, holding writes till there are millions of triples. Generally update performance is best if you write between 1k and 100k triples at a time. You may need to experiment to find the sweet spot with respect to your data, database size, the size of the differential index, and update frequency.</p>
 
-  <h2>Endpoint Security</h2>
+  <h2>Public Endpoint</h2>
 
-  <p class="qfaq">I want to use Stardog to serve a public SPARQL endpoint; is there some way I can disable security completely?</p>
+  <p class="qfaq">I want to use Stardog to serve a public SPARQL endpoint; is there some way I can do this without publishing user account information?</p>
 
-  <p class="afaq">We don't necessarily recommend disabling security completely, but it's possible. Simply pass <tt>--disable-security</tt> to <tt>stardog-admin</tt> when you start the Stardog Server and security checking will be disabled.</p>
+  <p class="afaq">We don't necessarily recommend this, but it's possible. Simply pass <tt>--disable-security</tt> to <tt>stardog-admin</tt> when you start the Stardog Server; while this may be the worst possible name for an argument, since it doesn't actually disable security, it will use the built-in anonymous user (given the default configuration and user accounts) in a way that makes Stardog usable for a public endpoint.</p>
 
 <!--
     <h2>Maven</h2>
