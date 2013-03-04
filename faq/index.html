@@ -12,7 +12,7 @@
     <link media="screen" rel="stylesheet" href="/_/css/ps.css"/>
     <link media="print" rel="stylesheet" href="/_/css/print.css"/>
     <link media="screen" rel="stylesheet" href="/_/css/simplegrid.css"/>
-    
+
   </head>
 
   <body>
@@ -22,7 +22,7 @@
 
 <div id="masthead">
 
-  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>  
+  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>
 
   <div id="chaptertitle" class="col-9-12">
       <blockquote>
@@ -44,7 +44,7 @@
   </div>
 
   <div class="col-9-12" id="main-channel">
-  
+
   <section id="faq">
     <header>
     <h1 id="chapter">Frequently Asked Questions</h1></header>
@@ -67,13 +67,30 @@ deadlocks waiting for     resources to be returned to their pools.</p>
     <p class="afaq">Similarly close your connections when you are done with them. If you don't close things when you're done with them, we won't be held responsible for the harm you will do to yourself as a result.</p>
 
     <p class="afaq">In short, as they teach us all in grade school, <b>PUT THINGS AWAY WHEN YOU ARE FINISHED PLAYING WITH THEM.</b></p>
-       
+
 
     <h2>SPARQL 1.1</h2>
 
     <p class="qfaq"><b>Question:</b> Does Stardog support SPARQL 1.1?</p>
 
     <p class="afaq"><b>Answer:</b> Yes. As of Stardog 1.1 (released 14 November 2012), Stardog supports SPARQL 1.1. However, there are still a few odds and ends of SPARQL 1.1 that we don't yet support. See <a href="../#note-1">this footnote</a> for more details.</p>
+
+
+  <h2>Write Performance</h2>
+
+  <p class="qfaq"><b>Question: I'm writing one triple at a time, in a tight loop, to Stardog and write performance isn't awesome.</p>
+
+  <p class="qfaq"><b>Question: I'm writing millions of triples at a time to Stardog and write performance isn't awesome.</p>
+
+  <p class="afaq"><b>Answer:</b> The answer to both questions is the same: stop doing that!</p>
+
+  <p class="afaq">In other words, there is a sweet spot for Stardog write performance in terms of bulk update. The best performance for writes isn't found by parsimoniously writing only one or a few triples at a time; or, on the other end of the spectrum, holding writes till there are millions of triples. Generally write performance is best if you write between 1k and 100k triples at a time. You may need to experiment to find the sweet spot with respect to your data, database size, and update frequency.</p>
+
+  <h2>Endpoint Security</h2>
+
+  <p class="qfaq">I want to use Stardog to serve a public SPARQL endpoint; is there some way I can disable security completely?</p>
+
+  <p class="afaq">We don't necessarily recommend disabling security completely, but it's possible. Simply pass <tt>--disable-security</tt> to <tt>stardog-admin</tt> when you start the Stardog Server and security checking will be disabled.</p>
 
 <!--
     <h2>Maven</h2>
@@ -107,7 +124,7 @@ deadlocks waiting for     resources to be returned to their pools.</p>
   </div>
   </div>
 
-  
+
   <script src="/_/js/pbk.js" type="text/javascript"></script>
     <script type="text/javascript">
       nodeName = "";
