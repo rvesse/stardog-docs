@@ -105,12 +105,12 @@ parameterize the actual request URLs, thus: <code>/{db}/size</code>.</p>
   <p>In a few cases, we use <tt>void</tt> as short hand for the case where
 there is a response code but the response body may be empty.</p>
 
-  <h2>Accept Header</h2>
+  <h2>HTTP Headers: <tt>Content-Type</tt> &amp; <tt>Accept</tt></h2>
 
   <p>All HTTP requests that are mutative (add or remove) must include a
-valid <tt>Accept</tt> header set to the MIME type of the request body,
+valid <tt>Content-Type</tt> header set to the MIME type of the request body,
 where "valid" is a valid MIME type for N-Triples, Trig, Trix, Turtle, NQuads, JSON-LD, or
-RDF/XML. In short,</p>
+RDF/XML:</p>
 
   <dl>
     <dt>RDF/XML</dt>
@@ -128,10 +128,13 @@ RDF/XML. In short,</p>
     <dt>JSON-LD</dt>
     <dd><tt>application/ld+json</tt></dd>
   </dl>
+  
+  <p>SPARQL <tt>CONSTRUCT</tt> queries must also include a <tt>Content-Type</tt> header set to one of the RDF
+  	serialization types above.
+  </p>
 
-  <p>Further, in other cases where <tt>Accept</tt> header should be
-set&mdash;chiefly for content negotiation&mdash;the other MIME types that
-Stardog recognizes include:</p>
+  <p>When issuing a <tt>SELECT</tt> query the <tt>Accept</tt> header should be
+set to one of the valid MIME types for <tt>SELECT</tt> results:</p>
 
   <dl>
     <dt>SPARQL XML Results Format</dt>
@@ -153,12 +156,36 @@ Stardog recognizes include:</p>
     <dd>Indicates the operation has succeeded.</dd>
     <dt><tt>400</tt></dt>
     <dd>Indicates parse errors or that the transaction identifier specified for an operation is invalid or does not correspond to a known transaction.</dd>
-	<dt><tt>403</tt></dt>
-	<dd>Indicates that the user attempting to perform the operation does not exist, their username or password is invalid, or they do not have the proper credentials to
+    <dt><tt>401</tt></dt>
+    <dd>Indicates requests that are unauthorized.</dd>
+    <dt><tt>403</tt></dt>
+    <dd>Indicates that the user attempting to perform the operation does not exist, their username or password is invalid, or they do not have the proper credentials to
 	perform the action.</dd>
+    <dt><tt>404</tt></dt>
+    <dd></dd>
+    <dt><tt>409</tt></dt>
+    <dd>Indicates a conflict for some database operations; for example, creating a database that already exists.</dd>
     <dt><tt>500</tt></dt>
     <dd>Indicates a failure in some internal operation.</dd>
   </dl>
+  
+  <p>Further, we extend <tt>404</tt> error codes with Stardog-specific codes as indicated by the value of 
+  <tt>SD-Error-Code</tt>:</tt></p>
+  
+  <ul>
+  	<li><tt>0</tt>: Authentication error</li>
+  	<li><tt>1</tt>: Authorization error</li>
+  	<li><tt>2</tt>: Query evaluation error</li>
+  	<li><tt>3</tt>: Unknown transaction</li>
+  	<li><tt>4</tt>: Unknown database</li>
+  	<li><tt>5</tt>: Database already exists</li>
+  	<li><tt>6</tt>: Invalid database name</li>
+  	<li><tt>7</tt>: Resource (user, role, etc) already exists</li>
+  	<li><tt>8</tt>: Invalid connection parameter(s)</li>
+  	<li><tt>9</tt>: Invalid database state for the request</li>
+  	<li><tt>10</tt>: Resource in use</li>
+  	<li><tt>11</tt>: Resource not found</li>
+  </ul>
 
     <p>In cases of error, the message body of the result will include any
 error information provided by the server to indicate the cause of the
