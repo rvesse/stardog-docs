@@ -106,7 +106,19 @@ interwebs!</u></blockquote>
 
 <pre><code>$ stardog help [command_group_name]</code></pre>
 
-<p>The main help command&mdash;<code>$ stardog help</code>&mdash;will print a listing of the command groups:</p>
+<p>The command groups and their subcommands include</p>
+
+data: add, remove, export;
+query: search, execute, explain, status;
+reasoning: explain, consistency;
+namespace: add, list, remove;
+server: start, stop;
+metadata: get, set;
+user: add, drop, edit, grant, list, permission, revoke, passwd;
+role: add, drop, grant, list, permission, revoke;
+db: copy, create, drop, migrate, optimize, list, online, offline.
+
+<p>The main help command for either CLI tool will print a listing of the command groups:</p>
 
 <pre><code>usage: stardog <command> [<args>]
 
@@ -127,9 +139,61 @@ See 'stardog help <command>' for more information on a specific command.</code><
 
 <p>Finally, everything here about command groups, commands, and online help works equally well for <tt>stardog-admin</tt>.</p>
 
+<p>The result of all these changes is a better user experience:</p>
+
+<pre><code>$ stardog reasoning consistency -u myUsername -p myPassword -r QL myDB</code></pre>
+
+<pre><code>$ stardog-admin db migrate -u myUsername -p myPassword myDb</code></pre>
+
+<h2>CLI Autocomplete</h2>
+
+<p>Stardog 1.2 also includes support for CLI autocomplete via the bash autocomplete feature. To install autocomplete for bash shell, you'll first want to make sure bash completion is installed:</p>
+
+<h3>Homebrew</h3>
+
+<pre><code>$ brew install bash-completion</code></pre>
+
+<p>Then enable it in .bash_profile:</p>
+
+<pre><code>if [ -f `brew --prefix`/etc/bash_completion ]; then
+. `brew --prefix`/etc/bash_completion
+fi</code></pre>
+
+<h3>MacPorts</h3>
+
+<p>First, you really should be using Homebrew; you feel me?</p>
+
+<p>If not, then:</p>
+
+<pre><code>$ sudo port install bash-completion</code></pre>
+
+<p>Enable it in .bash_profile:</p>
+
+<pre><code>if [ -f /opt/local/etc/bash_completion ]; then
+    . /opt/local/etc/bash_completion
+fi</code></pre>
+
+<p>Finally, an example for our Linux friends:</p>
+
+<h3>Ubuntu</h3>
+  <pre><code>$ sudo apt-get install bash-completion</code></pre>
+
+<h3>Fedora</h3>
+  <pre><code>$ sudo yum install bash-completion</code></pre>
+
+<h3>All Platforms</h3>
+
+<p>Now put the Stardog autocomplete script&mdash;<tt>stardog-completion.sh</tt>&mdash;into yr bash_completion.d directory, typically one of  <tt>/etc/bash_completion.d, /usr/local/etc/bash_completion.d or ~/bash_completion.d.</tt>
+
+<p>Alternately you can put it anywhere you want, but tell <tt>.bash_profile</tt> about it:</p>
+
+<pre><code>source ~/.stardog-completion.sh</code></pre>
+
 <h2>How to Make a Connection String</h2>
 
   <p>We've simplified connection strings in Stardog 1.2 to improve usability. A connection string may consist solely of the database name in cases where (a) Stardog is running on the standard ports; (b) SNARL is enabled; and (c) the command is invoked on the same machine where the server is running. In any other cases, a "fully qualified" connection string, as described below, is required.</p>
+
+Additionally, we have changed the way to specify the database connection string. Instead of using the -c option in a command, the connection string is now assumed to be the first argument of the command. It is also now possible to simply use the database name instead of the full connection string; in that case, Stardog will apply the command to snarl://localhost:5820/{database name}. Furthermore, in the admin CLI, the --server option for setting the default server is now global.
 
     <p>Some CLI subcommands require a Stardog connection string as an
 argument to identify the server and database upon which operations are to
