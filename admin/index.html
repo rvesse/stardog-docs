@@ -140,7 +140,7 @@ There are two URL schemes recognized by Stardog: <tt>http://</tt> and
 Protocol; the latter uses Stardog's native data access protocol, called
 SNARL, which is based on Google's Protocol Buffers.</p>
 
-    <p>Note: <tt>stardog-admin</tt> uses SNARL Protocol only; it will not work with or recognize HTTP connection strings. <tt>stardog</tt> user's client works with HTTP or SNARL Protocol, interchangeably.<n>SNARL is faster than HTTP in cases where payloads to and from the server are relatively <em>small</em>; for payloads that are large, raw transfer time dominates and there isn't much or any difference in performance.</n></p>
+    <p>Note: <tt>stardog-admin</tt> and <tt>stardog</tt> user's client works with HTTP or SNARL Protocol, interchangeably.<n>SNARL is faster than HTTP in cases where payloads to and from the server are relatively <em>small</em>; for payloads that are large, raw transfer time dominates and there isn't much or any difference in performance.</n></p>
 
     <h3>Example Connection Strings</h3>
 
@@ -168,24 +168,24 @@ SNARL, which is based on Google's Protocol Buffers.</p>
 <div><span><a name="admin-server"></a></span></div>
 <section id="admin-server"><header><h1 id="chapter">Administering a Stardog Server</h1></header>
 
-    <p>Stardog Server is multi-protocol beast: it supports both SNARL and HTTP protocols. The default port for SNARL is <b>5820</b>; the default port for HTTP is <b>5822</b>. <b>As of Stardog 1.0.1, all administrative functions work over SNARL or HTTP protocols.</b></p>
+    <p>Stardog Server is multi-protocol beast: it supports both SNARL and HTTP protocols. The default port for SNARL is <b>5820</b>; the default port for HTTP is <b>5822</b>. <b>All administrative functions work over SNARL or HTTP protocols.</b></p>
 
-    <p>To use any of these commands against a remote server, pass a <tt>--server</tt> argument with an HTTP or SNARL URL.</p>
+    <p>To use any of these commands against a remote server, pass a <tt>--server</tt> argument with an HTTP or SNARL URL.</p>@@TODO
 
-    <p><b>Note</b>: If you are running <tt>stardog-admin</tt> on the same machine where Stardog Server is running, and you're using the default protocol ports, then you can omit the <tt>--server</tt> argument and simply pass a database name via <tt>-n</tt> option. Most of the following commands assume this case for simplicity of exposition.</p>
+    <p><b>Note</b>: If you are running <tt>stardog-admin</tt> on the same machine where Stardog Server is running, and you're using the default protocol ports, then you can omit the <tt>--server</tt> argument and simply pass a database name via <tt>-n</tt> option. Most of the following commands assume this case for simplicity of exposition.</p>@@TODO
 
     <h2>Configuring Stardog Server Behavior</h2>
 
     <p><strong>Note</strong>: the properties described in this section control the behavior of the Stardog Server (whether HTTP or SNARL protocols are in use); to set properties or other metadata on individual Stardog <em>databases</em>, see <a href="#admin-database">Administering a Database</a>.</p>
 
-    <p>Stardog Server's behavior can be configured via the JVM
+    <p>Stardog Server's behavior can be configured via the JVM arg
 <tt>stardog.home</tt>, which sets Stardog Home, overriding the value of
 <tt>STARDOG_HOME</tt> set as an environment variable. Stardog Server's behavior
 can also be configured via a <tt>stardog.properties</tt>&mdash;which is a Java
 Properties file&mdash;file in <tt>STARDOG_HOME</tt>. To change the behavior of a
-running Stardog Server, it is necessary to shut it down and restart it.</p>
+running Stardog Server, it is necessary to restart it.</p>
 
-    <p>The following properties that determine aspects of Stardog Server's behavior are available in
+    <p>The following twiddly knobs for Stardog Server are available in
     <tt>stardog.properties</tt>:</p>
 
     <ol>
@@ -198,7 +198,6 @@ running Stardog Server, it is necessary to shut it down and restart it.</p>
       <li><tt>logging.slow_query.type</tt>: The three slow query logging options are used in the following way. To enable logging of slow queries, set <tt>enabled</tt> to <tt>true</tt>. To define what counts as a "slow" query, set <tt>time</tt> to a time duration value (positive integer plus "h", "m", "s", or "ms" for hours, minutes, seconds, or milliseconds respectively). To determine the type of logging, set <tt>type</tt> to <tt>text</tt> (the default) or <tt>binary</tt>. <strong>To state the obvious explicitly, a <tt>logging.slow_query.time</tt> that exceeds the value of <tt>query.timeout</tt> will result in null logs.</li>
       <li><tt>database.connection.timeout.ms</tt>: Controls how long, in milliseconds,connections may idle before being automatically closed by the server. </li>
       <li><tt>http.max.connections</tt>: The next two parameters control the maximum number of simultaneous connections for a client; for more information, see the <a href=" http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html">relevant Apache docs</a>.</li>
-      <li><tt>http.max.connections.per.route</tt></li>
       <li><tt>http.max.get.query.length</tt>: The length in characters of the longest SPARQL query that will be serialized via HTTP <tt>GET</tt>; queries longer are serialized via <tt>POST</tt>.</li>
       <li><tt>bnode.preserve.id</tt>: Determines how the Stardog parser handles bnode identifiers
 that may be present in (some) RDF input. If this property is enabled (i.e., <tt>TRUE</tt>), parsing
