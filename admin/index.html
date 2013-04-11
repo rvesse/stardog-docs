@@ -129,6 +129,8 @@ See 'stardog help <command>' for more information on a specific command.</code><
 
 <h2>How to Make a Connection String</h2>
 
+  <p>We've simplified connection strings in Stardog 1.2 to improve usability. A connection string may consist solely of the database name in cases where (a) Stardog is running on the standard ports; (b) SNARL is enabled; and (c) the command is invoked on the same machine where the server is running. In any other cases, a "fully qualified" connection string, as described below, is required.</p>
+
     <p>Some CLI subcommands require a Stardog connection string as an
 argument to identify the server and database upon which operations are to
 be performed. Connection strings are URLs and may either be local to the
@@ -157,7 +159,9 @@ SNARL, which is based on Google's Protocol Buffers.</p>
   <pre><code>snarl://localhost:1024/db1;reasoning=NONE</code></pre>
 
   <p>Using the default ports for SNARL and HTTP protocols simplifies connection strings. <code>connectionOptions</code> are a series of <code>;</code> delimited key-value pairs
-  which themselves are <code>=</code> delimited.  key names must be <b>lowercase</b> and their values are case-sensitive.</p>
+  which themselves are <code>=</code> delimited. Key names must be <b>lowercase</b> and their values are case-sensitive.</p>
+
+  <p>Finally, in the case where the scheme is SNARL, the machine is "localhost", and the port is the default SNARL port, a connection string may consist of the "databaseName" only.</p>
 
 </section>
 
