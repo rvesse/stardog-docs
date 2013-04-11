@@ -45,8 +45,9 @@
 
   <p>In this chapter we discuss how to administer a Stardog Server
 and Stardog databases, chiefly by way of discussing how to use the
-various Stardog command-line programs. An important part of Stardog
-administration is security, which is discussed in a separate, dedicated <a
+various Stardog command-line programs and how to configure a Stardog Server and
+its databases. An important part of Stardog
+administration is security, which is discussed in a separate <a
 href="../security">chapter</a>.</p>
 
     <section id="cli"><header><h1 id="chapter">CLI Overview</h1></header>
@@ -61,10 +62,14 @@ href="../security">chapter</a>.</p>
     <p>The admin and user's tools operate on local or remote databases,
 using either HTTP or SNARL Protocols. Both of these CLI tools are Unix-only,
 are self-documenting, and the help output of these tools is their canonical
-documentation. The documentation of these tools in this chapter goes into
+documentation.</p>
+
+<p>The CLI tools were completely rewritten for Stardog 1.2: online documentation, including examples, is much more extensive; and the commands and their arguments are rationalized and consistent. The documentation of these tools in this chapter goes into
 more detail, offers background, etc. But if there is a conflict between
-this documentation and the output of the CLI tools' "help" command, the CLI
+this documentation and the output of the CLI tools' <tt>help</tt> command, the CLI
 tools' output is correct.</p>
+
+    <h2>CLI Help</h2>
 
     <p>To use the Stardog CLI tools, you can start by asking them to display help:</p>
 
@@ -74,9 +79,17 @@ tools' output is correct.</p>
 
     <pre><code>$ stardog-admin help</code></pre>
 
+    <p>And for the very laziest among us, these work too:</p>
+
+    <pre><code>$ stardog</code></pre>
+
+    <pre><code>$ stardog-admin</code></pre>
+
+    <h2>CLI Security Considerations</h2>
+
     <p>The rationale for separating functionality into two CLI programs is
-largely based on security, since <tt>stardog-admin</tt> will need to have
-considerably tighter access restrictions than <tt>stardog</tt>.</p>
+largely based on security, since <tt>stardog-admin</tt> will need, in production
+environments, to have considerably tighter access restrictions than <tt>stardog</tt>.</p>
 
     <blockquote><b>SECURITY NOTICE</b>: <u>For usability, Stardog
 @@VERSION@@ provides a default user "admin" and password "admin" in
@@ -87,7 +100,32 @@ chapter at least twice, and then&mdash;minimally&mdash;change the
 administrative password to something we haven't published on the
 interwebs!</u></blockquote>
 
-    <h2>How to Make a Connection String</h2>
+<h2>CLI: Command Groups</h2>
+
+<p>The CLI tools both contain a lot of functionality; we've introduced "command groups" to make CLI subcommands easier to find. To print help for a particular command group, just ask for help:</p>
+
+<pre><code>$ stardog help [command_group_name]</code></pre>
+
+<p>The main help command&mdash;<code>$ stardog help</code>&mdash;will print a listing of the command groups:</p>
+
+<pre><code>usage: stardog <command> [<args>]
+
+The most commonly used stardog commands are:
+    data        Commands which can modify or dump the contents of a database
+    help        Display help information
+    icv         Commands for working with Stardog Integrity Constraint support
+    namespace   Commands which work with the namespaces defined for a database
+    query       Commands which query a Stardog database
+    reasoning   Commands which use the reasoning capabilities of a Stardog database
+    version     Prints information about this version of Stardog
+
+See 'stardog help <command>' for more information on a specific command.</code></pre>
+
+<p>To get more information about a particular command, simply issue the help command for it including its command group:</p>
+
+<pre><code>$ stardog help query execute</code></pre>
+
+<h2>How to Make a Connection String</h2>
 
     <p>Some CLI subcommands require a Stardog connection string as an
 argument to identify the server and database upon which operations are to
