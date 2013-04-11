@@ -10,7 +10,7 @@
     <link media="screen" rel="stylesheet" href="/_/css/ps.css"/>
     <link media="print" rel="stylesheet" href="/_/css/print.css"/>
     <link media="screen" rel="stylesheet" href="/_/css/simplegrid.css"/>
-    
+
   </head>
 
   <body>
@@ -20,7 +20,7 @@
 
 <div id="masthead">
 
-  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>  
+  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>
 
   <div id="chaptertitle" class="col-9-12">
       <blockquote>
@@ -49,7 +49,7 @@
   </div>
 
   <div class="col-9-12" id="main-channel">
-     
+
   <section>
   <header>
   <h1 id=chapter>Introduction</h1></header>
@@ -87,7 +87,7 @@ href="mailto:stardog@clarkparsia.com">stardog@clarkparsia.com</a>, is the place 
 
   <section><header><h1 id=chapter>The Essential Documentation</h1></header></section>
 
-  <p>This is 
+  <p>This is
   documentation for Stardog <b>@@VERSION@@</b> (<b>@@DATE@@</b>). Check out the
   <a href="../docs/RELEASE_NOTES.txt">release notes</a> and the <a href="../docs/faq/">FAQ</a>.</p>
 
@@ -106,8 +106,8 @@ href="mailto:stardog@clarkparsia.com">stardog@clarkparsia.com</a>, is the place 
   <h2><a href="../docs/admin/">Administration</a></h2>
 
     <ol>
-      <li><a href="../docs/admin/#cli">CLI Overview</a></li> 
-      <li><a href="../docs/admin/#admin-server">Administering a Stardog Server</a></li> 
+      <li><a href="../docs/admin/#cli">CLI Overview</a></li>
+      <li><a href="../docs/admin/#admin-server">Administering a Stardog Server</a></li>
       <li><a href="../docs/admin/#admin-db">Administering a Stardog Database</a></li>
       <li><a href="../docs/admin/#security">Configuring Security</a></li>
       <li><a href="../docs/admin/#search">Managing Search Indexes</a></li>
@@ -115,7 +115,7 @@ href="mailto:stardog@clarkparsia.com">stardog@clarkparsia.com</a>, is the place 
       <li><a href="../docs/admin/#resource-requirements">Resource Requirements for Stardog</a></li>
 	  <li><a href="../docs/admin/#using-windows">Using Stardog on Windows</a></li>
     </ol>
-   
+
   <h2><a href="../docs/using/">Using Stardog</a></h2>
     <ol>
       <li><a href="../docs/using/#using-stardog">Using Stardog</a></li>
@@ -166,7 +166,7 @@ href="mailto:stardog@clarkparsia.com">stardog@clarkparsia.com</a>, is the place 
       <li><a href="../docs/java/#pool">Connection Pooling</a></li>
       <li><a href="../docs/java/#deprecation">Deprecation &amp; Backward Compatibility</a></li>
     </ol>
-    
+
     <h2><a href="../docs/network/">Network Programming</a></h2>
 
     <ol>
@@ -208,18 +208,19 @@ href="mailto:stardog@clarkparsia.com">stardog@clarkparsia.com</a>, is the place 
 
       <li>multi-reader, single writer concurrency.</li>
 
-      <li>Asking for all individuals with reasoning via the query <tt>{?s a owl:Thing}</tt>
+     <!-- <li>Asking for all individuals with reasoning via the query <tt>{?s a owl:Thing}</tt>
 might also retrieve some classes and properties. <b>WILLFIX</b></li>
-
+-->
       <li>Schema queries do not bind graph variables.</li>
 
-      <li>Two query bugs due to its dependence on Sesame's SPARQL parser:
+   <!--   <li>Two query bugs due to its dependence on Sesame's SPARQL parser:
    <a href="https://openrdf.atlassian.net/browse/SES-1119">SES-1119</a> and <a href="https://openrdf.atlassian.net/browse/SES-1121">SES-1121</a>. <b>WILLFIX</b> </li>
-
+-->
+<!--
 <li>Read/Write permissions for the database metadata and read/write
 permissions to ICV constraints are not independent. Granting read/write
 permission to database metadata will grant the same permissions for ICV. <b>Work around:</b> Remove the permissions on the db metadata and assign only ICV. <b>WILLFIX</b> </li>
-
+-->
 <li>Dropping a database with the CLI will also delete all the data
 files on your Stardog home directory associated with that database. If
 you want to keep the data files but only remove the database from the
@@ -238,7 +239,7 @@ errors.</li>
 in fact, Maven, i.e., to automagically download the data from an arbitrary
 HTTP URL and include it in the query. Stardog will <em>only</em> evaluate
 queries over data that has been loaded into it.</li>
-     
+
   <li>SPARQL queries without a context or named graph are executed
 against the default, unnamed graph. In Stardog, the default graph is
 <em>not</em> the union of all the named graphs and the default graph. Note: this behavior is configurable via the <tt>query.all.graphs</tt> configuration parameter.</li>
