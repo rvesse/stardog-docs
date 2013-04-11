@@ -193,7 +193,7 @@ fi</code></pre>
 
   <p>We've simplified connection strings in Stardog 1.2 to improve usability. A connection string may consist solely of the database name in cases where (a) Stardog is running on the standard ports; (b) SNARL is enabled; and (c) the command is invoked on the same machine where the server is running. In any other cases, a "fully qualified" connection string, as described below, is required.</p>
 
-Additionally, we have changed the way to specify the database connection string. Instead of using the -c option in a command, the connection string is now assumed to be the first argument of the command. It is also now possible to simply use the database name instead of the full connection string; in that case, Stardog will apply the command to snarl://localhost:5820/{database name}. Furthermore, in the admin CLI, the --server option for setting the default server is now global.
+  <p>Additionally, we've rationalized the method of specifying the connection string: nstead of using the <tt>-c</tt> option in a command, the connection string is now assumed to be the first argument of the command.</p>
 
     <p>Some CLI subcommands require a Stardog connection string as an
 argument to identify the server and database upon which operations are to
@@ -203,6 +203,8 @@ There are two URL schemes recognized by Stardog: <tt>http://</tt> and
 <tt>snarl://</tt>. The former uses Stardog's (extended) version of SPARQL
 Protocol; the latter uses Stardog's native data access protocol, called
 SNARL, which is based on Google's Protocol Buffers.</p>
+
+<p>As of Stardog 1.2, in <tt>stardog-admin</tt> the <tt>--server</tt> option for setting the default server is a global arg.</p>
 
     <p>Note: <tt>stardog-admin</tt> and <tt>stardog</tt> user's client works with HTTP or SNARL Protocol, interchangeably.<n>SNARL is faster than HTTP in cases where payloads to and from the server are relatively <em>small</em>; for payloads that are large, raw transfer time dominates and there isn't much or any difference in performance.</n></p>
 
@@ -234,9 +236,9 @@ SNARL, which is based on Google's Protocol Buffers.</p>
 
     <p>Stardog Server is multi-protocol beast: it supports both SNARL and HTTP protocols. The default port for SNARL is <b>5820</b>; the default port for HTTP is <b>5822</b>. <b>All administrative functions work over SNARL or HTTP protocols.</b></p>
 
-    <p>To use any of these commands against a remote server, pass a <tt>--server</tt> argument with an HTTP or SNARL URL.</p>@@TODO
+    <p>To use any of these commands against a remote server, pass a global <tt>--server</tt> argument with an HTTP or SNARL URL.</p>
 
-    <p><b>Note</b>: If you are running <tt>stardog-admin</tt> on the same machine where Stardog Server is running, and you're using the default protocol ports, then you can omit the <tt>--server</tt> argument and simply pass a database name via <tt>-n</tt> option. Most of the following commands assume this case for simplicity of exposition.</p>@@TODO
+    <p><b>Note</b>: If you are running <tt>stardog-admin</tt> on the same machine where Stardog Server is running, and you're using the default protocol ports, then you can omit the <tt>--server</tt> argument and simply pass a database name via <tt>-n</tt> option. Most of the following commands assume this case for ease of exposition.</p>
 
     <h2>Configuring Stardog Server Behavior</h2>
 
@@ -284,7 +286,7 @@ single node in the database, then this configuration option should be disabled (
 
     <p>To specify parameters:</p>
 
-    <pre><code>$ stardog-admin --logfile=stardog.log server start --no-docs --http=80 </code></pre>
+    <pre><code>$ stardog-admin server start --logfile=stardog.log --no-docs --http=8080</code></pre>
 
     <p><tt>--no-docs</tt> will tell Stardog not to serve its documentation over HTTP at <tt>http://SERVER/docs</tt>, which it will otherwise do by default.</p>
 
@@ -298,9 +300,10 @@ using the flag <tt>--no-http</tt>; the SNARL interface may not be disabled.</p>
     <h2>Serving Stardog Documentation</h2>
 
     <p>By default, if you start Stardog Server with HTTP enabled, then
-Stardog will serve the system documentation at <tt>http://SERVER/docs</tt>,
-which is the reason "docs" is a reserved database name. In a production
-deployment, you might want to disable documentation serving, which you can
+Stardog will serve the system documentation at <tt>http://SERVER/docs</tt>
+(which is why "docs" is an invalid database name). That's user experience, holmes!</p>
+
+<p>In a production deployment, you might want to disable documentation serving, which you can
 do by passing <tt>--no-docs</tt> on server startup or by disabling HTTP
 altogether.</p>
 
@@ -328,6 +331,8 @@ Java plugin that implements the Stardog Server logging interface; see the
 <a href="../java/">Java Chapter</a> for more information</n>; and the log
 rotation policy (file size or time).</p>
 
+  <p>Slow query logging is also available. See the "Managing Queries" section below.</p>
+
     </section>
 
 <div><span><a name="db"></a></span></div>
@@ -336,7 +341,7 @@ rotation policy (file size or time).</p>
       <h2>Configuring a Database</h2>
 
       <p>To administer a Stardog database, some config options must be
-set at creation time; others may be changed subsequently, while yet may
+set at creation time; others may be changed subsequently and some may
 never be changed. All of the config options have sensible defaults (except,
 obviously, for database name), so you don't have to twiddle any of the knobs
 till you really need to.</p>
@@ -347,75 +352,75 @@ till you really need to.</p>
 
       <dl>
 <dt>database.name</dt>
-<dd> A legal database name.</dd>
+<dd>A legal database name.</dd>
 
 <dt>database.online</dt>
-<dd> The status of the database: online or offline. It may be set so that
+<dd>The status of the database: online or offline. It may be set so that
 the database is created initially in online or offline status;
 subsequently, it can't be set directly but only by using the relevant admin commands.</dd>
 
 <dt>icv.active.graphs</dt>
-<dd> Specifies which part of the database, in terms of named graphs, is
-checked with IC validation. to
+<dd>Specifies which part of the database, in terms of named graphs, is
+checked with IC validation. Set to <tt>tag:stardog:api:context:all</tt> to
 validate all the named graphs in the database.</dd>
 
 <dt>icv.enabled</dt>
-<dd> Determines whether ICV is active for the database; if true, all database
+<dd>Determines whether ICV is active for the database; if true, all database
 mutations are subject to IC validation (i.e., "guard mode").</dd>
 
 <dt>icv.reasoning-type</dt>
-<dd> Determines what "reasoning level" is used during IC validation.</dd>
+<dd>Determines what "reasoning level" is used during IC validation.</dd>
 
 <dt>index.differential.enable.limit</dt>
-<dd> Sets the minimum size of the Stardog database before differential indexes are used.</dd>
+<dd>Sets the minimum size of the Stardog database before differential indexes are used.</dd>
 
 <dt>index.differential.merge.limit</dt>
-<dd> Sets the size in number of RDF triples before the differential indexes are merged to the main indexes.</dd>
+<dd>Sets the size in number of RDF triples before the differential indexes are merged to the main indexes.</dd>
 
 <dt>index.literals.canonical</dt>
-<dd> Enables RDF literal canonicalization. See <a href="../java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#CANONICAL_LITERALS">literal canonicalization</a> for details.</dd>
+<dd>Enables RDF literal canonicalization. See <a href="../java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#CANONICAL_LITERALS">literal canonicalization</a> for details.</dd>
 
 <dt>index.named.graphs</dt>
-<dd> Enables optimized index support for named graphs; speeds SPARQL query evaluation with named graphs at the cost of some overhead for database loading and index maintenance.</dd>
+<dd>Enables optimized index support for named graphs; speeds SPARQL query evaluation with named graphs at the cost of some overhead for database loading and index maintenance.</dd>
 
 <dt>index.persist</dt>
-<dd> Enables persistent indexes.</dd>
+<dd>Enables persistent indexes.</dd>
 
 <dt>index.persist.sync</dt>
-<dd> Enables whether memory indexes are synchronously or asynchronously persisted to disk with respect to a transaction.</dd>
+<dd>Enables whether memory indexes are synchronously or asynchronously persisted to disk with respect to a transaction.</dd>
 
 <dt>index.statistics.update.automatic</dt>
-<dd> Sets whether statistics are maintained automatically.</dd>
+<dd>Sets whether statistics are maintained automatically.</dd>
 
 <dt>index.type</dt>
-<dd> Sets the index type (memory or disk).</dt>
+<dd>Sets the index type (memory or disk).</dt>
 
 <dt>reasoning.consistency.automatic</dt>
-<dd> Enables automatic consistency checking with respect to a transaction.</dt>
+<dd>Enables automatic consistency checking with respect to a transaction.</dt>
 
 <dt>reasoning.punning.enabled</dt>
-<dd> Enables punning.</dt>
+<dd>Enables punning.</dt>
 
 <dt>reasoning.schema.graphs</dt>
-<dd> Determines which, if any, named graph or graphs contains the "tbox", i.e., the schema part of the data.</dt>
+<dd>Determines which, if any, named graph or graphs contains the "tbox", i.e., the schema part of the data.</dt>
 
 <dt>search.enabled</dt>
-<dd> Enables semantic search on the database.</dt>
+<dd>Enables semantic search on the database.</dt>
 
 <dt>search.reindex.mode</dt>
-<dd> Sets how search indexes are maintained.</dt>
+<dd>Sets how search indexes are maintained.</dt>
 
 <dt>transactions.durable</dt>
-<dd> Enables durable transactions.</dt>
+<dd>Enables durable transactions.</dt>
 
       </dl>
 
       <h4>A Note About Database Status</h4>
 
-      <p>As of Stardog @@VERSION@@, a database must be set to
+      <p>A database must be set to
 <tt>offline</tt> status before most configuration parameters may be changed.
-So the routine is to set the database offline, change the parameters
-programmatically, and the set the database to online. All of these
+So the routine is to set the database offline, change the parameters, and
+then set the database to online. All of these
 operations may be done programmatically from CLI tools, such that they can
 be scripted in advance to minimize downtime.<n>In a future version, we will
 allow some properties to be set while the database remains online.</n></p>
@@ -592,39 +597,19 @@ respectively.</p>
 
     <p>Databases are either online or offline; this allows database maintenance to be decoupled from server maintenance.</p>
 
-    <h3>Online and Offline Strategies</h3>
+    <h3>Online and Offline</h3>
 
-    <p>Databases may be put into online or offline status via one of two strategies.</p>
-
-    <p>For moving from offline to online:</p>
-
-    <ol>
-      <li><tt>wait</tt>: Blocks till all database startup jobs and activities are completed; database is offline till all such jobs have completed.</li>
-      <li><tt>nowait</tt>: Database comes online more quickly, non-essential startup and other jobs are performed asynchronously.</li>
-    </ol>
-
-    <p>For moving from online to offline:</p>
-
-    <ol>
-      <li><tt>wait</tt>: No new connections to the database are allowed; pending jobs are unscheduled; open connections and running jobs are allowed to finish up to a timeout value; the default timeout value is 180 seconds.</li>
-      <li><tt>nowait</tt>: No new connections to the database are allowed; pending jobs are unscheduled; open connections and running jobs are allowed to finish up to a timeout value: the <em>fixed</em> timeout value for <tt>nowait</tt> is 0 seconds.</li>
-    </ol>
-
-    <p>By default, the online strategy for a database is <tt>wait</tt>.</p>
+    <p>Databases are put online or offline synchronously: these operations block until other database activity is completed or terminated. See <tt>stardog-admin help db</tt> for details.</p>
 
     <h3>Examples</h3>
 
     <p>To set a database from offline to online:</p>
 
-    <pre><code>$ stardog-admin offline -n my_db_name</code></pre>
-
-    <p>To set the database offline without waiting:</p>
-
-    <pre><code>$ stardog-admin offline --nowait -n my_db_name</code></pre>
+    <pre><code>$ stardog-admin db offline myDatabase</code></pre>
 
     <p>To set the database online:</p>
 
-    <pre><code>$ stardog-admin online -n my_db_name</code></pre>
+    <pre><code>$ stardog-admin db online myDatabase</code></pre>
 
     <p>If Stardog Server is shutdown while a database is offline, the database
 will be offline the next time the server starts.</p>
@@ -633,8 +618,9 @@ will be offline the next time the server starts.</p>
         <h2>Creating a Database</h2>
 
     <p>Stardog databases may be created locally or remotely; but, of course,
-performance is better if the data files don't have to be transferred over
-a network.<n>See the section below about loading compressed data.</n> All
+performance is better if data files don't have to be transferred over
+a network during creation and initial loading.<n>See the section
+below about loading compressed data.</n> All
 data files, indexes, and server metadata for the new database will be stored
 in Stardog Home. Stardog won't create a database with the same name as an
 existing database.<n>Stardog database names must conform to the regular
@@ -648,6 +634,8 @@ expression, <tt>[A-Za-z]{1}[A-Za-z0-9_-] </tt>.</n></p>
 is a database <i>name</i>; alternately, you may customize some other
 database parameters and options depending on anticipated workloads, data
 modeling, and other factors.</p>
+
+  <p>See <tt>stardog-admin help db create</tt> for all the details includin examples.</p>
 
    <h3>Persisting and Managing Namespace Prefix Bindings</h3>
 
@@ -663,25 +651,24 @@ bindings, which works in the following way:</p>
   the database. Any subsequent queries to the database may simply omit the
   <tt>PREFIX</tt> declarations:
 
-    <pre><code>$ ./stardog query -c snarl://localhost/myDB -q "select * {?s rdf:type owl:Class}"</code></pre>
+ <pre><code>$ stardog query myDB "select * {?s rdf:type owl:Class}"</code></pre>
 
   </li>
 
   <li>To add new bindings, use the <tt>namespace</tt> subcommand in the CLI:
 
-    <pre><code>$ ./stardog namespace add --prefix ex --uri \
-      'http://example.org/test#' -c snarl://localhost/myDB</code></pre>
+<pre><code>$ stardog namespace add myDb --prefix ex --uri 'http://example.org/test#'</code></pre>
   </li>
 
   <li>To modify an existing binding, delete the existing one and then add a new one:</li>
 
-  <pre><code>$ ./stardog namespace remove --prefix ex -c snarl://localhost/myDB</code></pre>
+  <pre><code>$ stardog namespace remove myDb --prefix ex</code></pre>
 
   </li>
 
   <li>Finally, to see all of the existing namespace prefix bindings:
 
-  <pre><code>$ ./stardog namespace list snarl://localhost/myDB</code></pre>
+  <pre><code>$ stardog namespace list myDB</code></pre>
 
 </ol>
 
@@ -694,8 +681,8 @@ SPARQL <tt>SELECT</tt> results will use the bindings as qnames. SPARQL
 <tt>CONSTRUCT</tt> query output (including export) will also use the stored
 prefixes.</p>
 
-  <p>Finally, to reiterate, namespace prefix bindings are <em>per
-database</em>, not global, in nature.</p>
+  <p>To reiterate, namespace prefix bindings are <em>per
+database</em>, not global.</p>
 
    <h3>Database Creation Templates</h3>
 
@@ -710,24 +697,23 @@ database passed in CLI parameters.</p>
   <p>To create a new database with the default options by simply
 providing a name and a set of initial datasets to load:</p>
 
-  <pre><code>$ stardog-admin create -n my-database input.ttl another_file.rdf moredata.rdf.gz</code></pre>
+  <pre><code>$ stardog-admin db create -n myDb input.ttl another_file.rdf moredata.rdf.gz</code></pre>
 
   <p>Datasets can be loaded later as well, though bulk loading at creation time is the fastest way to load data.</p>
 
   <p>To create (in this case, an empty) database from a template file:</p>
 
-  <pre><code>$ stardog-admin create -c database.properties</code></pre>
+  <pre><code>$ stardog-admin db create -c database.properties</code></pre>
 
   <p>At a minimum, the configuration file must have a value for <tt>database.name</tt> option.</p>
 
-  <p>Finally, if you only want to change only a few configuration options you can directly provide the values for these options in the CLI args
-as follows:</p>
+  <p>Finally, if you only want to change only a few configuration options you can directly provide the values for these options in the CLI args as follows:</p>
 
-  <pre><code>$ stardog-admin create -n db1 -o icv.enabled=true icv.reasoning.type=QL -- input.ttl</code></pre>
+  <pre><code>$ stardog-admin db create -n db -o icv.enabled=true icv.reasoning.type=QL -- input.ttl</code></pre>
 
   <p>Note that '--' is used in this case when -o is the last option to delimit the value for -o from the files to be bulk loaded.</p>
 
-  <p>Please refer to the CLI help for more details of the <tt>create</tt> subcommand.</p>
+  <p>Please refer to the CLI help for more details of the <tt>db create</tt> command.</p>
 
   <h3>Options</h3>
 
@@ -753,7 +739,7 @@ as follows:</p>
         <tr>
           <td><tt>--durable</tt>, <tt>-d</tt></td>
 
-          <td>If present, sets all mutation operations to database as transactionally durable; durability increases the cost of all mutation operations.<n>In a future release, we will allow durability to be overriden or enabled in Connection Strings, rather than set once-for-all at database creation time.</n></td>
+          <td>If present, sets all mutation operations to database as transactionally durable; durability increases the cost of all mutation operations.<n>In a future release, we will allow durability to be overriden or enabled in connection strings, rather than set once-for-all at database creation time.</n></td>
           <td></td>
 
           <td><tt>False</tt></td>
@@ -791,7 +777,7 @@ as follows:</p>
   <a name="index-strategies"></a>
   <h3>Index Strategies</h3>
 
-<p>By default, Stardog builds extra indexes for named graphs. These
+<p>By default Stardog builds extra indexes for named graphs. These
 additional indexes are used when SPARQL queries specify datasets using <tt>FROM</tt> and
 <tt>FROM NAMED</tt>. With these additional indexes, better statistics about
 named graphs are also computed.</p>
@@ -865,7 +851,7 @@ certain!</p>
 
 <p>It takes as its only argument a valid database name. For example,</p>
 
-<pre><code>$ stardog-admin drop -n my_db_name</code></pre>
+<pre><code>$ stardog-admin db drop my_db</code></pre>
 
     <h2>Using Integrity Constraint Validation</h2>
 
@@ -882,14 +868,12 @@ an existing database with constraints that are passed into the <tt>icv</tt>
 subcommand; that is, using different constraints than the ones already
 associated with the database.</p>
 
-  <p>CLI also supports a command, <tt>icv export</tt>, that will return the
+  <p>CLI also supports a command, <tt>icv convert</tt>, that will return the
 equivalent SPARQL queries to some constraints; this is useful if you want to
 see what a constraint means in terms of a query or if you want to feed those
-queries to some other RDF database for execution. See</p>
+queries to some other RDF database for execution.</p>
 
-<pre><code>./stardog help icv convert</code></pre>
-
-<p>for more information about this feature.</p>
+<p>For details of ICV usage, see <tt>stardog help icv</tt> and <tt>stardog-admin help icv</tt>.</p>
 
     <p>For ICV in transacted mutations of Stardog databases, see the
 database creation section above.</p>
@@ -897,16 +881,16 @@ database creation section above.</p>
     <h2>Migrating a Database</h2>
 
     <p>The <tt>migrate</tt> subcommand migrates an older Stardog database to
-the latest @@VERSION@@ of Stardog. Its only argument is the name of the database
+the latest version of Stardog. Its only argument is the name of the database
 to migrate. <tt>migrate</tt> won't necessarily work between arbitrary
 Stardog version, so before upgrading check the release notes for a new
 version carefully to see whether migration is required or possible.</p>
 
-  <pre><code>$ stardog-admin migrate -n myDatabase</code></pre>
+  <pre><code>$ stardog-admin db migrate myDatabase</code></pre>
 
 <p>will update <tt>myDatabase</tt> to the latest database format.</p>
 
-  <h2>Getting Database Information</h2>
+  <h2>Getting Database Information</h2>@@TODO@@
 
   <p>You can get some information about a database (online/offline status,
 creation time, last modification time, etc.) by running the following
@@ -937,7 +921,7 @@ the following command:</p>
 
 <h3>Configuring Query Management</h3>
 
-<p>For many uses cases the default configuration will be sufficient. But you may need to tweak the timeout parameter to be longer or shorter, depending on the data load, queries, throughput, etc. The default configuration has a server-wide query timeout value of <tt>query.timeout</tt>, which is inherited by all the databases in the server. You can customize the server-wide timeout value and then set per-database custom values, too. Any database without a custom value inherits the server-wide value. To disable query timeout, set <tt>query.timeout</tt> to <tt>0</tt>.</p>
+<p>For many uses cases the default configuration will be sufficient. But you may need to tweak the timeout parameter to be longer or shorter, depending on the hardware, data load, queries, throughput, etc. The default configuration has a server-wide query timeout value of <tt>query.timeout</tt>, which is inherited by all the databases in the server. You can customize the server-wide timeout value and then set per-database custom values, too. Any database without a custom value inherits the server-wide value. To disable query timeout, set <tt>query.timeout</tt> to <tt>0</tt>.</p>
 
 <h3>Command-line Tools</h3>
 
@@ -947,7 +931,7 @@ the following command:</p>
 
 <p>To see all running queries, use the <tt>query list</tt> subcommand:</p>
 
-<pre><code>-> % ./stardog-admin query list</code></pre>
+<pre><code>$ stardog-admin query list</code></pre>
 
 <p>The results are formatted tabularly:</p>
 
@@ -967,7 +951,7 @@ the following command:</p>
 
 <p>To delete a running query, simply pass its ID to the <tt>query kill</tt> subcommand:</p>
 
-<pre><code>-> % ./stardog-admin query kill 3</code></pre>
+<pre><code>$ stardog-admin query kill 3</code></pre>
 
 <p>The output confirms the query kill completing successfully:</p>
 
@@ -987,7 +971,7 @@ the following command:</p>
 
 <p>To see more detail about one running query, use the <tt>query status</tt> subcommand:</p>
 
-<pre><code>-> % ./stardog-admin query status 1</code></pre>
+<pre><code>$ stardog-admin query status 1</code></pre>
 
 <p>The resulting output includes query metadata, including the query itself:</p>
 
@@ -1013,11 +997,15 @@ limit 5</code></pre>
 
 <h3>Protocols and Java API</h3>
 
+<p>For HTTP protocol support, see <a href="http://docs.stardog.apiary.io/">Stardog's Apiary</a> docs.</p>
+
+<p>For Java, see <a href="http://stardog.com/docs/java/snarl/">Stardog Javadocs</a>.</p>
+
 <h3>Security and Query Management</h3>
 
 <p>The security model for query management is very simple: any user can kill any running query submitted by that user; a superuser can kill any running query. The same general restriction is applied to query status; you cannot see query status for a query you do not own, either as a non-superuser or as superuser.</p>
 
-    </section>
+  </section>
 
     <section id="security"><header><h1 id="chapter">Configuring Security</h1></header>
 
@@ -1057,7 +1045,7 @@ you:</p>
 
   <ol>
     <li>Load <a href="#compressed">compressed data files</a> since compression minimizes disk access</li>
-    <li>Use a multicore machine since bulk loading is highly parallelized and every index is built concurrently.</li>
+    <li>Use a multicore machine since bulk loading is highly parallelized and indexes are built concurrently.</li>
     <li>Load multiple files together at creation time since different files will be parsed and processed concurrently improving the load speed</li>
     <li>Turn off <a href="#jvm-arg"><tt>strict.parsing</tt></a>.</li>
     <li>If you are not using named graphs, use <a href="#index-strategies">triples only indexing strategy</a></li>
