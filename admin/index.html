@@ -1029,6 +1029,24 @@ limit 5</code></pre>
 
     </section>
 
+    <section id="tx-recovery-manage"><header><h1 id="chapter">Recovering From Transaction Failures</h1></header>
+
+    <p>In Stardog 1.2 we introduced a new transaction subsystem written from scratch for use in Stardog. This transaction framework&mdash;which we call "erg"&mdash;is mostly maintenance free; but there are some rare conditions in which manual intervention may be needed.</p>
+
+    <h2>Commit Failure Autorecovery</h2>
+
+    <p>Stardog's strategy for recovering automatically from (the very unlikely event of) commit failure is as follows:</p>
+
+    <ul>
+      <li>Stardog automatically rollsback the transaction upon a commit failure;</li>
+      <li>Stardog automatically takes the affected database offline for maintenance;<n>The probability of recovering from a catastrophic transaction failure is inversely proportional to the number of subsequent write attempts; hence, Stardog offlines the database to prevent subsequent write attempts and, hence, to increase the likelihood of recovery.</n> then</li>
+      <li>Stardog automatically takes the affected database online to resume operations.</li>
+    </ul>
+
+    <p>With an approriate logging configuration for production usage (at least error-level logging), log messages for the preceding recovery operations will occur. If for whatever reason the database fails to be returned automatically to online status, an administrator may use the CLI tools (i.e., <tt>stardog-admin db online</tt>) to attempt to online the database.</p>
+
+    </section>
+
     <section id="optimizing-bulk-load"><header><h1 id="chapter">Optimizing Bulk Data Loading</h1></header>
 
     <p>Stardog tries hard to do bulk loading at database creation time in
