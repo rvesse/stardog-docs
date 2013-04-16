@@ -11,7 +11,7 @@
     <link media="screen" rel="stylesheet" href="/_/css/ps.css"/>
     <link media="print" rel="stylesheet" href="/_/css/print.css"/>
     <link media="screen" rel="stylesheet" href="/_/css/simplegrid.css"/>
-    
+
   </head>
   <body>
 
@@ -20,7 +20,7 @@
 
 <div id="masthead">
 
-  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>  
+  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>
 
   <div id="chaptertitle" class="col-9-12">
       <blockquote>
@@ -60,6 +60,10 @@ HTTP Protocol; and SNARL, an RPC-style protocol based on <a
 href="http://code.google.com/apis/protocolbuffers/">Google Protocol
 Buffers</a>.</p>
 
+  <h2>Apiary REST Docs</h2>
+
+  <p>The Stardog HTTP API v3 is also available on Apiary: <a href="http://docs.stardog.apiary.io/">http://docs.stardog.apiary.io/</a>.</p>
+
   </section>
 
   <section id="http"><header><h1 id='chapter'>SPARQL Protocol: HTTP</h1></header>
@@ -67,6 +71,11 @@ Buffers</a>.</p>
   <p>Stardog supports the standard SPARQL Protocol HTTP bindings in a very
 obvious way. Since the Extended HTTP Protocol is a superset of SPARQL
 Protocol, the latter is documented below alongside the former.</p>
+
+  <h2>SPARQL 1.1 Service Description</h2>
+
+  <p>Stardog supports SPARQL 1.1's Service Description format. See the <a href="http://www.w3.org/TR/2013/REC-sparql11-service-description-20130321/">spec</a> if you want details.</p>
+
   </section>
 
   <section id="extended-http"><header><h1 id='chapter'>Extended HTTP Protocol</h1></header>
@@ -128,7 +137,7 @@ RDF/XML:</p>
     <dt>JSON-LD</dt>
     <dd><tt>application/ld+json</tt></dd>
   </dl>
-  
+
   <p>SPARQL <tt>CONSTRUCT</tt> queries must also include a <tt>Content-Type</tt> header set to one of the RDF
   	serialization types above.
   </p>
@@ -168,10 +177,10 @@ set to one of the valid MIME types for <tt>SELECT</tt> results:</p>
     <dt><tt>500</tt></dt>
     <dd>Indicates a failure in some internal operation.</dd>
   </dl>
-  
-  <p>Further, we extend <tt>404</tt> error codes with Stardog-specific codes as indicated by the value of 
+
+  <p>Further, we extend <tt>404</tt> error codes with Stardog-specific codes as indicated by the value of
   <tt>SD-Error-Code</tt>:</tt></p>
-  
+
   <ul>
   	<li><tt>0</tt>: Authentication error</li>
   	<li><tt>1</tt>: Authorization error</li>
@@ -213,14 +222,14 @@ service description, and other database metadata.</p>
 
   <h3>Query Evaluation</h3>
 
-  <pre><code>GET | POST /{db}/query &rarr; application/sparql-results+xml | 
+  <pre><code>GET | POST /{db}/query &rarr; application/sparql-results+xml |
                         text/boolean | application/rdf+xml</code></pre>
 
   <p>The SPARQL endpoint for the database.  Note that ASK queries currently only support an Accept header of text/boolean, you cannot get SPARQL-XML result formatted results for ASK queries.</p>
 
   <h3>Query Plan</h3>
 
-  <pre><code>GET | POST /{db}/explain &rarr; text/plain</code></pre> 
+  <pre><code>GET | POST /{db}/explain &rarr; text/plain</code></pre>
 
   <p>Returns the explanation for the execution of a query, i.e., a query
 plan. All the same arguments as for Query Evaluation are legal here; but the
@@ -288,7 +297,7 @@ failure message.</p>
 
   <h3>Query in Transaction</h3>
 
-  <pre><code>GET | POST /{db}/{txId}/query &rarr; application/sparql-results+xml | 
+  <pre><code>GET | POST /{db}/{txId}/query &rarr; application/sparql-results+xml |
                         text/boolean | application/rdf+xml</code></pre>
 
   <p>Returns a representation of a query executed within the <tt>txId</tt>
@@ -406,7 +415,7 @@ representations, HTTP response codes, and resource identifiers.</p>
   "databases" : ["testdb", "exampledb"]
 }
 </code></pre>
- 
+
   <h3>Copy a database</h3>
 
 <pre><code>PUT /admin/databases/{db}/copy?to={db_copy}</code></pre>
@@ -426,8 +435,8 @@ multipart POST request.</p>
 <pre><code>JSON (application/json):
 {
   "dbname" : "testDb",
-  "options" : { 
-    "icv.active.graphs" : "http://graph, http://another", 
+  "options" : {
+    "icv.active.graphs" : "http://graph, http://another",
     "search.enabled" : true,
     ...
   },
@@ -502,7 +511,7 @@ href="../admin/#admin-db">here</a>.</p>
   "icv.enabled" : true | false,
   "search.enabled" : true | false,
   ...
-} 
+}
 </code></pre>
 
   <h3>Get option values of an existing database.</h3>
@@ -521,7 +530,7 @@ option values in the database when the call returns.</p>
   "icv.enabled" : ...,
   "search.enabled" : ...,
   ...
-} 
+}
 </code></pre>
 
 <p>Output JSON example:</p>
@@ -531,7 +540,7 @@ option values in the database when the call returns.</p>
   "icv.enabled" : true,
   "search.enabled" : true,
   ...
-} 
+}
 </code></pre>
 
   <h3>Add a new user to the system.</h3>
@@ -575,7 +584,7 @@ as default to false.</p>
 
 <pre><code>{
   "enabled": true
-} 
+}
 </code></pre>
 
   <h3>Check if user is Superuser.</h3>
@@ -588,7 +597,7 @@ as default to false.</p>
 
 <pre><code>{
   "superuser": true
-} 
+}
 </code></pre>
 
   <h3>Listing users.</h3>
@@ -601,7 +610,7 @@ as default to false.</p>
 
 <pre><code>{
   "users": ["anonymous", "admin"]
-} 
+}
 </code></pre>
 
   <h3>Listing user roles.</h3>
@@ -614,7 +623,7 @@ as default to false.</p>
 
 <pre><code>{
   "roles": ["reader"]
-} 
+}
 </code></pre>
 
   <h3>Deleting users.</h3>
@@ -667,7 +676,7 @@ as default to false.</p>
 
 <pre><code>{
   "roles": ["reader"]
-} 
+}
 </code></pre>
 
   <h3>Listing users with a specified role.</h3>
@@ -680,7 +689,7 @@ as default to false.</p>
 
 <pre><code>{
   "users": ["anonymous"]
-} 
+}
 </code></pre>
 
   <h3>Deleting roles.</h3>
@@ -748,7 +757,7 @@ as default to false.</p>
 
 <pre><code>{
   "permissions": ["stardog:read:*"]
-} 
+}
 </code></pre>
 
   <h3>Listing user permissions.</h3>
@@ -761,7 +770,7 @@ as default to false.</p>
 
 <pre><code>{
   "permissions": ["stardog:read:*"]
-} 
+}
 </code></pre>
 
   <h3>Listing user effective permissions.</h3>
@@ -774,7 +783,7 @@ as default to false.</p>
 
 <pre><code>{
   "permissions": ["stardog:*"]
-} 
+}
 </code></pre>
 
   <h3>Shutdown server.</h3>
@@ -794,6 +803,8 @@ as default to false.</p>
  Remote Communications). The SNARL protocol supports the same set of client
  operations as the HTTP interface while also supporting the administrative
  functions provided by the Stardog database server.</p>
+
+<!--
 
   <h2>Big Packets</h2>
 
@@ -929,7 +940,7 @@ the server and a keystore on the client so that certificate exchange is
 symmetric. This lets servers verify that they're talking to secure clients;
 however, since the server needs to know ahead of time all clients which will
 connect to it, it's not ideal for some cases.</p>
--->
+
 
 <h3>Query</h3>
 
@@ -1040,7 +1051,7 @@ connect to it, it's not ideal for some cases.</p>
 	in the stream of RDF to add should be typed as <tt>ADD</tt> messages as opposed to <tt>REMOVE.</tt>  The
 	payload will be applied when the server sees the end of sequence flag, and again, a boolean acknowledgement
 	will be sent back from the server indicating the results of the operation.</p>
-
+-->
 </section>
 
 <section id="fn">
