@@ -61,7 +61,7 @@ equivalents) when you are done with them. These hold open resources both
 on the client and on the server and failing to close them when you are
 done will cause files, streams, lions, tigers, and bears to be held open.
 If you do that enough, then you'll eventually exhaust all of the resources in
-their respective     pools, which can cause slowness or ,in some cases,
+their respective     pools, which can cause slowness or, in some cases,
 deadlocks waiting for     resources to be returned to their pools.</p>
 
     <p class="afaq">Similarly close your connections when you are done with them. Failing to close Connections, Iterations, QueryResults, and other <i>closeable</i> objects will lead to undesirable behavior.</p>
@@ -75,19 +75,23 @@ deadlocks waiting for     resources to be returned to their pools.</p>
 
   <h2>Bulk Update Performance</h2>
 
-  <p class="qfaq"><b>Question: I'm adding one triple at a time, in a tight loop, to Stardog; is this the ideal strategy with respect to performance?</p>
+  <p class="qfaq"><b>Question:</b> I'm adding one triple at a time, in a tight loop, to Stardog; is this the ideal strategy with respect to performance?</p>
 
-  <p class="qfaq"><b>Question: I'm adding millions of triples to Stardog and I'm wondering it that's the best approach?</p>
+  <p class="qfaq"><b>Question:</b> I'm adding millions of triples to Stardog and I'm wondering it that's the best approach?</p>
 
-  <p class="afaq"><b>Answer:</b> The answer to both questions is to stop doing that...</p>
+  <p class="afaq"><b>Answer:</b> The answer to both questions is to stop doing that...</b></p>
 
   <p class="afaq">In other words, there is a sweet spot for Stardog bulk update performance. The best performance for writes isn't found by parsimoniously writing only one or a few triples at a time; or, on the other end of the spectrum, holding writes till there are millions of triples. Generally update performance is best if you write between 1k and 100k triples at a time. You may need to experiment to find the sweet spot with respect to your data, database size, the size of the differential index, and update frequency.</p>
 
   <h2>Public Endpoint</h2>
 
-  <p class="qfaq">I want to use Stardog to serve a public SPARQL endpoint; is there some way I can do this without publishing user account information?</p>
+  <p class="qfaq"><b>Question:</b> I want to use Stardog to serve a public SPARQL endpoint; is there some way I can do this without publishing user account information?</p>
 
-  <p class="afaq">We don't necessarily recommend this, but it's possible. Simply pass <tt>--disable-security</tt> to <tt>stardog-admin</tt> when you start the Stardog Server; while this may be the worst possible name for an argument, since it doesn't actually disable security, it will use the built-in anonymous user (given the default configuration and user accounts) in a way that makes Stardog usable for a public endpoint.</p>
+  <p class="afaq"><b>Answer:</b> We don't necessarily recommend this, but it's possible. Simply pass <tt>--disable-security</tt> to <tt>stardog-admin</tt> when you start the Stardog Server; while this may be the worst possible name for an argument, since it doesn't actually disable security, it will use the built-in anonymous user (given the default configuration and user accounts) in a way that makes Stardog usable for a public endpoint.</p>
+
+  <h2>Remote Bulk Loading</h2>
+  <p class="qfaq"><b>Question:</b> I'm trying to create a database and bulk load files from my machine to the server and it's not working, the files don't seem to load, what gives?</p>
+  <p class="afaq"><b>Answer:</b> Stardog does not tranfser files during database creation to the server, sending big files over a network kind of defeats the purpose of blazing fast bulk loading.  If you want to bulk load files from your machine to a remote server, copy them to the server and bulk load them.</p>
 
      </section>
 
