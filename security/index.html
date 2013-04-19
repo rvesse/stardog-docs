@@ -120,7 +120,7 @@
 
 <h3>Wildcards</h3>
 
-<p>Stardog allows the use of wildcards to represent sets of resources. A wildcard is denoted with the character <tt>*</tt>. Wildcards can be used to create complex permissions; for instance, we can give a user the ability to create any database by granting it a <tt>create</tt> permission over <tt>db:*</tt>. Similarly, wildcards can be used in order to revoke multiple permissions at the same time.
+<p>Stardog allows the use of wildcards to represent sets of resources. A wildcard is denoted with the character <tt>*</tt>. Wildcards can be used to create complex permissions; for instance, we can give a user the ability to create any database by granting it a <tt>create</tt> permission over <tt>db:*</tt>. Similarly, wildcards can be used in order to revoke multiple permissions at the same time.</p>
 
 <h3>Superusers</h3>
 
@@ -128,7 +128,7 @@
 
 <h3>Owner Permissions</h3>
 
-<p>When a user creates a resource, it is automatically granted <tt>delete</tt>, <tt>write</tt>, <tt>read</tt>, <tt>grant</tt>, and <tt>revoke</tt> permissions over the new resource. If the new resource is a database, then the user is additionally granted <tt>write</tt>, <tt>read</tt>, <tt>grant</tt>, and <tt>revoke</tt> permissions over <tt>icv-constraints:theDatabase</tt>, and <tt>execute</tt> permission over <tt>admin:theDatabase</tt>.</p>
+<p>When a user creates a resource, it is automatically granted <tt>delete</tt>, <tt>write</tt>, <tt>read</tt>, <tt>grant</tt>, and <tt>revoke</tt> permissions over the new resource. If the new resource is a database, then the user is additionally granted <tt>write</tt>, <tt>read</tt>, <tt>grant</tt>, and <tt>revoke</tt> permissions over <tt>icv-constraints:theDatabase</tt>, and <tt>execute</tt> permission over <tt>admin:theDatabase</tt>.  These two permissions give the creator of the database the ability to administer the ICV constraints for the database and administer the database itself.</p>
 
 <h2>Default Security Configuration</h2>
 
