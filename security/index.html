@@ -42,306 +42,193 @@
 
   <div class="col-9-12" id="main-channel">
     
-  <p>Stardog seeks a balance between security and usability: data in Stardog must be secured from unauthorized access, and using Stardog should be fun and make people more productive. In this chapter we explain how security works in Stardog, including how to securely deploy it in production environments.</p>
- 
-  <section id="model"><header><h1 id='chapter'>The User &amp; Security Model</h1></header>
-
-    <p>Stardog security and user model is standard role-based access control. Stardog uses <a href="http://shiro.apache.org/">Apache Shiro</a> for authentication, authorization, and session management; for cryptography, Stardog uses jBCrypt.</p>
-
-    <h2>Resources</h2>
-
-    <p>A resource is some Stardog entity or service to which access is to be controlled; in Stardog @@VERSION@@, the resource types are <tt>user, role, database</tt>, and <tt>database metadata</tt>.<n>We will extend the resource types to include named graph in Stardog 1.1.</n> A resource must have an identifier<n>The lexical space of legal identifiers for users, roles, and databases is given by the regular expression, <tt>[A-Za-z_]{1}[A-Za-z0-9_]*</tt>.</n> that is unique among resources of that type.<n>Resources of different types may have the same identifier, of course.</n> Stardog frequently names a resource using both its type and identifier separated by a colon to avoid ambiguity: for example,  <tt>user:admin</tt> and <tt>db:test</tt> (see table below for list of prefixes for all resource types). Stardog also has a notion of a "wildcard" resource; i.e., a resource that identifies all resources of a specified type. This is syntactic sugar that will make the database admin's life easier: <tt>user:*</tt> refers to all users, which allows, say, the granting of permissions to all users.</p>
-
-    <table>
-      <caption>Resource types and their prefixes</caption>
-      <thead>
-        <tr>
-          <th>Resource type</th>
-          <th>Prefix</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>user</td>
-          <td><tt>user</tt></td>
-        </tr>
-        <tr>
-          <td>role</td>
-          <td><tt>role</tt></td>
-        </tr>
-        <tr>
-          <td>database</td>
-          <td><tt>db</tt></td>
-        </tr>
-        <tr>
-          <td>database metadata</td>
-          <td><tt>metadata</tt></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p>In order to change permissions to a given resource (i.e., grant or revoke permissions), the user must have a permission to the <tt>grant</tt> action to that resource. Effectively, having <tt>grant</tt> permission makes the user an owner of that resource; after all, if a user is missing any permissions to that resource, they always can be granted.</p>
-
-    <p>In general, if a resource is created in the system, its creator receives the <em>standard</em> set of permissions: <tt>read, write, delete, grant</tt>.<n><tt>create</tt> and <tt>list</tt> are not granted because they apply to resource types, not to resources per se.</n>
-
-    <h2>Permissions</h2>
-
-    <p>A permission is a relation between a user or a role, an action (e.g., write), and a resource (e.g., database <tt>foo</tt>).</p>
-
-    <h2>Roles</h2>
-
-    <p>Sometimes called "groups" in other systems, a role is an abstraction over a set of users; rather than granting permissions to user accounts directly, most permissions are granted to some role, from which users (which have that role) inherit the permission.</p>
-
-    <p>The actions on role resources are as follows:</p>
-
-      <dl>
-        <dt><tt>read</tt></dt>
-        <dd>Permits reading all of the role's properties; for example, all the users that belong to it or what permissions are granted to the role.</dd>
-        <dt><tt>write</tt></dt>
-        <dd>Permits changing the role's properties.</dd>
-        <dt><tt>create</tt></dt>
-        <dd>Permits creation of a new role.</dd>
-        <dt><tt>list</tt></dt>
-        <dd>Permits listing all of the existing roles.</dd>
-        <dt><tt>grant</tt></dt>
-        <dd>Permits granting or revoking permissions to perform actions on a role.</dd>
-      </dl>
-
-    <p>Assigning a user to a role requires <tt>write</tt> permission to the user and to the role.</p>
-
-    <h2>Users</h2>
-
-    <p>A user is an account in Stardog, which typically (but not always) is tied to a person. Users belong to roles and own resources. Users can belong to multiple roles and inherit all the permissions assigned to the roles. Permission inheritance is additive only: if a role grants a specific permission, and a user (say, <tt>Bob</tt>) has that role, there is no way to deny that permission to <tt>Bob</tt>.</p>
-
-    <p>Users have state: they can be disabled or enabled, for example. Note: the system will not allow you to disable the last superuser in the system. A user account's name is the identifier of the user resource: so a user <tt>Bob</tt> is referred to as <tt>user:Bob</tt>. Once a user account is created, it is not possible to change the user identifier.</p>
-
-    <p>The actions on user resources are as follows:</p>
-
-    <dl>
-    <dt><tt>read</tt></dt>
-    <dd>Permits reading the properties and other info of the user: is user a superuser, is it enabled or disabled, what roles does it belong to, what the user's permissions are, when was it created, etc.</dd>
-    <dt><tt>write</tt></dt>
-    <dd>Permits modifying the <em>modifiable</em> properties of the user: enabing or disabling it, changing its roles, etc.</dd>
-    <dt><tt>create</tt></dt>
-    <dd>Permits creating a new user resource.</dd>
-    <dt><tt>delete</tt></dt>
-    <dd>Permits removing a user resource.</dd>
-    <dt><tt>list</tt></dt>
-    <dd>Permits retrieving a list of all user resources in the system.</dd>
-    <dt><tt>grant</tt></dt>
-    <dd>Permits granting or revoking permissions to any of the preceding actions on a user resource to a user resource.</dd>
-    </dl>
-
-    <p>Some restritions apply: only a superuser can create a new user as a superuser; it's not possible to change the superuser property of a user. Changing a user's password is also subject to special rules: a user can always change its own password, and a superuser can change another users' password.</p>
-
-    <p>A user account initially has no password: it has to be set explicitly. Until the password is set, it is not possible to log into the user account. Also it is worth noting, that creation of a new user account (say, <tt>Bob</tt>), does not automatically grant <tt>Bob</tt> the <tt>read</tt> permission to <tt>user:Bob</tt> resource. As the result, <tt>Bob</tt> will not be allowed to get any information about his own account (e.g., to list his own permissions), until that permission is explicitly granted to him.</p>
-
-    <p>Finally, assigning a user to a role requires <tt>write</tt> permission to the user account and to the role.</p>
-
-    <h3>Superuser</h3>
-
-    <p>A user account may be marked as a superuser account, in which case that user has permissions to perform all actions on any and all resources. A user account may neither be demoted from nor promoted to superuser status at any time except when the user account is created.</p>
-
-    <h2>Database &amp; Database Metadata</h2>
-
-    <p>A database resource is simply a Stardog database; for each database resource, there is a corresponding database metadata resource which controls some aspects of the database and its services.</p>
-
-    <p>The actions on database resources are as follows:</p>
-
-    <dl>
-      <dt><tt>read</tt></dt>
-      <dd>Permits reading data from the database, including querying the database.</dd>
-      <dt><tt>write</tt></dt>
-      <dd>Permits modifying the contents of the database in any way, including deletions.</dd>
-      <dt><tt>create</tt></dt>
-      <dd>Permits creating a new database in the system.</dd>
-      <dt><tt>delete</tt></dt>
-      <dd>Permits deleting (or "dropping") the database from the system.</dd>
-      <dt><tt>list</tt></dt>
-      <dd>Permits retrieving a list of all the databases in the system.</dd>
-      <dt><tt>grant</tt></dt>
-      <dd>Permits granting or revoking permissions to perform any of these actions on the database.</dd>
-    </dl>
-
-    <p>The database metadata resource represents all of the options or metadata that can be set on a database itself, as opposed to the data contained in the database. When a database is created&mdash;called, in this example, <tt>myDatabase</tt>&mdash;Stardog creates a database metadata resource, which contains three resources:</p>
-
-    <ul>
-    <li><tt>metadata:myDatabase:options</tt>&mdash;a container for modifiable database options; see <a href="">Foo Chapter</a> for more information about the modifiable database options.</li>
-    <li><tt>metadata:myDatabase:icv-constraints</tt>&mdash;the set of <a href"/docs/sdp">Integrity Constraint Validation</a> constraints for the database</li>
-    <li><tt>metadata:myDatabase:icv-guard</tt>&mdash;whether or not ICV Guard Mode can be enabled or disabled and which reasoning level guard is used with</li>
-    </ul>
-
-    <p>The first resource controls whether a user or role can modify the value of the modifiable database options; the second controls access to the ICV constraints for <tt>myDatabase</tt>; the third controls whether ICV guard mode can be enabled or disabled.</p>
-
-    <h2>Actions</h2>
-
-    <p>A fixed set of operations that may be performed upon a resource; in Stardog @@VERSION@@, the actions are <tt>read, write, create, delete, list, grant</tt>.</p>
-
-    <h2>Default Security Configuration</h2>
-
-    <p>Out of the box, the Stardog security setup is minimal:</p>
-    
-    <ul>
-      <li><tt>user:admin</tt> with password set to "admin" is a superuser.</li>
-      <li><tt>user:anonymous</tt> with password "anonymous" has the "reader" role.</li>
-      <li><tt>role:reader</tt> allows reading from all resources.</li>
-    </ul>
-
-    <p>The rationale for <tt>user:anonymous</tt> is to support, out of the box, the use case of a public SPARQL endpoint that allows access to multiple databases, while not allowing the user to have excessive privileges.</p>
-
-    <h2>Authentication and Authorization</h2>
-
-    <p>To be documented: how to extend Stardog to allow 3<sup>rd</sup> party authentication services.</p>
-
-    <h3>Password Policies</h3>
-
-    <p>To be documented: how to implement custom password policies in Stardog.</p>
-
-  </section>
- 
-  <section id="cli"><header><h1 id='chapter'>Command Line Interface</h1></header>
-
-  <p>Most of security-related commands are in the <tt>stardog-admin</tt> command, since most users don't need to manage security. In general, all options should accept <tt>-u username</tt> option (the user performing the operation) and either <tt>-p password</tt> (to pass the password on the command line; not secure but useful for scripting) or <tt>-P</tt> to force the CLI to prompt for the password.</p>
-
-  <p>If no username is passed, then user <tt>admin</tt> with password <tt>admin</tt> is assumed.</p>
-    
-  <p>Similarly, all admin options accept the <tt>--server</tt> parameter to specify the URL of the Stardog server.</p>
-  
-  <p>In the examples below, we generally don't show these options and parameters to avoid clutter, unless a full command is shown.</p>
-
-  <p>Note: the name of the user performing the operation should not be confused with a user that may be the object of the operation (e.g., when changing a password of a different user).</p>
-
-  <h2>User Management</h2>
-
-  <p>To create a new user:</p>
-  
-  <pre><code> $ stardog-admin user add -n newusername -u admin -p admin --server "snarl://server/"</code></pre>
-
-  <p>To make the new user a superuser, pass the <tt>-s</tt> flag.</p>
-
-  <p>To assign a password to the user <tt>bob</tt>:</p>
-
-  <pre><code> $ stardog-admin passwd -n bob -u admin -p admin --server "snarl://server/"</code></pre>
-
-  <p>To grant the newly created user the read permission to his or her own user account (so that the user can get information about the account; e.g., list all permissions):</p>
-
-  <pre><code> $ stardog-admin user grant -n bob -a read -o "user:bob" -u admin -p admin \
-    --server "snarl://server/"</code></pre>
-
-  <p>To remove a user, <tt>frank</tt>:</p>
-
-  <pre><code> $ stardog-admin user drop -n frank -u admin -p admin --server "snarl://server/"</code></pre>
-
-  <p>To list users:</p>
-
-  <pre><code> $ stardog-admin user list -u admin -p admin --server "snarl://server/"</code></pre>
-
-  <p>To list more information about users,<n>User names, superuser info, enabled-disabled state, roles.</n> pass the <tt>-a</tt> flag:</p>
-
-  <pre><code> $ stardog-admin user list -a -u admin -p admin --server "snarl://server/"</code></pre>
-
-  <p>To add roles (<tt>role1</tt> and <tt>role2</tt>) to a user, <tt>dahlia</tt>:</p>
-
-  <pre><code> $ stardog-admin user edit -R "role1,role2" -n dahlia -u admin -p \
-    admin --server "snarl://server/"</code></pre>
-
-  <p>To replace dahlia's roles with new roles (or to remove a user's roles, pass <tt>--replace -R ""</tt>):</p>
-
-  <pre><code> $ stardog-admin user edit --replace -R "role3,role4" -n dahlia -u admin \
-    -p admin --server "snarl://server/"</code></pre>
-
-  <p>To disable a user's account (note: you can never disable (or remove) the last superuser account):</p>
-
-  <pre><code> $ stardog-admin user edit -n dahlia --enabled false -u admin \
-    -p admin --server "snarl://server"</code></pre>
-
-  <h2>Role Management</h2>
-
-  <p>To add a new role, <tt>spyboy</tt>, to Stardog:</p>
-
-  <pre><code> $ stardog-admin role add -n spyboy -u admin -p admin --server "snarl://server"</code></pre>
-
-  <p>To delete a role from Stardog:</p>
-
-  <pre><code> $ stardog-admin role drop -n spyboy -u admin -p admin --server "snarl://server"</code></pre>
-
-  <p>To grant a permission (modifying the ICV Constraints resource of database <tt>test2</tt>) to a role, <tt>spyboy</tt>:
-
-  <pre><code> $ stardog-admin role grant -n spyboy -a write -o "metadata:test2:icv-constraints" \
-    -u admin -p admin --server "snarl://server"</code></pre>
-
-  <p>Dropping a role will fail if there are users who belong to that role. Pass <tt>-f</tt> or <tt>--force</tt>, which unassigns users from the role before removing it.</p>
-
-  <p>To list roles (short version):</p>
-
-  <pre><code> $ stardog-admin role list -u admin -p admin --server "snarl://server"</code></pre>
-
-  <p>And the long version, which includes users who belong to the role:</p>
-
-  <pre><code> $ stardog-admin role list -a -u admin -p admin --server "snarl://server"</code></pre>
-
-  <h2>Permissions Management</h2>
-
-  <p>You can list a user's assigned and inherited permissions; or you can list the permissions of a role. The syntax is the same for both; they accept <tt>-n</tt> to specify the user or role, respectively, for which the permissions should be listed.</p>
-
-  <p>In order to list permissions of a user or a role, read permission to that user or role is required.</p>
-
-  <p>The output is written in tabular form, grouping permissions to the same resource in a single line; for example, for user
-admin:</p>
-
-  <pre><code> $  stardog-admin user permission -n admin -u admin -p admin --server "snarl://server"</code></pre>
-
-  <p>Which returns:</p>
-
-  <pre><code>anonymous permissions
-+---------------+----------------------+-------------+-------------+
-| Resource Type |    Resource Name     | Permissions |   Source    |
-+---------------+----------------------+-------------+-------------+
-| *             | *                    | -R----      | reader      |
-| db            | *                    | C-----      | [anonymous] |
-| db            | lubm                 | -RWD-G      | lubmadmins  |
-| metadata      | lubm:icv-constraints | -RWD-G      | [anonymous] |
-| metadata      | lubm:icv-guard       | -RWD-G      | [anonymous] |
-| metadata      | lubm:options         | -RWD-G      | [anonymous] |
-| user          | *                    | C---L-      | useradmins  |
-+---------------+----------------------+-------------+-------------+
-
-useradmins permissions
-
-+---------------+---------------+-------------+
-| Resource Type | Resource Name | Permissions |
-+---------------+---------------+-------------+
-| user          | *             | C---L-      |
-+---------------+---------------+-------------+</code></pre>
-
-<p>The permissions are compactly displayed, one letter for permission (CRWDLG);<n>For create, read, write, delete, list, and grant.</n> if a user does not have a permission, a <tt>-</tt> is displayed in that position. For the <tt>anonymous</tt> user who belongs to the <tt>reader</tt> group, the output is <tt>-R----</tt>.</p>
-
-<h3>Granting Permissions</h3>
-
-<p>There are four subcommands to modify permissions: <tt>user grant</tt>, <tt>user revoke</tt>, <tt>role grant</tt>, and <tt>role revoke</tt>.</p>
-
-<p>They accept the <tt>-n</tt> parameter to specify the user or role to which the permission will be modified. They also accept an <tt>-a</tt> parameter to specify the action (e.g., <tt>-a "write"</tt>) and an <tt>-o</tt> parameter for the resource to which the permission applies (e.g., "db:foo").</p>
-
-<p>To grant user <tt>jim</tt> permission to write to database <tt>test2</tt>:</p>
-
-<pre><code> $  stardog-admin user grant -n jim -a write -o "db:test2" -u admin -p admin \
-  --server "snarl://server"</code></pre>
-
-<p>To revoke permission to read from database <tt>test3</tt> from role <tt>spyboy</tt>:</p>
-
-<pre><code> $  stardog-admin role revoke -n spyboy -a read -o "db:test3" -u admin -p admin \
-  --server "snarl://server"</code></pre>
-  
-  </section>
-
-  
-  <section id="api"><header><h1 id='chapter'>Programmatic Access</h1></header>
-
-  <p>See the <a href="">Java Programming</a> chapter.</p>
-
-  </section> 
- 
-  <section id="deployment"><header><h1 id='chapter'>Deploying Stardog Securely</h1></header>
+  <p>Stardog uses <a href="http://shiro.apache.org/">Apache Shiro</a> for authentication, authorization, and session management; for cryptography, Stardog uses jBCrypt.</p>
+
+<section id="model"><header><h1 id='chapter'>Security Model</h1></header>
+
+<p>Stardog security model is based on standard role-based access control: <i>users</i> have <i>permissions</i> over <i>resources</i>, permissions can be grouped into <i>roles</i>, and roles can be assigned to users.</p>
+
+<h2>Resources</h2>
+
+<p>A resource is some Stardog entity or service to which access is to be controlled. Resources are identified by their <i>type</i> and their <i>name</i>. A particular resource is denoted as <tt>type_prefix:name</tt>. The valid resource types with their prefixes are shown below.</p>
+
+<table>
+<caption>Resource Types for Stardog @@VERSION@@</caption>
+  <thead>
+    <tr>
+      <th>Resource type</th>
+      <th>Prefix</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>User</td>
+      <td><tt>user</tt></td>
+      <td>Represents a user (e.g., <tt>user:admin</tt>)</td>
+    </tr>
+    <tr>
+      <td>Role</td>
+      <td><tt>role</tt></td>
+      <td>Represents a role that can be assigned to a user (e.g., <tt>role:reader</tt>)</td>
+    </tr>
+    <tr>
+      <td>Database</td>
+      <td><tt>db</tt></td>
+      <td>Represents a database (e.g., <tt>db:myDB</tt>)</td>
+    </tr>
+    <tr>
+      <td>Database Metadata</td>
+      <td><tt>metadata</tt></td>
+      <td>Represents the metadata of a particular database (e.g., <tt>metadata:myDB</tt>)</td>
+    </tr>
+    <tr>
+      <td>Database Administration</td>
+      <td><tt>admin</tt></td>
+      <td>Represents a special type of resource that is reserved for database administration tasks (e.g., <tt>admin:myDB</tt>)</td>
+    </tr>
+    <tr>
+      <td>Integrity Constraints</td>
+      <td><tt>icv-constraints</tt></td>
+      <td>Represents the integrity constraints associated to a particular database (e.g., <tt>icv-constraints:myDB</tt>)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Permissions</h2>
+
+<p>Permissions are composed of a <i>permission subject</i>, an <i>action</i>, and a <i>permission object</i>, meaning that the subject resource can perform the specified action over the object resource.</p>
+
+<p>Permission subjects can be of type <tt>user</tt> or <tt>role</tt> only. Permission objects can be of any valid type. Valid actions are shown as follows:</p>
+
+<dl>
+  <dt><tt>read</tt></dt>
+    <dd>Permits reading the resource properties</dd>
+  <dt><tt>write</tt></dt>
+    <dd>Permits changing the resource properties</dd>
+  <dt><tt>create</tt></dt>
+    <dd>Permits creating new resources</dd>
+  <dt><tt>delete</tt></dt>
+    <dd>Permits deleting a resource</dd>
+  <dt><tt>grant</tt></dt>
+    <dd>Permits granting permissions over a resource</dd>
+  <dt><tt>revoke</tt></dt>
+    <dd>Permits revoking permissions over a resource</dd>
+  <dt><tt>execute</tt></dt>
+    <dd>Permits executing administration actions over a database</dd>
+</dl>
+
+<h3>Wildcards</h3>
+
+<p>Stardog allows the use of wildcards to represent sets of resources. A wildcard is denoted with the character <tt>*</tt>. Wildcards can be used to create complex permissions; for instance, we can give a user the ability to create any database by granting it a <tt>create</tt> permission over <tt>db:*</tt>. Similarly, wildcards can be used in order to revoke multiple permissions at the same time.</p>
+
+<h3>Superusers</h3>
+
+<p>It is possible to specify that a given user is a superuser at creation time. Being a superuser is equivalent to having been granted an <tt>all</tt> permission over <tt>*:*</tt>. Therefore, as expected, superusers are allowed to  perform any valid action over any existing resource.</p>
+
+<h3>Owner Permissions</h3>
+
+<p>When a user creates a resource, it is automatically granted <tt>delete</tt>, <tt>write</tt>, <tt>read</tt>, <tt>grant</tt>, and <tt>revoke</tt> permissions over the new resource. If the new resource is a database, then the user is additionally granted <tt>write</tt>, <tt>read</tt>, <tt>grant</tt>, and <tt>revoke</tt> permissions over <tt>icv-constraints:theDatabase</tt>, and <tt>execute</tt> permission over <tt>admin:theDatabase</tt>.  These two permissions give the creator of the database the ability to administer the ICV constraints for the database and administer the database itself.</p>
+
+<h2>Default Security Configuration</h2>
+
+<p>Out of the box, the Stardog security setup is minimal:</p>
+
+<ul>
+  <li><tt>user:admin</tt> with password set to "admin" is a superuser.</li>
+  <li><tt>user:anonymous</tt> with password "anonymous" has the "reader" role.</li>
+  <li><tt>role:reader</tt> allows to <tt>read</tt> from any resource.</li>
+</ul>
+
+</section>
+
+<section id="management"><header><h1 id='chapter'>Security Management</h1></header>
+
+<p>Stardog can be used to manage security resources (users, roles, permissions, etc.) programmatically and via the CLI. In this section we provide the corresponding permissions the user managing security information must have.</p>
+
+<h2>Users</h2>
+
+<dl>
+  <dt>Create a user</dt>
+    <dd><tt>create</tt> permission over <tt>user:*</tt>. <br/>
+        Only superusers can create other superusers.</dd>
+  <dt>Delete a user</dt>
+    <dd><tt>delete</tt> permission over the user.</dd>
+  <dt>Enable/Disable a user</dt>
+    <dd>User must be a superuser.</dd>
+  <dt>Change password of a user</dt>
+    <dd>User must be a superuser OR <br/>
+        user must be trying to change its own password.</dd>
+  <dt>Check if a user is a superuser</dt>
+    <dd><tt>read</tt> permission over the user OR <br/>
+        user must be trying to get its own info</dt>.</dd>
+  <dt>Check if a user is enabled</dt>
+    <dd><tt>read</tt> permission over the user OR <br/>
+        user must be trying to get its own info.</dd>
+  <dt>List users</dt>
+    <dd>Superusers can see all users. <br/>
+        Regular users can see only users over which they have a permission.</dd>
+</dl>
+
+<h2>Roles</h2>
+
+<dl>
+  <dt>Create a role</dt>
+    <dd><tt>create</tt> permission over <tt>role:*</tt>.</dd>
+  <dt>Delete a role</dt>
+    <dd><tt>delete</tt> permission over the role.</dd>
+  <dt>Assign a role to a user</dt>
+    <dd><tt>grant</tt> permission over the role AND <br/>
+          user must have all the permissions associated to the role.</dd>
+  <dt>Unassign a role from a user</dt>
+    <dd><tt>revoke</tt> permission over the role AND <br/>
+          user must have all the permissions associated to the role.</dd>
+  <dt>List roles</dt>
+    <dd>Superusers can see all roles. <br/>
+        Regular users can see only roles they have been assigned OR over which they have a permission.</dd>
+</dl>
+
+<h2>Databases</h2>
+
+<dl>
+  <dt>Create a database</dt>
+    <dd><tt>create</tt> permission over <tt>db:*</tt>.</dd>
+  <dt>Delete a database</dt>
+    <dd><tt>delete</tt> permission over <tt>db:theDatabase</tt>.</dd>
+  <dt>Add/Remove integrity constraints to a database</dt>
+      <dd><tt>write</tt> permission over <tt>icv-constraints:theDatabase</tt>.</dd>
+  <dt>Verify a database is valid with respect to its integrity constraints</dt>
+      <dd><tt>read</tt> permission over <tt>icv-constraints:theDatabase</tt>.</dd>
+  <dt>Online/Offline a database</dt>
+      <dd><tt>execute</tt> permission over <tt>admin:theDatabase</tt>.</dd>
+  <dt>Migrate a database</dt>
+      <dd><tt>execute</tt> permission over <tt>admin:theDatabase</tt>.</dd>
+  <dt>Optimize a database</dt>
+      <dd><tt>execute</tt> permission over <tt>admin:theDatabase</tt>.</dd>
+  <dt>List databases</dt>
+      <dd>Superusers can see all databases. <br/>
+          Regular users can see only databases over which they have a permission.</dd>
+</dl>
+
+<h2>Permissions</h2>
+<dl>
+  <dt>Grant a permission</dt>
+    <dd><tt>grant</tt> permission over the permission object AND <br/>
+          user must have the permission that it is trying to grant.</dd>
+  <dt>Revoke a permission from a user or role over an object resource</dt>
+    <dd><tt>revoke</tt> permission over the permission object AND <br/>
+          user must have the permission that it is trying to revoke.</dd>
+  <dt>List user permissions</dt>
+    <dd>User must be a superuser OR <br/>
+        user must be trying to get its own info.</dd>
+  <dt>List role permissions</dt>
+    <dd>User must be a superuser OR <br/>
+        user must have been assigned the role.</dd>
+</dl>
+
+</section>
+
+<section id="deployment"><header><h1 id='chapter'>Deploying Stardog Securely</h1></header>
 
   <h2>Securing Stardog in a Networked Environment</h2>
 
@@ -514,8 +401,10 @@ SDOPS ALL = ( stardog ) /usr/bin/stardog</code></pre>
 
 <pre><code>$ sudo stardog-admin create --type D --name my-new-database</code></pre> -->
 
-  </section> 
-  
+</section> 
+
+ 
+    
   
 <section id="fn">
   <header>  <h1 class="fn">Notes</h1></header>

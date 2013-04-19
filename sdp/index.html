@@ -11,7 +11,7 @@
     <link media="screen" rel="stylesheet" href="/_/css/ps.css"/>
     <link media="print" rel="stylesheet" href="/_/css/print.css"/>
     <link media="screen" rel="stylesheet" href="/_/css/simplegrid.css"/>
-    
+
   </head>
   <body>
 
@@ -19,7 +19,7 @@
 
 <div id="masthead">
 
-  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>  
+  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>
 
   <div id="chaptertitle" class="col-9-12">
       <blockquote>
@@ -41,10 +41,10 @@
   </div>
 
   <div class="col-9-12" id="main-channel">
-  
+
   <section id="intro"><header><h1 id='chapter'>Background</h1></header>
 
-  <p>Using OWL as if it were a schema or constraint language for RDF and
+  <p>Using high level languages like OWL, SWRL, and SPARQL as schema or constraint languages for RDF and
 Linked Data has several advantages:</p>
 
 <ul>
@@ -54,10 +54,7 @@ Linked Data has several advantages:</p>
 <li>Being able to use automated reasoning about all of these things to insure logical consistency, explain errors and problems, etc</li>
 </ul>
 
-<p>But the OWL 2 standard from W3C isn't designed for this usage; rather, it's
-primarily designed for <em>inferencing</em>.</p>
-
-  <p>In Stardog, you can use OWL as both a schema language for RDF and as a
+<p>But neither OWL 2, SWRL, nor SPARQL were explicitly designed for this usage. In Stardog, you can use OWL, SWRL, or SPARQL as a constraint language for RDF and as a
 modeling or inference language. This chapter explains how.</p>
 
   <p>If you are also interested in the theoretical background, please see the <a
@@ -103,7 +100,7 @@ understand if you read this section on terminology first.</p>
       <li>Adding new constraints to a Stardog database may make it invalid.</li>
       <li>Deleting constraints from a Stardog database <em>cannot make it invalid</em>.</li>
     </ol>
-  
+
   </section>
 
 
@@ -247,7 +244,7 @@ sufficient privileges for that action.</p>
 	  constraints that have been associated with it.  Should someone attempt to commit data which violates one or more of the constraints defined for
 	  the database, the commit will fail and the data will not be added/removed from your database.
   </p>
-  
+
   <p>
 	  By default, reasoning is not used when you enable guard mode, however you are free to specify any of the reasoning types supported by Stardog when
 	  enabling guard mode.  If you have provided a specific reasoning type for guard mode it will be used during validation of the integrity constraints.
@@ -284,43 +281,43 @@ and that <tt>xsd:</tt> is bound to the standard,
 
   <h4>Managers must be employees</h4>
 
-<table style="font-size: 80%"  width="25%" border="1" cellspacing="0"> 
-  <caption></caption> 
-  <tbody>		 
-	 <tr class="constraint"> 
+<table style="font-size: 80%"  width="25%" border="1" cellspacing="0">
+  <caption></caption>
+  <tbody>
+	 <tr class="constraint">
 		<td class="fixedcol">Constraint</td>
-		<td colspan="2"> 
-		  <div> 
+		<td colspan="2">
+		  <div>
 		  <pre>
-Class: Manager 
+Class: Manager
 	SubClassOf: Employee</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	</tr>
 	<tr class="bad">
 	  <td>A</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Alice
 	Types: Manager</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 		<td class="fixedcol">Invalid</td>
-	 </tr> 
+	 </tr>
 	<tr class="good">
 	  <td>B</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
-Individual: Alice 
+Individual: Alice
 	Types: Manager, Employee</pre>
-		  </div> 
+		  </div>
 		</td>
-		<td class="fixedcol">Valid</td> 
+		<td class="fixedcol">Valid</td>
 	 </tr>
-  </tbody> 
-</table> 
+  </tbody>
+</table>
 
 <p>This constraint says that if an RDF individual is an instance of
 <i>Manager</i>, then it must also be an instance of <i>Employee</i>. In
@@ -335,52 +332,52 @@ valid.</p>
 
 <h4>Only project leaders can be responsible for projects.</h4>
 
-<table style="font-size: 80%"  border="1" cellspacing="0"> 
-  <caption></caption> 
-  <tbody>		 
-	 <tr class="constraint"> 
+<table style="font-size: 80%"  border="1" cellspacing="0">
+  <caption></caption>
+  <tbody>
+	 <tr class="constraint">
 		<td class="fixedcol">Constraint</td>
-		<td colspan="2"> 
+		<td colspan="2">
 		  <div>
 		<pre>
 ObjectProperty: is_responsible_for
 	Domain: Project_Leader
 	Range: Project</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	</tr>
 	<tr class="bad">
 	 <td align="center">A</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Alice
-	Facts: is_responsible_for MyProject 
+	Facts: is_responsible_for MyProject
 
 Individual: MyProject
 	Types: Project</pre>
-		  </div> 
+		  </div>
 		</td>
-		<td class="fixedcol" align="center">Invalid</td> 
-	 </tr> 
+		<td class="fixedcol" align="center">Invalid</td>
+	 </tr>
 	<tr class="bad">
 	  <td align="center">B</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Alice
 	Types: Project_Leader
 	Facts: is_responsible_for MyProject
 
 Individual: MyProject</pre>
-		  </div> 
+		  </div>
 		</td>
-		<td class="fixedcol" align="center">Invalid</td> 
+		<td class="fixedcol" align="center">Invalid</td>
 	 </tr>
 	 <tr class="good">
 	  <td align="center">C</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Alice
 	Types: Project_Leader
@@ -388,12 +385,12 @@ Individual: Alice
 
 Individual: MyProject
 	Types: Project</pre>
-		  </div> 
+		  </div>
 		</td>
-		<td class="fixedcol" align="center">Valid</td> 
+		<td class="fixedcol" align="center">Valid</td>
 	 </tr>
-  </tbody> 
-</table> 
+  </tbody>
+</table>
 
 <p>This constraint says that if an RDF instance <i>i</i> is related to an
 RDF instance <i>j</i> via the property <i>is_responsible_for</i>, then
@@ -410,89 +407,89 @@ valid. In C, <i>Alice</i> is an instance of <i>Project_Leader</i>, and
 
 <!--<p><strong id="example-3">Example 3:</strong> Employees only work on projects.</p>
 
-  <table> 
-  <caption></caption> 
-  <tbody>		 
-	 <tr class="constraint"> 
+  <table>
+  <caption></caption>
+  <tbody>
+	 <tr class="constraint">
 		<td class="fixedcol">Constraint</td>
-		<td> 
+		<td>
 		  <div>
 		<pre>
 ObjectProperty: works_on
 	Range: Project</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	</tr>
 	<tr class="bad">
 	  <td class="fixedcol">Invalid</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Bob
 	Types: Employee
-	Facts: works_on MyProject 
+	Facts: works_on MyProject
 
 Individual: MyProject</pre>
-		  </div> 
-		</td> 
-	 </tr> 
+		  </div>
+		</td>
+	 </tr>
 	<tr class="good">
 	  <td class="fixedcol">Valid</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Bob
 	Types: Employee
-	Facts: works_on MyProject 
+	Facts: works_on MyProject
 
 Individual: MyProject
 	Types: Project</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	 </tr>
-  </tbody> 
+  </tbody>
 </table> -->
 
 <h4>Only employees can have an SSN.</h4>
 
-<table style="font-size: 80%"  border="1" cellspacing="0"> 
-  <caption></caption> 
-  <tbody>		 
-	 <tr class="constraint"> 
+<table style="font-size: 80%"  border="1" cellspacing="0">
+  <caption></caption>
+  <tbody>
+	 <tr class="constraint">
 		<td class="fixedcol">Constraint</td>
-		<td colspan="2"> 
+		<td colspan="2">
 		  <div>
 		<pre>
-DataProperty: SSN 
+DataProperty: SSN
 	Domain: Employee</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	</tr>
 	<tr class="bad">
 	  <td class="fixedcol" align="center">A</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Bob
 	Facts: SSN "123-45-6789"</pre>
-		  </div> 
-		</td> 
-	  <td class="fixedcol"  align="center">Invalid</td>        
-	 </tr> 
+		  </div>
+		</td>
+	  <td class="fixedcol"  align="center">Invalid</td>
+	 </tr>
 	<tr class="good">
 	  <td class="fixedcol" align="center">B</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Bob
 	Types: Employee
 	Facts: SSN "123-45-6789"</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td>         
+        <td class="fixedcol" align="center">Valid</td>
 	 </tr>
-  </tbody> 
-</table> 
+  </tbody>
+</table>
 
 <p>This constraint says that if an RDF instance <i>i</i> has a data assertion
 via the the property <i>SSN</i>, then <i>i</i> must be an instance of
@@ -503,42 +500,42 @@ ontology is valid.
 
 <h4>Each date of birth must be a date.</h4>
 
-  <table style="font-size: 80%"  border="1" cellspacing="0"> 
-  <caption></caption> 
-  <tbody>		 
-	 <tr class="constraint"> 
+  <table style="font-size: 80%"  border="1" cellspacing="0">
+  <caption></caption>
+  <tbody>
+	 <tr class="constraint">
 		<td class="fixedcol">Constraint</td>
-		<td colspan="2"> 
+		<td colspan="2">
 		  <div>
 		<pre>
-DataProperty: DOB 
+DataProperty: DOB
 	Range: xsd:date</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	</tr>
 	<tr class="bad">
 	  <td class="fixedcol" align="center">A</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Bob
 	Facts: DOB "1970-01-01"</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Invalid</td> 
-	 </tr> 
+        <td class="fixedcol" align="center">Invalid</td>
+	 </tr>
 	<tr class="good">
 	  <td class="fixedcol" align="center">B</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Bob
 	Facts: DOB "1970-01-01"^^xsd:date</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td> 
+        <td class="fixedcol" align="center">Valid</td>
 	 </tr>
-  </tbody> 
+  </tbody>
 </table>
 
 <p>This constraint says that if an RDF instance <i>i</i> is related to a
@@ -555,58 +552,58 @@ in some specified relationship.</p>
 
 <h4>Each supervisor must supervise at least one employee.</h4>
 
-    <table style="font-size: 80%"  border="1" cellspacing="0"> 
-  <caption></caption> 
-  <tbody>		 
-	 <tr class="constraint"> 
+    <table style="font-size: 80%"  border="1" cellspacing="0">
+  <caption></caption>
+  <tbody>
+	 <tr class="constraint">
 		<td class="fixedcol">Constraint</td>
-		<td colspan="2"> 
+		<td colspan="2">
 		  <div>
 		<pre>
 Class: Supervisor
 	SubClassOf: supervises some Employee</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	</tr>
 	<tr class="good">
 	  <td align="center">A</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Alice</pre>
-		  </div> 
+		  </div>
 		</td>
-		<td class="fixedcol" align="center">Valid</td> 
-	 </tr> 
+		<td class="fixedcol" align="center">Valid</td>
+	 </tr>
 	<tr class="bad">
 	  <td align="center">B</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Alice
 	Types: Supervisor</pre>
-		  </div> 
+		  </div>
 		</td>
-		<td class="fixedcol" align="center">Invalid</td> 
+		<td class="fixedcol" align="center">Invalid</td>
 	 </tr>
 	<tr class="bad">
 	  <td align="center">C</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Alice
 	Types: Supervisor
 	Facts: supervises Bob
 
 Individual: Bob</pre>
-		  </div> 
+		  </div>
 		</td>
-		<td class="fixedcol" align="center">Invalid</td> 
+		<td class="fixedcol" align="center">Invalid</td>
 	 </tr>
 	<tr class="good">
 	  <td align="center">D</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Alice
 	Types: Supervisor
@@ -614,12 +611,12 @@ Individual: Alice
 
 Individual: Bob
 	Types: Employee</pre>
-		  </div> 
+		  </div>
 		</td>
-		<td class="fixedcol" align="center">Valid</td> 
+		<td class="fixedcol" align="center">Valid</td>
 	 </tr>
-  </tbody> 
-</table> 
+  </tbody>
+</table>
 
 <p>This constraint says that if an RDF instance <i>i</i> is of type
 <i>Supervisor</i>, then <i>i</i> must be related to an individual
@@ -628,85 +625,85 @@ instance of <i>Employee</i>. In ontology A, <i>Supervisor</i> has no
 instances; therefore, A is vacuously valid. In B, the only instance of
 <i>Supervisor</i>, namely <i>Alice</i>, is related to no individual;
 therefore, B is invalid. In C, <i>Alice</i> is related to <i>Bob</i> via
-<i>supervises</i>, but <i>Bob</i> is not an instance of <i>Supervisor</i>;
+<i>supervises</i>, but <i>Bob</i> is not an instance of <i>Employee</i>;
 therefore, C is invalid. In D, <i>Alice</i> is related to <i>Bob</i> via
-<i>supervises</i>, and <i>Bob</i> is an instance of <i>Supervisor</i>;
+<i>supervises</i>, and <i>Bob</i> is an instance of <i>Employee</i>;
 therefore, D is valid.</p>
 
 <h4>Each project must have a valid project number.</h4>
 
-<table style="font-size: 80%"  border="1" cellspacing="0"> 
-<caption></caption> 
-<tbody>		 
- <tr class="constraint"> 
+<table style="font-size: 80%"  border="1" cellspacing="0">
+<caption></caption>
+<tbody>
+ <tr class="constraint">
   <td class="fixedcol">Constraint</td>
-  <td colspan="2"> 
+  <td colspan="2">
     <div>
   <pre>
 Class: Project
 SubClassOf: number some integer[&#62; 0, &#60; 5000]</pre>
-    </div> 
-  </td> 
+    </div>
+  </td>
 </tr>
 <tr class="good">
   <td class="fixedcol" align="center">A</td>
-  <td> 
-    <div> 
+  <td>
+    <div>
     <pre>
 Individual: MyProject</pre>
-    </div> 
+    </div>
   </td>
-      <td class="fixedcol" align="center">Valid</td> 
- </tr> 
+      <td class="fixedcol" align="center">Valid</td>
+ </tr>
 <tr class="bad">
   <td class="fixedcol" align="center">B</td>
-  <td> 
-    <div> 
+  <td>
+    <div>
     <pre>
 Individual: MyProject
 Types: Project</pre>
-    </div> 
+    </div>
   </td>
-      <td class="fixedcol" align="center">Invalid</td> 
+      <td class="fixedcol" align="center">Invalid</td>
  </tr>
 <tr class="bad">
   <td class="fixedcol" align="center">C</td>
-  <td> 
-    <div> 
+  <td>
+    <div>
     <pre>
 Individual: MyProject
 Types: Project
 Facts: number "23"</pre>
-    </div> 
+    </div>
   </td>
-      <td class="fixedcol" align="center">Invalid</td> 
+      <td class="fixedcol" align="center">Invalid</td>
  </tr>
 <tr class="bad">
   <td class="fixedcol" align="center">D</td>
-  <td> 
-    <div> 
+  <td>
+    <div>
     <pre>
 Individual: MyProject
 Types: Project
 Facts: number "6000"^^integer</pre>
-    </div> 
+    </div>
   </td>
-      <td class="fixedcol" align="center">Invalid</td> 
+      <td class="fixedcol" align="center">Invalid</td>
  </tr>
  <tr class="good">
   <td class="fixedcol" align="center">E</td>
-  <td> 
-    <div> 
+  <td>
+    <div>
     <pre>
 Individual: MyProject
 Types: Project
 Facts: number "23"^^integer</pre>
-    </div> 
+    </div>
   </td>
-      <td class="fixedcol" align="center">Valid</td> 
+      <td class="fixedcol" align="center">Valid</td>
  </tr>
-</tbody> 
-</table> 
+</tbody>
+</table>
 
 <p>This constraint says that if an RDF instance <i>i</i> is of type
 <i>Project</i>, then <i>i</i> must be related via the property <i>number</i>
@@ -728,71 +725,71 @@ in the range of <i>[0,5000]</i> so this ontology is valid.</p>
 
 <h4>Employees mustn't work on more than 3 projects</h4>
 
-  <table style="font-size: 80%"  border="1" cellspacing="0"> 
-<caption></caption> 
-<tbody>		 
- <tr class="constraint"> 
+  <table style="font-size: 80%"  border="1" cellspacing="0">
+<caption></caption>
+<tbody>
+ <tr class="constraint">
   <td class="fixedcol">Constraint</td>
-  <td colspan="2"> 
+  <td colspan="2">
     <div>
   <pre>
 Class: Employee
 SubClassOf: works_on max 3 Project</pre>
-    </div> 
-  </td> 
+    </div>
+  </td>
 </tr>
 <tr class="good">
   <td class="fixedcol" align="center">A</td>
-  <td> 
-    <div> 
+  <td>
+    <div>
     <pre>
 Individual: Bob</pre>
-    </div> 
+    </div>
   </td>
-      <td class="fixedcol" align="center">Valid</td> 
- </tr> 
+      <td class="fixedcol" align="center">Valid</td>
+ </tr>
 <tr class="good">
   <td class="fixedcol" align="center">B</td>
-  <td> 
-    <div> 
+  <td>
+    <div>
     <pre>
 Individual: Bob
 Types: Employee
 Facts: works_on MyProject
-  
+
 Individual: MyProject
 Types: Project</pre>
-    </div> 
+    </div>
   </td>
-      <td class="fixedcol" align="center">Valid</td> 
+      <td class="fixedcol" align="center">Valid</td>
  </tr>
 <tr class="bad">
   <td class="fixedcol" align="center">C</td>
-  <td> 
-    <div> 
+  <td>
+    <div>
     <pre>
 Individual: Bob
 Types: Employee
-Facts: works_on MyProject, works_on MyProjectFoo, works_on MyProjectBar, 
+Facts: works_on MyProject, works_on MyProjectFoo, works_on MyProjectBar,
        works_on MyProjectBaz
 
 Individual: MyProject
 Types: Project
-  
+
 Individual: MyProjectFoo
 Types: Project
-  
+
 Individual: MyProjectBar
 Types: Project
-  
+
 Individual: MyProjectBaz
 Types: Project</pre>
-    </div> 
+    </div>
   </td>
-      <td class="fixedcol" align="center">Invalid</td> 
+      <td class="fixedcol" align="center">Invalid</td>
  </tr>
-</tbody> 
-</table> 
+</tbody>
+</table>
 
 <p>This constraint says that if an RDF instance <i>i</i> is an
 <i>Employee</i>, then <i>i</i> must not be related via the property
@@ -808,33 +805,33 @@ individuals are considered distinct so the ontology is invalid.</p>
 
 <h4>Departments must have at least 2 employees.</h4>
 
-<table style="font-size: 80%"  border="1" cellspacing="0"> 
-<caption></caption> 
-<tbody>		 
- <tr class="constraint"> 
+<table style="font-size: 80%"  border="1" cellspacing="0">
+<caption></caption>
+<tbody>
+ <tr class="constraint">
   <td class="fixedcol">Constraint</td>
-  <td colspan="2"> 
+  <td colspan="2">
     <div>
   <pre>
 Class: Department
 SubClassOf: inverse(works_in) min 2 Employee</pre>
-    </div> 
-  </td> 
+    </div>
+  </td>
 </tr>
 <tr class="good">
   <td class="fixedcol" align="center">A</td>
-  <td> 
-    <div> 
+  <td>
+    <div>
     <pre>
 Individual: MyDepartment</pre>
-    </div> 
+    </div>
   </td>
-      <td class="fixedcol" align="center">Valid</td> 
- </tr> 
+      <td class="fixedcol" align="center">Valid</td>
+ </tr>
 <tr class="bad">
   <td class="fixedcol" align="center">B</td>
-  <td> 
-    <div> 
+  <td>
+    <div>
     <pre>
 Individual: MyDepartment
 Types: Department
@@ -842,14 +839,14 @@ Types: Department
 Individual: Bob
 Types: Employee
 Facts: works_in MyDepartment</pre>
-    </div> 
+    </div>
   </td>
-      <td class="fixedcol" align="center">Invalid</td> 
+      <td class="fixedcol" align="center">Invalid</td>
  </tr>
 <tr class="good">
   <td class="fixedcol" align="center">C</td>
-  <td> 
-    <div> 
+  <td>
+    <div>
     <pre>
 Individual: MyDepartment
 Types: Department
@@ -861,12 +858,12 @@ Facts: works_in MyDepartment
 Individual: Alice
 Types: Employee
 Facts: works_in MyDepartment</pre>
-    </div> 
+    </div>
   </td>
-      <td class="fixedcol" align="center">Valid</td> 
+      <td class="fixedcol" align="center">Valid</td>
  </tr>
-</tbody> 
-</table> 
+</tbody>
+</table>
 
 <p>This constraint says that if an RDF instance <i>i</i> is a
 <i>Department</i>, then there should exist at least 2 instances <i>j</i>
@@ -884,87 +881,87 @@ adopts for ICV), are distinct, so the ontology is valid.</p>
 
 <h4>Managers must manage exactly 1 department.</h4>
 
-    <table style="font-size: 80%"  border="1" cellspacing="0"> 
-  <caption></caption> 
-  <tbody>		 
-	 <tr class="constraint"> 
+    <table style="font-size: 80%"  border="1" cellspacing="0">
+  <caption></caption>
+  <tbody>
+	 <tr class="constraint">
 		<td class="fixedcol">Constraint</td>
-		<td colspan="2"> 
+		<td colspan="2">
 		  <div>
 		<pre>
 Class: Manager
 	SubClassOf: manages exactly 1 Department</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	</tr>
 	<tr class="good">
 	  <td class="fixedcol" align="center">A</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Isabella</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td> 
-	 </tr> 
+        <td class="fixedcol" align="center">Valid</td>
+	 </tr>
 	<tr class="bad">
 	  <td class="fixedcol" align="center">B</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Isabella
 	Types: Manager</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Invalid</td> 
+        <td class="fixedcol" align="center">Invalid</td>
 	 </tr>
 	<tr class="bad">
 	  <td class="fixedcol" align="center">C</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Isabella
 	Types: Manager
 	Facts: manages MyDepartment</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Invalid</td> 
+        <td class="fixedcol" align="center">Invalid</td>
 	 </tr>
 	 <tr class="good">
 	  <td class="fixedcol" align="center">D</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Isabella
 	Types: Manager
 	Facts: manages MyDepartment
-	
+
 Individual: MyDepartment
 	Types: Department</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td> 
+        <td class="fixedcol" align="center">Valid</td>
 	 </tr>
 	 <tr class="bad">
 	  <td class="fixedcol" align="center">E</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Isabella
 	Types: Manager
 	Facts: manages MyDepartment, MyDepartment1
-	
+
 Individual: MyDepartment
 	Types: Department
-	
+
 Individual: MyDepartment1
 	Types: Department</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Invalid</td> 
+        <td class="fixedcol" align="center">Invalid</td>
 	 </tr>
-  </tbody> 
-</table> 
+  </tbody>
+</table>
 
 <p>This constraint says that if an RDF instance <i>i</i> is a
 <i>Manager</i>, then it must be related to exactly 1 instance of
@@ -984,53 +981,53 @@ UNA) instances of <i>Department</i>, namely <i>MyDepartment</i> and
 
 <h4>Entities must not have more than one name.</h4>
 
- <table style="font-size: 80%"  border="1" cellspacing="0"> 
-  <caption></caption> 
-  <tbody>		 
-	 <tr class="constraint"> 
+ <table style="font-size: 80%"  border="1" cellspacing="0">
+  <caption></caption>
+  <tbody>
+	 <tr class="constraint">
 		<td class="fixedcol">Constraint</td>
-		<td colspan="2"> 
+		<td colspan="2">
 		  <div>
 		<pre>
 DataProperty: name
 	Characteristics: Functional</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	</tr>
 	<tr class="good">
 	  <td class="fixedcol" align="center">A</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: MyDepartment</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td> 
-	 </tr> 
+        <td class="fixedcol" align="center">Valid</td>
+	 </tr>
 	<tr class="good">
 	  <td class="fixedcol" align="center">B</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: MyDepartment
 	Facts: name "Human Resources"</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td> 
+        <td class="fixedcol" align="center">Valid</td>
 	 </tr>
 	<tr class="bad">
 	  <td class="fixedcol" align="center">C</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: MyDepartment
 	Facts: name "Human Resources", name "Legal"</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Invalid</td> 
+        <td class="fixedcol" align="center">Invalid</td>
 	 </tr>
-  </tbody> 
-</table> 
+  </tbody>
+</table>
 
 <p>This constraint says that no RDF instance <i>i</i> can have more than 1
 assertion via the data property <i>name</i>. In ontology A, the individual
@@ -1046,43 +1043,43 @@ to 2 literals, namely <i>"Human Resources"</i> and <i>"Legal"</i>, via
 
 <h4>The manager of a department must work in that department.</h4>
 
-<table style="font-size: 80%"  border="1" cellspacing="0"> 
-  <caption></caption> 
-  <tbody>		 
-	 <tr class="constraint"> 
+<table style="font-size: 80%"  border="1" cellspacing="0">
+  <caption></caption>
+  <tbody>
+	 <tr class="constraint">
 		<td class="fixedcol">Constraint</td>
-		<td colspan="2"> 
+		<td colspan="2">
 		  <div>
 		<pre>
 ObjectProperty: manages
 	SubPropertyOf: works_in</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	</tr>
 	<tr class="bad">
 	  <td class="fixedcol" align="center">A</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Bob
 	Facts: manages MyDepartment</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Invalid</td> 
-	 </tr> 
+        <td class="fixedcol" align="center">Invalid</td>
+	 </tr>
 	<tr class="good">
 	  <td class="fixedcol" align="center">B</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Bob
 	Facts: manages MyDepartment, works_in MyDepartment</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td> 
+        <td class="fixedcol" align="center">Valid</td>
 	 </tr>
-  </tbody> 
-</table> 
+  </tbody>
+</table>
 
 <p>This constraint says that if an RDF instance <i>i</i> is related to
 <i>j</i> via the property <i>manages</i>, then <i>i</i> must also be
@@ -1094,23 +1091,23 @@ ontology is valid.</p>
 
 <h4>Department managers must supervise all the department's employees.</h4>
 
-<table style="font-size: 80%"  border="1" cellspacing="0"> 
-  <caption></caption> 
-  <tbody>		 
-	 <tr class="constraint"> 
+<table style="font-size: 80%"  border="1" cellspacing="0">
+  <caption></caption>
+  <tbody>
+	 <tr class="constraint">
 		<td class="fixedcol">Constraint</td>
-		<td colspan="2"> 
+		<td colspan="2">
 		  <div>
 		<pre>
 ObjectProperty: is_supervisor_of
 	SubPropertyChain: manages o inverse(works_in)</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	</tr>
 	<tr class="bad">
 	  <td class="fixedcol" align="center">A</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Jose
 	Facts: manages MyDepartment, is_supervisor_of Maria
@@ -1120,14 +1117,14 @@ Individual: Maria
 
 Individual: Diego
 	Facts: works_in MyDepartment</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Invalid</td> 
-	 </tr> 
+        <td class="fixedcol" align="center">Invalid</td>
+	 </tr>
 	<tr class="good">
 	  <td class="fixedcol" align="center">B</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Jose
 	Facts: manages MyDepartment, is_supervisor_of Maria, is_supervisor_of Diego
@@ -1137,12 +1134,12 @@ Individual: Maria
 
 Individual: Diego
 	Facts: works_in MyDepartment</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td> 
+        <td class="fixedcol" align="center">Valid</td>
 	 </tr>
-  </tbody> 
-</table> 
+  </tbody>
+</table>
 
 <p>This constraint says that if an RDF instance <i>i</i> is related to
 <i>j</i> via the property <i>manages</i> and <i>k</i> is related to <i>j</i>
@@ -1166,37 +1163,37 @@ etc.</p>
 one employee that works on at least one project, or manages at least one
 department.</p>
 
-<table style="font-size: 80%"  border="1" cellspacing="0"> 
-  <caption></caption> 
-  <tbody>		 
-	 <tr class="constraint"> 
+<table style="font-size: 80%"  border="1" cellspacing="0">
+  <caption></caption>
+  <tbody>
+	 <tr class="constraint">
 		<td class="fixedcol">Constraint</td>
-		<td colspan="2"> 
+		<td colspan="2">
 		  <div>
 		<pre>
 Class: Employee
-	SubClassOf: works_on some Project or 
-		supervises some (Employee and works_on some Project) or 
+	SubClassOf: works_on some Project or
+		supervises some (Employee and works_on some Project) or
 		manages some Department</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	</tr>
 	<tr class="bad">
 	  <td class="fixedcol" align="center">A</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Esteban
 	Types: Employee</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Invalid</td> 
-	 </tr> 
-	
+        <td class="fixedcol" align="center">Invalid</td>
+	 </tr>
+
 	<tr class="bad">
 	  <td class="fixedcol" align="center">B</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Esteban
 	Types: Employee
@@ -1204,14 +1201,14 @@ Individual: Esteban
 
 Individual: Lucinda
 	Types: Employee</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Invalid</td> 
+        <td class="fixedcol" align="center">Invalid</td>
 	 </tr>
 	 <tr class="good">
 	  <td class="fixedcol" align="center">C</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Esteban
 	Types: Employee
@@ -1220,17 +1217,17 @@ Individual: Esteban
 Individual: Lucinda
 	Types: Employee
 	Facts: works_on MyProject
-	
+
 Individual: MyProject
 	Types: Project</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td> 
+        <td class="fixedcol" align="center">Valid</td>
 	 </tr>
 	 <tr class="good">
 	  <td class="fixedcol" align="center">D</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Esteban
 	Types: Employee
@@ -1238,29 +1235,29 @@ Individual: Esteban
 
 Individual: MyDepartment
 	Types: Department</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td> 
+        <td class="fixedcol" align="center">Valid</td>
 	 </tr>
 	 	<tr class="good">
 	  <td class="fixedcol" align="center">E</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: Esteban
 	Facts: manages MyDepartment, works_on MyProject
 
 Individual: MyDepartment
 	Types: Department
-	
+
 Individual: MyProject
 	Types: Project</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td> 
+        <td class="fixedcol" align="center">Valid</td>
 	 </tr>
-  </tbody> 
-</table> 
+  </tbody>
+</table>
 
 <p>This constraint says that if an individual <i>i</i> is an instance
 of <i>Employee</i>, then at least one of three conditions must be met:
@@ -1279,23 +1276,23 @@ via the property <i>manages</i>.</p>
 <p>Only employees who are American citizens can work on a project that
 receives funds from a US government agency.</p>
 
-  <table style="font-size: 80%"  border="1" cellspacing="0"> 
-  <caption></caption> 
-  <tbody>		 
-	 <tr class="constraint"> 
+  <table style="font-size: 80%"  border="1" cellspacing="0">
+  <caption></caption>
+  <tbody>
+	 <tr class="constraint">
 		<td class="fixedcol">Constraint</td>
-		<td colspan="2"> 
+		<td colspan="2">
 		  <div>
 		<pre>
 Class: Project and receives_funds_from some US_Government_Agency
 	SubClassOf: inverse(works_on) only (Employee and nationality value "US")</pre>
-		  </div> 
-		</td> 
+		  </div>
+		</td>
 	</tr>
 	<tr class="good">
 	  <td class="fixedcol" align="center">A</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: MyProject
 	Types: Project
@@ -1303,58 +1300,58 @@ Individual: MyProject
 
 Individual: NASA
 	Types: US_Government_Agency</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td> 
-	 </tr> 
-	
+        <td class="fixedcol" align="center">Valid</td>
+	 </tr>
+
 	<tr class="bad">
 	  <td class="fixedcol" align="center">B</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: MyProject
 	Types: Project
 	Facts: receives_funds_from NASA
-	
+
 Individual: NASA
 	Types: US_Government_Agency
 
 Individual: Andy
 	Types: Employee
 	Facts: works_on MyProject</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Invalid</td> 
+        <td class="fixedcol" align="center">Invalid</td>
 	 </tr>
 	 <tr class="good">
 	  <td class="fixedcol" align="center">C</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: MyProject
 	Types: Project
 	Facts: receives_funds_from NASA
-	
+
 Individual: NASA
 	Types: US_Government_Agency
 
 Individual: Andy
 	Types: Employee
 	Facts: works_on MyProject, nationality "US"</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Invalid</td> 
+        <td class="fixedcol" align="center">Invalid</td>
 	 </tr>
 	 <tr class="bad">
 	  <td class="fixedcol" align="center">D</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: MyProject
 	Types: Project
 	Facts: receives_funds_from NASA
-	
+
 Individual: NASA
 	Types: US_Government_Agency
 
@@ -1365,19 +1362,19 @@ Individual: Andy
 Individual: Heidi
 	Types: Supervisor
 	Facts: works_on MyProject, nationality "US"</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Invalid</td> 
+        <td class="fixedcol" align="center">Invalid</td>
 	 </tr>
 	 	<tr class="good">
 	  <td class="fixedcol" align="center">E</td>
-		<td> 
-		  <div> 
+		<td>
+		  <div>
 		  <pre>
 Individual: MyProject
 	Types: Project
 	Facts: receives_funds_from NASA
-	
+
 Individual: NASA
 	Types: US_Government_Agency
 
@@ -1391,12 +1388,12 @@ Individual: Heidi
 
 Class: Supervisor
 	SubClassOf: Employee</pre>
-		  </div> 
+		  </div>
 		</td>
-        <td class="fixedcol" align="center">Valid</td> 
+        <td class="fixedcol" align="center">Valid</td>
 	 </tr>
-  </tbody> 
-</table> 
+  </tbody>
+</table>
 
 <p>This constraint says that if an individual <i>i</i> is an instance of
 <i>Project</i> and is related to an instance of <i>US_Government_Agency</i>

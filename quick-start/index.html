@@ -72,16 +72,14 @@ SNARL and HTTP interfaces&mdash;on ports 5820 and 5822, respectively.</p>
     <p>Fourth, create a database with an input file; use the
 <tt>--server</tt> parameter to specify which server:</p>
 
-    <pre><code>$ ./stardog-admin create -n myDB -t D -u admin -p admin --server \
-      snarl://localhost:5820/ examples/data/University0_0.owl</code></pre>
+    <pre><code>$ ./stardog-admin create -n myDB -t D -u admin -p admin examples/data/University0_0.owl</code></pre>
 
     <p>Fifth, optionally, admire the pure RDF bulk loading
 power...woof!</p>
 
     <p>Sixth, query the database:</p>
 
-    <pre><code>$ ./stardog query -c http://localhost:5822/myDB -q \
-      "SELECT DISTINCT ?s WHERE { ?s ?p ?o } LIMIT 10"</code></pre>
+    <pre><code>$ ./stardog query myDB "SELECT DISTINCT ?s WHERE { ?s ?p ?o } LIMIT 10"</code></pre>
 
      </section>
 <section id="fn">
