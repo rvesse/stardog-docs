@@ -82,9 +82,7 @@ Protocol, the latter is documented below alongside the former.</p>
 
   <p>In addition to SPARQL Protocol for RDF support, Stardog supports
 an Extended HTTP Protocol with additional resource representations and
-capabilities. <n>Note, as of <b>@@VERSION@@</b>, none of the administrative
-functions are available via HTTP. They're available via <a href="../admin/">command-line</a> and
-<a href="../java/">programmatically</a>; they will also be available via the SNARL protocol.</n></p>
+capabilities.</p>
 
   <h2>Generating URLs</h2>
 
@@ -138,7 +136,7 @@ RDF/XML:</p>
     <dd><tt>application/ld+json</tt></dd>
   </dl>
 
-  <p>SPARQL <tt>CONSTRUCT</tt> queries must also include a <tt>Content-Type</tt> header set to one of the RDF
+  <p>SPARQL <tt>CONSTRUCT</tt> queries must also include a <tt>Accept</tt> header set to one of the RDF
   	serialization types above.
   </p>
 
@@ -163,6 +161,8 @@ set to one of the valid MIME types for <tt>SELECT</tt> results:</p>
   <dl>
     <dt><tt>200</tt></dt>
     <dd>Indicates the operation has succeeded.</dd>
+    <dt><tt>202</tt></dt>
+    <dd>Indicates the operation was recieved successfully and will be processed shortly.</dd>      
     <dt><tt>400</tt></dt>
     <dd>Indicates parse errors or that the transaction identifier specified for an operation is invalid or does not correspond to a known transaction.</dd>
     <dt><tt>401</tt></dt>
@@ -171,15 +171,19 @@ set to one of the valid MIME types for <tt>SELECT</tt> results:</p>
     <dd>Indicates that the user attempting to perform the operation does not exist, their username or password is invalid, or they do not have the proper credentials to
 	perform the action.</dd>
     <dt><tt>404</tt></dt>
-    <dd></dd>
+    <dd>Indicates a resource involved in the request, for example the database, or transaction, does not exist.</dd>
     <dt><tt>409</tt></dt>
     <dd>Indicates a conflict for some database operations; for example, creating a database that already exists.</dd>
     <dt><tt>500</tt></dt>
     <dd>Indicates a failure in some internal operation.</dd>
   </dl>
 
-  <p>Further, we extend <tt>404</tt> error codes with Stardog-specific codes as indicated by the value of
-  <tt>SD-Error-Code</tt>:</tt></p>
+  <p>Further, we provide Stardog-specific error codes in the <tt>SD-Error-Code</tt> header in the response from the server.
+    These can be used to further clarify the reason for the failure on the server, especially in cases where it could be ambiguous.  For example,
+    if YOu received a <code>404</code> from the server trying to commit a transaction denoted by the path 
+    <code>/myDb/transaction/commit/293845klf9f934</code>, what is missing is not clear, it's either the transaction or the database.  In this case,
+    the value of the <tt>SD-Error-Code</tt> header will specify which was missing.  
+    The enumeration of <tt>SD-Error-Code</tt> and their meanings are as follows:</p>
 
   <ul>
   	<li><tt>0</tt>: Authentication error</li>
@@ -210,9 +214,8 @@ representations, HTTP response codes, and resource identifiers.</p>
   <pre><code>GET /{db} &rarr; <tt>void</tt></code></pre>
 
 <p>Returns a representation of the database. As of <b>@@VERSION@@</b>, this
-is merely a placeholder; in a later release, this resource will include
-basic information about the database, including a link to the SPARQL 1.1
-service description, and other database metadata.</p>
+is merely a placeholder; in a later release, this resource will serve the 
+web console where the database can be interacted with in a browser.</p>
 
   <h3>Database Size</h3>
 
@@ -222,10 +225,9 @@ service description, and other database metadata.</p>
 
   <h3>Query Evaluation</h3>
 
-  <pre><code>GET | POST /{db}/query &rarr; application/sparql-results+xml |
-                        text/boolean | application/rdf+xml</code></pre>
+  <pre><code>GET | POST /{db}/query</code></pre>
 
-  <p>The SPARQL endpoint for the database.  Note that ASK queries currently only support an Accept header of text/boolean, you cannot get SPARQL-XML result formatted results for ASK queries.</p>
+  <p>The SPARQL endpoint for the database.  The valid Accept types are listed above in the <tt>HTTP Headers</tt> section.</p>
 
   <h3>Query Plan</h3>
 
@@ -242,13 +244,6 @@ only MIME type for the Query Plan resource is <tt>text/plain</tt>.</p>
   <p>Returns a transaction identifier resource as <tt>text/plain</tt>; this
 is likely to be deprecated in a future release in favor of a hypertext
 format in place of <tt>text/plain</tt>.</p>
-
-<!-- HTTP Admin Protocol documentation -->
-
-<!--
-  <p>See the <a href="../sp-tr-tx">Stored Procedures, Triggers, and Transactions</a>
-chapter for more on Stardog's transaction support.</p>
--->
 
   <h4>Transaction Security Considerations</h4>
 
@@ -291,18 +286,18 @@ changes that were made to the database.</p>
   <pre><code>POST /{db}/transaction/rollback/{txId} &rarr; <tt>void</tt> | text/plain</code></pre>
 
 <p>Returns a representation of the transaction after it's been rolled back.
-<tt>202</tt> means the rollback was successful, otherwise <tt>500</tt>
+<tt>200</tt> means the rollback was successful, otherwise <tt>500</tt>
 indicates the rollback failed and the text returned in the result is the
 failure message.</p>
 
   <h3>Query in Transaction</h3>
 
-  <pre><code>GET | POST /{db}/{txId}/query &rarr; application/sparql-results+xml |
-                        text/boolean | application/rdf+xml</code></pre>
+  <pre><code>GET | POST /{db}/{txId}/query</code></pre>
 
   <p>Returns a representation of a query executed within the <tt>txId</tt>
 transaction. Queries within transactions will be slower as extra processing
-is required to make the changes visible to the query.</p>
+is required to make the changes visible to the query.  Again, the valid 
+Accept types are listed above in the <tt>HTTP Headers</tt> section.</p>
 
   <h3>Add in Transaction</h3>
 
@@ -338,13 +333,23 @@ URI or URN for the default graph in Stardog. Stay tuned.</n> as the value of
 
   <h3>Explanation of inferences</h3>
 
-  <pre><code>POST /{db}/reasoning/explain &rarr; text/turtle | application/x-turtle</code>
-	  <code>POST /{db}/reasoning/{txId}/explain &rarr; text/turtle | application/x-turtle</code>
+  <pre><code>POST /{db}/reasoning/explain &rarr; RDF</code>
+	  <code>POST /{db}/reasoning/{txId}/explain &rarr; RDF</code>
   </pre>
 
   <p>Returns the explanation of the axiom which is in the body of the POST request.  The request
   takes the axioms in any supported RDF format and returns the explanation for why that axiom
   was inferred in Turtle format.</p>
+
+    <h3>Explain Inonsistency</h3>
+
+  <pre><code>GET | POST /{db}/reasoning/explain/inconsistency &rarr; RDF</code>
+  </pre>
+
+  <p>
+   If the data in the database is inconsistent w.r.t to the TBox, a call to consistency returned false,
+   this returns an explanation for the inconsistency.
+  </p>
 
   <h3>Consistency</h3>
 
@@ -465,32 +470,24 @@ multipart POST request.</p>
 
 <pre><code>PUT /admin/databases/{db}/online</code></pre>
 
-<p>Request message to set an existing database {db} online; receives
-optionally a JSON input to set the strategy in which the database will be
-set online, if no input is provided, defaults to a WAIT strategy.</p>
-
-<p>Optional input:</p>
-
-<pre><code>JSON (application/json):
-{
-  "strategy" : "WAIT" | "NO_WAIT"
-}
-</code></pre>
+<p>Request message to set an existing database {db} online.</p>
 
   <h3>Sets an existing database offline.</h3>
 
 <pre><code>PUT /admin/databases/{db}/offline</code></pre>
 
 <p>Request message to set an existing database offline; receives
-optionally a JSON input to set the strategy in which the database will be
-set offline, if no input is provided, defaults to a WAIT strategy with 3 ms
-as a wait timeout.</p>
+optionally a JSON input to specify a timeout for the offline operation.
+When not specified, defaults to 3 minutes as the timeout; the timeout should be
+provided in <strong>milliseconds</strong>.  The timeout is the
+amount of time the database will wait for existing connections to complete before
+going offline.  This will allow open transaction to commit/rollback, open queries to complete, etc.
+After the timeout has expired, all remaining open connections are closed and the database goes offline.</p>
 
 <p>Optional input:</p>
 
 <pre><code>JSON (application/json):
 {
-  "strategy" : "WAIT" | "NO_WAIT"
   "timeout" : &lt;timeout_in_ms&gt;
 }
 </code></pre>
@@ -549,14 +546,15 @@ option values in the database when the call returns.</p>
 
 <p>Adds a new user to the system; allows a configuration option for
 superuser as a JSON object. Superuser configuration is set
-as default to false.</p>
+as default to false.  The password <strong>must</strong> be provided for the user.</p>
 
 <p>Expected input:</p>
 
 <pre><code>JSON (application/json):
 {
-  "username" : "",
+  "username"  : "bob",
   "superuser" : true | false
+  "password"  : "passwd"
 }
 </code></pre>
 
@@ -705,8 +703,8 @@ as default to false.</p>
 <p>Creates a new permission for a given role over a specified resource; expects input JSON Object in the following format:</p>
 
 <pre><code>{
-  "action" : "read" | "write" | "create" | "delete" | "list" | "grant" | "*",
-  "resource_type" : "user" | "role" | "db" | "named-graph" | "metadata" | "*",
+  "action" : "read" | "write" | "create" | "delete" | "revoke" | "execute" | "grant" | "*",
+  "resource_type" : "user" | "role" | "db" | "named-graph" | "metadata" | "admin" | "icv-constraints" | "*",
   "resource" : "<resource_name>"
 }</code></pre>
 
@@ -717,8 +715,8 @@ as default to false.</p>
 <p>Creates a new permission for a given user over a specified resource; expects input JSON Object in the following format:</p>
 
 <pre><code>{
-  "action" : "read" | "write" | "create" | "delete" | "list" | "grant" | "*",
-  "resource_type" : "user" | "role" | "db" | "named-graph" | "metadata" | "*",
+  "action" : "read" | "write" | "create" | "delete" | "revoke" | "execute" | "grant" | "*",
+  "resource_type" : "user" | "role" | "db" | "named-graph" | "metadata" | "admin" | "icv-constraints" | "*",
   "resource" : "<resource_name>"
 }</code></pre>
 
@@ -729,8 +727,8 @@ as default to false.</p>
 <p>Deletes a permission for a given role over a specified resource; expects input JSON Object in the following format:</p>
 
 <pre><code>{
-  "action" : "read" | "write" | "create" | "delete" | "list" | "grant" | "*",
-  "resource_type" : "user" | "role" | "db" | "named-graph" | "metadata" | "*",
+  "action" : "read" | "write" | "create" | "delete" | "revoke" | "execute" | "grant" | "*",
+  "resource_type" : "user" | "role" | "db" | "named-graph" | "metadata" | "admin" | "icv-constraints" | "*",
   "resource" : "<resource_name>"
 }</code></pre>
 
@@ -741,8 +739,8 @@ as default to false.</p>
 <p>Deletes a permission for a given user over a specified resource; expects input JSON Object in the following format:</p>
 
 <pre><code>{
-  "action" : "read" | "write" | "create" | "delete" | "list" | "grant" | "*",
-  "resource_type" : "user" | "role" | "db" | "named-graph" | "metadata" | "*",
+  "action" : "read" | "write" | "create" | "delete" | "revoke" | "execute" | "grant" | "*",
+  "resource_type" : "user" | "role" | "db" | "named-graph" | "metadata" | "admin" | "icv-constraints" | "*",
   "resource" : "<resource_name>"
 }
 </code></pre>
@@ -790,7 +788,7 @@ as default to false.</p>
 
 <pre><code>POST /admin/shutdown</code></pre>
 
-<p>Shuts down the Stardog Server.</p>
+<p>Shuts down the Stardog Server.  If successful, returns a <tt>202</tt> to indicate that the request was recieved and that the server will be shut down shortly.</p>
 
 </section>
 

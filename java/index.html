@@ -188,8 +188,7 @@ API docs or the <a href="../admin/">administration section</a> for more informat
     <script src="https://gist.github.com/1045573.js?file=SNARLAddData.java"></script>
   </div>
 
-	  <p>As this snippet shows, Stardog has autocommiting transactions disabled;
-		  if you need autocommit, turn it on. Otherwise, you must always surround changes to
+	  <p>You must always surround changes to
 		  a database with a transaction begin and commit.  Changes are kept locally until
 		  the transaction is committed, or you try and perform a query operation to inspect
 		  the state of the database within the transaction.</p>
@@ -252,11 +251,8 @@ of "?s" in any BGP in the query, and you can specify <code>null</code> to remove
 	  and alter bindings, limit, and offset in any way you see fit and re-execute the query
 	  to get the updated results.</p>
 
-  <p>It's not in the code snippet, but you can also parameterize
-<code>offset</code>; and we'll add support for SPARQL's
-<code>DISTINCT</code> soon, too.<n>On that note, we'll also add support for
-projection variables, group by, order by, nested queries for 1.1, etc. All
-in good time, peeps. All in good time!</n></p>
+  <p>We <b>strongly</b> recommend the use of SNARL's parameterized queries over concatenating strings together in order to build your SPARQL query.  This latter
+      approach opens up the possibility for SPARQL injection attacks unless you are very careful in scrubbing your input.</p>
 
   <h2>Removing Data</h2>
 
@@ -273,7 +269,7 @@ in good time, peeps. All in good time!</n></p>
 
   <h2>Reasoning</h2>
 
-	  <p>AStardog supports query time OWL 2 QL, EL, and RL
+	  <p>Stardog supports query time OWL 2 QL, EL, and RL
 		  reasoning by using a query rewriting technique.<n>In short, when reasoning
 			  is requested, a query is automatically rewritten in <i>n</i> queries, which
 			  are then executed.</n>. As we discuss below in Connection Pooling, reasoning
@@ -288,7 +284,7 @@ in good time, peeps. All in good time!</n></p>
   <p>In this code example, you can see that it's trivial to enable reasoning
 for a <code>Connection</code>: simply call <code>reasoning()</code> with
 the appropriate constant (such as <code>ReasoningType.QL</code>) passed in. In
-  addition to OWL2 QL, EL, and RL, Stardog supports OWL2 DL <i>schema</i> queries.</p>
+  addition to OWL2 QL, EL, and RL, Stardog supports OWL2 DL <i>schema</i> queries.  Stardog also supports <a href="http://www.w3.org/Submission/SWRL/">SWRL</a>.</p>
 
 	  <p>For more information on how reasoning is supported in Stardog, check out the
 	  <a href="../owl2">reasoning section</a>.</p>
@@ -312,8 +308,11 @@ sets a minimum threshold for the results.
 <p>Then we call the <code>search()</code> method of our
 <code>Searcher</code> instance and iterate over the results
 (i.e., <code>SearchResults</code>). Last, we can use
-<code>offset()</code> on an existing code>Searcher</code> to grab another
+<code>offset()</code> on an existing <code>Searcher</code> to grab another
 page of results.</p>
+
+<p>Stardog also supports performing searches over the full-text index <i>within</i> a SPARQL query via the <a href="http://jena.apache.org/documentation/larq/">LARQ SPARQL syntax</a>.
+This provides a powerful mechanism for querying both your RDF index and full-text index at the same time while also giving you a more performant option to the SPARQL <code>regex</code> filter.</p>
 
   <h2>SNARL Connection Views</h2>
 
@@ -335,7 +334,7 @@ page of results.</p>
 	  <p>
 		  An example of obtaining an instance of a
 		  <a href="../java/snarl/com/clarkparsia/stardog/api/search/SearchConnection.html"><code>SearchConnection</code></a>
-		  to use Stardog's <a href="../search">full text support</a>.
+		  to use Stardog's full-text search support.
 	  </p>
 
   <h2>SNARL API Docs</h2>
@@ -366,12 +365,13 @@ differences worth pointing out. <p>
   you call <code>Repository.getConnection</code>, your original ConnectionConfiguration will be used
   to spawn a new connection to the database.</p>	  
 
-  <h2>Disable Autocommit</h2>
+  <h2>Autocommit</h2>
 
-  <p>We also suggest disabling Sesame's autocommit since it's a bit too
-chatty with respect to committing transactions: if you don't disable
-autocommit, it will commit after every RDF statement, which, for anything
-non-trivial, will cause you to have a bad day.</p>
+  <p>Stardog's RepositoryConnection implementation will, by default, disable <code>autoCommit</code> status.
+     When enabled, every single statement added or deleted via the Connection will incur the cost
+     of a transaction, which is too heavyweight for nearly every use case.  You can enable <code>autoCommit</code>
+     and it will work as expected, but for the aforementioned reason, and the fact that Sesame has deprecated
+     the method, we recommend leaving it disabled.</p>
 
   </section>
 
@@ -469,14 +469,14 @@ objects for efficiency and programmer sanity. Here's how they work:</p>
   </div>
 
   <p>Per standard practice, we first initialize security and grab a
-  connection, in this case to the <tt>test</tt> database.</p>
+  connection, in this case to the <tt>testConnectionPool</tt> database.</p>
 
   <p>Then we setup a <code>ConnectionPoolConfig</code>, using its fluent
   API, which establishes the parameters of the pool:</p>
 
   <dl>
     <dt>using()</dt>
-    <dd>Sets which connection we want to pool</dd>
+    <dd>Sets which ConnectionConfiguration we want to pool; this is what is used to actually create the connections.</dd>
     <dt>minPool()</dt>
     <dt>maxPool()</dt>
     <dd>Establishes min and max pooled objects; max pooled objects includes both leased and idled objects.</dd>
@@ -497,7 +497,7 @@ pool.</p>
 <p>Since <a href="../owl2">reasoning</a> in Stardog is enabled per
 <code>Connection</code>, you can create two pools: one with reasoning
 connections, one with non-reasoning connections; and then use the one you
-need to have reasoning <em>per query</em>. Neato mosquito: never pay for
+need to have reasoning <em>per query</em>; never pay for
 more than you need.</p>
 
   </section>
@@ -506,19 +506,16 @@ more than you need.</p>
   
   
   <p>Methods and classes in SNARL API that are marked with the
-<code>com.google.common.annotations.Beta</code> are subject to change and could
-be removed entirely prior to the 1.0 release. We are using this annotation
+<code>com.google.common.annotations.Beta</code> are subject to change or removal in any release. We are using this annotation
 to denote new or experimental features, the behavior or signature of which
-may change or, in some cases, does not yet work.</p>
+may change significantly before it's out of "beta".</p>
 
   <p>We will otherwise attempt to keep the public APIs as stable as
 possible, and methods will be marked with the standard <code>@Deprecated</code>
 annotation for a least one full revision cycle before their removal from the
 SNARL API.</p>
 
-<p>Anything marked <code>@VisibleForTesting</code> is likely to be removed
-before the 1.0 release; don't write any important code that depends on
-functions with this annotation. </p>
+<p>Anything marked <code>@VisibleForTesting</code> is just that, visible as a consequence of test case requirements; don't write any important code that depends on functions with this annotation.</p>
 
 </section>
 

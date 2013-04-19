@@ -193,7 +193,7 @@ fi</code></pre>
 
   <p>We've simplified connection strings in Stardog 1.2 to improve usability. A connection string may consist solely of the database name in cases where (a) Stardog is running on the standard ports; (b) SNARL is enabled; and (c) the command is invoked on the same machine where the server is running. In any other cases, a "fully qualified" connection string, as described below, is required.</p>
 
-  <p>Additionally, we've rationalized the method of specifying the connection string: nstead of using the <tt>-c</tt> option in a command, the connection string is now assumed to be the first argument of the command.</p>
+  <p>Additionally, we've rationalized the method of specifying the connection string: instead of using the <tt>-c</tt> option in a command, the connection string is now assumed to be the first argument of the command.</p>
 
     <p>Some CLI subcommands require a Stardog connection string as an
 argument to identify the server and database upon which operations are to
@@ -261,7 +261,7 @@ running Stardog Server, it is necessary to restart it.</p>
       <li><tt>logging.[access,audit].[enabled,type,file]</tt>: Controls whether and how Stardog logs server events; described in detail below.</li>
       <li><tt>logging.slow_query.enabled</tt></li>
       <li><tt>logging.slow_query.time</tt></li>
-      <li><tt>logging.slow_query.type</tt>: The three slow query logging options are used in the following way. To enable logging of slow queries, set <tt>enabled</tt> to <tt>true</tt>. To define what counts as a "slow" query, set <tt>time</tt> to a time duration value (positive integer plus "h", "m", "s", or "ms" for hours, minutes, seconds, or milliseconds respectively). To determine the type of logging, set <tt>type</tt> to <tt>text</tt> (the default) or <tt>binary</tt>. <strong>To state the obvious explicitly, a <tt>logging.slow_query.time</tt> that exceeds the value of <tt>query.timeout</tt> will result in null logs.</li>
+      <li><tt>logging.slow_query.type</tt>: The three slow query logging options are used in the following way. To enable logging of slow queries, set <tt>enabled</tt> to <tt>true</tt>. To define what counts as a "slow" query, set <tt>time</tt> to a time duration value (positive integer plus "h", "m", "s", or "ms" for hours, minutes, seconds, or milliseconds respectively). To determine the type of logging, set <tt>type</tt> to <tt>text</tt> (the default) or <tt>binary</tt>. <strong>To state the obvious explicitly, a <tt>logging.slow_query.time</tt> that exceeds the value of <tt>query.timeout</tt> will result in null logs.</strong></li>
       <li><tt>database.connection.timeout.ms</tt>: Controls how long, in milliseconds,connections may idle before being automatically closed by the server. </li>
       <li><tt>http.max.connections</tt>: The next two parameters control the maximum number of simultaneous connections for a client; for more information, see the <a href=" http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html">relevant Apache docs</a>.</li>
       <li><tt>http.max.get.query.length</tt>: The length in characters of the longest SPARQL query that will be serialized via HTTP <tt>GET</tt>; queries longer are serialized via <tt>POST</tt>.</li>
@@ -290,18 +290,20 @@ single node in the database, then this configuration option should be disabled (
 
     <p><tt>--no-docs</tt> will tell Stardog not to serve its documentation over HTTP at <tt>http://SERVER/docs</tt>, which it will otherwise do by default.</p>
 
+    <p>Note: ports can be specified using the properties <tt>--snarl</tt> and <tt>--http</tt>. The HTTP interface can be disabled by
+    using the flag <tt>--no-http</tt>; the SNARL interface may not be disabled.</p>
+    
     <p>To shut down the server:</p>
 
     <pre><code>$ stardog-admin server stop</code></pre>
 
-    <p>Note: ports can be specified using the properties <tt>--snarl</tt> and <tt>--http</tt>. The HTTP interface can be disabled by
-using the flag <tt>--no-http</tt>; the SNARL interface may not be disabled.</p>
+    <p>If you started stardog on a port other than the default, or want to shut down a remote server, you can simply use the <tt>--server</tt> option to specify the location of the server you wish to shut down</p>
 
     <h2>Serving Stardog Documentation</h2>
 
     <p>By default, if you start Stardog Server with HTTP enabled, then
 Stardog will serve the system documentation at <tt>http://SERVER/docs</tt>
-(which is why "docs" is an invalid database name). That's user experience, holmes!</p>
+(which is why "docs" is an invalid database name).</p>
 
 <p>In a production deployment, you might want to disable documentation serving, which you can
 do by passing <tt>--no-docs</tt> on server startup or by disabling HTTP
@@ -326,7 +328,7 @@ but the safest way to insure that is the case is to log to a separate disk
 <p>The important configuration choices are whether logs should be binary
 or plain text (both based on ProtocolBuffer message formats); the type of
 logging (audit or access); the logging location (which may be "off disk" or
-even "off machine")<n>Logging to a centralized logging facility requires a
+even "off machine") <n>Logging to a centralized logging facility requires a
 Java plugin that implements the Stardog Server logging interface; see the
 <a href="../java/">Java Chapter</a> for more information</n>; and the log
 rotation policy (file size or time).</p>
@@ -422,7 +424,7 @@ mutations are subject to IC validation (i.e., "guard mode").</dd>
 So the routine is to set the database offline, change the parameters, and
 then set the database to online. All of these
 operations may be done programmatically from CLI tools, such that they can
-be scripted in advance to minimize downtime.<n>In a future version, we will
+be scripted in advance to minimize downtime. <n>In a future version, we will
 allow some properties to be set while the database remains online.</n></p>
 
       <h4>Summary of Configuration Options</h4>
@@ -814,7 +816,7 @@ if the main index itself is small. For this reason, the
 differential index is not used until the main index size reaches
 <tt>DIFF_INDEX_MAX_LIMIT</tt>.</p>
 
-<p>In most cases, the default value of the <tt>DIFF_INDEX_MAX_LIMIT</tt> parameter will work fine and doesn't need to be changed.<n>The corrollary of this claim is that you shouldn't change this value in a production system till you've tested the effects of a change in a non-production system.</n>
+<p>In most cases, the default value of the <tt>DIFF_INDEX_MAX_LIMIT</tt> parameter will work fine and doesn't need to be changed.<n>The corollary of this claim is that you shouldn't change this value in a production system till you've tested the effects of a change in a non-production system.</n>
 
     <div><span><a name="compressed"></a></span></div>
     <h2>Using Compressed Data</h2>
@@ -844,10 +846,9 @@ unrecognized file extension (e.g. '.txt') that file will be skipped.</p>
     <h2>Dropping a Database</h2>
 
     <p>This command removes a database and all associated files and
-metadata. As with <tt>create</tt>, this command may work against a database
-directly or via a running Stardog server. <tt>drop</tt> operates without
-regard to pending writes or queries. Only use <tt>drop</tt> when you're
-certain!</p>
+metadata. This means all files on disk pertaining to the database will be 
+deleted, so only use <tt>drop</tt> when you're
+certain!  Databases must be offline in order to be dropped.</p>
 
 <p>It takes as its only argument a valid database name. For example,</p>
 
@@ -885,20 +886,20 @@ version carefully to see whether migration is required or possible.</p>
 
 <p>will update <tt>myDatabase</tt> to the latest database format.</p>
 
-  <h2>Getting Database Information</h2>@@TODO@@
+  <h2>Getting Database Information</h2>
 
   <p>You can get some information about a database (online/offline status,
 creation time, last modification time, etc.) by running the following
 command:</p>
 
-  <pre><code>$ stardog-admin get -n my_db_name</code></pre>
+  <pre><code>$ stardog-admin get my_db_name</code></pre>
 
   <p>This will return all the metadata stored about the database, including
 the values of configuration options used for this database instance.
 If you want to get the value for a specific option then you can run
 the following command:</p>
 
-  <pre><code>$ stardog-admin get -o index.named.graphs -n my_db_name</code></pre>
+  <pre><code>$ stardog-admin get -o index.named.graphs my_db_name</code></pre>
 
 <h2 id="manage-queries">Managing Queries</h2>
 
@@ -1038,12 +1039,12 @@ limit 5</code></pre>
     <p>Stardog's strategy for recovering automatically from (the very unlikely event of) commit failure is as follows:</p>
 
     <ul>
-      <li>Stardog automatically rollsback the transaction upon a commit failure;</li>
+      <li>Stardog will automatically roll back the transaction upon a commit failure;</li>
       <li>Stardog automatically takes the affected database offline for maintenance;<n>The probability of recovering from a catastrophic transaction failure is inversely proportional to the number of subsequent write attempts; hence, Stardog offlines the database to prevent subsequent write attempts and, hence, to increase the likelihood of recovery.</n> then</li>
-      <li>Stardog automatically takes the affected database online to resume operations.</li>
+      <li>Stardog will then begin recovery automatically, bringing the recovered database back online once that task is successful so that it can resume operations.</li>
     </ul>
 
-    <p>With an approriate logging configuration for production usage (at least error-level logging), log messages for the preceding recovery operations will occur. If for whatever reason the database fails to be returned automatically to online status, an administrator may use the CLI tools (i.e., <tt>stardog-admin db online</tt>) to attempt to online the database.</p>
+    <p>With an appropriate logging configuration for production usage (at least error-level logging), log messages for the preceding recovery operations will occur. If for whatever reason the database fails to be returned automatically to online status, an administrator may use the CLI tools (i.e., <tt>stardog-admin db online</tt>) to attempt to online the database.</p>
 
     </section>
 
@@ -1052,8 +1053,7 @@ limit 5</code></pre>
     <p>Stardog tries hard to do bulk loading at database creation time in
 the most efficient and scalable way possible. But data loading time can vary
 widely, depending on factors in the data to be loaded, including the number
-of unique resources, etc. We'll continue to improve bulk loading as we move
-to the 1.0 release; for now, here are some tuning tips that may work for
+of unique resources, etc. Here are some tuning tips that may work for
 you:</p>
 
   <ol>

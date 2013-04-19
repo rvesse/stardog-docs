@@ -54,7 +54,7 @@
   <header>
   <h1 id=chapter>Introduction</h1></header>
 
-<p>Stardog is a <a href="../docs/performance">fast</a>, lightweight, commercial RDF database for mission-critical apps: it supports <a href="http://www.w3.org/TR/2012/WD-sparql11-query-20120105/">SPARQL 1.1</a>;<n>As of @@VERSION@@, Stardog's SPARQL 1.1 support does not include: UPDATE query language; service description and federation; UPDATE protocol; no entailment regimes other than OWL 2 Direct Semantics. We will address these in upcoming 1.1.x releases.</n> HTTP and the SNARL protocol for
+<p>Stardog is a <a href="../docs/performance">fast</a>, lightweight, commercial RDF database for mission-critical apps: it supports <a href="http://www.w3.org/TR/2012/WD-sparql11-query-20120105/">SPARQL 1.1</a>;<n>As of @@VERSION@@, Stardog's SPARQL 1.1 support does not include: UPDATE query language; federation; UPDATE protocol; no entailment regimes other than OWL 2 Direct Semantics. We will address these in upcoming releases.</n> HTTP and the SNARL protocol for
 remote access and control; <a href="http://www.w3.org/RDF/">RDF</a> as a
 data model; and <a href="http://www.w3.org/TR/owl2-overview/">OWL 2</a> for
 inference and data analytics.</p>
@@ -62,7 +62,7 @@ inference and data analytics.</p>
   <h2>Acquiring Stardog &amp; Support</h2>
 
   <p><a href="http://stardog.com/dl/">Download</a> Stardog to get started. The <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog support forum</a>, <a
-href="mailto:stardog@clarkparsia.com">stardog@clarkparsia.com</a>, is the place to report bugs, ask questions, etc.</p>
+href="mailto:stardog@clarkparsia.com">stardog@clarkparsia.com</a>, is the place to report bugs, ask questions, etc.  You can also ask questions on <a href="http://stackoverflow.com/">Stack Overflow</a> using the tag <i>stardog</i>.</p>
 
   <!--<h2>Acknowledgments</h2>
 
@@ -277,8 +277,6 @@ href="mailto:stardog@clarkparsia.com">stardog@clarkparsia.com</a>, is the place 
 
     <ol>
 
-      <!-- <li>multi-reader, single writer concurrency.</li> -->
-
       <li>Asking for all individuals with reasoning via the query <tt>{?s a owl:Thing}</tt>
 might also retrieve some classes and properties. <b>WILLFIX</b></li>
 
@@ -287,11 +285,7 @@ might also retrieve some classes and properties. <b>WILLFIX</b></li>
    <!--   <li>Two query bugs due to its dependence on Sesame's SPARQL parser:
    <a href="https://openrdf.atlassian.net/browse/SES-1119">SES-1119</a> and <a href="https://openrdf.atlassian.net/browse/SES-1121">SES-1121</a>. <b>WILLFIX</b> </li>
 -->
-<!--
-<li>Read/Write permissions for the database metadata and read/write
-permissions to ICV constraints are not independent. Granting read/write
-permission to database metadata will grant the same permissions for ICV. <b>Work around:</b> Remove the permissions on the db metadata and assign only ICV. <b>WILLFIX</b> </li>
--->
+
 <li>Dropping a database with the CLI will also delete all the data
 files on your Stardog home directory associated with that database. If
 you want to keep the data files but only remove the database from the

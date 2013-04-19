@@ -64,10 +64,7 @@ If you do that enough, then you'll eventually exhaust all of the resources in
 their respective     pools, which can cause slowness or ,in some cases,
 deadlocks waiting for     resources to be returned to their pools.</p>
 
-    <p class="afaq">Similarly close your connections when you are done with them. If you don't close things when you're done with them, we won't be held responsible for the harm you will do to yourself as a result.</p>
-
-    <p class="afaq">In short, as they teach us all in grade school, <b>PUT THINGS AWAY WHEN YOU ARE FINISHED PLAYING WITH THEM.</b></p>
-
+    <p class="afaq">Similarly close your connections when you are done with them. Failing to close Connections, Iterations, QueryResults, and other <i>closeable</i> objects will lead to undesirable behavior.</p>
 
     <h2>SPARQL 1.1</h2>
 
@@ -80,7 +77,7 @@ deadlocks waiting for     resources to be returned to their pools.</p>
 
   <p class="qfaq"><b>Question: I'm adding one triple at a time, in a tight loop, to Stardog; is this the ideal strategy with respect to performance?</p>
 
-  <p class="qfaq"><b>Question: I'm adding millions of triples to Stardog and I'm wonderinf it that's the best approach?</p>
+  <p class="qfaq"><b>Question: I'm adding millions of triples to Stardog and I'm wondering it that's the best approach?</p>
 
   <p class="afaq"><b>Answer:</b> The answer to both questions is to stop doing that...</p>
 
@@ -91,14 +88,6 @@ deadlocks waiting for     resources to be returned to their pools.</p>
   <p class="qfaq">I want to use Stardog to serve a public SPARQL endpoint; is there some way I can do this without publishing user account information?</p>
 
   <p class="afaq">We don't necessarily recommend this, but it's possible. Simply pass <tt>--disable-security</tt> to <tt>stardog-admin</tt> when you start the Stardog Server; while this may be the worst possible name for an argument, since it doesn't actually disable security, it will use the built-in anonymous user (given the default configuration and user accounts) in a way that makes Stardog usable for a public endpoint.</p>
-
-<!--
-    <h2>Maven</h2>
-
-    <p class="qfaq"><b>Question:</b> Is there a Maven repository?</p>
-
-    <p class="afaq"><b>Answer:</b> ...</p>
--->
 
      </section>
 

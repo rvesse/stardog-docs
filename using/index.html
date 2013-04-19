@@ -66,54 +66,8 @@ href="http://www.cambridgesemantics.com/2008/09/sparql-by-example">SPARQL</a
 	  <a href="http://www.w3.org/TR/2012/CR-sparql11-entailment-20121108/">OWL 2 Direct Semantics entailment regime</a>.
 		  </p>
 
-	<p>To execute a SPARQL query against a Stardog database, use the <tt>query</tt> subcommand.</p>
-
-    <table>
-      <caption>Options for the Stardog <tt>query</tt> subcommand.</caption>
-      <thead>
-        <tr>
-          <th width="10%">Name</th>
-          <th>Description</th>
-          <th width="30%">Arg values</th>
-          <th width="30%">Default</th>
-        </tr>
-      </thead>
-      <tfoot>
-        <tr>
-          <th width="10%">Name</th>
-          <th>Description</th>
-          <th width="30%">Arg values</th>
-          <th width="30%">Default</th>
-        </tr>
-      </tfoot>
-      <tbody><!-- add a colgroup -->
-        <tr>
-          <td><tt>--format</tt>, <tt>-f</tt></td>
-          <td>Controls the format type of the query results, either RDF or variable bindings, depending on the SPARQL query form used.</td>
-          <td>RDF: <tt>N-TRIPLES, RDFXML, TURTLE</tt>; variable bindings: <tt>SPARQL<n>This is the XML results format.</n>, JSON, TEXT</tt></td>
-          <td>For RDF, <tt>??</tt>; for variable bindings, <tt>SPARQL</tt></td>
-        </tr>
-        <tr>
-          <td><tt>--query</tt>, <tt>-q</tt></td>
-          <td>An appropriately-escaped SPARQL query.</td>
-          <td>A valid SPARQL query that's appropriately escaped</td>
-          <td>None</td>
-        </tr>
-        <tr>
-          <td><tt>--bind</tt>, <tt>-b</tt></td>
-          <td>One or more variable bindings for use in parameterized queries; each binding is a <tt>var=value</tt> pair; multiple bindings should be separated by whitespace.</td>
-          <td>A whitespace separated list of bindings where the value is a valid RDF term expression in Turtle syntax.</td>
-          <td>None</td>
-      </tbody>
-      
-    </table>
-
-    <p>For example,</p>
-
-    <pre><code>$ ./stardog query -c "http://localhost:8989/sp2b_10k" \
-      -q "SELECT DISTINCT ?s { ?s ?p ?o } LIMIT 10"</code></pre>
-
-    <p>Which will return up to 10 unique resource identifiers from the <tt>sp2b_10k</tt> database.</p>
+	<p>To execute a SPARQL query against a Stardog database, use the <tt>query</tt> subcommand.  Detailed information on using the query command in
+    Stardog can be found on its <a href="/docs/man/query-execute.html">manpage</a></p>
 
       </section>
 
@@ -122,9 +76,9 @@ href="http://www.cambridgesemantics.com/2008/09/sparql-by-example">SPARQL</a
     <p>The most efficient way to load data into Stardog is at database creation time. See the
     <a href="../admin/#create">Creating a Database</a> section for bulk loading data at
     database creation time. 
-    To add data to an existing Stardog database, use the <tt>add</tt> command:</p>
+    To add data to an existing Stardog database, use the <a href="/docs/man/data-add.html">add</a> command:</p>
 
-    <pre><code>$ stardog add -c snarl://server/myDatabase 1.rdf 2.rdf 3.rdf</code></pre>
+    <pre><code>$ stardog data add myDatabase 1.rdf 2.rdf 3.rdf</code></pre>
 
     <p>The optional arguments are <tt>-f</tt> (or <tt>--format</tt>) to
 specify the RDF serialization type of the files to be loaded; if you specify
@@ -136,7 +90,7 @@ Turtle syntax. If you specify a type, then all the files being loaded must of th
   <p>If you want to add data to a named graph, specify it via the
   <tt>--graph-uri</tt> or <tt>-g</tt> options.</p>
    
-  <p>To remove data from a Stardog database, <tt>remove</tt> is used by specifying&mdash;</p>
+  <p>To remove data from a Stardog database, <a href="/docs/man/data-remove.html">remove</a> is used by specifying&mdash;</p>
 
     <ol>
       <li>one Named Graph, OR</li>
@@ -146,16 +100,16 @@ Turtle syntax. If you specify a type, then all the files being loaded must of th
 
     <p>For example,</p>
 
-    <pre><code>$ stardog remove -c snarl://server/myDatabase -g http://foo</code></pre>
+    <pre><code>$ stardog remove -g http://foo myDatabase</code></pre>
 
     <p>will remove the named graph <tt>http://foo</tt> and all its triples from
 <tt>myDatabase</tt>.</p>
 
-    <pre><code>$ stardog remove -c snarl://server/myDatabase 1.rdf</code></pre>
+    <pre><code>$ stardog remove myDatabase 1.rdf</code></pre>
 
     <p>will remove the triples in <tt>1.rdf</tt> from (the default graph of) <tt>myDatabase</tt>.</p>
 
-    <pre><code>$ stardog remove -c snarl://server/myDatabase -g http://foo -f TURTLE 2.rdf 3.rdf</code></pre>
+    <pre><code>$ stardog remove -g http://foo -f TURTLE myDatabase 2.rdf 3.rdf</code></pre>
 
     <p>will remove the triples in the Turtle files <tt>2.rdf</tt> and
 <tt>3.rdf</tt> from the named graph <tt>http://foo</tt> 
@@ -180,7 +134,7 @@ undesired results.</p>
     
     <section id="export"><header><h1 id='chapter'>Exporting a Database</h1></header>
 
-  <p>To export data from a Stardog database back to RDF, <tt>export</tt> is used by specifying&mdash;</p>
+  <p>To export data from a Stardog database back to RDF, <a href="/docs/man/data-export.html">export</a> is used by specifying&mdash;</p>
   <ol>
     <li>the connection string of the database to export</li>
     <li>the export format: <tt>N-TRIPLES, RDFXML, TURTLE, TRIG</tt>.  default is 'N-TRIPLES'&mdash; 'TRIG' must be used when exporting the entire database if the database contains triples inside named graphs.</li>
@@ -190,8 +144,8 @@ undesired results.</p>
 
   <p>For example,</p>
 
-  <pre><code>$ stardog export -c myDatabase --format TURTLE myDatabase_output.ttl</code></pre>
-  <pre><code>$ stardog export -c myDatabase --graph-uri http://example.org/context myDatabase_output.nt</code></pre>
+  <pre><code>$ stardog export --format TURTLE myDatabase myDatabase_output.ttl</code></pre>
+  <pre><code>$ stardog export --graph-uri http://example.org/context myDatabase myDatabase_output.nt</code></pre>
 
   </section>
   
@@ -224,13 +178,13 @@ WHERE {
 
   <h2>Searching with the Command Line</h2>
 
-  <p>First, check out the CLI help for the search subcommand...I'll wait.</p>
+  <p>First, check out the CLI help for the <a href="/docs/man/query-search.html">search</a> subcommand...I'll wait.</p>
 
-  <pre><code>$ stardog help search</code></pre>
+  <pre><code>$ stardog help query search</code></pre>
 
   <p>Okay, now let's do a search over the O'Reilly book catalog in RDF for everything mentioning "html":</p>
 
-  <pre><code>$ stardog search -c "snarl://127.0.0.1:5820/catalog" -q "html" -l 10</code></pre>
+  <pre><code>$ stardog query search -q "html" -l 10 catalog</code></pre>
 
   <p>The results?</p>
 
@@ -251,7 +205,7 @@ WHERE {
   <h2>Query Syntax</h2>
 
   <p>Stardog search is based on
-Lucene 3.4.0: we support all of the <a
+Lucene 4.2.0: we support all of the <a
 href="http://lucene.apache.org/java/3_4_0/queryparsersyntax.html">search
 modifiers</a> that Lucene supports, with the exception of fields.</p>
 
