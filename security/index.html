@@ -116,6 +116,8 @@
     <dd>Permits revoking permissions over a resource</dd>
   <dt><tt>execute</tt></dt>
     <dd>Permits executing administration actions over a database</dd>
+  <dt><tt>all</tt></dt>
+    <dd>Special action type that permits all previous actions over a resource</dd>
 </dl>
 
 <h3>Wildcards</h3>
@@ -128,7 +130,7 @@
 
 <h3>Owner Permissions</h3>
 
-<p>When a user creates a resource, it is automatically granted <tt>delete</tt>, <tt>write</tt>, <tt>read</tt>, <tt>grant</tt>, and <tt>revoke</tt> permissions over the new resource. If the new resource is a database, then the user is additionally granted <tt>write</tt>, <tt>read</tt>, <tt>grant</tt>, and <tt>revoke</tt> permissions over <tt>icv-constraints:theDatabase</tt>, and <tt>execute</tt> permission over <tt>admin:theDatabase</tt>.  These two permissions give the creator of the database the ability to administer the ICV constraints for the database and administer the database itself.</p>
+<p>When a user creates a resource, it is automatically granted <tt>delete</tt>, <tt>write</tt>, <tt>read</tt>, <tt>grant</tt>, and <tt>revoke</tt> permissions over the new resource. If the new resource is a database, then the user is additionally granted <tt>write</tt>, <tt>read</tt>, <tt>grant</tt>, and <tt>revoke</tt> permissions over <tt>icv-constraints:theDatabase</tt>, and <tt>execute</tt> permission over <tt>admin:theDatabase</tt>. These two permissions give the creator of the database the ability to administer the ICV constraints for the database and administer the database itself.</p>
 
 <h2>Default Security Configuration</h2>
 
@@ -402,9 +404,6 @@ SDOPS ALL = ( stardog ) /usr/bin/stardog</code></pre>
 <pre><code>$ sudo stardog-admin create --type D --name my-new-database</code></pre> -->
 
 </section> 
-
- 
-    
   
 <section id="fn">
   <header>  <h1 class="fn">Notes</h1></header>
