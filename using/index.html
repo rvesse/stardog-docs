@@ -100,16 +100,16 @@ Turtle syntax. If you specify a type, then all the files being loaded must of th
 
     <p>For example,</p>
 
-    <pre><code>$ stardog remove -g http://foo myDatabase</code></pre>
+    <pre><code>$ stardog data remove -g http://foo myDatabase</code></pre>
 
     <p>will remove the named graph <tt>http://foo</tt> and all its triples from
 <tt>myDatabase</tt>.</p>
 
-    <pre><code>$ stardog remove myDatabase 1.rdf</code></pre>
+    <pre><code>$ stardog data remove myDatabase 1.rdf</code></pre>
 
     <p>will remove the triples in <tt>1.rdf</tt> from (the default graph of) <tt>myDatabase</tt>.</p>
 
-    <pre><code>$ stardog remove -g http://foo -f TURTLE myDatabase 2.rdf 3.rdf</code></pre>
+    <pre><code>$ stardog data remove -g http://foo -f TURTLE myDatabase 2.rdf 3.rdf</code></pre>
 
     <p>will remove the triples in the Turtle files <tt>2.rdf</tt> and
 <tt>3.rdf</tt> from the named graph <tt>http://foo</tt> 
@@ -144,8 +144,8 @@ undesired results.</p>
 
   <p>For example,</p>
 
-  <pre><code>$ stardog export --format TURTLE myDatabase myDatabase_output.ttl</code></pre>
-  <pre><code>$ stardog export --graph-uri http://example.org/context myDatabase myDatabase_output.nt</code></pre>
+  <pre><code>$ stardog data export --format TURTLE myDatabase myDatabase_output.ttl</code></pre>
+  <pre><code>$ stardog data export --graph-uri http://example.org/context myDatabase myDatabase_output.nt</code></pre>
 
   </section>
   
