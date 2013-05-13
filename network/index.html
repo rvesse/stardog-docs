@@ -241,9 +241,10 @@ only MIME type for the Query Plan resource is <tt>text/plain</tt>.</p>
 
   <pre><code>POST /{db}/transaction/begin &rarr; text/plain</code></pre>
 
-  <p>Returns a transaction identifier resource as <tt>text/plain</tt>; this
-is likely to be deprecated in a future release in favor of a hypertext
-format in place of <tt>text/plain</tt>.</p>
+  <p>Returns a transaction identifier resource as <tt>text/plain</tt>, which is 
+  likely to be deprecated in a future release in favor of a hypertext format.</p>
+  
+  <p>Note: <code>POST</code> to begin a transaction accepts neither body nor arguments.</p>
 
   <h4>Transaction Security Considerations</h4>
 
@@ -303,7 +304,7 @@ Accept types are listed above in the <tt>HTTP Headers</tt> section.</p>
 
   <pre><code>POST /{db}/{txId}/add &rarr; <tt>void</tt> | text/plain</code></pre>
 
-<p>Returns a representation of data added to the database within of the
+<p>Returns a representation of data added to the database of the
 specified transaction. Accepts an optional parameter, <tt>graph-uri</tt>,
 which specifies the named graph the data should be added to. If a named
 graph is not specified, the data is added to the default (i.e., unnamed)
