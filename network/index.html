@@ -241,9 +241,10 @@ only MIME type for the Query Plan resource is <tt>text/plain</tt>.</p>
 
   <pre><code>POST /{db}/transaction/begin &rarr; text/plain</code></pre>
 
-  <p>Returns a transaction identifier resource as <tt>text/plain</tt>; this
-is likely to be deprecated in a future release in favor of a hypertext
-format in place of <tt>text/plain</tt>.</p>
+  <p>Returns a transaction identifier resource as <tt>text/plain</tt>, which is 
+  likely to be deprecated in a future release in favor of a hypertext format.</p>
+  
+  <p>Note: <code>POST</code> to begin a transaction accepts neither body nor arguments.</p>
 
   <h4>Transaction Security Considerations</h4>
 
