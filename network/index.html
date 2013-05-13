@@ -290,7 +290,7 @@ changes that were made to the database.</p>
 indicates the rollback failed and the text returned in the result is the
 failure message.</p>
 
-  <h3>Query in Transaction</h3>
+  <h3>Querying (Transactionally)</h3>
 
   <pre><code>GET | POST /{db}/{txId}/query</code></pre>
 
@@ -299,7 +299,7 @@ transaction. Queries within transactions will be slower as extra processing
 is required to make the changes visible to the query.  Again, the valid 
 Accept types are listed above in the <tt>HTTP Headers</tt> section.</p>
 
-  <h3>Add in Transaction</h3>
+  <h3>Adding Data (Transactionally)</h3>
 
   <pre><code>POST /{db}/{txId}/add &rarr; <tt>void</tt> | text/plain</code></pre>
 
@@ -310,7 +310,7 @@ graph is not specified, the data is added to the default (i.e., unnamed)
 context. The response codes are <tt>200</tt> for success and <tt>500</tt>
 for failure.</p>
 
-  <h3>Remove in Transaction</h3>
+  <h3>Deleting Data (Transactionally)</h3>
 
   <pre><code>POST /{db}/{txId}/remove &rarr; <tt>void</tt> | text/plain</code></pre>
 
