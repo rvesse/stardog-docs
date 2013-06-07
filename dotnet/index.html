@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Stardog: Documentation: .Net Programming</title>
+    <script type="text/javascript" src="http://use.typekit.com/muj3mlu.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <link media="screen" rel="stylesheet" href="/_/css/ps.css"/>
+    <link media="print" rel="stylesheet" href="/_/css/print.css"/>
+    <link media="screen" rel="stylesheet" href="/_/css/simplegrid.css"/>
+    
+  </head>
+
+  <body>
+
+<div class="grid grid-pad">
+
+<div id="masthead">
+
+  <div class="col-3-12" id="logoquote"><a href="/"><img border=0 src="/_/img/sdog-bare.png"></a></div>  
+
+  <div id="chaptertitle" class="col-9-12">
+      <blockquote>
+        <b>When someone says "I want a programming language in which I need only say what I wish done," give him a lollipop.</b>&mdash;<cite>Alan Perlis, Epigrams in Programming</cite>
+      </blockquote>
+      <h1 id="title">Stardog <span id="subtitle">.Net</span></h1>
+  </div>
+
+</div>
+
+</div>
+
+<div class="grid grid-pad">
+
+<div id="contentbody">
+
+  <div class="col-3-12" id="left-gutter">
+    <div id="tocblock"></div>
+  </div>
+
+  <div class="col-9-12" id="main-channel">
+  
+  <section id="intro"><header><h1 id='chapter'>Introduction</h1></header>
+
+    <p>In the <a href="../network/">Network Programming</a> chapter, we
+    looked at how to interact with Stardog over a network via HTTP and SNARL protocol.</p>
+
+  <p>In this chapter we describe how to program Stardog from .Net using <a href="http://www.dotnetrdf.org">dotNetRDF</a>.  Note that this is an open source library developed externally and so questions/issues with the .Net API should be directed to that project.
+   You should also be aware that dotNetRDF uses the HTTP API for all communication with Stardog so you <strong>must</strong> enable the HTTP server to use Stardog from .Net</p>
+
+  <p>If you're a Java developer see the <a href="../java">Programming with Java</a> chapter.  Alternatively if you're a Spring developer, see the <a href="../spring">Programming with Spring</a> chapter.</p>
+
+  </section>
+
+  <div><span><a id="intro"></a></span></div>
+
+  <section id="admin"><header><h1 id='chapter'>Creating &amp; Administering Databases</h1></header>
+	  <p><code>StardogServer</code> provides some limited administrative functionality by implementing the <a href="https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Storage/Servers">Servers API</a></p>
+
+	  <h2>Creating a Database</h2>
+	  <p>You can create a basic disk backed database with Stardog with one line of code:</p>
+	  <div style="font-size:small">
+    	<script src="https://gist.github.com/rvesse/5732640.js"></script>
+  	  </div>
+
+      <p>
+		  It is important to note that, as shown in the examples, you <b>should</b> take care to always dispose of the <code>IStorageServer</code> and/or <code>IStorageProvider</code> instances you create when you are done working with them.
+	  </p>
+
+	  <p>
+		  You can also use the <code>StardogDiskTemplate</code> or <code>StardogMemTemplate</code> to configure a disk/memory backed database with whatever options you desire, these both derive from the <code>BaseStardogTemplate</code> which
+          contains many properties that can be used to configure Stardog database options:
+
+	  <div style="font-size:small">
+		  <script src="https://gist.github.com/rvesse/5732680.js"></script>
+	  </div>
+	  <p>This illustrates how to create a disk backed database named 'id' which supports full text search via <a href="../using">Waldo</a> and has durable transactions enabled.</p>
+
+	  <div style="font-size:small">
+		  <script src="https://gist.github.com/rvesse/5732690.js"></script>
+	  </div>
+	  <p>This illustrates how to create a disk backed database with ICV guard mode enabled at the QL reasoning type.  For more information on what the available
+	  properties are see <a href="http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.Management.Provisioning.Stardog.BaseStardogTemplate">BaseStardogTemplate</a>, for what they mean to Stardog please refer to the <a href="../admin/">admin docs</a>, specifically the chapter on administering a database.</p>
+	  
+	  <p>For performing other basic administrative tasks via dotNetRDF please refer to the <a href="https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Storage/Servers">Servers API</a> documentation.
+
+	  <p>Also note, Stardog database administration can be performed from the <a href="../admin/">command line</a>.</p>
+  </section>
+
+  <section id="connection"><header><h1 id='chapter'>Connecting to a Database</h1></header>
+
+  <p>
+  Connecting to a database can be done using the dotNetRDF <a href="https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Storage%20API">Storage API</a>, they provide a <a href="http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.StardogConnector">StardogConnector</a> which implements their standard <code>IStorageProvider</code> interface.
+  Making a connection requires at a minimum knowing the Base URI of your Stardog server and the name of the database.  The Base URI is the HTTP URL that Stardog prints out when you start up the server and is typically of the form <code>http://machine:5822</code> where <code>machine</code> is replaced with the name of the host on which the server
+   is running and <code>5822</code> changed only if you have configured Stardog to run on a different port than the default.  As Stardog implements comprehensive <a href="../security">security</a> you will also likely require user credentials.
+  </p>
+
+  <div style="font-size: small">
+    <script src="https://gist.github.com/rvesse/5732808.js"></script>
+  </div>
+  
+  <p>
+    Stardog allows you to specify the reasoning mode used for queries as part of the connection information like so:
+  </p>
+  
+  <div style="font-size: small">
+    <script src="https://gist.github.com/rvesse/5732812.js"></script>
+  </div>
+  
+  <p>
+  	Note that is it possible to change the reasoning mode used at any time by changing the value of the <code>Reasoning</code> property though remember that this only affects subsequently issued queries i.e. it does not affect queries that are already in-flight.
+  </p>
+
+  </section>
+
+  <section id="storage-api"><header><h1 id='chapter'>Using the Storage API</h1></header>
+
+  <p>
+	  This chapter covers how to carry out various common operations against Stardog using dotNetRDF's <a href="https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Storage%20API">Storage API</a>, you may wish to refer to their <a href="https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Triple%20Store%20Integration">Triple Store Integration</a> documentation for some more generic examples of using this API.
+  </p>
+  
+  <p>
+      When using this API transactions are primarily handled for you with the connection operating in auto-commit mode by default with any write operations automatically using a new transaction and committing it or rolling it back as appropriate.
+      Transactions may be manually managed using the <code>Begin()</code>, <code>Commit()</code> and <code>Rollback()</code> methods, read operations will only use transactions when they run in the context of an active transaction.
+  </p>
+
+  <h2>Adding Data</h2>
+  
+  <p>
+  	The simplest way to add data is to call the <code>SaveGraph()</code> method which saves a RDF graph to the store.
+  </p>
+
+  <div style="font-size: small">
+    <!-- TODO: Add gist for SaveGraph() -->
+  </div>
+
+	  <p>By default, RDF added will go to the named graph corresponding to the <code>BaseUri</code> property of the provided graph unless it is <code>null</code> in which case it gets added to the default graph.</p>
+	  
+	  <!-- TODO: Add notes about append/overwrite behaviour -->
+
+	  <!-- TODO: Write up using UpdateGraph() to add data, also add an example using WriteToStoreHandler -->
+
+  <h2>Parameterized SPARQL Queries</h2>
+
+  
+
+  <div style="font-size: small">
+    <!-- TODO: Gist for SparqlParameterizedString -->
+  </div>
+
+  <p>We can make a <code>Query</code> object by passing a SPARQL query in the constructor. Simple. Obvious.</p>
+
+  <!-- TODO Write up making queries -->
+
+  <p>We <b>strongly</b> recommend the use of SNARL's parameterized queries over concatenating strings together in order to build your SPARQL query.  This latter
+      approach opens up the possibility for SPARQL injection attacks unless you are very careful in scrubbing your input.</p>
+
+  <h2>Removing Data</h2>
+
+  <div style="font-size: small">
+    <!-- TODO: Gist for DeleteGraph() -->
+  </div>
+
+  <!-- TODO: Write up removing data using UpdateGraph() -->
+
+  <h2>Reasoning</h2>
+
+	  <p>Stardog supports query time OWL 2 QL, EL, and RL
+		  reasoning by using a query rewriting technique.<n>In short, when reasoning
+			  is requested, a query is automatically rewritten in <i>n</i> queries, which
+			  are then executed.</n>. As mentioned earlier reasoning
+		  is enabled at the <code>StardogConnector</code> layer and then any queries
+		  executed over that connection are executed with reasoning enabled;
+		  you don't need to do anything up front when you create your database if you want to use reasoning.</p>
+
+	  <p>For more information on how reasoning is supported in Stardog, check out the
+	  <a href="../owl2">reasoning section</a>.</p>
+	  
+  <h2>dotNetRDF API Docs</h2>
+
+  <p>Please see the <a href="http://www.dotnetrdf.org/api/">dotNetRDF API</a> docs for more
+information.</p>
+
+  </section>
+
+<section id="fn">
+  <header>  <h1 class="fn">Notes</h1></header>
+  <ol id="notes">
+    <!-- footnotes get pub'd here -->
+  </ol>
+
+  </section>
+
+ </div>
+</div>
+</div>
+
+  <div class="grid grid-pad">
+  <div class="col-12-12">
+  <nav><p><a class="top" href="#" title="Back to top"><span style="font-size: 48px">&#8962;</a></a></p></nav>
+  <p>For comments, questions, or to report problems with this page, please email the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support Forum</a>.</p>
+  <footer>
+    <p id="thefooter"></p>
+  </footer>
+  </div>
+  </div>
+
+
+  <script src="/_/js/pbk.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      nodeName = "";
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-1719955-3']);
+      _gaq.push(['_setDomainName', 'stardog.com']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+<script src="/_/js/sticky.js" type="text/javascript"></script>
+
+<script>
+  $(document).ready(function(){
+    $("#tocblock").sticky({topSpacing:4});
+  });
+</script>
+
+  </body>
+</html>
