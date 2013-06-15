@@ -24,7 +24,7 @@
 
   <div id="chaptertitle" class="col-9-12">
       <blockquote>
-        <b>A good system can't have a weak command language.</b>&mdash;<cite>Alan Perlis, Epigrams in Programming</cite>
+        <b>Syntactic sugar causes cancer of the semicolon.</b>&mdash;<cite>Alan Perlis, Epigrams in Programming</cite>
       </blockquote>
       <h1 id="title">Stardog <span id="subtitle">.Net</span></h1>
   </div>
@@ -87,7 +87,7 @@
 	  
 	  <p>For performing other basic administrative tasks via dotNetRDF please refer to the <a href="https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Storage/Servers">Servers API</a> documentation.
 
-	  <p>Also note, Stardog database administration can be performed from the <a href="../admin/">command line</a>.</p>
+	  <p>Also note, Stardog database administration can be performed from the <a href="../admin/">command line</a> which is substantially more powerful and supports bulk loading of data at database creation time which dotNetRDF does not currently support.</p>
   </section>
 
   <section id="connection"><header><h1 id='chapter'>Connecting to a Database</h1></header>
@@ -95,7 +95,7 @@
   <p>
   Connecting to a database can be done using the dotNetRDF <a href="https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Storage%20API">Storage API</a>, they provide a <a href="http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.StardogConnector">StardogConnector</a> which implements their standard <code>IStorageProvider</code> interface.
   Making a connection requires at a minimum knowing the Base URI of your Stardog server and the name of the database.  The Base URI is the HTTP URL that Stardog prints out when you start up the server and is typically of the form <code>http://machine:5822</code> where <code>machine</code> is replaced with the name of the host on which the server
-   is running and <code>5822</code> changed only if you have configured Stardog to run on a different port than the default.  As Stardog implements comprehensive <a href="../security">security</a> you will also likely require user credentials.
+   is running and <code>5822</code> changed only if you have configured Stardog to run on a different HTTP port than the default.  As Stardog implements comprehensive <a href="../security">security</a> you will also likely require user credentials.
   </p>
 
   <div style="font-size: small">
@@ -123,7 +123,7 @@
   </p>
   
   <p>
-      When using this API transactions are primarily handled for you with the connection operating in auto-commit mode by default with any write operations automatically using a new transaction and committing it or rolling it back as appropriate.
+      When using this API transactions are primarily handled for you with the connection operating in auto-commit mode by default, any write operations automatically using a new transaction and committing it or rolling it back as appropriate.
       Transactions may be manually managed using the <code>Begin()</code>, <code>Commit()</code> and <code>Rollback()</code> methods, read operations will only use transactions when they run in the context of an active transaction.
   </p>
 
@@ -134,16 +134,30 @@
   </p>
 
   <div style="font-size: small">
-    <!-- TODO: Add gist for SaveGraph() -->
+    <script src="https://gist.github.com/rvesse/5786144.js"></script>
   </div>
 
 	  <p>By default, RDF added will go to the named graph corresponding to the <code>BaseUri</code> property of the provided graph unless it is <code>null</code> in which case it gets added to the default graph.</p>
 	  
 	  <!-- TODO: Add notes about append/overwrite behaviour -->
-
+	  
 	  <!-- TODO: Write up using UpdateGraph() to add data, also add an example using WriteToStoreHandler -->
+	  
+  <h2>Loading Data</h2>
+  
+  <p>
+    Since the <code>IStorageProvider</code> API is primarily graph oriented the simplest way to load data is to load an entire graph from a database:
+  </p>
+  
+  <div style="font-size: small">
+  	<script src="https://gist.github.com/rvesse/5786161.js"></script>
+  </div>
+  
+  <p>
+    If you need more fine grained control over loading data then you should make a SPARQL Query as detailed in the next section.
+  </p>
 
-  <h2>Parameterized SPARQL Queries</h2>
+  <h2>Making SPARQL Queries</h2>
 
   
 
@@ -174,7 +188,8 @@
 			  are then executed.</n>. As mentioned earlier reasoning
 		  is enabled at the <code>StardogConnector</code> layer and then any queries
 		  executed over that connection are executed with reasoning enabled;
-		  you don't need to do anything up front when you create your database if you want to use reasoning.</p>
+		  you don't need to do anything up front when you create your database if you want to use reasoning.  The in-use reasoning mode for your connection may be changed at any time by
+		  setting the <code>Reasoning</code> property appropriately.</p>
 
 	  <p>For more information on how reasoning is supported in Stardog, check out the
 	  <a href="../owl2">reasoning section</a>.</p>
