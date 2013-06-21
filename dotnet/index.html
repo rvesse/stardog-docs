@@ -139,9 +139,15 @@
 
 	  <p>By default, RDF added will go to the named graph corresponding to the <code>BaseUri</code> property of the provided graph unless it is <code>null</code> in which case it gets added to the default graph.</p>
 	  
-	  <!-- TODO: Add notes about append/overwrite behaviour -->
+	  <p>When you use the <code>SaveGraph()</code> method the exact behaviour depends on the target graph, saving to the default graph appends data while saving to named graph overwites data.  You can inspect the <code>IOBehaviour</code> property to see all flags that apply to Stardog connectivity when used via dotNetRDF.
 	  
-	  <!-- TODO: Write up using UpdateGraph() to add data, also add an example using WriteToStoreHandler -->
+	<h2>Modifying Data</h2>
+	  
+	  <p>If you want to add/remove data from an existing graph then you can use the <code>UpdateGraph()</code> method, this takes a URI for the graph to update and collections of triples to be added and removed.  Note that removals are always processed before additions.</p>
+	  
+	  <div style="font-size: small">
+	    <script src="https://gist.github.com/rvesse/5833189.js"></script>
+	  </div>
 	  
   <h2>Loading Data</h2>
   
