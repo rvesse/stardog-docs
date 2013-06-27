@@ -1,0 +1,33 @@
+// Your custom SCSS should be written here...
+@import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700);
+
+
+code,tt,pre,kbd,samp,var, pre span {font-family: "Ubuntu Mono"; font-weight: $font-weight-bold;}
+
+//Should be using some special units!
+pre {
+       margin-bottom: $base-line-height / 2;
+       margin-left: $base-line-height / 2;
+
+}
+
+#title-masthead {
+  color: #083959;
+  font-weight: $font-weight-bold;
+
+}
+
+#title-subhead {
+  color: #C0D732;
+  font-weight: $font-weight-thin;
+}
+
+#title {
+  margin-bottom: $base-line-height / 1.5;
+
+}
+
+h2 {
+  color: #A61D24;
+
+}

@@ -1,0 +1,868 @@
+<p><a href="/"><img src="/_/img/sdog-bare.png" alt="" /></a></p>
+
+<blockquote>
+<p><strong>If you can imagine a society in which the computer-robot is the only
+menial, you can imagine anything.</strong>—Alan Perlis, Epigrams in
+Programming</p>
+</blockquote>
+
+<h1 id="stardognetworktitle">Stardog Network {#title}</h1>
+
+<h1 id="networkprogrammingstardogchapter">Network Programming &amp; Stardog {#chapter}</h1>
+
+<p>In the <a href="../java/">Programming with Java</a> chapter, we consider
+interacting with Stardog programatically with Java. In the <a href="../programming/">Programming
+with JVM-based Languages</a> chapter, we consider
+interacting with Stardog by way of languages other than Java. In this
+chapter we consider interacting with Stardog over a network. In some use
+cases or deployment scenarios, it may be necessary to interact with or
+control Stardog remotely over an IP-based network. For those purposes,
+Stardog supports <a href="http://www.w3.org/TR/rdf-sparql-protocol/">SPARQL 1.0 HTTP
+Protocol</a>; the <a href="http://www.w3.org/TR/sparql11-http-rdf-update/">SPARQL 1.1
+Graph Store HTTP
+Protocol</a>; the
+Stardog-native Extended HTTP Protocol; and SNARL, an RPC-style protocol
+based on <a href="http://code.google.com/apis/protocolbuffers/">Google Protocol
+Buffers</a>.</p>
+
+<h2 id="apiaryrestdocs">Apiary REST Docs</h2>
+
+<p>The Stardog HTTP API v3 is also available on Apiary:
+<a href="http://docs.stardog.apiary.io/">http://docs.stardog.apiary.io/</a>.</p>
+
+<h1 id="sparqlprotocol:httpchapter">SPARQL Protocol: HTTP {#chapter}</h1>
+
+<p>Stardog supports the standard SPARQL Protocol HTTP bindings in a very
+obvious way. Since the Extended HTTP Protocol is a superset of SPARQL
+Protocol, the latter is documented below alongside the former.</p>
+
+<h2 id="sparql1.1servicedescription">SPARQL 1.1 Service Description</h2>
+
+<p>Stardog supports SPARQL 1.1&#8217;s Service Description format. See the
+<a href="http://www.w3.org/TR/2013/REC-sparql11-service-description-20130321/">spec</a>
+if you want details.</p>
+
+<h1 id="extendedhttpprotocolchapter">Extended HTTP Protocol {#chapter}</h1>
+
+<p>In addition to SPARQL Protocol for RDF support, Stardog supports an
+Extended HTTP Protocol with additional resource representations and
+capabilities.</p>
+
+<h2 id="generatingurls">Generating URLs</h2>
+
+<p>If you are running the HTTP server at the following URL</p>
+
+<pre class="highlighted"><code class="smalltalk"><span class="method">http:</span>//<span class="method">localhost:</span><span class="number">12345</span>/
+</code></pre>
+
+<p>To form the URI of a particular Stardog Database, the Database Short
+Name is the first URL path segment appended to the deployment URI. For
+example, for the Database called <code>cytwombly</code>, deployed in the above
+example HTTP server, the Database Network Name might be</p>
+
+<pre class="highlighted"><code class="smalltalk"><span class="method">http:</span>//<span class="method">localhost:</span><span class="number">12345</span>/cytwombly
+</code></pre>
+
+<p>All the resources related to this database are identified by URL path
+segments relative to the Database Network Name; hence:</p>
+
+<pre class="highlighted"><code class="smalltalk"><span class="method">http:</span>//<span class="method">localhost:</span><span class="number">12345</span>/cytwombly/size
+</code></pre>
+
+<p>In what follows, we use a <a href="http://code.google.com/p/uri-templates/">URI
+Template</a> notation to
+parameterize the actual request URLs, thus: <code>/{db}/size</code>.</p>
+
+<p>We also abuse notation to show the permissible HTTP request types and
+default MIME types, thus:</p>
+
+<pre class="highlighted"><code class="nginx"><span class="title">REQ</span> | REQ /resource/identifier → mime_type | mime_type
+</code></pre>
+
+<p>In a few cases, we use <code>void</code> as short hand for the case where there is
+a response code but the response body may be empty.</p>
+
+<h2 id="httpheaders:content-typeaccept">HTTP Headers: <code>Content-Type</code> &amp; <code>Accept</code></h2>
+
+<p>All HTTP requests that are mutative (add or remove) must include a valid
+<code>Content-Type</code> header set to the MIME type of the request body, where
+&#8220;valid&#8221; is a valid MIME type for N-Triples, Trig, Trix, Turtle, NQuads,
+JSON-LD, or RDF/XML:</p>
+<dl>
+<dt>RDF/XML</dt>
+<dd><code>application/rdf+xml</code>
+Turtle</dd>
+
+<dd><code>application/x-turtle</code> or <code>text/turtle</code>
+N-Triples</dd>
+
+<dd><code>text/plain</code>
+TriG</dd>
+
+<dd><code>application/x-trig</code>
+TriX</dd>
+
+<dd><code>application/trix</code>
+NQuads</dd>
+
+<dd><code>text/x-nquads</code>
+JSON-LD</dd>
+
+<dd><code>application/ld+json</code></dd>
+</dl>
+
+
+<p>SPARQL <code>CONSTRUCT</code> queries must also include a <code>Accept</code> header set to
+one of the RDF serialization types above.</p>
+
+<p>When issuing a <code>SELECT</code> query the <code>Accept</code> header should be set to one
+of the valid MIME types for <code>SELECT</code> results:</p>
+<dl>
+<dt>SPARQL XML Results Format</dt>
+<dd><code>application/sparql-results+xml</code>
+SPARQL JSON Results Format</dd>
+
+<dd><code>application/sparql-results+json</code>
+SPARQL Boolean Results</dd>
+
+<dd><code>text/boolean</code>
+SPARQL Binary Results</dd>
+
+<dd><code>application/x-binary-rdf-results-table</code></dd>
+</dl>
+
+
+<h2 id="responsecodes">Response Codes</h2>
+
+<p>Stardog uses HTTP response codes in the following way:</p>
+<dl>
+<dt><code>200</code></dt>
+<dd>Indicates the operation has succeeded.
+<code>202</code></dd>
+
+<dd>Indicates the operation was recieved successfully and will be
+ processed shortly.
+<code>400</code></dd>
+
+<dd>Indicates parse errors or that the transaction identifier specified
+ for an operation is invalid or does not correspond to a known
+ transaction.
+<code>401</code></dd>
+
+<dd>Indicates requests that are unauthorized.
+<code>403</code></dd>
+
+<dd>Indicates that the user attempting to perform the operation does not
+ exist, their username or password is invalid, or they do not have
+ the proper credentials to perform the action.
+<code>404</code></dd>
+
+<dd>Indicates a resource involved in the request, for example the
+ database, or transaction, does not exist.
+<code>409</code></dd>
+
+<dd>Indicates a conflict for some database operations; for example,
+ creating a database that already exists.
+<code>500</code></dd>
+
+<dd>Indicates a failure in some internal operation.</dd>
+</dl>
+
+
+<p>Further, we provide Stardog-specific error codes in the <code>SD-Error-Code</code>
+header in the response from the server. These can be used to further
+clarify the reason for the failure on the server, especially in cases
+where it could be ambiguous. For example, if YOu received a <code>404</code> from
+the server trying to commit a transaction denoted by the path
+<code>/myDb/transaction/commit/293845klf9f934</code>, what is missing is not clear,
+it&#8217;s either the transaction or the database. In this case, the value of
+the <code>SD-Error-Code</code> header will specify which was missing. The
+enumeration of <code>SD-Error-Code</code> and their meanings are as follows:</p>
+
+<ul>
+<li><code>0</code>: Authentication error</li>
+<li><code>1</code>: Authorization error</li>
+<li><code>2</code>: Query evaluation error</li>
+<li><code>3</code>: Unknown transaction</li>
+<li><code>4</code>: Unknown database</li>
+<li><code>5</code>: Database already exists</li>
+<li><code>6</code>: Invalid database name</li>
+<li><code>7</code>: Resource (user, role, etc) already exists</li>
+<li><code>8</code>: Invalid connection parameter(s)</li>
+<li><code>9</code>: Invalid database state for the request</li>
+<li><code>10</code>: Resource in use</li>
+<li><code>11</code>: Resource not found</li>
+</ul>
+
+<p>In cases of error, the message body of the result will include any error
+information provided by the server to indicate the cause of the error.</p>
+
+<h2 id="exposedresources">Exposed Resources</h2>
+
+<p>To interact with Stardog over HTTP, use the following resource
+representations, HTTP response codes, and resource identifiers.</p>
+
+<h3 id="astardogdatabase">A Stardog Database</h3>
+
+<pre class="highlighted"><code class="cs">GET /{db} → <span class="keyword">void</span>
+</code></pre>
+
+<p>Returns a representation of the database. As of <strong>@@VERSION@@</strong>, this is
+merely a placeholder; in a later release, this resource will serve the
+web console where the database can be interacted with in a browser.</p>
+
+<h3 id="databasesize">Database Size</h3>
+
+<pre class="highlighted"><code class="mel">GET /{db}/<span class="keyword">size</span> → <span class="keyword">text</span>/plain
+</code></pre>
+
+<p>Returns the number of RDF triples in the database.</p>
+
+<h3 id="queryevaluation">Query Evaluation</h3>
+
+<pre class="highlighted"><code class="erlang"><span class="variable">GET</span> | <span class="variable">POST</span> /<span class="tuple">{db}</span>/<span class="keyword">query</span>
+</code></pre>
+
+<p>The SPARQL endpoint for the database. The valid Accept types are listed
+above in the <code>HTTP Headers</code> section.</p>
+
+<p>To issue SPARQL queries with reasoning over HTTP, see the <a href="http://www.stardog.com/docs/owl2/#reasoning">Using
+Reasoning</a> section of the
+<a href="http://www.stardog.com/docs/owl2/">Reasoning</a> chapter.</p>
+
+<h3 id="queryplan">Query Plan</h3>
+
+<pre class="highlighted"><code class="1c">GET <span class="string">| POST /{db}/explain → text/plain</span>
+</code></pre>
+
+<p>Returns the explanation for the execution of a query, i.e., a query
+plan. All the same arguments as for Query Evaluation are legal here; but
+the only MIME type for the Query Plan resource is <code>text/plain</code>.</p>
+
+<h3 id="transactionbegin">Transaction Begin</h3>
+
+<pre class="highlighted"><code class="sql">POST /{db}/transaction/<span class="operator"><span class="keyword">begin</span> → text/plain
+</code></pre>
+
+<p>Returns a transaction identifier resource as <code>text/plain</code>, which is
+likely to be deprecated in a future release in favor of a hypertext
+format.</p>
+
+<p>Note: <code>POST</code> to begin a transaction accepts neither body nor arguments.</p>
+
+<h4 id="transactionsecurityconsiderations">Transaction Security Considerations</h4>
+
+<p><strong>Note</strong>: Stardog&#8217;s implementation of transactions with HTTP is
+vulnerable to man-in-the-middle attacks, which could be used to violate
+Stardog&#8217;s isolation guarantee (among other nasty side effects).</p>
+
+<p>Stardog&#8217;s transaction identifiers are 64-bit GUIDs and, thus, pretty
+hard to <em>guess</em>; but if you can grab a response in-flight, you can steal
+the transaction identifier if basic access auth or RFC 2069 digest auth
+is in use.</p>
+
+<p><strong>You&#8217;ve been warned.</strong></p>
+
+<p>In a future release, Stardog will switch to only use <a href="http://tools.ietf.org/html/rfc2617">RFC 2617 HTTP
+Digest Authentication</a>, which is
+less vulnerable to various attacks, and will never ask a client to use a
+different authentication type, which should lessen the likelihood of
+MitM attacks for properly restricted Stardog clients.In other words, a
+Stardog client that treats any request by a proxy server or origin
+server (i.e., Stardog) to use basic access auth or RFC 2069 digest auth
+as a MitM attack. See <a href="http://tools.ietf.org/html/rfc2617">RFC 2617</a>,
+Section 4.8 Man in the Middle for more information.</p>
+
+<h3 id="transactioncommit">Transaction Commit</h3>
+
+<pre class="highlighted"><code class="sql">POST /{db}/transaction/<span class="operator"><span class="keyword">commit</span>/{txId} → void | text/plain
+</code></pre>
+
+<p>Returns a representation of the committed transaction; <code>200</code> means the
+commit was successful. Otherwise a <code>500</code> error indicates the commit
+failed and the text returned in the result is the failure message.</p>
+
+<p>As you might expect, failed commits exit cleanly, rolling back any
+changes that were made to the database.</p>
+
+<h3 id="transactionrollback">Transaction Rollback</h3>
+
+<pre class="highlighted"><code class="sql">POST /{db}/transaction/<span class="operator"><span class="keyword">rollback</span>/{txId} → void | text/plain
+</code></pre>
+
+<p>Returns a representation of the transaction after it&#8217;s been rolled back.
+<code>200</code> means the rollback was successful, otherwise <code>500</code> indicates the
+rollback failed and the text returned in the result is the failure
+message.</p>
+
+<h3 id="queryingtransactionally">Querying (Transactionally)</h3>
+
+<pre class="highlighted"><code class="matlab">GET | POST /<span class="cell">{db}</span>/<span class="cell">{txId}</span>/query
+</code></pre>
+
+<p>Returns a representation of a query executed within the <code>txId</code>
+transaction. Queries within transactions will be slower as extra
+processing is required to make the changes visible to the query. Again,
+the valid Accept types are listed above in the <code>HTTP Headers</code> section.</p>
+
+<h3 id="addingdatatransactionally">Adding Data (Transactionally)</h3>
+
+<pre class="highlighted"><code class="matlab">POST /<span class="cell">{db}</span>/<span class="cell">{txId}</span>/add → void | text/plain
+</code></pre>
+
+<p>Returns a representation of data added to the database of the specified
+transaction. Accepts an optional parameter, <code>graph-uri</code>, which specifies
+the named graph the data should be added to. If a named graph is not
+specified, the data is added to the default (i.e., unnamed) context. The
+response codes are <code>200</code> for success and <code>500</code> for failure.</p>
+
+<h3 id="deletingdatatransactionally">Deleting Data (Transactionally)</h3>
+
+<pre class="highlighted"><code class="matlab">POST /<span class="cell">{db}</span>/<span class="cell">{txId}</span>/remove → void | text/plain
+</code></pre>
+
+<p>Returns a representation of data removed from the database within the
+specified transaction. Also accepts <code>graph-uri</code> with the analogous
+meaning as above (Add in Transaction); response codes are the same as
+with Add in Transaction.</p>
+
+<h3 id="cleardatabase">Clear Database</h3>
+
+<pre class="highlighted"><code class="mel">POST /{db}/{txId}/<span class="keyword">clear</span> → void | <span class="keyword">text</span>/plain
+</code></pre>
+
+<p>Removes all data from the database within the context of the
+transaction. <code>200</code> indicates success; <code>500</code> indicates an error. Also
+takes an optional parameter, <code>graph-uri</code>, which removes data from a
+named graph. To clear only the default graph, pass <code>DEFAULT</code>We will
+deprecate this identifier in favor of a proper URI or URN for the
+default graph in Stardog. Stay tuned. as the value of <code>graph-uri</code>.</p>
+
+<h3 id="explanationofinferences">Explanation of inferences</h3>
+
+<pre class="highlighted"><code class="matlab">POST /<span class="cell">{db}</span>/reasoning/explain → RDF
+      POST /<span class="cell">{db}</span>/reasoning/<span class="cell">{txId}</span>/explain → RDF
+</code></pre>
+
+<p>Returns the explanation of the axiom which is in the body of the POST
+request. The request takes the axioms in any supported RDF format and
+returns the explanation for why that axiom was inferred in Turtle
+format.</p>
+
+<h3 id="explaininonsistency">Explain Inonsistency</h3>
+
+<pre class="highlighted"><code class="1c">GET <span class="string">| POST /{db}/reasoning/explain/inconsistency → RDF</span>
+</code></pre>
+
+<p>If the data in the database is inconsistent w.r.t to the TBox, a call to
+consistency returned false, this returns an explanation for the
+inconsistency.</p>
+
+<h3 id="consistency">Consistency</h3>
+
+<pre class="highlighted"><code class="applescript">GET | POST /{db}/reasoning/consistency → <span class="type">text</span>/<span class="type">boolean</span>
+</code></pre>
+
+<p>Returns whether or not the database is consistent w.r.t to the TBox.</p>
+
+<h3 id="listingintegrityconstraints">Listing Integrity Constraints</h3>
+
+<pre class="highlighted"><code class="coffeescript">GET    <span class="regexp">/{db}/i</span>cv   → RDF
+</code></pre>
+
+<p>Returns the integrity constraints for the specified database serialized
+in any supported RDF format.</p>
+
+<h3 id="addingintegrityconstraints">Adding Integrity Constraints</h3>
+
+<pre class="highlighted"><code class="avrasm">POST /{db}/icv/<span class="keyword">add</span>
+</code></pre>
+
+<p>Accepts a set of valid Integrity constraints serialized in any RDF
+format supported by Stardog and adds them to the database in an atomic
+action. 200 return code indicates the constraints were added
+successfully, 500 indicates that the constraints were not valid or
+unable to be added.</p>
+
+<h3 id="removingintegrityconstraints">Removing Integrity Constraints</h3>
+
+<pre class="highlighted"><code class="cmake">POST /{db}/icv/<span class="keyword">remove</span>
+</code></pre>
+
+<p>Accepts a set of valid Integrity constraints serialized in any RDF
+format supported by Stardog and removes them from the database in a
+single atomic action. <code>200</code> indicates the constraints were successfully
+remove; <code>500</code> indicates an error.</p>
+
+<h3 id="clearingintegrityconstraints">Clearing Integrity Constraints</h3>
+
+<pre class="highlighted"><code class="coffeescript">POST <span class="regexp">/{db}/icv/</span>clear 
+</code></pre>
+
+<p>Drops <strong>ALL</strong> integrity constraints for a database. <code>200</code> indicates all
+constraints were successfully dropped; <code>500</code> indicates an error.</p>
+
+<h3 id="convertingconstraintstosparqlqueries">Converting Constraints to SPARQL Queries</h3>
+
+<pre class="highlighted"><code class="coffeescript">POST <span class="regexp">/{db}/icv/</span>convert
+</code></pre>
+
+<p>The body of the <code>POST</code> is a single Integrity Constraint, serialized in
+any supported RDF format, with <code>Content-type</code> set appropriately. Returns
+either a <code>text/plain</code> result containing a single SPARQL query; or it
+returns <code>400</code> if more than one constraint was included in the input.</p>
+
+<h2 id="httpadministrationresources">HTTP Administration Resources</h2>
+
+<p>To administer Stardog over HTTP, use the following resource
+representations, HTTP response codes, and resource identifiers.</p>
+
+<h3 id="listdatabases">List databases</h3>
+
+<pre class="highlighted"><code class="nginx"><span class="title">GET</span> /admin/databases → application/json
+</code></pre>
+
+<p>Lists all the databases available.</p>
+
+<p>Output JSON example:</p>
+
+<pre class="highlighted"><code class="json">{
+  "<span class="attribute">databases</span>" : <span class="value">[<span class="string">"testdb"</span>, <span class="string">"exampledb"</span>]
+}</span>
+</code></pre>
+
+<h3 id="copyadatabase">Copy a database</h3>
+
+<pre class="highlighted"><code class="haskell"><span class="type">PUT</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">db</span>}</span>/copy?to=<span class="container">{<span class="title">db_copy</span>}</span></span>
+</code></pre>
+
+<p>Copies a database <code>db</code> to another specified <code>db_copy</code>.</p>
+
+<h3 id="createanewdatabase">Create a new database</h3>
+
+<pre class="highlighted"><code class="nginx"><span class="title">POST</span> /admin/databases
+</code></pre>
+
+<p>Creates a new database; expects a multipart request with a JSON
+specifying database name, options and filenames followed by (optional)
+file contents as a multipart POST request.</p>
+
+<p>Expected input:</p>
+
+<pre class="highlighted"><code class="r">JSON (application/json):
+{
+  <span class="string">"dbname"</span> : <span class="string">"testDb"</span>,
+  <span class="string">"options"</span> : {
+    <span class="string">"icv.active.graphs"</span> : <span class="string">"http://graph, http://another"</span>,
+    <span class="string">"search.enabled"</span> : true,
+    <span class="keyword">...</span>
+  },
+  <span class="string">"files"</span> : [{ <span class="string">"name"</span>:<span class="string">"fileX.ttl"</span>, <span class="string">"context"</span>:<span class="string">"some:context"</span> }, <span class="keyword">...</span>]
+}
+</code></pre>
+
+<h3 id="dropanexistingdatabase">Drop an existing database</h3>
+
+<pre class="highlighted"><code class="haskell"><span class="type">DELETE</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">db</span>}</span></span>
+</code></pre>
+
+<p>Drops an existing database <code>db</code> and all the information that it
+contains.</p>
+
+<h3 id="migrateanexistingdatabase">Migrate an existing database</h3>
+
+<pre class="highlighted"><code class="haskell"><span class="type">PUT</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">db</span>}</span>/migrate</span>
+</code></pre>
+
+<p>Migrates the existing content of a legacy database to new format.</p>
+
+<h3 id="optimizeanexistingdatabase">Optimize an existing database</h3>
+
+<pre class="highlighted"><code class="haskell"><span class="type">PUT</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">db</span>}</span>/optimize</span>
+</code></pre>
+
+<p>Optimize an existing database.</p>
+
+<h3 id="setsanexistingdatabaseonline.">Sets an existing database online.</h3>
+
+<pre class="highlighted"><code class="haskell"><span class="type">PUT</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">db</span>}</span>/online</span>
+</code></pre>
+
+<p>Request message to set an existing database {db} online.</p>
+
+<h3 id="setsanexistingdatabaseoffline.">Sets an existing database offline.</h3>
+
+<pre class="highlighted"><code class="haskell"><span class="type">PUT</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">db</span>}</span>/offline</span>
+</code></pre>
+
+<p>Request message to set an existing database offline; receives optionally
+a JSON input to specify a timeout for the offline operation. When not
+specified, defaults to 3 minutes as the timeout; the timeout should be
+provided in <strong>milliseconds</strong>. The timeout is the amount of time the
+database will wait for existing connections to complete before going
+offline. This will allow open transaction to commit/rollback, open
+queries to complete, etc. After the timeout has expired, all remaining
+open connections are closed and the database goes offline.</p>
+
+<p>Optional input:</p>
+
+<pre class="highlighted"><code class="javascript">JSON (application/json):
+{
+  <span class="string">"timeout"</span> : <span class="xml"><span class="tag">&lt;<span class="title">timeout_in_ms</span>&gt;</span>
+}
+</span></code></pre>
+
+<h3 id="setoptionvaluestoanexistingdatabase.">Set option values to an existing database.</h3>
+
+<pre class="highlighted"><code class="haskell"><span class="type">POST</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">kb</span>}</span>/options</span>
+</code></pre>
+
+<p>Set options in the database passed through a JSON object specification,
+i.e. JSON Request for option values. Database options can be found
+<a href="../admin/#admin-db">here</a>.</p>
+
+<p>Expected input:</p>
+
+<pre class="highlighted"><code class="r">JSON (application/json):
+{
+  <span class="string">"database.name"</span> : <span class="string">"DB_NAME"</span>,
+  <span class="string">"icv.enabled"</span> : true | false,
+  <span class="string">"search.enabled"</span> : true | false,
+  <span class="keyword">...</span>
+}
+</code></pre>
+
+<h3 id="getoptionvaluesofanexistingdatabase.">Get option values of an existing database.</h3>
+
+<pre class="highlighted"><code class="haskell"><span class="type">PUT</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">kb</span>}</span>/options → application/json</span>
+</code></pre>
+
+<p>Retrieves a set of options passed through a JSON object specification.
+The JSON input has empty values for each key, but will be filled with
+the option values in the database when the call returns.</p>
+
+<p>Expected input:</p>
+
+<pre class="highlighted"><code class="r">JSON (application/json):
+{
+  <span class="string">"database.name"</span> : <span class="keyword">...</span>,
+  <span class="string">"icv.enabled"</span> : <span class="keyword">...</span>,
+  <span class="string">"search.enabled"</span> : <span class="keyword">...</span>,
+  <span class="keyword">...</span>
+}
+</code></pre>
+
+<p>Output JSON example:</p>
+
+<pre class="highlighted"><code class="r">{
+  <span class="string">"database.name"</span> : <span class="string">"testdb"</span>,
+  <span class="string">"icv.enabled"</span> : true,
+  <span class="string">"search.enabled"</span> : true,
+  <span class="keyword">...</span>
+}
+</code></pre>
+
+<h3 id="addanewusertothesystem.">Add a new user to the system.</h3>
+
+<pre class="highlighted"><code class="nginx"><span class="title">POST</span> /admin/users
+</code></pre>
+
+<p>Adds a new user to the system; allows a configuration option for
+superuser as a JSON object. Superuser configuration is set as default to
+false. The password <strong>must</strong> be provided for the user.</p>
+
+<p>Expected input:</p>
+
+<pre class="highlighted"><code class="applescript">JSON (<span class="type">application</span>/json):
+{
+  <span class="string">"username"</span>  : <span class="string">"bob"</span>,
+  <span class="string">"superuser"</span> : <span class="constant">true</span> | <span class="constant">false</span>
+  <span class="string">"password"</span>  : <span class="string">"passwd"</span>
+}
+</code></pre>
+
+<h3 id="changeuserpassword.">Change user password.</h3>
+
+<pre class="highlighted"><code class="coffeescript">PUT <span class="regexp">/admin/users/{user}/</span>pwd
+</code></pre>
+
+<p>Changes {user} password in the system. Receives input of new password as
+a JSON Object.</p>
+
+<p>Expected input:</p>
+
+<pre class="highlighted"><code class="applescript">JSON (<span class="type">application</span>/json):
+{
+  <span class="string">"password"</span> : <span class="string">"xxxxx"</span>
+}
+</code></pre>
+
+<h3 id="checkifuserisenabled.">Check if user is enabled.</h3>
+
+<pre class="highlighted"><code class="coffeescript">GET <span class="regexp">/admin/users/{user}/enabled → application/</span>json
+</code></pre>
+
+<p>Verifies if user is enabled in the system.</p>
+
+<p>Output JSON example:</p>
+
+<pre class="highlighted"><code class="json">{
+  "<span class="attribute">enabled</span>": <span class="value"><span class="literal">true</span>
+}</span>
+</code></pre>
+
+<h3 id="checkifuserissuperuser.">Check if user is Superuser.</h3>
+
+<pre class="highlighted"><code class="coffeescript">GET <span class="regexp">/admin/users/{user}/superuser → application/</span>json
+</code></pre>
+
+<p>Verifies if the user is a superuser.</p>
+
+<p>Output JSON example:</p>
+
+<pre class="highlighted"><code class="json">{
+  "<span class="attribute">superuser</span>": <span class="value"><span class="literal">true</span>
+}</span>
+</code></pre>
+
+<h3 id="listingusers.">Listing users.</h3>
+
+<pre class="highlighted"><code class="nginx"><span class="title">GET</span> /admin/users → application/json
+</code></pre>
+
+<p>Retrieves a list of users.</p>
+
+<p>Output JSON example:</p>
+
+<pre class="highlighted"><code class="json">{
+  "<span class="attribute">users</span>": <span class="value">[<span class="string">"anonymous"</span>, <span class="string">"admin"</span>]
+}</span>
+</code></pre>
+
+<h3 id="listinguserroles.">Listing user roles.</h3>
+
+<pre class="highlighted"><code class="coffeescript">GET <span class="regexp">/admin/users/{user}/roles → application/</span>json
+</code></pre>
+
+<p>Retrieves the list of the roles assigned to user.</p>
+
+<p>Output JSON example:</p>
+
+<pre class="highlighted"><code class="json">{
+  "<span class="attribute">roles</span>": <span class="value">[<span class="string">"reader"</span>]
+}</span>
+</code></pre>
+
+<h3 id="deletingusers.">Deleting users.</h3>
+
+<pre class="highlighted"><code class="sql"><span class="operator"><span class="keyword">DELETE</span> /admin/users/{<span class="keyword">user</span>}
+</code></pre>
+
+<p>Removes a user from the system.</p>
+
+<h3 id="enablingusers.">Enabling users.</h3>
+
+<pre class="highlighted"><code class="coffeescript">PUT <span class="regexp">/admin/users/{user}/</span>enabled
+</code></pre>
+
+<p>Enables a user in the system; expects a JSON object in the following
+format:</p>
+
+<pre class="highlighted"><code class="json">{
+  "<span class="attribute">enabled</span>" : <span class="value"><span class="literal">true</span>
+}</span>
+</code></pre>
+
+<h3 id="settinguserroles.">Setting user roles.</h3>
+
+<pre class="highlighted"><code class="coffeescript">PUT <span class="regexp">/admin/users/{user}/</span>roles
+</code></pre>
+
+<p>Sets roles for a given user; expects a JSON object specifying the roles
+for the user in the following format:</p>
+
+<pre class="highlighted"><code class="json">{
+  "<span class="attribute">roles</span>" : <span class="value">[<span class="string">"reader"</span>,<span class="string">"secTestDb-full"</span>]
+}</span>
+</code></pre>
+
+<h3 id="addingnewroles.">Adding new roles.</h3>
+
+<pre class="highlighted"><code class="nginx"><span class="title">POST</span> /admin/roles
+</code></pre>
+
+<p>Adds the new role to the system.</p>
+
+<p>Expected input:</p>
+
+<pre class="highlighted"><code class="applescript">JSON (<span class="type">application</span>/json):
+{
+  <span class="string">"rolename"</span> : <span class="string">""</span>
+}
+</code></pre>
+
+<h3 id="listingroles.">Listing roles.</h3>
+
+<pre class="highlighted"><code class="nginx"><span class="title">GET</span> /admin/roles → application/json
+</code></pre>
+
+<p>Retrieves the list of roles registered in the system.</p>
+
+<p>Output JSON example:</p>
+
+<pre class="highlighted"><code class="json">{
+  "<span class="attribute">roles</span>": <span class="value">[<span class="string">"reader"</span>]
+}</span>
+</code></pre>
+
+<h3 id="listinguserswithaspecifiedrole.">Listing users with a specified role.</h3>
+
+<pre class="highlighted"><code class="coffeescript">GET <span class="regexp">/admin/roles/{role}/users → application/</span>json
+</code></pre>
+
+<p>Retrieves users that have the role assigned.</p>
+
+<p>Output JSON example:</p>
+
+<pre class="highlighted"><code class="json">{
+  "<span class="attribute">users</span>": <span class="value">[<span class="string">"anonymous"</span>]
+}</span>
+</code></pre>
+
+<h3 id="deletingroles.">Deleting roles.</h3>
+
+<pre class="highlighted"><code class="sql"><span class="operator"><span class="keyword">DELETE</span> /admin/roles/{role}?force={force}
+</code></pre>
+
+<p>Deletes an existing role from the system; the force parameter is a
+boolean flag which indicates if the delete call for the role must be
+forced.</p>
+
+<h3 id="assigningpermissionstoroles.">Assigning permissions to roles.</h3>
+
+<pre class="highlighted"><code class="coffeescript">PUT <span class="regexp">/admin/permissions/role/</span>{role}
+</code></pre>
+
+<p>Creates a new permission for a given role over a specified resource;
+expects input JSON Object in the following format:</p>
+
+<pre class="highlighted"><code class="sql">{
+  "action" : "read" | "write" | "<span class="operator"><span class="keyword">create</span><span class="string">" | "</span><span class="keyword">delete</span><span class="string">" | "</span><span class="keyword">revoke</span><span class="string">" | "</span><span class="keyword">execute</span><span class="string">" | "</span><span class="keyword">grant</span><span class="string">" | "</span>*<span class="string">",
+  "</span>resource_type<span class="string">" : "</span><span class="keyword">user</span><span class="string">" | "</span>role<span class="string">" | "</span>db<span class="string">" | "</span>named-graph<span class="string">" | "</span>metadata<span class="string">" | "</span>admin<span class="string">" | "</span>icv-<span class="keyword">constraints</span><span class="string">" | "</span>*<span class="string">",
+  "</span>resource<span class="string">" : ""
+}
+</code></pre>
+
+<h3 id="assigningpermissionstousers.">Assigning permissions to users.</h3>
+
+<pre class="highlighted"><code class="apache">PUT /admin/permissions/<span class="keyword">user</span>/{<span class="keyword">user</span>}
+</code></pre>
+
+<p>Creates a new permission for a given user over a specified resource;
+expects input JSON Object in the following format:</p>
+
+<pre class="highlighted"><code class="sql">{
+  "action" : "read" | "write" | "<span class="operator"><span class="keyword">create</span><span class="string">" | "</span><span class="keyword">delete</span><span class="string">" | "</span><span class="keyword">revoke</span><span class="string">" | "</span><span class="keyword">execute</span><span class="string">" | "</span><span class="keyword">grant</span><span class="string">" | "</span>*<span class="string">",
+  "</span>resource_type<span class="string">" : "</span><span class="keyword">user</span><span class="string">" | "</span>role<span class="string">" | "</span>db<span class="string">" | "</span>named-graph<span class="string">" | "</span>metadata<span class="string">" | "</span>admin<span class="string">" | "</span>icv-<span class="keyword">constraints</span><span class="string">" | "</span>*<span class="string">",
+  "</span>resource<span class="string">" : ""
+}
+</code></pre>
+
+<h3 id="deletingpermissionsfromroles.">Deleting permissions from roles.</h3>
+
+<pre class="highlighted"><code class="sql">POST /admin/permissions/role/{role}/<span class="operator"><span class="keyword">delete</span>
+</code></pre>
+
+<p>Deletes a permission for a given role over a specified resource; expects
+input JSON Object in the following format:</p>
+
+<pre class="highlighted"><code class="sql">{
+  "action" : "read" | "write" | "<span class="operator"><span class="keyword">create</span><span class="string">" | "</span><span class="keyword">delete</span><span class="string">" | "</span><span class="keyword">revoke</span><span class="string">" | "</span><span class="keyword">execute</span><span class="string">" | "</span><span class="keyword">grant</span><span class="string">" | "</span>*<span class="string">",
+  "</span>resource_type<span class="string">" : "</span><span class="keyword">user</span><span class="string">" | "</span>role<span class="string">" | "</span>db<span class="string">" | "</span>named-graph<span class="string">" | "</span>metadata<span class="string">" | "</span>admin<span class="string">" | "</span>icv-<span class="keyword">constraints</span><span class="string">" | "</span>*<span class="string">",
+  "</span>resource<span class="string">" : ""
+}
+</code></pre>
+
+<h3 id="deletingpermissionsfromusers.">Deleting permissions from users.</h3>
+
+<pre class="highlighted"><code class="sql">POST /admin/permissions/user/{user}/<span class="operator"><span class="keyword">delete</span>
+</code></pre>
+
+<p>Deletes a permission for a given user over a specified resource; expects
+input JSON Object in the following format:</p>
+
+<pre class="highlighted"><code class="sql">{
+  "action" : "read" | "write" | "<span class="operator"><span class="keyword">create</span><span class="string">" | "</span><span class="keyword">delete</span><span class="string">" | "</span><span class="keyword">revoke</span><span class="string">" | "</span><span class="keyword">execute</span><span class="string">" | "</span><span class="keyword">grant</span><span class="string">" | "</span>*<span class="string">",
+  "</span>resource_type<span class="string">" : "</span><span class="keyword">user</span><span class="string">" | "</span>role<span class="string">" | "</span>db<span class="string">" | "</span>named-graph<span class="string">" | "</span>metadata<span class="string">" | "</span>admin<span class="string">" | "</span>icv-<span class="keyword">constraints</span><span class="string">" | "</span>*<span class="string">",
+  "</span>resource<span class="string">" : ""
+}
+</code></pre>
+
+<h3 id="listingrolepermissions.">Listing role permissions.</h3>
+
+<pre class="highlighted"><code class="coffeescript">GET <span class="regexp">/admin/permissions/role/{role} → application/</span>json
+</code></pre>
+
+<p>Retrieves permissions assigned to the role.</p>
+
+<p>Output JSON example:</p>
+
+<pre class="highlighted"><code class="json">{
+  "<span class="attribute">permissions</span>": <span class="value">[<span class="string">"stardog:read:*"</span>]
+}</span>
+</code></pre>
+
+<h3 id="listinguserpermissions.">Listing user permissions.</h3>
+
+<pre class="highlighted"><code class="apache">GET /admin/permissions/<span class="keyword">user</span>/{<span class="keyword">user</span>} → application/json
+</code></pre>
+
+<p>Retrieves permissions assigned to the user.</p>
+
+<p>Output JSON example:</p>
+
+<pre class="highlighted"><code class="json">{
+  "<span class="attribute">permissions</span>": <span class="value">[<span class="string">"stardog:read:*"</span>]
+}</span>
+</code></pre>
+
+<h3 id="listingusereffectivepermissions.">Listing user effective permissions.</h3>
+
+<pre class="highlighted"><code class="apache">GET /admin/permissions/effective/<span class="keyword">user</span>/{<span class="keyword">user</span>} → application/json
+</code></pre>
+
+<p>Retrieves effective permissions assigned to the user.</p>
+
+<p>Output JSON example:</p>
+
+<pre class="highlighted"><code class="json">{
+  "<span class="attribute">permissions</span>": <span class="value">[<span class="string">"stardog:*"</span>]
+}</span>
+</code></pre>
+
+<h3 id="shutdownserver.">Shutdown server.</h3>
+
+<pre class="highlighted"><code class="nginx"><span class="title">POST</span> /admin/shutdown
+</code></pre>
+
+<p>Shuts down the Stardog Server. If successful, returns a <code>202</code> to
+indicate that the request was recieved and that the server will be shut
+down shortly.</p>
+
+<h1 id="snarlchapter">SNARL {#chapter}</h1>
+
+<p>The Stardog Native API for the RDF Language, or SNARL, protocol is an
+RPC protocol based on exchanging <a href="http://code.google.com/apis/protocolbuffers/">Google Protocol
+Buffers</a> formatted
+messages, which we call BARC (BigPacket Access for Remote
+Communications). The SNARL protocol supports the same set of client
+operations as the HTTP interface while also supporting the
+administrative functions provided by the Stardog database server.</p>
+
+<h1 id="notes.fn">Notes {.fn}</h1>
+
+<p><a href="#" title="Back to top">⌂</a></p>
+
+<p>For comments, questions, or to report problems with this page, please
+email the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support
+Forum</a>.</p>

@@ -1,0 +1,542 @@
+<p><a href="/"><img src="/_/img/sdog-bare.png" alt="" /></a></p>
+
+<blockquote>
+<p><strong>Every program has (at least) two purposes: the one for which it was
+written, and another for which it wasn&#8217;t.</strong>—Alan Perlis, Epigrams in
+Programming</p>
+</blockquote>
+
+<h1 id="stardogsecuritytitle">Stardog Security {#title}</h1>
+
+<p>Stardog uses <a href="http://shiro.apache.org/">Apache Shiro</a> for
+authentication, authorization, and session management; for cryptography,
+Stardog uses jBCrypt.</p>
+
+<h1 id="securitymodelchapter">Security Model {#chapter}</h1>
+
+<p>Stardog security model is based on standard role-based access control:
+<em>users</em> have <em>permissions</em> over <em>resources</em>, permissions can be grouped
+into <em>roles</em>, and roles can be assigned to users.</p>
+
+<h2 id="resources">Resources</h2>
+
+<p>A resource is some Stardog entity or service to which access is to be
+controlled. Resources are identified by their <em>type</em> and their <em>name</em>. A
+particular resource is denoted as <code>type_prefix:name</code>. The valid resource
+types with their prefixes are shown below.</p>
+<dl>
+<dt> Resource type Prefix Description</dt>
+<dt> &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</dt>
+<dt> User <code>user</code> Represents a user (e.g., <code>user:admin</code>)</dt>
+<dt> Role <code>role</code> Represents a role that can be assigned to a user (e.g., <code>role:reader</code>)</dt>
+<dt> Database <code>db</code> Represents a database (e.g., <code>db:myDB</code>)</dt>
+<dt> Database Metadata <code>metadata</code> Represents the metadata of a particular database (e.g., <code>metadata:myDB</code>)</dt>
+<dt> Database Administration <code>admin</code> Represents a special type of resource that is reserved for database administration tasks (e.g., <code>admin:myDB</code>)</dt>
+<dt> Integrity Constraints <code>icv-constraints</code> Represents the integrity constraints associated to a particular database (e.g., <code>icv-constraints:myDB</code>)</dt>
+<dd>Resource Types for Stardog @@VERSION@@</dd>
+</dl>
+
+
+<h2 id="permissions">Permissions</h2>
+
+<p>Permissions are composed of a <em>permission subject</em>, an <em>action</em>, and a
+<em>permission object</em>, meaning that the subject resource can perform the
+specified action over the object resource.</p>
+
+<p>Permission subjects can be of type <code>user</code> or <code>role</code> only. Permission
+objects can be of any valid type. Valid actions are shown as follows:</p>
+<dl>
+<dt><code>read</code></dt>
+<dd>Permits reading the resource properties
+<code>write</code></dd>
+
+<dd>Permits changing the resource properties
+<code>create</code></dd>
+
+<dd>Permits creating new resources
+<code>delete</code></dd>
+
+<dd>Permits deleting a resource
+<code>grant</code></dd>
+
+<dd>Permits granting permissions over a resource
+<code>revoke</code></dd>
+
+<dd>Permits revoking permissions over a resource
+<code>execute</code></dd>
+
+<dd>Permits executing administration actions over a database
+<code>all</code></dd>
+
+<dd>Special action type that permits all previous actions over a
+ resource</dd>
+</dl>
+
+
+<h3 id="wildcards">Wildcards</h3>
+
+<p>Stardog allows the use of wildcards to represent sets of resources. A
+wildcard is denoted with the character <code>*</code>. Wildcards can be used to
+create complex permissions; for instance, we can give a user the ability
+to create any database by granting it a <code>create</code> permission over <code>db:*</code>.
+Similarly, wildcards can be used in order to revoke multiple permissions
+at the same time.</p>
+
+<h3 id="superusers">Superusers</h3>
+
+<p>It is possible to specify that a given user is a superuser at creation
+time. Being a superuser is equivalent to having been granted an <code>all</code>
+permission over <code>*:*</code>. Therefore, as expected, superusers are allowed to
+perform any valid action over any existing resource.</p>
+
+<h3 id="ownerpermissions">Owner Permissions</h3>
+
+<p>When a user creates a resource, it is automatically granted <code>delete</code>,
+<code>write</code>, <code>read</code>, <code>grant</code>, and <code>revoke</code> permissions over the new
+resource. If the new resource is a database, then the user is
+additionally granted <code>write</code>, <code>read</code>, <code>grant</code>, and <code>revoke</code> permissions
+over <code>icv-constraints:theDatabase</code>, and <code>execute</code> permission over
+<code>admin:theDatabase</code>. These two permissions give the creator of the
+database the ability to administer the ICV constraints for the database
+and administer the database itself.</p>
+
+<h2 id="defaultsecurityconfiguration">Default Security Configuration</h2>
+
+<p>Out of the box, the Stardog security setup is minimal:</p>
+
+<ul>
+<li><code>user:admin</code> with password set to &#8220;admin&#8221; is a superuser.</li>
+<li><code>user:anonymous</code> with password &#8220;anonymous&#8221; has the &#8220;reader&#8221; role.</li>
+<li><code>role:reader</code> allows to <code>read</code> from any resource.</li>
+</ul>
+
+<h1 id="securitymanagementchapter">Security Management {#chapter}</h1>
+
+<p>Stardog can be used to manage security resources (users, roles,
+permissions, etc.) programmatically and via the CLI. In this section we
+provide the corresponding permissions the user managing security
+information must have.</p>
+
+<h2 id="users">Users</h2>
+<dl>
+<dt>Create a user</dt>
+<dd><code>create</code> permission over <code>user:*</code>. \
+ Only superusers can create other superusers.
+Delete a user</dd>
+
+<dd><code>delete</code> permission over the user.
+Enable/Disable a user</dd>
+
+<dd>User must be a superuser.
+Change password of a user</dd>
+
+<dd>User must be a superuser OR \
+ user must be trying to change its own password.
+Check if a user is a superuser</dd>
+
+<dd><code>read</code> permission over the user OR \
+ user must be trying to get its own info
+ .
+Check if a user is enabled</dd>
+
+<dd><code>read</code> permission over the user OR \
+ user must be trying to get its own info.
+List users</dd>
+
+<dd>Superusers can see all users. \
+ Regular users can see only users over which they have a permission.</dd>
+</dl>
+
+
+<h2 id="roles">Roles</h2>
+<dl>
+<dt>Create a role</dt>
+<dd><code>create</code> permission over <code>role:*</code>.
+Delete a role</dd>
+
+<dd><code>delete</code> permission over the role.
+Assign a role to a user</dd>
+
+<dd><code>grant</code> permission over the role AND \
+ user must have all the permissions associated to the role.
+Unassign a role from a user</dd>
+
+<dd><code>revoke</code> permission over the role AND \
+ user must have all the permissions associated to the role.
+List roles</dd>
+
+<dd>Superusers can see all roles. \
+ Regular users can see only roles they have been assigned OR over
+ which they have a permission.</dd>
+</dl>
+
+
+<h2 id="databases">Databases</h2>
+<dl>
+<dt>Create a database</dt>
+<dd><code>create</code> permission over <code>db:*</code>.
+Delete a database</dd>
+
+<dd><code>delete</code> permission over <code>db:theDatabase</code>.
+Add/Remove integrity constraints to a database</dd>
+
+<dd><code>write</code> permission over <code>icv-constraints:theDatabase</code>.
+Verify a database is valid with respect to its integrity constraints</dd>
+
+<dd><code>read</code> permission over <code>icv-constraints:theDatabase</code>.
+Online/Offline a database</dd>
+
+<dd><code>execute</code> permission over <code>admin:theDatabase</code>.
+Migrate a database</dd>
+
+<dd><code>execute</code> permission over <code>admin:theDatabase</code>.
+Optimize a database</dd>
+
+<dd><code>execute</code> permission over <code>admin:theDatabase</code>.
+List databases</dd>
+
+<dd>Superusers can see all databases. \
+ Regular users can see only databases over which they have a
+ permission.</dd>
+</dl>
+
+
+<h2 id="permissions">Permissions</h2>
+<dl>
+<dt>Grant a permission</dt>
+<dd><code>grant</code> permission over the permission object AND \
+ user must have the permission that it is trying to grant.
+Revoke a permission from a user or role over an object resource</dd>
+
+<dd><code>revoke</code> permission over the permission object AND \
+ user must have the permission that it is trying to revoke.
+List user permissions</dd>
+
+<dd>User must be a superuser OR \
+ user must be trying to get its own info.
+List role permissions</dd>
+
+<dd>User must be a superuser OR \
+ user must have been assigned the role.</dd>
+</dl>
+
+
+<h1 id="deployingstardogsecurelychapter">Deploying Stardog Securely {#chapter}</h1>
+
+<h2 id="securingstardoginanetworkedenvironment">Securing Stardog in a Networked Environment</h2>
+
+<p>To ensure that Stardog&#8217;s RBAC access control implementation will be
+effective, all non-administrator access to Stardog databases should
+occur over network (i.e., non-native) database connections.In other
+words, embedded or native Stardog access is inherently <em>insecure</em> and
+should be used accordingly. To ensure the confidentiality of user
+authentication credentials when using remote connections, the Stardog
+server should only accept connections that are secured with SSL. This
+section describes how Stardog can be configured to use SSL for data
+confidentiality and server authentication. It does not address using SSL
+for client authentication.Stardog @@VERSION@@ does not support client
+authentication using X.509 certificates instead of passphrases.</p>
+
+<h3 id="configuringstardogtousessl">Configuring Stardog to use SSL</h3>
+
+<p>Stardog&#8217;s HTTP server does not include support for SSL; it must be
+deployed with other components to provide SSL support. The two primary
+ways to accomplish such a deployment are both described below: HTTPS
+reverse proxying; and SSL-enabled application server.</p>
+
+<h4 id="httpsreverseproxying">HTTPS Reverse Proxying</h4>
+
+<p>An HTTPS reverse proxyReverse proxying may be useful beyond SSL
+layering—it may be used to distribute load across multiple Stardog
+servers. For general documentation of reverse proxying with lighttpd,
+see <a href="http://redmine.lighttpd.net/wiki/lighttpd/Docs:ModProxy">the fine
+documentation</a>;
+likewise for
+<a href="http://httpd.apache.org/docs/2.2/mod/mod_proxy.html#forwardreverse">Apache</a>.
+may be used to secure Stardog client-server connections if the Stardog
+server is run using the command-line tool or deployed as a servlet. In
+the following two sections, we describe how to use <a href="">Apache</a> and
+<a href="">lighttpd</a> as HTTPS reverse proxies for Stardog. These configurations
+can be used for new reverse proxy deployments or can be modified to
+augment existing reverse proxies with SSL.Of course other solutions may
+be used; these are illustrative of the general technique and approach.</p>
+
+<p>In this deployment approach, the network connection between Stardog
+clients and the proxy server is secured using SSL. But the connection
+between the proxy server and Stardog server is insecure; thus, <em>care
+should be taken to ensure that proxy-Stardog connections only occur over
+trusted networks.</em> Note also that non-SSL connections to the Stardog
+server from hosts other than the proxy server should be prohibited in
+order to prevent network exposure of user credentials and data.Stardog&#8217;s
+default HTTP server listens on all host interfaces and accepts all
+connections. If it is used, then a host-based firewall is necessary to
+prohibit connections from servers other than the proxy server.</p>
+
+<p>HTTPS reverse proxying depends on having a certificate and private key
+on the proxy server. A cheap and easy deployment strategy is to use a
+self-signed certificate. Creating such a certificate is documented
+elsewhere adn not repeated here.For example, see <a href="http://docs.oracle.com/javaee/1.4/tutorial/doc/Security6.html">the
+example</a>
+creating a certificate with the Java keytool; or <a href="http://www.openssl.org/docs/apps/req.html">an
+example</a> generating a self
+signed root certificate using the openssl req tool. Alternatively, an
+SSL cert can be obtained from a commercial certificate authority.</p>
+
+<h5 id="reverseproxywithlighttpd">Reverse Proxy with lighttpd</h5>
+
+<p><a href="http://lighttpd.net">lighttpd</a> can be configured to provide an SSL
+layer for remote connections. The following lighttpd configuration file
+is a complete example that lets clients use HTTPS connections with the
+lighttpd proxy to communicate with a Stardog HTTP server listening on
+port 12345 of the lighttpd host.</p>
+
+<pre class="highlighted"><code class="haskell"><span class="title">server</span>.port = <span class="number">443</span>
+<span class="title">ssl</span>.engine = <span class="string">"enable"</span>
+<span class="title">ssl</span>.pemfile = <span class="string">"server.pem"</span>
+<span class="title">server</span>.<span class="module">modules = <span class="container">( "<span class="title">mod_proxy</span>" )</span>
+proxy.server = <span class="container">( "" =&gt;
+        ( ( "<span class="title">host</span>" =&gt; "127.0.0.1" , "<span class="title">port</span>" =&gt; "12345" )</span> )
+        )
+server.document-root = "/dev/null"
+</code></pre>
+
+<p>This configuration directs lighttpd to use the certificate and private
+key in server.pem for SSL connections.lighttpd can be configured to
+present chaining certificates with the server certificate. This may be
+necessary if the server certificate is not directly signed by a trusted
+authority, but chains to a trusted authority. For details on this
+configuration see <a href="http://redmine.lighttpd.net/wiki/lighttpd/Docs:SSL">the
+docs</a> (the
+ssl.ca-file option).</p>
+
+<h5 id="reverseproxywithapache2">Reverse Proxy with Apache 2</h5>
+
+<p>Apache httpd can be configured to provide an SSL layer for remote
+connections. The following partial configuration fileA complete
+configuration file is not provided because the minimal configuration
+file required by Apache is more detailed than the configuration file
+required by lighttpd.The configuration directives shown are those
+necessary to enable SSL and reverse proxying. allows clients to use
+HTTPS connections with the Apache proxy, which communicates with a
+Stardog HTTP server listening on port 12345 of the Apache host.</p>
+
+<pre class="highlighted"><code class="apache"><span class="keyword">SSLEngine</span>        <span class="literal">On</span>
+<span class="keyword">SSLCertificateFile</span>        server.pem
+<span class="tag">&lt;Directory /&gt;</span>
+        <span class="keyword">SSLRequireSSL</span>
+<span class="tag">&lt;/Directory&gt;</span>
+<span class="keyword">ProxyPass</span>        /        http://127.0.0.1:12345/
+</code></pre>
+
+<p>This configuration depends on the SSL certificate and private key being
+located in the <code>server.pem</code> file in the Apache server root. It also
+depends on <code>mod_ssl</code>, <code>mod_proxy</code>, and <code>mod_proxy_http</code> modules being
+compiled into the httpd binary or loaded via directives elsewhere in the
+configuration file.</p>
+
+<h4 id="ssl-enabledappserver">SSL-Enabled App Server</h4>
+
+<p>Of course Stardog may also be deployed as a servlet in a servlet
+container or app server that can provide SSL support. For example, if
+Stardog is deployed into a default Resin Server,See
+<a href="http://caucho.com/resin/">Resin</a> for more info; it supports SSL using
+JSSE in the open source version and using OpenSSL in the professional
+version. Resin’s SSL support is <a href="http://www.caucho.com/resin-4.0/admin/security-ssl.xtp">well
+documented</a>.
+then the following configuration would enable SSL on the server using
+the certificate and private key stored in the Java KeyStore at
+<code>server-keystore.jks</code>.</p>
+
+<pre class="highlighted"><code class="xml"><span class="tag">&lt;<span class="title">http</span> <span class="attribute">address</span>=<span class="value">"*"</span> <span class="attribute">port</span>=<span class="value">"443"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">jsse-ssl</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">key-store-file</span>&gt;</span>server-keystore.jks<span class="tag">&lt;/<span class="title">key-store-file</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">password</span>&gt;</span>********<span class="tag">&lt;/<span class="title">password</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">jsse-ssl</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">http</span>&gt;</span>
+</code></pre>
+
+<p>Other Java app servers support SSL including GlassFish, Tomcat, and
+JBoss. The configuration of SSL for each application server is
+implementation specific, so users should consult the relevant server’s
+documentation.</p>
+
+<h3 id="configuringstardogclienttousessl">Configuring Stardog Client to use SSL</h3>
+
+<p>The Stardog HTTP client driver directly supports SSL when the <code>https:</code>
+scheme is used in the database connection string. For example, the
+following invocation of the Stardog command line utility will initiate
+an SSL connection to a remote database</p>
+
+<pre class="highlighted"><code class="ruby"><span class="variable">$ </span>stardog status -c <span class="symbol">https:</span>/<span class="regexp">/stardog.example.org/sp</span>2b_10k
+</code></pre>
+
+<p>If the client is unable to authenticate the server, then the connection
+will fail and an error message like the following will be generated.</p>
+
+<pre class="highlighted"><code class="perl">Error during <span class="keyword">connect</span>.  Cause was SSLPeerUnverifiedException: peer <span class="keyword">not</span> authenticated
+</code></pre>
+
+<p>The most common cause of this error is that the server presented a
+certificate that was not issued by an authority that the client trusts.
+The Stardog HTTP client driver uses standard Java security components to
+access a store of trusted certificates. By default, it trusts a list of
+certificates installed with the Java runtime environment, but it can be
+configured to use a custom trust store.The Stardog HTTP client driver
+uses an X509TrustManager. The details of how a trust store is selected
+to initialize the trust manager are
+<a href="http://docs.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#X509TrustManager">documented</a>.</p>
+
+<p>The client driver can be directed to use a specific Java KeyStore file
+as a trust store by setting the <code>javax.net.ssl.trustStore</code> system
+property. To address the authentication error above, that trust store
+should contain the issuer of the server’s certificate.Standard Java
+tools can create such a file. The following invocation of the <code>keytool</code>
+utility creates a new trust store named <code>my-truststore.jks</code> and
+initializes it with the certificate in <code>my-trusted-server.crt</code>. The tool
+will prompt for a passphrase to associate with the trust store. This is
+not used to encrypt its contents, but can be used to ensure its
+integrity.See the <code>javax.net.ssl.trustStorePassword</code> system property
+<a href="http://docs.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#X509TrustManager">documentation</a>.</p>
+
+<pre class="highlighted"><code class="brainfuck"><span class="comment">$</span> <span class="comment">keytool</span> <span class="literal">-</span><span class="comment">importcert</span>  <span class="literal">-</span><span class="comment">keystore</span> <span class="comment">my</span>-<span class="comment">truststore</span>.<span class="comment">jks</span> <span class="comment">\</span>
+        <span class="literal">-</span><span class="comment">alias</span> <span class="comment">stardog</span>-<span class="comment">server</span> <span class="literal">-</span><span class="comment">file</span> <span class="comment">my</span>-<span class="comment">trusted</span>-<span class="comment">server</span>.<span class="comment">crt</span>
+</code></pre>
+
+<p>The following Stardog command line invocation uses the newly created
+truststore.</p>
+
+<pre class="highlighted"><code class="avrasm">$ STARDOG_JAVA_ARGS=”-Djavax<span class="preprocessor">.net</span><span class="preprocessor">.ssl</span><span class="preprocessor">.trustStore</span>=my-truststore<span class="preprocessor">.jks</span>” \
+        stardog status -c https://stardog<span class="preprocessor">.example</span><span class="preprocessor">.org</span>/sp2b_10k
+</code></pre>
+
+<p>For custom Java applications that use the Stardog HTTP client driver,
+the system property can be set programmatically or when the JVM is
+initialized.</p>
+
+<p>The most common deployment approach requiring a custom trust store is
+when a self-signed certificate is presented by the Stardog server. For
+connections to succeed, the Stardog client must trust the self-signed
+certificate. To accomplish this with the examples given above, the
+self-signed certificate should be in the my-trusted-server.crt file in
+the keytool invocation.</p>
+
+<p>A client may also fail to authenticate the server if the hostname in the
+Stardog database connection string does not match a name contained in
+the server certificate.The matching algorithm used is
+<a href="http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html">described</a>
+in the Apache docs about <code>BrowserCompatHostnameVerifier</code>.</p>
+
+<p>This will cause an error message like the following</p>
+
+<pre class="highlighted"><code class="vbscript"><span class="keyword">Error</span> during connect.  Cause was SSLException: hostname <span class="keyword">in</span> certificate didn<span class="comment">'t match</span>
+</code></pre>
+
+<p>The client driver does not support connecting despite a mismatch,
+therefore the only solutions are to replace the server’s certificate or
+modify the connection string to use an alias for the same server that
+matches the certificate.</p>
+
+<h2 id="securingstardogonlinux">Securing Stardog on Linux</h2>
+
+<p>This section describes one approach to installing Stardog on Linux—or
+another Unix-like operating system—with the goal of restricting
+unauthorized access to Stardog data. The approach detailed below is not
+the only effective way to secure a Stardog installation. Stardog
+administrators should customize their installation for the requirements
+of their environment.</p>
+
+<p>In what follows, you&#8217;ll see snippets of shell code. For each snippet <code>$</code>
+represents the shell prompt and <code>\</code> is the line continuation character.
+Some of the shell snippets make use of relative paths and are intended
+to be run from within directory where Stardog release file was unzipped.
+Many of the snippets will need to be run with elevated permissions.</p>
+
+<h3 id="warning">Warning</h3>
+
+<p>Make sure that you know what you&#8217;re doing before you copy any of the
+snippets of shell code or configuration syntax into a real Linux system.
+<em>You&#8217;ve been warned.</em></p>
+
+<h3 id="creatingabasicstardogenvironment">Creating A Basic Stardog Environment</h3>
+
+<p>The Stardog library files should be copied from the distribution
+directory into a permanent location in the host system. The snippet
+below chooses a common location and uses a versioning string to
+facilitate parallel installs of different Stardog releases. An
+administrator may choose any location.</p>
+
+<pre class="highlighted"><code class="ruby"><span class="variable">$ </span>export <span class="constant">STARDOG_VERSION</span>=<span class="variable">@@VERSION</span>@@
+<span class="variable">$ </span>export <span class="constant">STARDOG_LIBDIR</span>=<span class="regexp">/opt/stardog</span>-<span class="variable">${</span><span class="constant">STARDOG_VERSION</span>}/lib
+<span class="variable">$ </span>install -d <span class="variable">${</span><span class="constant">STARDOG_LIBDIR</span>}
+<span class="variable">$ </span>cp -r lib/* <span class="variable">${</span><span class="constant">STARDOG_LIBDIR</span>}
+<span class="variable">$ </span>chown -<span class="constant">R</span> <span class="symbol">root:</span>root <span class="variable">${</span><span class="constant">STARDOG_LIBDIR</span>}
+<span class="variable">$ </span>chmod -<span class="constant">R</span> a+r <span class="variable">${</span><span class="constant">STARDOG_LIBDIR</span>}
+</code></pre>
+
+<p>The Stardog command line tools should be copied from the distribution
+directory into a location that places them into most users’ execution
+PATH. Execution permissions to the tools are <em>not</em> limited because
+access to the data directory will be <em>strictly limited</em>.</p>
+
+<pre class="highlighted"><code class="brainfuck"><span class="comment">$</span> <span class="comment">install</span> <span class="literal">-</span><span class="comment">c</span> <span class="literal">-</span><span class="comment">m</span> <span class="comment">a=rx</span> <span class="comment">\</span>
+<span class="string">.</span><span class="comment">/stardog</span> <span class="comment">/usr/bin/stardog</span>
+<span class="comment">$</span> <span class="comment">install</span> <span class="literal">-</span><span class="comment">c</span> <span class="literal">-</span><span class="comment">m</span> <span class="comment">a=rx</span> <span class="comment">\</span>
+<span class="string">.</span><span class="comment">/stardog</span>-<span class="comment">admin</span> <span class="comment">/usr/sbin/stardog</span>-<span class="comment">admin</span>
+</code></pre>
+
+<p>The Stardog data directory stores both user data and system
+configuration data, including access control information. The location
+selected for the data directory should be reliable, large enough to meet
+data requirements, and secured from unauthorized access.</p>
+
+<pre class="highlighted"><code class="coffeescript">$ <span class="reserved">export</span> STARDOG_HOME=<span class="regexp">/var/db/</span>stardog
+</code></pre>
+
+<p>Access to the data directory is limited to the <code>stardog</code> group and the
+only member of that group is the <code>stardog</code> user.Granting access
+permissions to members of the <code>stardog</code> group is more flexible than
+limiting access to a single user. For example, it may allow a Stardog
+network server to run as a user other than <code>stardog</code>; or it may
+facilitate other processes other than Stardog, i.e., data backup. The
+snippet below creates that user and group.</p>
+
+<pre class="highlighted"><code class="tex"><span class="formula">$ groupadd stardog
+$</span> useradd <span class="command">\
+</span>-d <span class="formula">$<span class="special">{</span>STARDOG_HOME<span class="special">}</span> <span class="command">\
+</span>-g stardog <span class="command">\
+</span>-s /sbin/nologin <span class="command">\
+</span>stardog
+</code></pre>
+
+<p>This snippet creates the data directory and limits its access to the
+newly created group.</p>
+
+<pre class="highlighted"><code class="brainfuck"><span class="comment">$</span> <span class="comment">install</span> <span class="literal">-</span><span class="comment">d</span> <span class="literal">-</span><span class="comment">o</span> <span class="comment">stardog</span> <span class="literal">-</span><span class="comment">g</span> <span class="comment">stardog</span> <span class="literal">-</span><span class="comment">m</span> <span class="comment">ug=rwx</span>,<span class="comment">o=</span> <span class="comment">\</span>
+<span class="comment">${STARDOG_HOME}</span>
+</code></pre>
+
+<p>Note that if a Stardog server is used to allow network access to remote
+Stardog clients, then the approach described here requires the server to
+run as a user in the <code>stardog</code> group.</p>
+
+<p>An administrator can accomplish this by running the server as the
+<code>stardog</code> user or by adding the relevant user to the <code>stardog</code> group.
+For example, the following snippet adding the <code>tomcat</code> user to the
+<code>stardog</code> group may be needed in an environment where a Stardog HTTP
+server is run as an application within Tomcat.</p>
+
+<pre class="highlighted"><code class="brainfuck"><span class="comment">$</span> <span class="comment">usermod</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">add</span>-<span class="comment">to</span>-<span class="comment">group</span> <span class="comment">stardog</span> <span class="comment">tomcat</span>
+</code></pre>
+
+<p>Of course the ideal deployment of the Stardog server depends on the
+particulars of the deployment environment, the preferences of the
+administrator, and the anticipated user load. The group-based permission
+approach provides flexibility to satisfy many alternatives.</p>
+
+<h1 id="notes.fn">Notes {.fn}</h1>
+
+<p><a href="#" title="Back to top">⌂</a></p>
+
+<p>For comments, questions, or to report problems with this page, please
+email the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support
+Forum</a>.</p>
