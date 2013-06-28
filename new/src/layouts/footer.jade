@@ -2,11 +2,14 @@
 
 //footer.jade
 
-#footer
+.container.shaded
+  .row
+     .twelve.columns
+       h3 This is&nbsp;
+         span#title-masthead Stardog&nbsp;
+         span#subfoot-subhead= document.title
+         |, part of Stardog Docs <t>version</t>.
 
-  <p>For comments, questions, or to report problems with this page, please email the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support Forum</a>.</p>
+       p For comments, questions, or to report problems with this page, visit the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support Forum</a>.
 
-  p
-    &copy;2010&ndash;#{YYYY} Clark & Parsia LLC.&nbsp;
-    a(href="http://creativecommons.org/licenses/by-sa/3.0/") Some rights reserved
-    .
+       p &copy;2010&ndash;#{YYYY} Clark & Parsia LLC. <a href="http://creativecommons.org/licenses/by-sa/3.0/">Some rights reserved</a>.

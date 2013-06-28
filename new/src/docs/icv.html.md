@@ -1,15 +1,18 @@
-[![](/_/img/sdog-bare.png)](/)
+---
+quote: "It is easier to write an incorrect program than understand a correct one."
+title: "ICV"
+layout: "default"
+related: ""
+---
 
-> **It is easier to write an incorrect program than understand a correct
-> one.**—Alan Perlis, Epigrams in Programming
+## Introduction
 
-Stardog ICV {#title}
-===========
+Stardog Integrity Constraint Validation ("ICV") lets you SPARQL, OWL,
+and SWRL as a constraint language for RDF. This chapter explains how to use
+it and how it works.
 
-Background {#chapter}
-==========
-
-Using high level languages like OWL, SWRL, and SPARQL as schema or
+Stardog Integrity Constraint Validation ("ICV") is an RDF graph validation
+service. Using high level languages like OWL, SWRL, and SPARQL as schema or
 constraint languages for RDF and Linked Data has several advantages:
 
 -   Unifying the domain model with data quality rules
@@ -20,23 +23,31 @@ constraint languages for RDF and Linked Data has several advantages:
 -   Being able to use automated reasoning about all of these things to
     insure logical consistency, explain errors and problems, etc
 
-But neither OWL 2, SWRL, nor SPARQL were explicitly designed for this
-usage. In Stardog, you can use OWL, SWRL, or SPARQL as a constraint
-language for RDF and as a modeling or inference language. This chapter
-explains how.
-
 If you are also interested in the theoretical background, please see the
 [ICV specification](icv-specification.html), which has all the formal
 details.
 
-Terminology
------------
+## A Quick Start Guide to Using ICV
+
+To use ICV in Stardog, you need to...
+
+``` Blah blah
+```
+
+## Terminology
 
 In the sections below, we explain the operational usage of Integrity
 Constraint Validation (ICV) in Stardog: it may be easier for you to
 understand if you read this section on terminology first.
 
-Schema, TBox
+### ICV, Integrity Constraint Validation
+
+The process of checking whether some Stardog database is valid with
+respect to some integrity constraints. The result of ICV is a boolean
+value (true if valid, false if invalid) and, optionally, an *explanation
+of constraint violations*.
+
+### Schema, TBox
 
 A schema (or "terminology box" a.k.a., TBox) is a set of statements that
 define the relationships between data elements, including property and
@@ -44,32 +55,25 @@ class names, their relationships, etc. In practical terms, schema
 statements for a Stardog database are RDF Schema and OWL 2 terms,
 axioms, and definitions.
 
-Data, ABox
+### Data, ABox
 
 All of the triples in a Stardog database that aren't part of the schema
 are part of the data (or "assertional box" a.k.a. ABox).
 
-Integrity Constraint
+### Integrity Constraint
 
 A declarative expression of some rule or constraint which data must
 conform to in order to be valid. Integrity Constraints are typically
 domain and application specific. They can be expressed in OWL 2 (any
 legal syntax), SWRL rules, or (a restricted form of) SPARQL queries.
 
-Constraints
+### Constraints
 
 Constraints that have been associated with a Stardog database and which
 are used to validate the data it contains. Each Stardog may optionally
 have one and only one set of constraints associated with it.
 
-ICV, Integrity Constraint Validation
-
-The process of checking whether some Stardog database is valid with
-respect to some integrity constraints. The result of ICV is a boolean
-value (true if valid, false if invalid) and, optionally, an *explanation
-of constraint violations*.
-
-Closed World Assumption, Closed World Reasoning
+### Closed World Assumption, Closed World Reasoning
 
 Stardog ICV assumes a closed world with respect to data and constraints:
 that is, it assumes that all relevant data is known to it and included
@@ -78,7 +82,7 @@ Constraints in light of this assumption; if a constraint says a value
 *must* be present, the absence of that value is interpreted as a
 constraint violation and, hence, as invalid data.
 
-Open World Assumption, Open World Reasoning
+### Open World Assumption, Open World Reasoning
 
 A legal OWL 2 inference may violate or satisfy an Integrity Constraint
 in Stardog. In other words, you get to have your cake (OWL as a
@@ -86,12 +90,12 @@ constraint language) and eat it, too (OWL as modeling or inference
 language). This means that constraints are applied to a Stardog database
 *with respect to an OWL 2 profile*.
 
-Monotonicity
+### Monotonicity
 
-OWL is a monotonic language: that means you can't ever add anything to a
-Stardog database that causes there to be fewer legal inferences. Or, put
+OWL is a monotonic language: that means you can never **add** anything to a
+Stardog database that causes there to be **fewer** legal inferences. Or, put
 another way, the only way to decrease the number of legal inferences is
-to *delete* something.
+to **delete** something.
 
 Monotonicity interacts with ICV in the following ways:
 
@@ -103,22 +107,20 @@ Monotonicity interacts with ICV in the following ways:
 4.  Deleting constraints from a Stardog database *cannot make it
     invalid*.
 
-Validating Linked Data {#chapter}
-======================
+## Validating Linked Data
 
 The use of high-level languages (OWL 2, SWRL, and SPARQL) to validate
 RDF data using closed world semantics is one of Stardog's unique
 capabilities.
 
-ICV and OWL 2 Reasoning
------------------------
+### ICV & OWL 2 Reasoning
 
 An integrity constraint may be satisfied or violated in either of two
 ways: by an explicit statement in a Stardog database or by statement
 that's been legally inferred by Stardog. This means that when ICV is
 enabled for a Stardog database, it has to be enabled relative to a
 reasoning type. The valid choices of reasoning type are any type or kind
-of reasoning supported by Stardog. As of @@VERSION@@, those types
+of reasoning supported by Stardog. As of Stardog <t>version</t>, those types
 include
 
 -   no reasoning
@@ -127,9 +129,6 @@ include
 -   OWL 2 EL
 -   OWL 2 RL
 -   OWL 2 DL
-
-Future releases of Stardog will include RDF Schema and OWL 2 DL
-reasoning types.
 
 The important implication here is that Integrity Constraint Validation
 is performed with three inputs: a Stardog database, a set of
@@ -147,8 +146,7 @@ integrity constraint validation has serious security implications with
 respect to a Stardog database and may only be performed by a user role
 with sufficient privileges for that action.
 
-How to Use ICV in Stardog
--------------------------
+### Using ICV Programmatically
 
 This section will describe how to use Stardog ICV via the SNARL APIs.
 For more information on using SNARL in general, please refer to the

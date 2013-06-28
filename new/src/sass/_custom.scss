@@ -18,8 +18,14 @@ pre {
 }
 
 #title-subhead {
-  color: #C0D732;
+  color: $sd-lime;
   font-weight: $font-weight-thin;
+}
+
+#subfoot-subhead {
+  color: $sd-lime;
+  font-weight: $font-weight-bold;
+
 }
 
 #title {
@@ -29,5 +35,62 @@ pre {
 
 h2 {
   color: #A61D24;
+}
+
+ul {
+
+  list-style: square inside;
 
 }
+
+thead,tfoot {
+  font-weight: $font-weight-bold
+}
+
+table{
+  border: 1px solid #F0F8FF;
+  margin-bottom: $base-line-height;
+}
+
+th, td{
+  padding: 4px;
+}
+
+th{
+ color: #fff;
+ background-color: #aaa
+}
+
+tr:nth-of-type(odd) td
+{
+ background-color:#F0F8FF;
+ color: black;
+}
+
+a:visited {color: #03738C;}
+a:link {color: #8C031C; text-decoration: none;}
+
+.container + .container {
+  padding: 75px 20px 70px 20px;
+}
+
+.container + .container.nopad {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.container.shaded {
+  background-color: $shaded-container-color !important;
+}
+
+  .container {
+    min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+.nlm {
+  margin-left: 0px;
+  padding: 0px;
+  border: 0;
+  }

@@ -22,23 +22,18 @@ html(lang="en")
 
   body
 
+    include navbar.html
+
     //header partial or include (img, quote, masthead/title, <something>)
     #the-header
       include header.jade
 
     #the-content
       .row
-        .one.columns
-          #sidebar-toc
-            p Hi mom!
-
-        .eleven.columns
-            !{content}
+        .twelve.columns
+          !{content}
 
     //footer
-    #the-footer
-      .row
-        .twelve.columns
-           include footer.jade
+    include footer.jade
 
     != getBlock("scripts").add(site.scripts).toHTML()
