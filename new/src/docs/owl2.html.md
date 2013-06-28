@@ -19,7 +19,7 @@ peruse the section on [terminology](#terminology).
 
 Stardog reasoning is based on the [OWL 2 Direct Semantics Entailment
 Regime](http://www.w3.org/TR/2010/WD-sparql11-entailment-20100126/#id45013).
-Stardog performs reasoning in a very lazy and late-binding fashion: it
+Stardog performs reasoning in a lazy and late-binding fashion: it
 does not materialize inferences; but, rather, reasoning is performed at
 query time according to a given reasoning level. This allows for maximum
 flexibility while maintaining excellent performance and scalability.
@@ -39,11 +39,8 @@ considered during query evaluation:
 -   **EL**. For [OWL 2 EL](http://www.w3.org/TR/owl2-profiles/#OWL_2_EL)
     axioms.
 -   **DL**. For [OWL 2 DL](http://www.w3.org/TR/owl2-syntax/) axioms.
-
-Stardog also supports [user-defined rule reasoning](#swrl) (using
-[SWRL](http://www.w3.org/Submission/SWRL/) syntax and bultins).SWRL
-rules are taken into account for reasoning for all reasoning levels
-except **NONE**.
+-   **SL**. For a combination of RDFS, QL, RL, and EL axioms, plus 
+    [SWRL rules](http://www.w3.org/Submission/SWRL/).
 
 Using Reasoning {#chapter}
 ===============
@@ -58,11 +55,11 @@ needed: it is neither fixed nor compiled in any special way.
 The schema may reside in the default graph, in a specific named graph,
 or in a collection of graphs. You can tell Stardog where the schema is
 by setting the `reasoning.schema.graphs` property to one or more named
-graph URIs. If we want the default graph to be considered part of the
-schema, then we can use the special built-in URI
-`tag:stardog:api:context:default`. If we want to use all named graphs
+graph URIs. If you want the default graph to be considered part of the
+schema, then you can use the special built-in URI
+`tag:stardog:api:context:default`. If you want to use all named graphs
 (that is, to tell Stardog to look for the schema in every named graph),
-we can use `tag:stardog:api:context:all`. The default value for this
+you can use `tag:stardog:api:context:all`. The default value for this
 property is to use the default graph only.
 
 Query Answering
@@ -153,6 +150,9 @@ Here's a few things that you might want to try:
     contain [TBox BGPs](#query_types) only—will return complete query
     results.
 
+-   **Are you using SWRL?** As from version 2.0, SWRL rules are only taken 
+    into account using the **SL** reasoning level.
+
 Known Issues {#chapter}
 ============
 
@@ -187,8 +187,8 @@ syntax and builtin-ins library. In order to apply SWRL user-defined
 rules, you must include the rules as part of the database's schema: that
 is, put your rules where your axioms are, i.e., in the schema. See
 [Schema Extraction](#tbox_extraction) for more details. Once the rules
-are part of the schema, they will be used for reasoning automatically,
-*unless the reasoning level selected is* **NONE**.
+are part of the schema, they will be used for reasoning automatically
+when using the **SL** reasoning level.
 
 Assertions implied by the rules *will not* be materialized. Instead,
 rules are used to expand queries just as regular axioms (see [Stardog's
@@ -207,6 +207,17 @@ Stardog supports the following SWRL built-in functions:
     with the exception of `swrlb:tokenize`.
 -   [Built-ins for date, time, and
     duration](http://www.w3.org/Submission/SWRL/#8.4).
+-   Stardog built-in function library:
+    * `tag:stardog:api:functions:ln`
+    * `tag:stardog:api:functions:log`
+    * `tag:stardog:api:functions:atan`
+    * `tag:stardog:api:functions:asin`
+    * `tag:stardog:api:functions:acos`
+    * `tag:stardog:api:functions:sinh`
+    * `tag:stardog:api:functions:cosh`
+    * `tag:stardog:api:functions:tang`
+    * `tag:stardog:api:functions:toDegrees`
+    * `tag:stardog:api:functions:toRadians`
 
 SWRL Examples
 -------------
