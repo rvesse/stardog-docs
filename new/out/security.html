@@ -24,6 +24,7 @@ into <em>roles</em>, and roles can be assigned to users.</p>
 controlled. Resources are identified by their <em>type</em> and their <em>name</em>. A
 particular resource is denoted as <code>type_prefix:name</code>. The valid resource
 types with their prefixes are shown below.</p>
+
 <dl>
 <dt> Resource type Prefix Description</dt>
 <dt> &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</dt>
@@ -36,7 +37,6 @@ types with their prefixes are shown below.</p>
 <dd>Resource Types for Stardog @@VERSION@@</dd>
 </dl>
 
-
 <h2 id="permissions">Permissions</h2>
 
 <p>Permissions are composed of a <em>permission subject</em>, an <em>action</em>, and a
@@ -45,6 +45,7 @@ specified action over the object resource.</p>
 
 <p>Permission subjects can be of type <code>user</code> or <code>role</code> only. Permission
 objects can be of any valid type. Valid actions are shown as follows:</p>
+
 <dl>
 <dt><code>read</code></dt>
 <dd>Permits reading the resource properties
@@ -71,7 +72,6 @@ objects can be of any valid type. Valid actions are shown as follows:</p>
 <dd>Special action type that permits all previous actions over a
  resource</dd>
 </dl>
-
 
 <h3 id="wildcards">Wildcards</h3>
 
@@ -118,6 +118,7 @@ provide the corresponding permissions the user managing security
 information must have.</p>
 
 <h2 id="users">Users</h2>
+
 <dl>
 <dt>Create a user</dt>
 <dd><code>create</code> permission over <code>user:*</code>. \
@@ -147,8 +148,8 @@ List users</dd>
  Regular users can see only users over which they have a permission.</dd>
 </dl>
 
-
 <h2 id="roles">Roles</h2>
+
 <dl>
 <dt>Create a role</dt>
 <dd><code>create</code> permission over <code>role:*</code>.
@@ -170,8 +171,8 @@ List roles</dd>
  which they have a permission.</dd>
 </dl>
 
-
 <h2 id="databases">Databases</h2>
+
 <dl>
 <dt>Create a database</dt>
 <dd><code>create</code> permission over <code>db:*</code>.
@@ -200,8 +201,8 @@ List databases</dd>
  permission.</dd>
 </dl>
 
-
 <h2 id="permissions">Permissions</h2>
+
 <dl>
 <dt>Grant a permission</dt>
 <dd><code>grant</code> permission over the permission object AND \
@@ -219,7 +220,6 @@ List role permissions</dd>
 <dd>User must be a superuser OR \
  user must have been assigned the role.</dd>
 </dl>
-
 
 <h1 id="deployingstardogsecurelychapter">Deploying Stardog Securely {#chapter}</h1>
 

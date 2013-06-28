@@ -88,6 +88,7 @@ a response code but the response body may be empty.</p>
 <code>Content-Type</code> header set to the MIME type of the request body, where
 &#8220;valid&#8221; is a valid MIME type for N-Triples, Trig, Trix, Turtle, NQuads,
 JSON-LD, or RDF/XML:</p>
+
 <dl>
 <dt>RDF/XML</dt>
 <dd><code>application/rdf+xml</code>
@@ -111,12 +112,12 @@ JSON-LD</dd>
 <dd><code>application/ld+json</code></dd>
 </dl>
 
-
 <p>SPARQL <code>CONSTRUCT</code> queries must also include a <code>Accept</code> header set to
 one of the RDF serialization types above.</p>
 
 <p>When issuing a <code>SELECT</code> query the <code>Accept</code> header should be set to one
 of the valid MIME types for <code>SELECT</code> results:</p>
+
 <dl>
 <dt>SPARQL XML Results Format</dt>
 <dd><code>application/sparql-results+xml</code>
@@ -131,10 +132,10 @@ SPARQL Binary Results</dd>
 <dd><code>application/x-binary-rdf-results-table</code></dd>
 </dl>
 
-
 <h2 id="responsecodes">Response Codes</h2>
 
 <p>Stardog uses HTTP response codes in the following way:</p>
+
 <dl>
 <dt><code>200</code></dt>
 <dd>Indicates the operation has succeeded.
@@ -167,7 +168,6 @@ SPARQL Binary Results</dd>
 
 <dd>Indicates a failure in some internal operation.</dd>
 </dl>
-
 
 <p>Further, we provide Stardog-specific error codes in the <code>SD-Error-Code</code>
 header in the response from the server. These can be used to further

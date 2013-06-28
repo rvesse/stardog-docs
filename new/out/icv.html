@@ -1,15 +1,75 @@
-<p><a href="/"><img src="/_/img/sdog-bare.png" alt="" /></a></p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Stardog 1.2.3 Docs: ICV</title><script src="js/libs/modernizr-2.6.2.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.42.2"/><link  rel="stylesheet" href="css/gumby.css" />
+    <!--add fonts to styles & meta?-->
+    <!--!= getBlock("fonts").toHTML()-->
+    <!--footnote processor (could put that into scripts...)-->
+    <!--a block for ipad, etc... might should go in meta-->
+  </head>
+  <body><div class="navbar" id="nav1">
+    <div class="row">
+      <a class="toggle" gumby-trigger="#nav1 &gt; .row &gt; ul" href="#"><i class="icon-menu"></i></a>
+      <h3 class="five columns logo">
+        <a href="http://stardog.com/">
+          <img style="max-width: 40%;" src="/img/logotype.png" gumby-retina="">
+        </a>
+      </h3>
+      <ul class="seven columns">
+        <li><a href="#">Chapters</a></li>
+        <li>
+          <a href="#">Related</a>
+          <div class="dropdown">
+            <ul>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+              <li>
+                <a href="#">I HAVE STUFF NESTED UNDER ME</a>
+                <div class="dropdown">
+                  <ul>
+                    <li><a href="">nested</a></li>
+                    <li><a href="">nested</a></li>
+                    <li><a href="">nested</a></li>
+                  </ul>
+                </div>
+              </li>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+            </ul>
+          </div>
+        </li>
+        <li><a href="#">Java API</a></li>
+        <li class="field"><input class="search input" type="search" placeholder="Search"></li>
+      </ul>
+    </div>
+  </div>
+    <!--header partial or include (img, quote, masthead/title, <something>)-->
+    <div id="the-header">
+      <div class="row valign">
+        <div class="twelve columns">
+          <div id="header-quote">
+            <p><strong>It is easier to write an incorrect program than understand a correct one.</strong>&mdash;Alan Perlis,
+              <cite>Epigrams in Programming</cite>
+            </p>
+          </div>
+          <div id="title">
+            <h1 class="nlm"><span id="title-masthead"><img src="/img/stardog-FLAT.png" style="max-width: 25%;"></span><span id="title-subhead">ICV</span></h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="the-content">
+      <div class="row">
+        <div class="twelve columns"><h2 id="introduction">Introduction</h2>
 
-<blockquote>
-<p><strong>It is easier to write an incorrect program than understand a correct
-one.</strong>—Alan Perlis, Epigrams in Programming</p>
-</blockquote>
+<p>Stardog Integrity Constraint Validation (&#8220;ICV&#8221;) lets you SPARQL, OWL,
+and SWRL as a constraint language for RDF. This chapter explains how to use
+it and how it works.</p>
 
-<h1 id="stardogicvtitle">Stardog ICV {#title}</h1>
-
-<h1 id="backgroundchapter">Background {#chapter}</h1>
-
-<p>Using high level languages like OWL, SWRL, and SPARQL as schema or
+<p>Stardog Integrity Constraint Validation (&#8220;ICV&#8221;) is an RDF graph validation
+service. Using high level languages like OWL, SWRL, and SPARQL as schema or
 constraint languages for RDF and Linked Data has several advantages:</p>
 
 <ul>
@@ -22,14 +82,16 @@ integration model, mapping rules, etc with SPARQL</li>
 insure logical consistency, explain errors and problems, etc</li>
 </ul>
 
-<p>But neither OWL 2, SWRL, nor SPARQL were explicitly designed for this
-usage. In Stardog, you can use OWL, SWRL, or SPARQL as a constraint
-language for RDF and as a modeling or inference language. This chapter
-explains how.</p>
-
 <p>If you are also interested in the theoretical background, please see the
 <a href="icv-specification.html">ICV specification</a>, which has all the formal
 details.</p>
+
+<h2 id="aquickstartguidetousingicv">A Quick Start Guide to Using ICV</h2>
+
+<p>To use ICV in Stardog, you need to&#8230;</p>
+
+<p><code>Blah blah
+</code></p>
 
 <h2 id="terminology">Terminology</h2>
 
@@ -37,7 +99,14 @@ details.</p>
 Constraint Validation (ICV) in Stardog: it may be easier for you to
 understand if you read this section on terminology first.</p>
 
-<p>Schema, TBox</p>
+<h3 id="icvintegrityconstraintvalidation">ICV, Integrity Constraint Validation</h3>
+
+<p>The process of checking whether some Stardog database is valid with
+respect to some integrity constraints. The result of ICV is a boolean
+value (true if valid, false if invalid) and, optionally, an <em>explanation
+of constraint violations</em>.</p>
+
+<h3 id="schematbox">Schema, TBox</h3>
 
 <p>A schema (or &#8220;terminology box&#8221; a.k.a., TBox) is a set of statements that
 define the relationships between data elements, including property and
@@ -45,32 +114,25 @@ class names, their relationships, etc. In practical terms, schema
 statements for a Stardog database are RDF Schema and OWL 2 terms,
 axioms, and definitions.</p>
 
-<p>Data, ABox</p>
+<h3 id="dataabox">Data, ABox</h3>
 
 <p>All of the triples in a Stardog database that aren&#8217;t part of the schema
 are part of the data (or &#8220;assertional box&#8221; a.k.a. ABox).</p>
 
-<p>Integrity Constraint</p>
+<h3 id="integrityconstraint">Integrity Constraint</h3>
 
 <p>A declarative expression of some rule or constraint which data must
 conform to in order to be valid. Integrity Constraints are typically
 domain and application specific. They can be expressed in OWL 2 (any
 legal syntax), SWRL rules, or (a restricted form of) SPARQL queries.</p>
 
-<p>Constraints</p>
+<h3 id="constraints">Constraints</h3>
 
 <p>Constraints that have been associated with a Stardog database and which
 are used to validate the data it contains. Each Stardog may optionally
 have one and only one set of constraints associated with it.</p>
 
-<p>ICV, Integrity Constraint Validation</p>
-
-<p>The process of checking whether some Stardog database is valid with
-respect to some integrity constraints. The result of ICV is a boolean
-value (true if valid, false if invalid) and, optionally, an <em>explanation
-of constraint violations</em>.</p>
-
-<p>Closed World Assumption, Closed World Reasoning</p>
+<h3 id="closedworldassumptionclosedworldreasoning">Closed World Assumption, Closed World Reasoning</h3>
 
 <p>Stardog ICV assumes a closed world with respect to data and constraints:
 that is, it assumes that all relevant data is known to it and included
@@ -79,7 +141,7 @@ Constraints in light of this assumption; if a constraint says a value
 <em>must</em> be present, the absence of that value is interpreted as a
 constraint violation and, hence, as invalid data.</p>
 
-<p>Open World Assumption, Open World Reasoning</p>
+<h3 id="openworldassumptionopenworldreasoning">Open World Assumption, Open World Reasoning</h3>
 
 <p>A legal OWL 2 inference may violate or satisfy an Integrity Constraint
 in Stardog. In other words, you get to have your cake (OWL as a
@@ -87,12 +149,12 @@ constraint language) and eat it, too (OWL as modeling or inference
 language). This means that constraints are applied to a Stardog database
 <em>with respect to an OWL 2 profile</em>.</p>
 
-<p>Monotonicity</p>
+<h3 id="monotonicity">Monotonicity</h3>
 
-<p>OWL is a monotonic language: that means you can&#8217;t ever add anything to a
-Stardog database that causes there to be fewer legal inferences. Or, put
+<p>OWL is a monotonic language: that means you can never <strong>add</strong> anything to a
+Stardog database that causes there to be <strong>fewer</strong> legal inferences. Or, put
 another way, the only way to decrease the number of legal inferences is
-to <em>delete</em> something.</p>
+to <strong>delete</strong> something.</p>
 
 <p>Monotonicity interacts with ICV in the following ways:</p>
 
@@ -106,20 +168,20 @@ may make it invalid.</li>
 invalid</em>.</li>
 </ol>
 
-<h1 id="validatinglinkeddatachapter">Validating Linked Data {#chapter}</h1>
+<h2 id="validatinglinkeddata">Validating Linked Data</h2>
 
 <p>The use of high-level languages (OWL 2, SWRL, and SPARQL) to validate
 RDF data using closed world semantics is one of Stardog&#8217;s unique
 capabilities.</p>
 
-<h2 id="icvandowl2reasoning">ICV and OWL 2 Reasoning</h2>
+<h3 id="icvowl2reasoning">ICV &amp; OWL 2 Reasoning</h3>
 
 <p>An integrity constraint may be satisfied or violated in either of two
 ways: by an explicit statement in a Stardog database or by statement
 that&#8217;s been legally inferred by Stardog. This means that when ICV is
 enabled for a Stardog database, it has to be enabled relative to a
 reasoning type. The valid choices of reasoning type are any type or kind
-of reasoning supported by Stardog. As of @@VERSION@@, those types
+of reasoning supported by Stardog. As of Stardog 1.2.3, those types
 include</p>
 
 <ul>
@@ -130,9 +192,6 @@ include</p>
 <li>OWL 2 RL</li>
 <li>OWL 2 DL</li>
 </ul>
-
-<p>Future releases of Stardog will include RDF Schema and OWL 2 DL
-reasoning types.</p>
 
 <p>The important implication here is that Integrity Constraint Validation
 is performed with three inputs: a Stardog database, a set of
@@ -150,7 +209,7 @@ integrity constraint validation has serious security implications with
 respect to a Stardog database and may only be performed by a user role
 with sufficient privileges for that action.</p>
 
-<h2 id="howtouseicvinstardog">How to Use ICV in Stardog</h2>
+<h3 id="usingicvprogrammatically">Using ICV Programmatically</h3>
 
 <p>This section will describe how to use Stardog ICV via the SNARL APIs.
 For more information on using SNARL in general, please refer to the
@@ -1096,3 +1155,61 @@ ontology is valid.</p>
 <p>For comments, questions, or to report problems with this page, please
 email the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support
 Forum</a>.</p>
+</div>
+      </div>
+    </div>
+    <!--footer-->
+    <!--footer.jade-->
+    <div class="row"><a href="#" id="upaway" class="skip" gumby-easing="easeInOutQuad" gumby-goto="top" gumby-duration="2000">&uarr;</a>
+      <!--p.skiplink.metro.primary-->
+      <!--  <a href="" gumby-goto="top">Top</a>-->
+    </div>
+    <div class="container shaded">
+      <div class="row">
+        <div class="twelve columns">
+          <h3>This is&nbsp;<span id="title-masthead">Stardog&nbsp;</span><span id="subfoot-subhead">ICV</span>, part of Stardog Docs 1.2.3.</h3>
+          <p>For comments, questions, or to report problems with this page, visit the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support Forum</a>.</p>
+          <p>&copy;2010&ndash;2013 Clark & Parsia LLC. <a href="http://creativecommons.org/licenses/by-sa/3.0/">Some rights reserved</a>.</p>
+        </div>
+      </div>
+    </div><script >(function(){
+	/* Did we just livereload? */
+var log = true && localStorage && console && console.log && true;
+if ( log && localStorage.getItem('/docpad-livereload/reloaded') === 'yes' ) {
+	localStorage.removeItem('/docpad-livereload/reloaded');
+	console.log('LiveReloaded at', new Date())
+}
+
+/* Listen for the regenerated event and perform a reload of the page when the event occurs */
+var listen = function(){
+	var socket = io.connect('/docpad-livereload');
+	socket.on('regenerated',function(){
+		if ( log ) {
+	localStorage.setItem('/docpad-livereload/reloaded', 'yes');
+}
+document.location.reload();
+	});
+};
+	if ( typeof io !== 'undefined' ) {
+		listen();
+	} else {
+		/* Inject socket.io into our page then listen once loaded */
+var inject = function(){
+	var t = document.createElement('script');
+	t.type = 'text/javascript';
+	t.async = true;
+	t.src = '/socket.io/socket.io.js';
+	t.onload = listen;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(t,s);
+};
+		var readyStateCheckInterval = setInterval(function() {
+  if (document.readyState === "complete") {
+    inject();
+    clearInterval(readyStateCheckInterval);
+  }
+}, 10);
+	}
+})();</script><script defer="defer"  src="js/libs/jquery-1.9.1.min.js"></script><script defer="defer"  src="js/libs/gumby.fixed.js"></script><script defer="defer"  src="js/libs/gumby.navbar.js"></script><script defer="defer"  src="js/libs/gumby.retina.js"></script><script defer="defer"  src="js/libs/gumby.skiplink.js"></script><script defer="defer"  src="js/libs/gumby.tabs.js"></script><script defer="defer"  src="js/libs/gumby.toggleswitch.js"></script><script defer="defer"  src="js/libs/gumby.init.js"></script>
+  </body>
+</html>

@@ -407,6 +407,7 @@ connection, in this case to the <code>testConnectionPool</code> database.</p>
 
 <p>Then we setup a <code>ConnectionPoolConfig</code>, using its fluent API, which
 establishes the parameters of the pool:</p>
+
 <dl>
 <dt>using()</dt>
 <dd>Sets which ConnectionConfiguration we want to pool; this is what is
@@ -425,7 +426,6 @@ blockAtCapacity()</dd>
 <dd>Sets the max time (here: in minutes) that we&#8217;ll block waiting for an
  object when there aren&#8217;t any idle ones in the pool.</dd>
 </dl>
-
 
 <p>Whew! Next we can create() the pool using this <code>ConnectionPoolConfig</code>
 thing.</p>

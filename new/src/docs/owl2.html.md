@@ -1,13 +1,10 @@
-[![](/_/img/sdog-bare.png)](/)
+---
+quote: "The proof of a system's value is its existence."
+layout: "default"
+title: "Reasoning & Inference"
+---
 
-> **The proof of a system's value is its existence.**—Alan Perlis,
-> Epigrams in Programming
-
-Stardog OWL 2 {#title}
-=============
-
-Introduction {#chapter}
-============
+##Introduction
 
 In this chapter we describe [how to use Stardog's reasoning
 capabilities](#reasoning); we also address some [common
@@ -39,11 +36,9 @@ considered during query evaluation:
 -   **EL**. For [OWL 2 EL](http://www.w3.org/TR/owl2-profiles/#OWL_2_EL)
     axioms.
 -   **DL**. For [OWL 2 DL](http://www.w3.org/TR/owl2-syntax/) axioms.
--   **SL**. For a combination of RDFS, QL, RL, and EL axioms, plus 
-    [SWRL rules](http://www.w3.org/Submission/SWRL/).
+-   **SL**. For a combination of RDFS, QL, RL, and EL axioms, plus [SWRL rules](http://www.w3.org/Submission/SWRL/).
 
-Using Reasoning {#chapter}
-===============
+## Using Reasoning
 
 In order to perform query evaluation with reasoning, Stardog requires a
 schema (sometimes called a "TBox") to be present in the database. Since
@@ -62,8 +57,7 @@ schema, then you can use the special built-in URI
 you can use `tag:stardog:api:context:all`. The default value for this
 property is to use the default graph only.
 
-Query Answering
----------------
+### Query Answering
 
 All of Stardog's interfaces (API, network, and command-line as of
 @@VERSION@@) support reasoning during query evaluation.
@@ -84,8 +78,7 @@ parameters in the request header `SD-Connection-String`:
     $ curl -u admin:admin -X GET -H "SD-Connection-String: reasoning=QL" \
       "http://localhost:5822/myDB/query?query=..."
 
-ReasoningConnection API
------------------------
+### `ReasoningConnection` API
 
 In order to use the ReasoningConnection API one needs to specify a
 reasoning level. See the [Java Programming](../java/) chapter for
@@ -99,8 +92,7 @@ Currently, the API has two methods:
     given class if satisfiable with respect to the current KB and
     reasoning level.
 
-Explaining Reasoning Results
-----------------------------
+## Explaining Reasoning Results
 
 Stardog can be used to check if the current KB logically entails a set
 of triples; moreover, Stardog can explain why this is so. An explanation
@@ -113,7 +105,7 @@ statements.
 Explanations can be retrieved using the CLI command `explain inference`
 by providing an input file that contains the inferences to be explained:
 
-    $ stardog reasoning explain "myDB;reasoning=EL" inference_to_explain.ttl 
+    $ stardog reasoning explain "myDB;reasoning=EL" inference_to_explain.ttl
 
 The output is displayed in a concise syntax designed to be legible; but
 it can be rendered in any one of the supported RDF syntaxes if desired.
@@ -126,8 +118,7 @@ Note that there is probably more than one explanation for an inference,
 but Stardog returns only a single explanation. We plan to compute
 multiple explanations in a future version.
 
-Not Getting Expected Answers? {#chapter}
-=============================
+## Not Getting Expected Answers?
 
 Here's a few things that you might want to try:
 
@@ -150,13 +141,12 @@ Here's a few things that you might want to try:
     contain [TBox BGPs](#query_types) only—will return complete query
     results.
 
--   **Are you using SWRL?** As from version 2.0, SWRL rules are only taken 
+-   **Are you using SWRL?** As from version 2.0, SWRL rules are only taken
     into account using the **SL** reasoning level.
 
-Known Issues {#chapter}
-============
+## Known Issues
 
-Stardog **@@VERSION@@** does not
+Stardog <t>version</t> does not
 
 -   Follow ontology `owl:imports` statements automatically; any imported
     OWL ontologies that are required for reasoning must be loaded into a
@@ -170,8 +160,7 @@ Stardog **@@VERSION@@** does not
     query answering.
 -   Perform datatype reasoning and user-defined datatypes.
 
-User-defined Rule Reasoning {#chapter}
-===========================
+## User-defined Rule Reasoning
 
 Many reasoning problems may be solved with OWL's axiom-based approach;
 but, of course, not all reasoning problems are amenable to this
@@ -194,8 +183,18 @@ Assertions implied by the rules *will not* be materialized. Instead,
 rules are used to expand queries just as regular axioms (see [Stardog's
 approach to query answering](#approach)).
 
-Supported Built-Ins
--------------------
+### Syntax
+
+Stardog supports two different syntaxes for defining rules. The first,
+which you shouldn't use, is the standard RDF/XML syntax for SWRL. It
+has the advantage of being supported in many toosl; but it's painfully
+awful to read or write. Seriously, don't use it.
+
+The second is native Stardog Rules syntax and is based on SPARQL syntax,
+so you can re-use what you already know about SPARQL to write rules. This...
+
+
+### Supported Built-Ins
 
 Stardog supports the following SWRL built-in functions:
 
@@ -219,8 +218,7 @@ Stardog supports the following SWRL built-in functions:
     * `tag:stardog:api:functions:toDegrees`
     * `tag:stardog:api:functions:toRadians`
 
-SWRL Examples
--------------
+### SWRL Examples
 
 User-defined rules in SWRL provide a different sort of "user interface"
 with respect to OWL 2 reasoning in Stardog. Some problems (and some
@@ -230,7 +228,7 @@ and reasoning than to an axioms-based approach. What follows are a few
 Datalog syntax; Stardog requires the canonical RDF serialization of
 SWRL, however).
 
-### Basic Rules
+#### Basic Rules
 
 A person between 13 and 19 (inclusive) years of age is a teenager:
 
@@ -240,7 +238,7 @@ A person between 13 and 19 (inclusive) years of age is a teenager:
 
 A person who's an uncle of a niece:
 
-    :UncleOfNiece(?x) <- :Person(?x), :Male(?x), :hasSibling(?x, ?y), 
+    :UncleOfNiece(?x) <- :Person(?x), :Male(?x), :hasSibling(?x, ?y),
                       :isParentOf(?y, ?z), :Female(?z)
 
 A person who's male and has a niece or nephew is an uncle of his
@@ -253,11 +251,12 @@ A super user can read all of the things!
     :Role(?z), :hasRole(?x, ?z), :readPermission(?z, ?y) <- :SuperUser(?x)
                        :Resource(?y), http://www.w3.org/ns/sparql#UUID(?z)
 
-Special Predicates {#chapter}
-==================
+## Special Predicates
 
-Direct/Strict Subclasses and Subproperties, and Direct Types
-------------------------------------------------------------
+something something...
+
+
+### Direct/Strict Subclasses, Subproperties, & Direct Types
 
 Besides the standard RDF(S) predicates `rdf:type`, `rdfs:subClassOf` and
 `rdfs:subPropertyOf`, Stardog supports the following special built-in
@@ -301,8 +300,7 @@ analogous triple pattern.The predicates `sdle:directSubPropertyOf` and
 These triple patterns can be used instead of the triple containing our
 built-in predicate in SELECT, CONSTRUCT, or ASK queries.
 
-New Individuals with SWRL
--------------------------
+### New Individuals with SWRL
 
 One cannot create new individuals (i.e., new instances of classes) using
 SWRL. This restriction is well-motivated as it can lead to
@@ -320,7 +318,7 @@ This rule will be used to create a *random* bnode for each instance of
 the class `:Person` and also to assert that each new instance is also an
 instance of `:Parent`.
 
-### Remarks
+#### Remarks
 
 The new individual built-in can **only be used in the body of rules and
 it cannot be the only body atom**. The URIs for the generated bnodes are
@@ -351,13 +349,12 @@ And then modify the original rule accordingly:
 
     :Father(?y) <- :Person(?x), http://www.w3.org/ns/sparql#UUID(?y).
 
-Query Rewriting {#chapter}
-===============
+## Query Rewriting
 
-Query answering with reasoning in Stardog is based on *query rewriting*:
-Stardog rewrites the user's query with respect to the schema, and then
+Query answering with reasoning in Stardog is based on the *query rewriting*
+technique: Stardog rewrites the user's query with respect to the schema, and then
 executes the resulting expanded query (EQ) against the data. As can be
-seen in Figure 2, the rewriting process involves 5 different phases.
+seen in Figure 2, the rewriting process involves five different phases.
 
 ![](/docs/owl2/blackout.png)
 
@@ -374,7 +371,7 @@ axioms:
       :SeniorManager rdfs:subClassOf :manages some :Manager
       :manages some :Employee rdfs:subClassOf :Manager
       :Manager rdfs:subClassOf :Employee
-      
+
 
 Which says that a senior manager manages at least one manager, that
 every person that manages an employee is a manager, and that every
@@ -385,7 +382,7 @@ contains the following data assertions:
       :Robert rdf:type :Manager
       :Ana :manages :Lucy
       :Lucy rdf:type :Employee
-      
+
 
 Finally, let us assume that we want to retrieve the set of all
 employees. We do this by posing the following query:
@@ -401,7 +398,7 @@ original query is rewritten into four queries:
       SELECT ?employee WHERE { ?employee rdf:type :Manager }
       SELECT ?employee WHERE { ?employee rdf:type :SeniorManager }
       SELECT ?employee WHERE { ?employee :manages ?x. ?x rdf:type :Employee }
-      
+
 
 The final step consists of executing these four queries over the data.
 
@@ -412,8 +409,7 @@ queries*. If the reasoning level is OWL 2 RL or EL, then the EQ *may*
 Stardog's answers will be sound but incomplete with respect to the
 semantics of the requested reasoning level.
 
-Why Query Rewriting?
---------------------
+### Why Query Rewriting?
 
 Query rewriting has several advantages over the (primary) alternative
 technique, i.e., materialization. In this approach, it is the data that
@@ -436,8 +432,7 @@ materialization introduces some issues:
     complexity of the schema, materialization can be computationally
     expensive.
 
-Performance Hints {#chapter}
-=================
+## Performance Hints
 
 The [query rewriting approach implemented by Stardog](#approach) implies
 guidelines that might contribute to more efficient query answering.
@@ -457,21 +452,21 @@ set of subclasses of the class `:Employee`:
       :Manager rdfs:subClassOf :Employee
       :SeniorManager rdfs:subClassOf :Manager
       ...
-      
+
       :Supervisor rdfs:subClassOf :Employee
       :DepartmentSupervisor rdfs:subClassOf :Supervisor
       ...
-      
+
       :Secretary rdfs:subClassOf :Employee
       ...
-      
+
 
 If we wanted to retrieve the set of all employees, Blackout would
 produce an EQ containing a query of the following form for every
 subclass `:Ci` of `:Employee`:
 
       SELECT ?employee WHERE { ?employee rdf:type :Ci }
-      
+
 
 At this point, it is easy to see that **the more specific the query, the
 better** as general queries—that is, queries that contain concepts high
@@ -487,24 +482,26 @@ subsumption*. In order to grasp the intuition behind it, let us consider
 the following query asking for people and the employees they manage:
 
       SELECT ?manager ?employee WHERE { ?manager :manages ?employee. ?employee rdf:type :Employee }
-      
+
 
 We know that this query would cause a large EQ given the deep hierarchy
 of `:Employee` in MyDB~1~. However, if we added the following single
 range axiom:
 
       :manages rdfs:range :Employee
-      
+
 
 then the EQ would collapse to:
 
       SELECT ?manager ?employee WHERE { ?manager :manages ?employee }
-      
+
 
 which is considerably less difficult to evaluate.
 
-Terminology
------------
+## Terminology
+
+The preceeding discussion employs the following terms of art with the following
+definitions.
 
 ### Databases
 
@@ -530,7 +527,7 @@ prefixes for RDF(S) and OWL.
 
       :clark_and_parsia rdf:type :Company
       :clark_and_parsia :maintains :Stardog
-      
+
 
 stating that `:clark_and_parsia` is a company, and that
 `:clark_and_parsia` maintains `:Stardog`.
@@ -541,7 +538,7 @@ instance of another class. For example, suppose that MyDB~2~ contains
 the following TBox axiom:
 
       :Company rdfs:subClassOf :Organization
-      
+
 
 stating that companies are a type of organization.
 
@@ -592,13 +589,13 @@ following assertion and axiom:
 
       :clark_and_parsia rdf:type :Company
       :Company rdfs:subClassOf :Organization
-      
+
 
 From this DB, we can use Stardog in order to *infer* that
 `:clark_and_parsia` is an organization:
 
       :clark_and_parsia rdf:type :Organization
-      
+
 
 Using reasoning in order to infer implicit knowledge in the context of
 an enterprise application can lead to simpler queries. Let us suppose,
@@ -609,17 +606,17 @@ list of all considered organizations. If Stardog were used **with
 reasoning**, then we would need only issue the following simple query:
 
       SELECT ?org WHERE { ?org rdf:type :Organization}
-      
+
 
 In contrast, if we were using Stardog **with no reasoning**, then we
 would have to issue the following considerably more complex query that
 considers all possible types of organization:
 
-      SELECT ?org WHERE { { ?org rdf:type :Organization } UNION 
+      SELECT ?org WHERE { { ?org rdf:type :Organization } UNION
                           { ?org rdf:type :Company } UNION
-                          ... 
+                          ...
                         }
-      
+
 
 Stardog can also be used in order to discover modeling errors in a DB.
 The most common modeling errors are *unsatisfiable* classes and
@@ -629,8 +626,8 @@ An unsatisfiable class is simply a class that cannot have any instances.
 Say, for example, that we added the following axioms to MyDB~2~:
 
       :Company owl:disjointWith :Organization
-      :LLC owl:equivalentClass :Company and :Organization  
-      
+      :LLC owl:equivalentClass :Company and :Organization
+
 
 stating that companies cannot be organizations and vice versa, and that
 an LLC is a company and an organization. The disjointness axiom causes
@@ -652,7 +649,7 @@ to believe that there is a modeling error in our DB. In this case, it is
 easy to see that the problem is the disjointness axiom between
 `:Company` and `:Organization`.
 
-### OWL 2 Profiles {#profiles}
+### OWL 2 Profiles
 
 As explained in the [OWL 2 Web Ontology Language Profiles
 Specification](http://www.w3.org/TR/owl2-profiles/) of the W3C, an OWL 2
@@ -690,14 +687,3 @@ Stardog supports the three profiles of OWL 2 by making use of Blackout
 and Pellet. Notably, since TBox BGPs are handled completely by Pellet,
 Stardog supports reasoning for the whole of OWL 2 for queries containing
 TBox BGPs only.
-
-Notes {.fn}
-=====
-
-[⌂](# "Back to top")
-
-For comments, questions, or to report problems with this page, please
-email the [Stardog Support
-Forum](https://groups.google.com/a/clarkparsia.com/group/stardog/about).
-
-

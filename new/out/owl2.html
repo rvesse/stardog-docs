@@ -1,13 +1,68 @@
-<p><a href="/"><img src="/_/img/sdog-bare.png" alt="" /></a></p>
-
-<blockquote>
-<p><strong>The proof of a system&#8217;s value is its existence.</strong>—Alan Perlis,
-Epigrams in Programming</p>
-</blockquote>
-
-<h1 id="stardogowl2title">Stardog OWL 2 {#title}</h1>
-
-<h1 id="introductionchapter">Introduction {#chapter}</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Stardog 1.2.3 Docs: Reasoning &amp; Inference</title><script src="js/libs/modernizr-2.6.2.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.42.2"/><link  rel="stylesheet" href="css/gumby.css" />
+    <!--add fonts to styles & meta?-->
+    <!--!= getBlock("fonts").toHTML()-->
+    <!--footnote processor (could put that into scripts...)-->
+    <!--a block for ipad, etc... might should go in meta-->
+  </head>
+  <body><div class="navbar" id="nav1">
+    <div class="row">
+      <a class="toggle" gumby-trigger="#nav1 &gt; .row &gt; ul" href="#"><i class="icon-menu"></i></a>
+      <h3 class="five columns logo">
+        <a href="http://stardog.com/">
+          <img style="max-width: 40%;" src="/img/logotype.png" gumby-retina="">
+        </a>
+      </h3>
+      <ul class="seven columns">
+        <li><a href="#">Chapters</a></li>
+        <li>
+          <a href="#">Related</a>
+          <div class="dropdown">
+            <ul>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+              <li>
+                <a href="#">I HAVE STUFF NESTED UNDER ME</a>
+                <div class="dropdown">
+                  <ul>
+                    <li><a href="">nested</a></li>
+                    <li><a href="">nested</a></li>
+                    <li><a href="">nested</a></li>
+                  </ul>
+                </div>
+              </li>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+            </ul>
+          </div>
+        </li>
+        <li><a href="#">Java API</a></li>
+        <li class="field"><input class="search input" type="search" placeholder="Search"></li>
+      </ul>
+    </div>
+  </div>
+    <!--header partial or include (img, quote, masthead/title, <something>)-->
+    <div id="the-header">
+      <div class="row valign">
+        <div class="twelve columns">
+          <div id="header-quote">
+            <p><strong>The proof of a system's value is its existence.</strong>&mdash;Alan Perlis,
+              <cite>Epigrams in Programming</cite>
+            </p>
+          </div>
+          <div id="title">
+            <h1 class="nlm"><span id="title-masthead"><img src="/img/stardog-FLAT.png" style="max-width: 25%;"></span><span id="title-subhead">Reasoning &amp; Inference</span></h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="the-content">
+      <div class="row">
+        <div class="twelve columns"><h2 id="introduction">Introduction</h2>
 
 <p>In this chapter we describe <a href="#reasoning">how to use Stardog&#8217;s reasoning
 capabilities</a>; we also address some <a href="#trouble">common
@@ -19,7 +74,7 @@ peruse the section on <a href="#terminology">terminology</a>.</p>
 
 <p>Stardog reasoning is based on the <a href="http://www.w3.org/TR/2010/WD-sparql11-entailment-20100126/#id45013">OWL 2 Direct Semantics Entailment
 Regime</a>.
-Stardog performs reasoning in a very lazy and late-binding fashion: it
+Stardog performs reasoning in a lazy and late-binding fashion: it
 does not materialize inferences; but, rather, reasoning is performed at
 query time according to a given reasoning level. This allows for maximum
 flexibility while maintaining excellent performance and scalability.</p>
@@ -40,14 +95,10 @@ axioms.</li>
 <li><strong>EL</strong>. For <a href="http://www.w3.org/TR/owl2-profiles/#OWL_2_EL">OWL 2 EL</a>
 axioms.</li>
 <li><strong>DL</strong>. For <a href="http://www.w3.org/TR/owl2-syntax/">OWL 2 DL</a> axioms.</li>
+<li><strong>SL</strong>. For a combination of RDFS, QL, RL, and EL axioms, plus <a href="http://www.w3.org/Submission/SWRL/">SWRL rules</a>.</li>
 </ul>
 
-<p>Stardog also supports <a href="#swrl">user-defined rule reasoning</a> (using
-<a href="http://www.w3.org/Submission/SWRL/">SWRL</a> syntax and bultins).SWRL
-rules are taken into account for reasoning for all reasoning levels
-except <strong>NONE</strong>.</p>
-
-<h1 id="usingreasoningchapter">Using Reasoning {#chapter}</h1>
+<h2 id="usingreasoning">Using Reasoning</h2>
 
 <p>In order to perform query evaluation with reasoning, Stardog requires a
 schema (sometimes called a &#8220;TBox&#8221;) to be present in the database. Since
@@ -59,14 +110,14 @@ needed: it is neither fixed nor compiled in any special way.</p>
 <p>The schema may reside in the default graph, in a specific named graph,
 or in a collection of graphs. You can tell Stardog where the schema is
 by setting the <code>reasoning.schema.graphs</code> property to one or more named
-graph URIs. If we want the default graph to be considered part of the
-schema, then we can use the special built-in URI
-<code>tag:stardog:api:context:default</code>. If we want to use all named graphs
+graph URIs. If you want the default graph to be considered part of the
+schema, then you can use the special built-in URI
+<code>tag:stardog:api:context:default</code>. If you want to use all named graphs
 (that is, to tell Stardog to look for the schema in every named graph),
-we can use <code>tag:stardog:api:context:all</code>. The default value for this
+you can use <code>tag:stardog:api:context:all</code>. The default value for this
 property is to use the default graph only.</p>
 
-<h2 id="queryanswering">Query Answering</h2>
+<h3 id="queryanswering">Query Answering</h3>
 
 <p>All of Stardog&#8217;s interfaces (API, network, and command-line as of
 @@VERSION@@) support reasoning during query evaluation.</p>
@@ -89,7 +140,7 @@ parameters in the request header <code>SD-Connection-String</code>:</p>
   <span class="comment">"http://localhost:5822/myDB/query?query=</span>.<span class="string">.</span><span class="string">.</span><span class="comment">"</span>
 </code></pre>
 
-<h2 id="reasoningconnectionapi">ReasoningConnection API</h2>
+<h3 id="reasoningconnectionapi"><code>ReasoningConnection</code> API</h3>
 
 <p>In order to use the ReasoningConnection API one needs to specify a
 reasoning level. See the <a href="../java/">Java Programming</a> chapter for
@@ -118,7 +169,7 @@ statements.</p>
 <p>Explanations can be retrieved using the CLI command <code>explain inference</code>
 by providing an input file that contains the inferences to be explained:</p>
 
-<pre class="highlighted"><code class="ruby"><span class="variable">$ </span>stardog reasoning explain <span class="string">"myDB;reasoning=EL"</span> inference_to_explain.ttl 
+<pre class="highlighted"><code class="ruby"><span class="variable">$ </span>stardog reasoning explain <span class="string">"myDB;reasoning=EL"</span> inference_to_explain.ttl
 </code></pre>
 
 <p>The output is displayed in a concise syntax designed to be legible; but
@@ -132,7 +183,7 @@ explanations programmatically.</p>
 but Stardog returns only a single explanation. We plan to compute
 multiple explanations in a future version.</p>
 
-<h1 id="notgettingexpectedanswerschapter">Not Getting Expected Answers? {#chapter}</h1>
+<h2 id="notgettingexpectedanswers">Not Getting Expected Answers?</h2>
 
 <p>Here&#8217;s a few things that you might want to try:</p>
 
@@ -155,11 +206,13 @@ logging.properties file in <code>STARDOG_HOME</code>:</p>
 2 DL, which effectively means that only TBox queries—queries that
 contain <a href="#query_types">TBox BGPs</a> only—will return complete query
 results.</p></li>
+<li><p><strong>Are you using SWRL?</strong> As from version 2.0, SWRL rules are only taken
+into account using the <strong>SL</strong> reasoning level.</p></li>
 </ul>
 
-<h1 id="knownissueschapter">Known Issues {#chapter}</h1>
+<h2 id="knownissues">Known Issues</h2>
 
-<p>Stardog <strong>@@VERSION@@</strong> does not</p>
+<p>Stardog 1.2.3 does not</p>
 
 <ul>
 <li>Follow ontology <code>owl:imports</code> statements automatically; any imported
@@ -175,7 +228,7 @@ query answering.</li>
 <li>Perform datatype reasoning and user-defined datatypes.</li>
 </ul>
 
-<h1 id="user-definedrulereasoningchapter">User-defined Rule Reasoning {#chapter}</h1>
+<h2 id="user-definedrulereasoning">User-defined Rule Reasoning</h2>
 
 <p>Many reasoning problems may be solved with OWL&#8217;s axiom-based approach;
 but, of course, not all reasoning problems are amenable to this
@@ -191,14 +244,24 @@ syntax and builtin-ins library. In order to apply SWRL user-defined
 rules, you must include the rules as part of the database&#8217;s schema: that
 is, put your rules where your axioms are, i.e., in the schema. See
 <a href="#tbox_extraction">Schema Extraction</a> for more details. Once the rules
-are part of the schema, they will be used for reasoning automatically,
-<em>unless the reasoning level selected is</em> <strong>NONE</strong>.</p>
+are part of the schema, they will be used for reasoning automatically
+when using the <strong>SL</strong> reasoning level.</p>
 
 <p>Assertions implied by the rules <em>will not</em> be materialized. Instead,
 rules are used to expand queries just as regular axioms (see <a href="#approach">Stardog&#8217;s
 approach to query answering</a>).</p>
 
-<h2 id="supportedbuilt-ins">Supported Built-Ins</h2>
+<h3 id="syntax">Syntax</h3>
+
+<p>Stardog supports two different syntaxes for defining rules. The first,
+which you shouldn&#8217;t use, is the standard RDF/XML syntax for SWRL. It
+has the advantage of being supported in many toosl; but it&#8217;s painfully
+awful to read or write. Seriously, don&#8217;t use it.</p>
+
+<p>The second is native Stardog Rules syntax and is based on SPARQL syntax,
+so you can re-use what you already know about SPARQL to write rules. This&#8230;</p>
+
+<h3 id="supportedbuilt-ins">Supported Built-Ins</h3>
 
 <p>Stardog supports the following SWRL built-in functions:</p>
 
@@ -211,9 +274,23 @@ values</a>.</li>
 with the exception of <code>swrlb:tokenize</code>.</li>
 <li><a href="http://www.w3.org/Submission/SWRL/#8.4">Built-ins for date, time, and
 duration</a>.</li>
+<li>Stardog built-in function library:
+
+<ul>
+<li><code>tag:stardog:api:functions:ln</code></li>
+<li><code>tag:stardog:api:functions:log</code></li>
+<li><code>tag:stardog:api:functions:atan</code></li>
+<li><code>tag:stardog:api:functions:asin</code></li>
+<li><code>tag:stardog:api:functions:acos</code></li>
+<li><code>tag:stardog:api:functions:sinh</code></li>
+<li><code>tag:stardog:api:functions:cosh</code></li>
+<li><code>tag:stardog:api:functions:tang</code></li>
+<li><code>tag:stardog:api:functions:toDegrees</code></li>
+<li><code>tag:stardog:api:functions:toRadians</code></li>
+</ul></li>
 </ul>
 
-<h2 id="swrlexamples">SWRL Examples</h2>
+<h3 id="swrlexamples">SWRL Examples</h3>
 
 <p>User-defined rules in SWRL provide a different sort of &#8220;user interface&#8221;
 with respect to OWL 2 reasoning in Stardog. Some problems (and some
@@ -223,7 +300,7 @@ and reasoning than to an axioms-based approach. What follows are a few
 Datalog syntax; Stardog requires the canonical RDF serialization of
 SWRL, however).</p>
 
-<h3 id="basicrules">Basic Rules</h3>
+<h4 id="basicrules">Basic Rules</h4>
 
 <p>A person between 13 and 19 (inclusive) years of age is a teenager:</p>
 
@@ -234,7 +311,7 @@ SWRL, however).</p>
 
 <p>A person who&#8217;s an uncle of a niece:</p>
 
-<pre class="highlighted"><code class="ruby"><span class="symbol">:UncleOfNiece</span>(<span class="number">?x</span>) &lt;- <span class="symbol">:Person</span>(<span class="number">?x</span>), <span class="symbol">:Male</span>(<span class="number">?x</span>), <span class="symbol">:hasSibling</span>(<span class="number">?x</span>, <span class="number">?y</span>), 
+<pre class="highlighted"><code class="ruby"><span class="symbol">:UncleOfNiece</span>(<span class="number">?x</span>) &lt;- <span class="symbol">:Person</span>(<span class="number">?x</span>), <span class="symbol">:Male</span>(<span class="number">?x</span>), <span class="symbol">:hasSibling</span>(<span class="number">?x</span>, <span class="number">?y</span>),
                   <span class="symbol">:isParentOf</span>(<span class="number">?y</span>, <span class="number">?z</span>), <span class="symbol">:Female</span>(<span class="number">?z</span>)
 </code></pre>
 
@@ -250,9 +327,11 @@ niece(s) and nephew(s):</p>
                    <span class="attribute">:Resource</span>(?<span class="attribute">y</span>), <span class="attribute">http:</span>//<span class="attribute">www.w3.org</span>/<span class="attribute">ns</span>/<span class="attribute">sparql</span>#<span class="attribute">UUID</span>(?<span class="attribute">z</span>)
 </code></pre>
 
-<h1 id="specialpredicateschapter">Special Predicates {#chapter}</h1>
+<h2 id="specialpredicates">Special Predicates</h2>
 
-<h2 id="directstrictsubclassesandsubpropertiesanddirecttypes">Direct/Strict Subclasses and Subproperties, and Direct Types</h2>
+<p>something something&#8230;</p>
+
+<h3 id="directstrictsubclassessubpropertiesdirecttypes">Direct/Strict Subclasses, Subproperties, &amp; Direct Types</h3>
 
 <p>Besides the standard RDF(S) predicates <code>rdf:type</code>, <code>rdfs:subClassOf</code> and
 <code>rdfs:subPropertyOf</code>, Stardog supports the following special built-in
@@ -299,7 +378,7 @@ analogous triple pattern.The predicates <code>sdle:directSubPropertyOf</code> an
 <p>These triple patterns can be used instead of the triple containing our
 built-in predicate in SELECT, CONSTRUCT, or ASK queries.</p>
 
-<h2 id="newindividualswithswrl">New Individuals with SWRL</h2>
+<h3 id="newindividualswithswrl">New Individuals with SWRL</h3>
 
 <p>One cannot create new individuals (i.e., new instances of classes) using
 SWRL. This restriction is well-motivated as it can lead to
@@ -318,7 +397,7 @@ built-in predicate <code>http://www.w3.org/ns/sparql#UUID</code> as follows:</p>
 the class <code>:Person</code> and also to assert that each new instance is also an
 instance of <code>:Parent</code>.</p>
 
-<h3 id="remarks">Remarks</h3>
+<h4 id="remarks">Remarks</h4>
 
 <p>The new individual built-in can <strong>only be used in the body of rules and
 it cannot be the only body atom</strong>. The URIs for the generated bnodes are
@@ -353,24 +432,20 @@ rule to our schema:</p>
 <pre class="highlighted"><code class="xml">:Father(?y) <span class="tag">&lt;<span class="title">-</span> <span class="attribute">:Person</span>(?<span class="attribute">x</span>), <span class="attribute">http:</span>//<span class="attribute">www.w3.org</span>/<span class="attribute">ns</span>/<span class="attribute">sparql</span>#<span class="attribute">UUID</span>(?<span class="attribute">y</span>)<span class="attribute">.</span>
 </code></pre>
 
-<h1 id="queryrewritingchapter">Query Rewriting {#chapter}</h1>
+<h2 id="queryrewriting">Query Rewriting</h2>
 
-<p>Query answering with reasoning in Stardog is based on <em>query rewriting</em>:
-Stardog rewrites the user&#8217;s query with respect to the schema, and then
+<p>Query answering with reasoning in Stardog is based on the <em>query rewriting</em>
+technique: Stardog rewrites the user&#8217;s query with respect to the schema, and then
 executes the resulting expanded query (EQ) against the data. As can be
-seen in Figure 2, the rewriting process involves 5 different phases.</p>
+seen in Figure 2, the rewriting process involves five different phases.</p>
 
 <figure>
 <img src="/docs/owl2/blackout.png" alt="" /></figure>
-
-
 
 <p>Figure 1. Query Answering</p>
 
 <figure>
 <img src="/docs/owl2/blackout-internals.png" alt="" /></figure>
-
-
 
 <p>Figure 2. Query Rewriting</p>
 
@@ -420,7 +495,7 @@ queries</em>. If the reasoning level is OWL 2 RL or EL, then the EQ <em>may</em>
 Stardog&#8217;s answers will be sound but incomplete with respect to the
 semantics of the requested reasoning level.</p>
 
-<h2 id="whyqueryrewriting">Why Query Rewriting?</h2>
+<h3 id="whyqueryrewriting">Why Query Rewriting?</h3>
 
 <p>Query rewriting has several advantages over the (primary) alternative
 technique, i.e., materialization. In this approach, it is the data that
@@ -445,7 +520,7 @@ complexity of the schema, materialization can be computationally
 expensive.</li>
 </ul>
 
-<h1 id="performancehintschapter">Performance Hints {#chapter}</h1>
+<h2 id="performancehints">Performance Hints</h2>
 
 <p>The <a href="#approach">query rewriting approach implemented by Stardog</a> implies
 guidelines that might contribute to more efficient query answering.</p>
@@ -512,6 +587,9 @@ range axiom:</p>
 <p>which is considerably less difficult to evaluate.</p>
 
 <h2 id="terminology">Terminology</h2>
+
+<p>The preceeding discussion employs the following terms of art with the following
+definitions.</p>
 
 <h3 id="databases">Databases</h3>
 
@@ -628,9 +706,9 @@ reasoning</strong>, then we would need only issue the following simple query:</p
 would have to issue the following considerably more complex query that
 considers all possible types of organization:</p>
 
-<pre class="highlighted"><code class="r">  SELECT ?org WHERE { { ?org rdf:type :Organization } UNION 
+<pre class="highlighted"><code class="r">  SELECT ?org WHERE { { ?org rdf:type :Organization } UNION
                       { ?org rdf:type :Company } UNION
-                      <span class="keyword">...</span> 
+                      <span class="keyword">...</span>
                     }
 </code></pre>
 
@@ -642,7 +720,7 @@ The most common modeling errors are <em>unsatisfiable</em> classes and
 Say, for example, that we added the following axioms to MyDB~2~:</p>
 
 <pre class="highlighted"><code class="css">  <span class="pseudo">:Company</span> <span class="tag">owl</span><span class="pseudo">:disjointWith</span> <span class="pseudo">:Organization</span>
-  <span class="pseudo">:LLC</span> <span class="tag">owl</span><span class="pseudo">:equivalentClass</span> <span class="pseudo">:Company</span> <span class="tag">and</span> <span class="pseudo">:Organization</span>  
+  <span class="pseudo">:LLC</span> <span class="tag">owl</span><span class="pseudo">:equivalentClass</span> <span class="pseudo">:Company</span> <span class="tag">and</span> <span class="pseudo">:Organization</span>
 </code></pre>
 
 <p>stating that companies cannot be organizations and vice versa, and that
@@ -665,7 +743,7 @@ to believe that there is a modeling error in our DB. In this case, it is
 easy to see that the problem is the disjointness axiom between
 <code>:Company</code> and <code>:Organization</code>.</p>
 
-<h3 id="owl2profilesprofiles">OWL 2 Profiles {#profiles}</h3>
+<h3 id="owl2profiles">OWL 2 Profiles</h3>
 
 <p>As explained in the <a href="http://www.w3.org/TR/owl2-profiles/">OWL 2 Web Ontology Language Profiles
 Specification</a> of the W3C, an OWL 2
@@ -705,11 +783,61 @@ constructs.</p>
 and Pellet. Notably, since TBox BGPs are handled completely by Pellet,
 Stardog supports reasoning for the whole of OWL 2 for queries containing
 TBox BGPs only.</p>
+</div>
+      </div>
+    </div>
+    <!--footer-->
+    <!--footer.jade-->
+    <div class="row"><a href="#" id="upaway" class="skip" gumby-easing="easeInOutQuad" gumby-goto="top" gumby-duration="2000">&uarr;</a>
+      <!--p.skiplink.metro.primary-->
+      <!--  <a href="" gumby-goto="top">Top</a>-->
+    </div>
+    <div class="container shaded">
+      <div class="row">
+        <div class="twelve columns">
+          <h3>This is&nbsp;<span id="title-masthead">Stardog&nbsp;</span><span id="subfoot-subhead">Reasoning &amp; Inference</span>, part of Stardog Docs 1.2.3.</h3>
+          <p>For comments, questions, or to report problems with this page, visit the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support Forum</a>.</p>
+          <p>&copy;2010&ndash;2013 Clark & Parsia LLC. <a href="http://creativecommons.org/licenses/by-sa/3.0/">Some rights reserved</a>.</p>
+        </div>
+      </div>
+    </div><script >(function(){
+	/* Did we just livereload? */
+var log = true && localStorage && console && console.log && true;
+if ( log && localStorage.getItem('/docpad-livereload/reloaded') === 'yes' ) {
+	localStorage.removeItem('/docpad-livereload/reloaded');
+	console.log('LiveReloaded at', new Date())
+}
 
-<h1 id="notes.fn">Notes {.fn}</h1>
-
-<p><a href="#" title="Back to top">⌂</a></p>
-
-<p>For comments, questions, or to report problems with this page, please
-email the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support
-Forum</a>.</p>
+/* Listen for the regenerated event and perform a reload of the page when the event occurs */
+var listen = function(){
+	var socket = io.connect('/docpad-livereload');
+	socket.on('regenerated',function(){
+		if ( log ) {
+	localStorage.setItem('/docpad-livereload/reloaded', 'yes');
+}
+document.location.reload();
+	});
+};
+	if ( typeof io !== 'undefined' ) {
+		listen();
+	} else {
+		/* Inject socket.io into our page then listen once loaded */
+var inject = function(){
+	var t = document.createElement('script');
+	t.type = 'text/javascript';
+	t.async = true;
+	t.src = '/socket.io/socket.io.js';
+	t.onload = listen;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(t,s);
+};
+		var readyStateCheckInterval = setInterval(function() {
+  if (document.readyState === "complete") {
+    inject();
+    clearInterval(readyStateCheckInterval);
+  }
+}, 10);
+	}
+})();</script><script defer="defer"  src="js/libs/jquery-1.9.1.min.js"></script><script defer="defer"  src="js/libs/gumby.fixed.js"></script><script defer="defer"  src="js/libs/gumby.navbar.js"></script><script defer="defer"  src="js/libs/gumby.retina.js"></script><script defer="defer"  src="js/libs/gumby.skiplink.js"></script><script defer="defer"  src="js/libs/gumby.tabs.js"></script><script defer="defer"  src="js/libs/gumby.toggleswitch.js"></script><script defer="defer"  src="js/libs/gumby.init.js"></script>
+  </body>
+</html>
