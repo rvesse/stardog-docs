@@ -4,11 +4,23 @@
 
 code,tt,pre,kbd,samp,var, pre span {font-family: "Ubuntu Mono"; font-weight: $font-weight-bold;}
 
+a {
+  color: #0D7EA3;
+}
+
 //Should be using some special units!
 pre {
        margin-bottom: $base-line-height / 2;
        margin-left: $base-line-height / 2;
 
+}
+
+dd {
+  margin-left: $base-line-height / 2;
+}
+
+dl {
+  margin-bottom: $base-line-height / 2;
 }
 
 #title-masthead {

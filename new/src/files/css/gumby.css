@@ -1847,7 +1847,13 @@ body .video.twitch, body .video.youtube.show_controls { padding-top: 30px; }
 
 code, tt, pre, kbd, samp, var, pre span { font-family: "Ubuntu Mono"; font-weight: 700; }
 
+a { color: #0D7EA3; }
+
 pre { margin-bottom: 13px; margin-left: 13px; }
+
+dd { margin-left: 13px; }
+
+dl { margin-bottom: 13px; }
 
 #title-masthead { color: #083959; font-weight: 700; }
 
