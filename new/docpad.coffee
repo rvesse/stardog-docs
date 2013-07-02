@@ -54,22 +54,23 @@ docpadConfig = {
 
         # Specify some site properties
         version: "1.2.3" #update me on new release
+        reldate: "11 June 2013"
         site:
             scripts: [
-                      "js/libs/jquery-1.9.1.min.js"
-                      "js/libs/gumby.js">
-                      "js/libs/gumby.fittext.js"
-                      "js/libs/gumby.fixed.js"
-                      "js/libs/gumby.navbar.js"
-                      "js/libs/gumby.retina.js"
-                      "js/libs/gumby.skiplink.js"
-                      "js/libs/gumby.tabs.js"
-                      "js/libs/gumby.toggleswitch.js"
-                      "js/libs/gumby.init.js"
+                      "/js/libs/jquery-1.9.1.min.js"
+                      "/js/libs/gumby.js">
+                      "/js/libs/gumby.fittext.js"
+                      "/js/libs/gumby.fixed.js"
+                      "/js/libs/gumby.navbar.js"
+                      "/js/libs/gumby.retina.js"
+                      "/js/libs/gumby.skiplink.js"
+                      "/js/libs/gumby.tabs.js"
+                      "/js/libs/gumby.toggleswitch.js"
+                      "/js/libs/gumby.init.js"
                       ]
             styles: [
 
-                      "css/gumby.css"
+                      "/css/gumby.css"
 
                      ]
             # The production url of our website
