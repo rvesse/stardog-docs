@@ -1,36 +1,20 @@
-[![](/_/img/sdog-bare.png)](/)
+---
+quote: Functions delay binding; data structures induce binding. Moral: Structure data late in the programming process.
+layout: default
+title: Documentation
+---
 
-> **Functions delay binding; data structures induce binding. Moral:
-> Structure data late in the programming process.**—Alan Perlis,
-> Epigrams in Programming
+## Introduction
 
-Stardog Docs {#title}
-============
-
-Shortcuts {#toc-title}
-=========
-
-1.  [Download](http://stardog.com/dl/) Stardog
-2.  [Quick Start Guide](quick-start)
-3.  [Support
-    Forum](https://groups.google.com/a/clarkparsia.com/group/stardog/about)
-
-Introduction {#chapter}
-============
-
-Stardog is a [fast](../docs/performance), lightweight, commercial RDF
+Stardog is a [fast](/performance), lightweight, commercial RDF
 database for mission-critical apps: it supports [SPARQL
-1.1](http://www.w3.org/TR/2012/WD-sparql11-query-20120105/);As of
-@@VERSION@@, Stardog's SPARQL 1.1 support does not include: UPDATE query
-language; federation; UPDATE protocol; no entailment regimes other than
-OWL 2 Direct Semantics. We will address these in upcoming releases. HTTP
+1.1](http://www.w3.org/TR/2012/WD-sparql11-query-20120105/); HTTP
 and the SNARL protocol for remote access and control;
 [RDF](http://www.w3.org/RDF/) as a data model; and [OWL
 2](http://www.w3.org/TR/owl2-overview/) for inference and data
 analytics.
 
-Acquiring Stardog & Support
----------------------------
+### Acquiring Stardog & Support
 
 [Download](http://stardog.com/dl/) Stardog to get started. The [Stardog
 support
@@ -39,17 +23,10 @@ forum](https://groups.google.com/a/clarkparsia.com/group/stardog/about),
 to report bugs, ask questions, etc. You can also ask questions on [Stack
 Overflow](http://stackoverflow.com/) using the tag *stardog*.
 
-Contributing
-------------
+### Contributing
 
 There are several open source components of Stardog; feel free to submit
-pull requests!
-
--   [stardog-docs](https://github.com/clarkparsia/stardog-docs)
--   [stardog.js](https://github.com/clarkparsia/stardog.js)
--   [stardog-groovy](https://github.com/clarkparsia/stardog-groovy)
--   [stardog-spring](https://github.com/clarkparsia/stardog-spring)
--   [stardog.rb](https://github.com/antoniogarrote/stardog-rb)
+pull requests: [stardog-docs](https://github.com/clarkparsia/stardog-docs), [stardog.js](https://github.com/clarkparsia/stardog.js), [stardog-groovy](https://github.com/clarkparsia/stardog-groovy), [stardog-spring](https://github.com/clarkparsia/stardog-spring), and [stardog.rb](https://github.com/antoniogarrote/stardog-rb).
 
 ### Acknowledgments
 
@@ -58,34 +35,18 @@ Marko A. Rodriguez, Brian Sletten, Alin Dreghiciu, Rob Vesse, Stephane
 Fallah, John "New Model Army" Goodwin, José Devezas, Chris
 Halaschek-Wiener, Gavin Carothers, Brian Panulla, Ryan Kohl, Morton
 Swimmer, Quentin Reul, Paul Dlug, James Leigh, Alex Tucker, Ron
-Zettlemoyer, Jim Rhyne. Andrea Westerinen, Huy Phan.
+Zettlemoyer, Jim Rhyne, Andrea Westerinen, Huy Phan, Zach Whitley.
 
-The Essential Documentation {#chapter}
-===========================
+## The Essential Documentation
 
-This is documentation for Stardog **@@VERSION@@** (**@@DATE@@**). Check
-out the [release notes](../docs/RELEASE_NOTES.txt) and the
-[FAQ](../docs/faq/).
+This is documentation for Stardog <t>version</t> (<t>reldate</t>). Check
+out the [release notes](../docs/RELEASE_NOTES.txt) and the [FAQ](../docs/faq/).
 
-[Quick Start Guide](../docs/quick-start)
-----------------------------------------
+### [Quick Start Guide](../docs/quick-start)
 
 Instructions to get up-and-running very quickly with Stardog.
 
-[Terminology](../docs/term/)
-----------------------------
-
-A [glossary](../docs/term/) of technical terms used throughout the
-Stardog docs.
-
-[Stardog Compatibility Policies: The Future of Queries, Data, and Programs](../docs/compatibility/)
----------------------------------------------------------------------------------------------------
-
-A statement of the policies we will pursue in evolving Stardog beyond
-the 1.0 release.
-
-[Administration](../docs/admin/)
---------------------------------
+### [Administration](../docs/admin/)
 
 1.  [CLI Overview](../docs/admin/#cli)
 2.  [Administering a Stardog Server](../docs/admin/#admin-server)
@@ -93,12 +54,10 @@ the 1.0 release.
 4.  [Configuring Security](../docs/admin/#security)
 5.  [Managing Search Indexes](../docs/admin/#search)
 6.  [Optimizing Bulk Data Loading](../docs/admin/#optimizing-bulk-load)
-7.  [Resource Requirements for
-    Stardog](../docs/admin/#resource-requirements)
+7.  [Resource Requirements for Stardog](../docs/admin/#resource-requirements)
 8.  [Using Stardog on Windows](../docs/admin/#using-windows)
 
-[Using Stardog](../docs/using/)
--------------------------------
+### [Using Stardog](../docs/using/)
 
 1.  [Using Stardog](../docs/using/#using-stardog)
 2.  [Querying a Database](../docs/using/#query)
@@ -106,23 +65,19 @@ the 1.0 release.
 4.  [Exporting a Database](../docs/using/#export)
 5.  [Searching](../docs/using/#search)
 
-[Security](../docs/security)
-----------------------------
+### [Security](../docs/security)
 
 1.  [The User & Security Model](../docs/security/#model)
 2.  [Command-line Interface](../docs/security/#cli)
 3.  [Programmatic Access](../docs/security/#api)
 4.  [Deploying Stardog Securely](../docs/security/#deployment)
 
-[Integrity Constraint Validation](../docs/sdp)
-----------------------------------------------
+### [Integrity Constraint Validation](../docs/sdp)
 
 1.  [Background & Terminology](../docs/sdp/#intro)
-2.  [Validating RDF with Closed World Integrity
-    Constraints](../docs/sdp/#validation)
+2.  [Validating RDF with Closed World Integrity Constraints](../docs/sdp/#validation)
 
-[OWL 2 Reasoning](../docs/owl2)
--------------------------------
+### [OWL 2 Reasoning](../docs/owl2)
 
 1.  [Using Stardog's Reasoning Capabilities](../docs/owl2/#reasoning)
 2.  [Not Getting Expected Answers?](../docs/owl2/#trouble)
@@ -130,8 +85,7 @@ the 1.0 release.
 4.  [Guidelines](../docs/owl2/#guidelines)
 5.  [Technical Background](../docs/owl2/#query)
 
-[Programming with Java](../docs/java/)
---------------------------------------
+### [Programming with Java](../docs/java/)
 
 1.  [Introduction](../docs/java/#intro)
 2.  [Creating and Administering Databases](../docs/java/#admin)
@@ -145,15 +99,14 @@ the 1.0 release.
 10. [Connection Pooling](../docs/java/#pool)
 11. [Deprecation & Backward Compatibility](../docs/java/#deprecation)
 
-[Network Programming](../docs/network/)
----------------------------------------
+### [Network Programming](../docs/network/)
 
 1.  [SPARQL Protocol: HTTP](../docs/network/#http)
 2.  [Extended HTTP Protocol](../docs/network/#extended-http)
 3.  [SNARL: The Native Stardog Remote API](../docs/network/#snarl)
 
-[Programming with Spring](../docs/spring)
------------------------------------------
+
+### [Programming with Spring](../docs/spring)
 
 1.  [Introduction](../docs/spring/#intro)
 2.  [Building Spring for Stardog](../docs/spring/#building)
@@ -162,18 +115,30 @@ the 1.0 release.
 5.  [Spring Batch](../docs/spring/#batch)
 6.  [Examples](../docs/spring/#examples)
 
-[Programming with Groovy](../docs/groovy/)
-------------------------------------------
+### [Programming with Groovy](../docs/groovy/)
 
 1.  [Introduction](../docs/groovy/#intro)
 2.  [Building Groovy for Stardog](../docs/groovy/#building)
 3.  [Overview](../docs/groovy/#overview)
 4.  [Examples](../docs/groovy/#examples)
 
-The Man Pages
--------------
+### [Programming with Javascript](http://clarkparsia.github.io/stardog.js/)
 
-`stardog-admin`
+The documentation for [stardog.js](http://clarkparsia.github.io/stardog.js), which is available on [Github](https://github.com/clarkparsia/stardog.js) and [npm]().
+
+### [Terminology](../docs/term/)
+
+A [glossary](../docs/term/) of technical terms used throughout the
+Stardog docs.
+
+### [Stardog Compatibility Policies](../docs/compatibility/)
+
+A statement of the policies we will pursue in evolving Stardog beyond
+the 1.0 release.
+
+### The Man Pages
+
+#### `stardog-admin`
 
 > `db copy, db create, db drop, db list, db migrate, db offline, db online, db optimize, db status.`
 >
@@ -189,7 +154,7 @@ The Man Pages
 >
 > `user add, user disable, user enable, user addrole, user removerole, user grant, user list, user passwd, user permission, user remove, user revoke.`
 
-`stardog`
+#### `stardog`
 
 > ` data add, data export, data remove, data size.`
 >
@@ -201,11 +166,13 @@ The Man Pages
 >
 > ` reasoning consistency, reasoning explain.`
 
-Known Issues {#chapter}
-============
+### Known Issues
 
-As of **@@VERSION@@**, the known issues include:
+As of <t>version</t>, known issues include:
 
+1. Stardog doesn't support SPARQ 1.1 UPDATE query
+    language, federation, UPDATE protocol (but the HTTP protocol support is a superset of SPARQL 1.1 UPDATE protocol anyway), or any entailment regimes other than
+    OWL 2 Direct Semantics. **WILLFIX**
 1.  Asking for all individuals with reasoning via the query
     `{?s a owl:Thing}` might also retrieve some classes and properties.
     **WILLFIX**
@@ -234,10 +201,3 @@ As of **@@VERSION@@**, the known issues include:
 7.  RDF literals are limited to 8MB (after compression) in Stardog.
     Input data with literals larger than 8MB (after compression) will
     raise an exception.
-
-Notes {.fn}
-=====
-
-[⌂](# "Back to top")
-
-

@@ -21,9 +21,9 @@ does not materialize inferences; but, rather, reasoning is performed at
 query time according to a given reasoning level. This allows for maximum
 flexibility while maintaining excellent performance and scalability.
 
-Stardog supports several reasoning levels; the reasoning level
-determines the kinds of inference rules or axioms that are to be
-considered during query evaluation:
+<div><a id="reasoning-levels"></a></div>
+
+Stardog supports several reasoning levels; the reasoning level determines the kinds of inference rules or axioms that are to be considered during query evaluation:
 
 -   **NONE**. No axioms are considered.
 -   **RDFS**. For the OWL 2 axioms allowed in [RDF

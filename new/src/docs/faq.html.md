@@ -1,15 +1,22 @@
-^^^
+---
 quote: "Software is under a constant tension. Being symbolic it is arbitrarily perfectible; but also it is arbitrarily changeable."
 title: "FAQ"
-^^^
-
-These are the things Stardog users ask frequently and the answers we
-have to give.
+layout: "default"
+---
 
 Some frequently asked questions for which we have answers.
 
-Deadlocks and Slowdowns
------------------------
+## SPARQL 1.1
+
+**Question:** Does Stardog support SPARQL 1.1?
+
+**Answer:** Yes. As of Stardog 1.1 (released 14 November 2012), Stardog
+supports SPARQL 1.1. However, there are still a few odds and ends of
+SPARQL 1.1 that we don't yet support.
+
+**Revised Answer:** Stardog 2.0 supports SPARQL 1.1 protocol and query language, including updates.
+
+## Deadlocks and Slowdowns
 
 **Question:** Stardog slows down or deadlocks?! I don't understand why,
 I'm just trying to send some queries and do something with the
@@ -28,18 +35,7 @@ Similarly close your connections when you are done with them. Failing to
 close Connections, Iterations, QueryResults, and other *closeable*
 objects will lead to undesirable behavior.
 
-SPARQL 1.1
-----------
-
-**Question:** Does Stardog support SPARQL 1.1?
-
-**Answer:** Yes. As of Stardog 1.1 (released 14 November 2012), Stardog
-supports SPARQL 1.1. However, there are still a few odds and ends of
-SPARQL 1.1 that we don't yet support. See [this footnote](../#note-1)
-for more details.
-
-Bulk Update Performance
------------------------
+## Bulk Update Performance
 
 **Question:** I'm adding one triple at a time, in a tight loop, to
 Stardog; is this the ideal strategy with respect to performance?
@@ -58,8 +54,7 @@ and 100k triples at a time. You may need to experiment to find the sweet
 spot with respect to your data, database size, the size of the
 differential index, and update frequency.
 
-Public Endpoint
----------------
+## Public Endpoint
 
 **Question:** I want to use Stardog to serve a public SPARQL endpoint;
 is there some way I can do this without publishing user account
@@ -72,8 +67,7 @@ argument, since it doesn't actually disable security, it will use the
 built-in anonymous user (given the default configuration and user
 accounts) in a way that makes Stardog usable for a public endpoint.
 
-Remote Bulk Loading
--------------------
+## Remote Bulk Loading
 
 **Question:** I'm trying to create a database and bulk load files from
 my machine to the server and it's not working, the files don't seem to
@@ -83,6 +77,3 @@ load, what gives?
 the server, sending big files over a network kind of defeats the purpose
 of blazing fast bulk loading. If you want to bulk load files from your
 machine to a remote server, copy them to the server and bulk load them.
-
-Notes {.fn}
-=====

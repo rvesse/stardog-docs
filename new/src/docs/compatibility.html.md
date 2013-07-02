@@ -1,13 +1,10 @@
-[![](/_/img/sdog-bare.png)](/)
+---
+quote: Don't have good ideas if you aren't willing to be responsible for them.
+title: What 1.x Means
+layout: "default"
+---
 
-> **Don't have good ideas if you aren't willing to be responsible for
-> them.**—Alan Perlis, Epigrams in Programming
-
-Stardog 1.x {#title}
-===========
-
-Introduction {#chapter}
-============
+## Introduction
 
 The Stardog 1.x release ("Stardog" for short) is a major milestone in
 the development of the system. Stardog is a stable platform for the
@@ -31,8 +28,7 @@ should continue to work even as future releases of Stardog (1.1, 1.2,
 APIs, protocols, and interfaces may grow, acquiring new parts and
 features, but not in a way that breaks existing Stardog programs.
 
-Expectations
-------------
+## Expectations
 
 Although we expect that nearly all Stardog programs will maintain this
 compatibility over time, it is impossible to guarantee that no future
@@ -63,8 +59,7 @@ guarantee can be made about the performance of a given program between
 releases, except to say that our expectation is that performance will
 generally trend in the appropriate direction.
 
-Data Migration & Safety
------------------------
+## Data Migration & Safety
 
 Finally, we expect that data safety will always be given greater weight
 than any other consideration. But since Stardog stores user data
@@ -84,14 +79,3 @@ require the "dump and reload" strategy between *major* releases of
 Stardog (that is, from 1.x to 2.x, etc.), unless that strategy of
 migration is required to repair a security or other data safety bug in
 Stardog 1.x.
-
-Notes {.fn}
-=====
-
-[⌂](# "Back to top")
-
-For comments, questions, or to report problems with this page, please
-email the [Stardog Support
-Forum](https://groups.google.com/a/clarkparsia.com/group/stardog/about).
-
-
