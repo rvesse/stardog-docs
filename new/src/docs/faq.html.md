@@ -2,6 +2,7 @@
 quote: "Software is under a constant tension. Being symbolic it is arbitrarily perfectible; but also it is arbitrarily changeable."
 title: "FAQ"
 layout: "default"
+toc: true
 ---
 
 Some frequently asked questions for which we have answers.

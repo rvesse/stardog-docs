@@ -37,13 +37,13 @@ environment;</p></li>
 POM in local Maven repo; alternately,</p></li>
 <li><p><code>mvn install</code> will work, too:</p>
 
-<pre class="highlighted"><code class="brainfuck"><span class="comment">mvn</span> <span class="comment">install:install</span>-<span class="comment">file</span>
-      <span class="literal">-</span><span class="comment">DgroupId=com</span>.<span class="comment">clarkparsia</span>.<span class="comment">stardog</span>
-      <span class="literal">-</span><span class="comment">DartifactId=stardog</span>-<span class="comment">spring</span>
-      <span class="literal">-</span><span class="comment">Dversion=1</span>.<span class="comment">1</span>.<span class="comment">1</span>
-      <span class="literal">-</span><span class="comment">Dfile=stardog</span>-<span class="comment">spring</span>.<span class="comment">jar</span>
-      <span class="literal">-</span><span class="comment">Dpackaging=jar</span>
-      <span class="literal">-</span><span class="comment">DpomFile=pom</span>.<span class="comment">xml</span>
+<pre><code>mvn install:install-file
+      -DgroupId=com.clarkparsia.stardog
+      -DartifactId=stardog-spring
+      -Dversion=1.1.1
+      -Dfile=stardog-spring.jar
+      -Dpackaging=jar
+      -DpomFile=pom.xml
 </code></pre></li>
 </ul>
 
@@ -111,36 +111,36 @@ parameter for a single result set.</p>
 
 <p>The key methods on <code>SnarlTemplate</code> include the following:</p>
 
-<pre class="highlighted"><code class="erlang"><span class="function"><span class="title">query</span><span class="params">(<span class="variable">String</span> sparql<span class="variable">Query</span>, <span class="variable">Map</span> args, <span class="variable">RowMapper</span>)</span>
+<pre><code>query(String sparqlQuery, Map args, RowMapper)
 </code></pre>
 
 <p><code>query()</code> executes the SELECT query with provided argument list, and
 invokes the mapper for result rows.</p>
 
-<pre class="highlighted"><code class="erlang"><span class="function"><span class="title">doWithAdder</span><span class="params">(<span class="variable">AdderCallback</span>)</span>
+<pre><code>doWithAdder(AdderCallback)
 </code></pre>
 
 <p><code>doWithAdder()</code> is a transaction- and connection-pool safe adder call.</p>
 
-<pre class="highlighted"><code class="erlang"><span class="function"><span class="title">doWithGetter</span><span class="params">(<span class="variable">String</span> subject, <span class="variable">String</span> predicate, <span class="variable">GetterCallback</span>)</span>
+<pre><code>doWithGetter(String subject, String predicate, GetterCallback)
 </code></pre>
 
 <p><code>doWithGetter()</code> is the connection pool boilerplate method for the
 <code>Getter</code> interface, including the programmatic filters.</p>
 
-<pre class="highlighted"><code class="erlang"><span class="function"><span class="title">doWithRemover</span><span class="params">(<span class="variable">RemoverCallback</span>)</span>
+<pre><code>doWithRemover(RemoverCallback)
 </code></pre>
 
 <p><code>doWithRemover()</code> As above, the remover method that is transaction and
 pool safe.</p>
 
-<pre class="highlighted"><code class="erlang"><span class="function"><span class="title">execute</span><span class="params">(<span class="variable">ConnectionCallback</span>)</span>
+<pre><code>execute(ConnectionCallback)
 </code></pre>
 
 <p><code>execute()</code> lets you work with a connection directly; again, transaction
 and pool safe.</p>
 
-<pre class="highlighted"><code class="erlang"><span class="function"><span class="title">construct</span><span class="params">(<span class="variable">String</span> construct<span class="variable">Sparql</span>, <span class="variable">Map</span> args, <span class="variable">GraphMapper</span>)</span>
+<pre><code>construct(String constructSparql, Map args, GraphMapper)
 </code></pre>
 
 <p><code>construct()</code> executes a SPARQL CONSTRUCT query with provided argument

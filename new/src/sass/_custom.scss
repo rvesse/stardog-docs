@@ -29,7 +29,7 @@ dl {
 
 }
 
-#title-subhead {
+#title-subhead, #tochead {
   color: $sd-lime;
   font-weight: $font-weight-thin;
 }
@@ -38,6 +38,12 @@ dl {
   color: $sd-lime;
   font-weight: $font-weight-bold;
 
+}
+
+#social {
+  @include padding-leader($rhythm-spacing);
+  @include adjust-leading-to($rhythm-height);
+  @include padding-trailer($rhythm-spacing);
 }
 
 #title {
@@ -107,6 +113,69 @@ a:link {color: #8C031C; text-decoration: none;}
   border: 0;
   }
 
-a#upaway {
-  font-size: $large;
+#upaway {
+  @include padding-leader($rhythm-spacing);
+  @include adjust-leading-to($rhythm-height);
+  @include padding-trailer($rhythm-spacing);
+  font-size: $med;
+}
+
+#copywood {
+  font-size: $norm;
+}
+
+p#social a {
+  decoration: none;
+}
+
+#inner-doc #inner-nav {
+  margin-bottom: 40px;
+}
+
+#inner-doc #sidebar-nav-holder.fixed {
+  top: 10px;
+}
+@media only screen and (max-width: 768px) {
+  #inner-doc #sidebar-nav-holder.fixed {
+    width: 100%;
+  }
+}
+
+#inner-doc #sidebar-nav-holder.end {
+  position: absolute;
+}
+
+#inner-doc #sidebar-nav {
+  text-align: left;
+}
+@media only screen and (max-width: 767px) {
+  #inner-doc #sidebar-nav {
+    margin-bottom: 30px;
+  }
+}
+
+#inner-doc #sidebar-nav li a {
+  background: none;
+  -o-transition: .4s;
+  -ms-transition: .4s;
+  -moz-transition: .4s;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+#inner-doc #sidebar-nav li.active a {
+  color: #fff;
+  background: #3085d6;
+}
+#inner-doc #sidebar-nav li.active a:hover {
+  background: #3085d6;
+}
+
+#inner-doc #sidebar-nav a {
+  color: #555555;
+  display: block;
+  padding: 8px 14px;
+}
+#inner-doc #sidebar-nav a:hover {
+  background: #E9E9E9;
 }

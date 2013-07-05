@@ -2,6 +2,7 @@
 quote: "The proof of a system's value is its existence."
 layout: "default"
 title: "Reasoning & Inference"
+toc: true
 ---
 
 ##Introduction

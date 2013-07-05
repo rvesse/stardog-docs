@@ -37,7 +37,7 @@ regime</a>.</p>
 <p>To execute a SPARQL query against a Stardog database, use the <code>query</code>
 subcommand:</p>
 
-<pre class="highlighted"><code class="sql">$ stardog query myDb "<span class="operator"><span class="keyword">select</span> * <span class="keyword">where</span> { ?s ?p ?o }<span class="string">"
+<pre><code>$ stardog query myDb &quot;select * where { ?s ?p ?o }&quot;
 </code></pre>
 
 <p>Detailed information on using the query command in Stardog can be found
@@ -50,7 +50,7 @@ time. See the <a href="../admin/#create">Creating a Database</a> section for bul
 loading data at database creation time. To add data to an existing
 Stardog database, use the <a href="/docs/man/data-add.html">add</a> command:</p>
 
-<pre class="highlighted"><code class="haskell">$ stardog <span class="typedef"><span class="keyword">data</span> add myDatabase 1.rdf 2.rdf 3.rdf</span>
+<pre><code>$ stardog data add myDatabase 1.rdf 2.rdf 3.rdf
 </code></pre>
 
 <p>The optional arguments are <code>-f</code> (or <code>--format</code>) to specify the RDF
@@ -76,19 +76,19 @@ format, i.e., RDF/XML, Turtle, Trig), OR</li>
 
 <p>For example,</p>
 
-<pre class="highlighted"><code class="haskell">$ stardog <span class="typedef"><span class="keyword">data</span> remove -g http://foo myDatabase</span>
+<pre><code>$ stardog data remove -g http://foo myDatabase
 </code></pre>
 
 <p>will remove the named graph <code>http://foo</code> and all its triples from
 <code>myDatabase</code>.</p>
 
-<pre class="highlighted"><code class="haskell">$ stardog <span class="typedef"><span class="keyword">data</span> remove myDatabase 1.rdf</span>
+<pre><code>$ stardog data remove myDatabase 1.rdf
 </code></pre>
 
 <p>will remove the triples in <code>1.rdf</code> from (the default graph of)
 <code>myDatabase</code>.</p>
 
-<pre class="highlighted"><code class="brainfuck"><span class="comment">$</span> <span class="comment">stardog</span> <span class="comment">data</span> <span class="comment">remove</span> <span class="literal">-</span><span class="comment">g</span> <span class="comment">http://foo</span> <span class="literal">-</span><span class="comment">f</span> <span class="comment">TURTLE</span> <span class="comment">myDatabase</span> <span class="comment">2</span>.<span class="comment">rdf</span> <span class="comment">3</span>.<span class="comment">rdf</span>
+<pre><code>$ stardog data remove -g http://foo -f TURTLE myDatabase 2.rdf 3.rdf
 </code></pre>
 
 <p>will remove the triples in the Turtle files <code>2.rdf</code> and <code>3.rdf</code> from the
@@ -127,9 +127,9 @@ export a single named graph only.</li>
 
 <p>For example,</p>
 
-<pre class="highlighted"><code class="brainfuck"><span class="comment">$</span> <span class="comment">stardog</span> <span class="comment">data</span> <span class="comment">export</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">format</span> <span class="comment">TURTLE</span> <span class="comment">myDatabase</span> <span class="comment">myDatabase_output</span>.<span class="comment">ttl</span>
+<pre><code>$ stardog data export --format TURTLE myDatabase myDatabase_output.ttl
 
-<span class="comment">$</span> <span class="comment">stardog</span> <span class="comment">data</span> <span class="comment">export</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">graph</span>-<span class="comment">uri</span> <span class="comment">http://example</span>.<span class="comment">org/context</span> <span class="comment">myDatabase</span> <span class="comment">myDatabase_output</span>.<span class="comment">nt</span>
+$ stardog data export --graph-uri http://example.org/context myDatabase myDatabase_output.nt
 </code></pre>
 
 <h1 id="searchingchapter">Searching {#chapter}</h1>
@@ -151,10 +151,10 @@ access the search index in a SPARQL query.</p>
 
 <p>For example,</p>
 
-<pre class="highlighted"><code class="ruby"><span class="constant">SELECT</span> <span class="constant">DISTINCT</span> <span class="number">?s</span> <span class="number">?s</span>core 
-<span class="constant">WHERE</span> {
-<span class="number">?s</span> <span class="number">?p</span> <span class="number">?l</span>.
-( <span class="number">?l</span> <span class="number">?s</span>core ) &lt;<span class="symbol">http:</span>/<span class="regexp">/jena.hpl.hp.com/</span><span class="constant">ARQ</span>/property<span class="comment">#textMatch&gt; ( 'mac' 0.5 50 ). </span>
+<pre><code>SELECT DISTINCT ?s ?score 
+WHERE {
+?s ?p ?l.
+( ?l ?score ) &lt;http://jena.hpl.hp.com/ARQ/property#textMatch&gt; ( 'mac' 0.5 50 ). 
 }
 </code></pre>
 
@@ -171,29 +171,29 @@ you like to enhance your initial search results.</p>
 <p>First, check out the CLI help for the
 <a href="/docs/man/query-search.html">search</a> subcommand&#8230;I&#8217;ll wait.</p>
 
-<pre class="highlighted"><code class="erlang">$ stardog help <span class="keyword">query</span> search
+<pre><code>$ stardog help query search
 </code></pre>
 
 <p>Okay, now let&#8217;s do a search over the O&#8217;Reilly book catalog in RDF for
 everything mentioning &#8220;html&#8221;:</p>
 
-<pre class="highlighted"><code class="brainfuck"><span class="comment">$</span> <span class="comment">stardog</span> <span class="comment">query</span> <span class="comment">search</span> <span class="literal">-</span><span class="comment">q</span> <span class="comment">"html"</span> <span class="literal">-</span><span class="comment">l</span> <span class="comment">10</span> <span class="comment">catalog</span>
+<pre><code>$ stardog query search -q &quot;html&quot; -l 10 catalog
 </code></pre>
 
 <p>The results?</p>
 
-<pre class="highlighted"><code class="smalltalk"><span class="class">Index</span>    <span class="class">Score</span>    <span class="class">Hit</span>
+<pre><code>Index    Score    Hit
 ====================
-<span class="number">0</span>    <span class="number">6.422</span>    <span class="method">urn:</span>x-<span class="method">domain:</span>oreilly.<span class="method">com:</span><span class="method">product:</span><span class="number">9780596527402.</span><span class="class">IP</span>
-<span class="number">1</span>    <span class="number">6.422</span>    <span class="method">urn:</span>x-<span class="method">domain:</span>oreilly.<span class="method">com:</span><span class="method">product:</span><span class="number">9780596003166.</span><span class="class">IP</span>
-<span class="number">2</span>    <span class="number">6.422</span>    <span class="method">urn:</span>x-<span class="method">domain:</span>oreilly.<span class="method">com:</span><span class="method">product:</span><span class="number">9781565924949.</span><span class="class">IP</span>
-<span class="number">3</span>    <span class="number">6.422</span>    <span class="method">urn:</span>x-<span class="method">domain:</span>oreilly.<span class="method">com:</span><span class="method">product:</span><span class="number">9780596002251.</span><span class="class">IP</span>
-<span class="number">4</span>    <span class="number">6.422</span>    <span class="method">urn:</span>x-<span class="method">domain:</span>oreilly.<span class="method">com:</span><span class="method">product:</span><span class="number">9780596101978.</span><span class="class">IP</span>
-<span class="number">5</span>    <span class="number">6.422</span>    <span class="method">urn:</span>x-<span class="method">domain:</span>oreilly.<span class="method">com:</span><span class="method">product:</span><span class="number">9780596154066.</span><span class="class">IP</span>
-<span class="number">6</span>    <span class="number">6.422</span>    <span class="method">urn:</span>x-<span class="method">domain:</span>oreilly.<span class="method">com:</span><span class="method">product:</span><span class="number">9780596157616.</span><span class="class">IP</span>
-<span class="number">7</span>    <span class="number">6.422</span>    <span class="method">urn:</span>x-<span class="method">domain:</span>oreilly.<span class="method">com:</span><span class="method">product:</span><span class="number">9780596805876.</span><span class="class">IP</span>
-<span class="number">8</span>    <span class="number">6.422</span>    <span class="method">urn:</span>x-<span class="method">domain:</span>oreilly.<span class="method">com:</span><span class="method">product:</span><span class="number">9780596527273.</span><span class="class">IP</span>
-<span class="number">9</span>    <span class="number">6.422</span>    <span class="method">urn:</span>x-<span class="method">domain:</span>oreilly.<span class="method">com:</span><span class="method">product:</span><span class="number">9780596002961.</span><span class="class">IP</span>
+0    6.422    urn:x-domain:oreilly.com:product:9780596527402.IP
+1    6.422    urn:x-domain:oreilly.com:product:9780596003166.IP
+2    6.422    urn:x-domain:oreilly.com:product:9781565924949.IP
+3    6.422    urn:x-domain:oreilly.com:product:9780596002251.IP
+4    6.422    urn:x-domain:oreilly.com:product:9780596101978.IP
+5    6.422    urn:x-domain:oreilly.com:product:9780596154066.IP
+6    6.422    urn:x-domain:oreilly.com:product:9780596157616.IP
+7    6.422    urn:x-domain:oreilly.com:product:9780596805876.IP
+8    6.422    urn:x-domain:oreilly.com:product:9780596527273.IP
+9    6.422    urn:x-domain:oreilly.com:product:9780596002961.IP
 </code></pre>
 
 <h2 id="querysyntax">Query Syntax</h2>

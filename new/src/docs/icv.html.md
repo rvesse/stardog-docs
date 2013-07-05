@@ -1,17 +1,20 @@
 ---
 quote: "It is easier to write an incorrect program than understand a correct one."
-title: "ICV"
+title: "Integrity Constraint Validation"
 layout: "default"
 related: ""
+toc: true
+summary: 'ICV validates RDF data stored in a Stardog database according to data rules (i.e., "constraints") described by users and that make sense for their domain, application, and data. These constraints are written in SPARQL, OWL, or SWRL. This chapter explains how to use ICV and how it works.'
 ---
 
+<!-- 
 ## Introduction
 
-Stardog Integrity Constraint Validation ("ICV") validates RDF data stored in a Stardog database according to data rules (i.e., "constraints") described by users and that make sense for their domain, application, and data. These constraints are written in PARQL, OWL, or SWRL.
+Stardog Integrity Constraint Validation ("ICV") validates RDF data stored in a Stardog database according to data rules (i.e., "constraints") described by users and that make sense for their domain, application, and data. These constraints are written in PARQL, OWL, or SWRL. This chapter explains how to use ICV and how it works.
 
-This chapter explains how to use ICV and how it works.
+-->
 
-## A Quick Start Guide to Using ICV
+## ICV Quick Start
 
 To use ICV in Stardog, you need some data and some constraints. To get you started very quickly, we've included a sample database and constraints in the Stardog distribution. This section explains how to use ICV in Stardog using that sample info.
 

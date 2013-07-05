@@ -50,28 +50,27 @@ docpadConfig = {
     # Template Data
     # Use to define your own template data and helpers that will be accessible to your templates
     # Complete listing of default values can be found here: http://docpad.org/docs/template-data
-    templateData:  # example
-
+    templateData:
         # Specify some site properties
         version: "1.2.3" #update me on new release
         reldate: "11 June 2013"
         site:
             scripts: [
-                      "/js/libs/jquery-1.9.1.min.js"
-                      "/js/libs/gumby.js">
-                      "/js/libs/gumby.fittext.js"
-                      "/js/libs/gumby.fixed.js"
-                      "/js/libs/gumby.navbar.js"
-                      "/js/libs/gumby.retina.js"
-                      "/js/libs/gumby.skiplink.js"
-                      "/js/libs/gumby.tabs.js"
-                      "/js/libs/gumby.toggleswitch.js"
+                      "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
+                      "/js/libs/gumby.js"
+                      "/js/libs/ui/gumby.fittext.js"
+                      "/js/libs/ui/gumby.fixed.js"
+                      "/js/libs/ui/gumby.navbar.js"
+                      "/js/libs/ui/gumby.retina.js"
+                      "/js/libs/ui/gumby.skiplink.js"
+                      "/js/libs/ui/gumby.tabs.js"
+                      "/js/libs/ui/gumby.toggleswitch.js"
                       "/js/libs/gumby.init.js"
+                      "/js/plugins.js"
+                      "/js/main.js"
                       ]
             styles: [
-
                       "/css/gumby.css"
-
                      ]
             # The production url of our website
             url: "http://docs.stardog.com/"
@@ -80,14 +79,10 @@ docpadConfig = {
             title: "Stardog Documentation"
 
             # The website description (for SEO)
-            description: """
-                When your website appears in search results in say Google, the text here will be shown underneath your website's title.
-                """
+            description: """ """
 
             # The website keywords (for SEO) separated by commas
-            keywords: """
-                place, your, website, keywoards, here, keep, them, related, to, the, content, of, your, website
-                """
+            keywords: """ """
 
         # -----------------------------
         # Helper Functions
@@ -136,14 +131,15 @@ docpadConfig = {
     # Configure Plugins
     # Should contain the plugin short names on the left, and the configuration to pass the plugin on the right
     plugins:  # example
-        # Disable NIB within the Stylus Plugin
-        stylus:
-            useNib: false
         markedOptions:
             gfm: true
             tables: true
             sanitize: false
-
+        tableofcontents:
+            requiredMetadataField: "toc"
+            #headerIdPrefix: "sd-"
+            #headerSelectors: "h2,h3"
+        watchOptions: preferredMethods: ['watchFile','watch']
 
     # =================================
     # Event Configuration

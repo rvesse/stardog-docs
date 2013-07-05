@@ -1,0 +1,158 @@
+<p><a href="/"><img src="/_/img/sdog-bare.png" alt=""></a></p>
+<blockquote>
+<p><strong>The string is a stark data structure and everywhere it is passed
+there is much duplication of process. It is a perfect vehicle for
+hiding information.</strong>—Alan Perlis, Epigrams in Programming</p>
+</blockquote>
+<h1>Stardog Use {#title}</h1>
+<h1>Using Stardog {#chapter}</h1>
+<p>While Stardog is a full-featured RDF database, its primary purpose is to
+execute queries against RDF data which it has under direct
+management.This implies that Stardog will not retrieve data from the Web
+or from any other network via HTTP URLs in order to query that data. If
+you want to query data using Stardog, you must add that data to a new or
+existing Stardog database. Note: A future version of Stardog will
+support
+<a href="http://weblog.clarkparsia.com/2011/03/07/sdq-information-integration-i%0An-the-real-world/">SDQ</a>,
+a distributed query system, that will lift this restriction. Stardog
+supports the
+<a href="http://www.cambridgesemantics.com/2008/09/sparql-by-example">SPARQL</a>
+query language, a W3C standard.</p>
+<h1>Querying a Database {#chapter}</h1>
+<p>Stardog currently supports all of the <a href="http://www.w3.org/TR/sparql11-query/">SPARQL 1.1 Query
+language</a>. Support is planned for
+<a href="http://www.w3.org/TR/2012/PR-sparql11-update-20121108">SPARQL 1.1
+Update</a> in a
+future release. Stardog does not support SPARQL 1.1 federation (the
+SERVICE keyword). Stardog also supports the <a href="http://www.w3.org/TR/2012/CR-sparql11-entailment-20121108/">OWL 2 Direct Semantics
+entailment
+regime</a>.</p>
+<p>To execute a SPARQL query against a Stardog database, use the <code>query</code>
+subcommand:</p>
+<pre><code>$ stardog query myDb &quot;select * where { ?s ?p ?o }&quot;</code></pre>
+<p>Detailed information on using the query command in Stardog can be found
+on its <a href="/docs/man/query-execute.html">manpage</a></p>
+<h1>Adding and Removing {#chapter}</h1>
+<p>The most efficient way to load data into Stardog is at database creation
+time. See the <a href="../admin/#create">Creating a Database</a> section for bulk
+loading data at database creation time. To add data to an existing
+Stardog database, use the <a href="/docs/man/data-add.html">add</a> command:</p>
+<pre><code>$ stardog data add myDatabase 1.rdf 2.rdf 3.rdf</code></pre>
+<p>The optional arguments are <code>-f</code> (or <code>--format</code>) to specify the RDF
+serialization type of the files to be loaded; if you specify the wrong
+type, <code>add</code> will fail. If you don&#39;t specify a type, Stardog will try to
+determine the type on its own based on the file extension. For example,
+the files that have names ending with &#39;.ttl&#39; will be parsed with Turtle
+syntax. If you specify a type, then all the files being loaded must of
+that same type.</p>
+<p>If you want to add data to a named graph, specify it via the
+<code>--graph-uri</code> or <code>-g</code> options.</p>
+<p>To remove data from a Stardog database,
+<a href="/docs/man/data-remove.html">remove</a> is used by specifying—</p>
+<ol>
+<li>one Named Graph, OR</li>
+<li>one or more files containing RDF (in some recognized serialization
+format, i.e., RDF/XML, Turtle, Trig), OR</li>
+<li>one Named Graph and one or more RDF files.</li>
+</ol>
+<p>For example,</p>
+<pre><code>$ stardog data remove -g http://foo myDatabase</code></pre>
+<p>will remove the named graph <code>http://foo</code> and all its triples from
+<code>myDatabase</code>.</p>
+<pre><code>$ stardog data remove myDatabase 1.rdf</code></pre>
+<p>will remove the triples in <code>1.rdf</code> from (the default graph of)
+<code>myDatabase</code>.</p>
+<pre><code>$ stardog data remove -g http://foo -f TURTLE myDatabase 2.rdf 3.rdf</code></pre>
+<p>will remove the triples in the Turtle files <code>2.rdf</code> and <code>3.rdf</code> from the
+named graph <code>http://foo</code> of <code>myDatabase</code>.</p>
+<p>Strict or loose parsing may be set for the input payload by using
+<code>--strict-parsing=TRUE|FALSE</code>.</p>
+<p>How Stardog Handles RDF Parsing</p>
+<p>RDF parsing in Stardog is strict: it requires typed RDF literals to
+match their explicit datatypes, URIs to be well-formed, etc. In some
+cases, strict parsing isn&#39;t ideal, so it may be disabled using the
+<code>--strict-parsing=FALSE</code> to disable it.</p>
+<p>However, even with strict parsing disabled, Stardog&#39;s RDF parser may
+encounter parse errors from which it cannot recover. And loading data in
+lax mode may lead to unexpected SPARQL query results. For example,
+malformed literals (<code>&quot;2.5&quot;^^xsd:int</code>) used in filter evaluation may lead
+to undesired results.</p>
+<h1>Exporting a Database {#chapter}</h1>
+<p>To export data from a Stardog database back to RDF,
+<a href="/docs/man/data-export.html">export</a> is used by specifying—</p>
+<ol>
+<li>the connection string of the database to export</li>
+<li>the export format: <code>N-TRIPLES, RDFXML, TURTLE, TRIG</code>. default is
+&#39;N-TRIPLES&#39;— &#39;TRIG&#39; must be used when exporting the entire database
+if the database contains triples inside named graphs.</li>
+<li>optionally, the URI of the named graph to export if you wish to
+export a single named graph only.</li>
+<li>the file to export to</li>
+</ol>
+<p>For example,</p>
+<pre><code>$ stardog data export --format TURTLE myDatabase myDatabase_output.ttl
+
+$ stardog data export --graph-uri http://example.org/context myDatabase myDatabase_output.nt</code></pre>
+<h1>Searching {#chapter}</h1>
+<p>Stardog includes an RDF-aware semantic search capability: it will index
+RDF literals and supports information retrieval-style queries over
+indexed data.</p>
+<h2>Indexing Strategy</h2>
+<p>The indexing strategy creates a &quot;search document&quot; per RDF literal. Each
+document consists of the following fields: literal ID; literal value;
+and contexts.</p>
+<h2>Search in SPARQL</h2>
+<p>We use the predicate <code>http://jena.hpl.hp.com/ARQ/property#textMatch</code> to
+access the search index in a SPARQL query.</p>
+<p>For example,</p>
+<pre><code>SELECT DISTINCT ?s ?score 
+WHERE {
+?s ?p ?l.
+( ?l ?score ) &lt;http://jena.hpl.hp.com/ARQ/property#textMatch&gt; ( &#39;mac&#39; 0.5 50 ). 
+}</code></pre>
+<p>This query selects the top 50 literals, and their scores, which match
+&#39;mac&#39; and whose scores are above a threshold of 0.5. These literals are
+then joined with the generic BGP <code>?s ?p ?l</code> to get the resources (?s)
+that have those literals. Alternatively, you could use
+<code>?s rdf:type ex:Book</code> if you only wanted to select the books which
+reference the search criteria; you can include as many other BGP&#39;s as
+you like to enhance your initial search results.</p>
+<h2>Searching with the Command Line</h2>
+<p>First, check out the CLI help for the
+<a href="/docs/man/query-search.html">search</a> subcommand...I&#39;ll wait.</p>
+<pre><code>$ stardog help query search</code></pre>
+<p>Okay, now let&#39;s do a search over the O&#39;Reilly book catalog in RDF for
+everything mentioning &quot;html&quot;:</p>
+<pre><code>$ stardog query search -q &quot;html&quot; -l 10 catalog</code></pre>
+<p>The results?</p>
+<pre><code>Index    Score    Hit
+====================
+0    6.422    urn:x-domain:oreilly.com:product:9780596527402.IP
+1    6.422    urn:x-domain:oreilly.com:product:9780596003166.IP
+2    6.422    urn:x-domain:oreilly.com:product:9781565924949.IP
+3    6.422    urn:x-domain:oreilly.com:product:9780596002251.IP
+4    6.422    urn:x-domain:oreilly.com:product:9780596101978.IP
+5    6.422    urn:x-domain:oreilly.com:product:9780596154066.IP
+6    6.422    urn:x-domain:oreilly.com:product:9780596157616.IP
+7    6.422    urn:x-domain:oreilly.com:product:9780596805876.IP
+8    6.422    urn:x-domain:oreilly.com:product:9780596527273.IP
+9    6.422    urn:x-domain:oreilly.com:product:9780596002961.IP</code></pre>
+<h2>Query Syntax</h2>
+<p>Stardog search is based on Lucene 4.2.0: we support all of the <a href="http://lucene.apache.org/java/3_4_0/queryparsersyntax.html">search
+modifiers</a>
+that Lucene supports, with the exception of fields.</p>
+<ul>
+<li>wildcards: <code>?</code> and <code>*</code></li>
+<li>fuzzy: <code>~</code> and <code>~</code> with similarity weights (e.g. <code>foo~0.8</code>)</li>
+<li>proximities: <code>&quot;semantic web&quot;~5</code></li>
+<li>term boosting</li>
+<li>booleans: <code>OR</code>, <code>AND</code>, <code>+</code>, <code>NOT</code>, and <code>-</code>.</li>
+<li>grouping</li>
+</ul>
+<p>For a more detailed discussion, see the <a href="http://lucene.apache.org/java/3_3_0/queryparsersyntax.html">Lucene
+docs</a>.</p>
+<h1>Notes {.fn}</h1>
+<p><a href="#" title="Back to top">⌂</a></p>
+<p>For comments, questions, or to report problems with this page, please
+email the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support
+Forum</a>.</p>

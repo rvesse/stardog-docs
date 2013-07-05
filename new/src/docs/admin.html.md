@@ -3,6 +3,7 @@ quote: "In man-machine symbiosis, it is man who must adjust: The machines can't.
 title: "Administration"
 layout: default
 related: ""
+toc: true
 ---
 
 In this chapter we describe the administration of Stardog Server and
@@ -729,8 +730,7 @@ command.
           <th width="10%">Default</th>
         </tr>
       </tfoot>
-      <tbody><!-- add a colgroup -->
-
+      <tbody>
         <tr>
           <td><tt>--durable</tt>, <tt>-d</tt></td>
 
@@ -1106,8 +1106,7 @@ for you:
 5.  If you are not using named graphs, use [triples only indexing
     strategy](#index-strategies)
 
-### Resource Requirements for Stardog
-
+## Capacity Planning
 The three system resources used by Stardog are CPU, memory, and disk. In
 what follows we primarily discuss memory and disk. Stardog will take
 advantage of multiple CPUs, cores, and core-based threads in data

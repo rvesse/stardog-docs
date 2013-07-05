@@ -33,13 +33,13 @@ directory;</p></li>
 POM in local Maven repo; alternately,</p></li>
 <li><p><code>mvn install</code> will work, too:</p>
 
-<pre class="highlighted"><code class="brainfuck"><span class="comment">mvn</span> <span class="comment">install:install</span>-<span class="comment">file</span>
-      <span class="literal">-</span><span class="comment">DgroupId=com</span>.<span class="comment">clarkparsia</span>.<span class="comment">stardog</span>
-      <span class="literal">-</span><span class="comment">DartifactId=stardog</span>-<span class="comment">groovy</span>
-      <span class="literal">-</span><span class="comment">Dversion=1</span>.<span class="comment">1</span>.<span class="comment">1</span>
-      <span class="literal">-</span><span class="comment">Dfile=stardog</span>-<span class="comment">groovy</span>.<span class="comment">jar</span>
-      <span class="literal">-</span><span class="comment">Dpackaging=jar</span>
-      <span class="literal">-</span><span class="comment">DpomFile=pom</span>.<span class="comment">xml</span>
+<pre><code>mvn install:install-file
+      -DgroupId=com.clarkparsia.stardog
+      -DartifactId=stardog-groovy
+      -Dversion=1.1.1
+      -Dfile=stardog-groovy.jar
+      -Dpackaging=jar
+      -DpomFile=pom.xml
 </code></pre></li>
 </ul>
 

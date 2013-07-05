@@ -2,6 +2,7 @@
 quote: Don't have good ideas if you aren't willing to be responsible for them.
 title: What 1.x Means
 layout: "default"
+toc: true
 ---
 
 ## Introduction

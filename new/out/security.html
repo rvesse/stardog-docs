@@ -24,7 +24,6 @@ into <em>roles</em>, and roles can be assigned to users.</p>
 controlled. Resources are identified by their <em>type</em> and their <em>name</em>. A
 particular resource is denoted as <code>type_prefix:name</code>. The valid resource
 types with their prefixes are shown below.</p>
-
 <dl>
 <dt> Resource type Prefix Description</dt>
 <dt> &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</dt>
@@ -37,6 +36,7 @@ types with their prefixes are shown below.</p>
 <dd>Resource Types for Stardog @@VERSION@@</dd>
 </dl>
 
+
 <h2 id="permissions">Permissions</h2>
 
 <p>Permissions are composed of a <em>permission subject</em>, an <em>action</em>, and a
@@ -45,7 +45,6 @@ specified action over the object resource.</p>
 
 <p>Permission subjects can be of type <code>user</code> or <code>role</code> only. Permission
 objects can be of any valid type. Valid actions are shown as follows:</p>
-
 <dl>
 <dt><code>read</code></dt>
 <dd>Permits reading the resource properties
@@ -72,6 +71,7 @@ objects can be of any valid type. Valid actions are shown as follows:</p>
 <dd>Special action type that permits all previous actions over a
  resource</dd>
 </dl>
+
 
 <h3 id="wildcards">Wildcards</h3>
 
@@ -118,7 +118,6 @@ provide the corresponding permissions the user managing security
 information must have.</p>
 
 <h2 id="users">Users</h2>
-
 <dl>
 <dt>Create a user</dt>
 <dd><code>create</code> permission over <code>user:*</code>. \
@@ -148,8 +147,8 @@ List users</dd>
  Regular users can see only users over which they have a permission.</dd>
 </dl>
 
-<h2 id="roles">Roles</h2>
 
+<h2 id="roles">Roles</h2>
 <dl>
 <dt>Create a role</dt>
 <dd><code>create</code> permission over <code>role:*</code>.
@@ -171,8 +170,8 @@ List roles</dd>
  which they have a permission.</dd>
 </dl>
 
-<h2 id="databases">Databases</h2>
 
+<h2 id="databases">Databases</h2>
 <dl>
 <dt>Create a database</dt>
 <dd><code>create</code> permission over <code>db:*</code>.
@@ -201,8 +200,8 @@ List databases</dd>
  permission.</dd>
 </dl>
 
-<h2 id="permissions">Permissions</h2>
 
+<h2 id="permissions">Permissions</h2>
 <dl>
 <dt>Grant a permission</dt>
 <dd><code>grant</code> permission over the permission object AND \
@@ -220,6 +219,7 @@ List role permissions</dd>
 <dd>User must be a superuser OR \
  user must have been assigned the role.</dd>
 </dl>
+
 
 <h1 id="deployingstardogsecurelychapter">Deploying Stardog Securely {#chapter}</h1>
 
@@ -290,14 +290,14 @@ is a complete example that lets clients use HTTPS connections with the
 lighttpd proxy to communicate with a Stardog HTTP server listening on
 port 12345 of the lighttpd host.</p>
 
-<pre class="highlighted"><code class="haskell"><span class="title">server</span>.port = <span class="number">443</span>
-<span class="title">ssl</span>.engine = <span class="string">"enable"</span>
-<span class="title">ssl</span>.pemfile = <span class="string">"server.pem"</span>
-<span class="title">server</span>.<span class="module">modules = <span class="container">( "<span class="title">mod_proxy</span>" )</span>
-proxy.server = <span class="container">( "" =&gt;
-        ( ( "<span class="title">host</span>" =&gt; "127.0.0.1" , "<span class="title">port</span>" =&gt; "12345" )</span> )
+<pre><code>server.port = 443
+ssl.engine = &quot;enable&quot;
+ssl.pemfile = &quot;server.pem&quot;
+server.modules = ( &quot;mod_proxy&quot; )
+proxy.server = ( &quot;&quot; =&gt;
+        ( ( &quot;host&quot; =&gt; &quot;127.0.0.1&quot; , &quot;port&quot; =&gt; &quot;12345&quot; ) )
         )
-server.document-root = "/dev/null"
+server.document-root = &quot;/dev/null&quot;
 </code></pre>
 
 <p>This configuration directs lighttpd to use the certificate and private
@@ -320,12 +320,12 @@ necessary to enable SSL and reverse proxying. allows clients to use
 HTTPS connections with the Apache proxy, which communicates with a
 Stardog HTTP server listening on port 12345 of the Apache host.</p>
 
-<pre class="highlighted"><code class="apache"><span class="keyword">SSLEngine</span>        <span class="literal">On</span>
-<span class="keyword">SSLCertificateFile</span>        server.pem
-<span class="tag">&lt;Directory /&gt;</span>
-        <span class="keyword">SSLRequireSSL</span>
-<span class="tag">&lt;/Directory&gt;</span>
-<span class="keyword">ProxyPass</span>        /        http://127.0.0.1:12345/
+<pre><code>SSLEngine        On
+SSLCertificateFile        server.pem
+&lt;Directory /&gt;
+        SSLRequireSSL
+&lt;/Directory&gt;
+ProxyPass        /        http://127.0.0.1:12345/
 </code></pre>
 
 <p>This configuration depends on the SSL certificate and private key being
@@ -347,12 +347,12 @@ then the following configuration would enable SSL on the server using
 the certificate and private key stored in the Java KeyStore at
 <code>server-keystore.jks</code>.</p>
 
-<pre class="highlighted"><code class="xml"><span class="tag">&lt;<span class="title">http</span> <span class="attribute">address</span>=<span class="value">"*"</span> <span class="attribute">port</span>=<span class="value">"443"</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">jsse-ssl</span>&gt;</span>
-                <span class="tag">&lt;<span class="title">key-store-file</span>&gt;</span>server-keystore.jks<span class="tag">&lt;/<span class="title">key-store-file</span>&gt;</span>
-                <span class="tag">&lt;<span class="title">password</span>&gt;</span>********<span class="tag">&lt;/<span class="title">password</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">jsse-ssl</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">http</span>&gt;</span>
+<pre><code>&lt;http address=&quot;*&quot; port=&quot;443&quot;&gt;
+        &lt;jsse-ssl&gt;
+                &lt;key-store-file&gt;server-keystore.jks&lt;/key-store-file&gt;
+                &lt;password&gt;********&lt;/password&gt;
+        &lt;/jsse-ssl&gt;
+&lt;/http&gt;
 </code></pre>
 
 <p>Other Java app servers support SSL including GlassFish, Tomcat, and
@@ -367,13 +367,13 @@ scheme is used in the database connection string. For example, the
 following invocation of the Stardog command line utility will initiate
 an SSL connection to a remote database</p>
 
-<pre class="highlighted"><code class="ruby"><span class="variable">$ </span>stardog status -c <span class="symbol">https:</span>/<span class="regexp">/stardog.example.org/sp</span>2b_10k
+<pre><code>$ stardog status -c https://stardog.example.org/sp2b_10k
 </code></pre>
 
 <p>If the client is unable to authenticate the server, then the connection
 will fail and an error message like the following will be generated.</p>
 
-<pre class="highlighted"><code class="perl">Error during <span class="keyword">connect</span>.  Cause was SSLPeerUnverifiedException: peer <span class="keyword">not</span> authenticated
+<pre><code>Error during connect.  Cause was SSLPeerUnverifiedException: peer not authenticated
 </code></pre>
 
 <p>The most common cause of this error is that the server presented a
@@ -398,15 +398,15 @@ not used to encrypt its contents, but can be used to ensure its
 integrity.See the <code>javax.net.ssl.trustStorePassword</code> system property
 <a href="http://docs.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#X509TrustManager">documentation</a>.</p>
 
-<pre class="highlighted"><code class="brainfuck"><span class="comment">$</span> <span class="comment">keytool</span> <span class="literal">-</span><span class="comment">importcert</span>  <span class="literal">-</span><span class="comment">keystore</span> <span class="comment">my</span>-<span class="comment">truststore</span>.<span class="comment">jks</span> <span class="comment">\</span>
-        <span class="literal">-</span><span class="comment">alias</span> <span class="comment">stardog</span>-<span class="comment">server</span> <span class="literal">-</span><span class="comment">file</span> <span class="comment">my</span>-<span class="comment">trusted</span>-<span class="comment">server</span>.<span class="comment">crt</span>
+<pre><code>$ keytool -importcert  -keystore my-truststore.jks \
+        -alias stardog-server -file my-trusted-server.crt
 </code></pre>
 
 <p>The following Stardog command line invocation uses the newly created
 truststore.</p>
 
-<pre class="highlighted"><code class="avrasm">$ STARDOG_JAVA_ARGS=”-Djavax<span class="preprocessor">.net</span><span class="preprocessor">.ssl</span><span class="preprocessor">.trustStore</span>=my-truststore<span class="preprocessor">.jks</span>” \
-        stardog status -c https://stardog<span class="preprocessor">.example</span><span class="preprocessor">.org</span>/sp2b_10k
+<pre><code>$ STARDOG_JAVA_ARGS=”-Djavax.net.ssl.trustStore=my-truststore.jks” \
+        stardog status -c https://stardog.example.org/sp2b_10k
 </code></pre>
 
 <p>For custom Java applications that use the Stardog HTTP client driver,
@@ -428,7 +428,7 @@ in the Apache docs about <code>BrowserCompatHostnameVerifier</code>.</p>
 
 <p>This will cause an error message like the following</p>
 
-<pre class="highlighted"><code class="vbscript"><span class="keyword">Error</span> during connect.  Cause was SSLException: hostname <span class="keyword">in</span> certificate didn<span class="comment">'t match</span>
+<pre><code>Error during connect.  Cause was SSLException: hostname in certificate didn't match
 </code></pre>
 
 <p>The client driver does not support connecting despite a mismatch,
@@ -465,12 +465,12 @@ below chooses a common location and uses a versioning string to
 facilitate parallel installs of different Stardog releases. An
 administrator may choose any location.</p>
 
-<pre class="highlighted"><code class="ruby"><span class="variable">$ </span>export <span class="constant">STARDOG_VERSION</span>=<span class="variable">@@VERSION</span>@@
-<span class="variable">$ </span>export <span class="constant">STARDOG_LIBDIR</span>=<span class="regexp">/opt/stardog</span>-<span class="variable">${</span><span class="constant">STARDOG_VERSION</span>}/lib
-<span class="variable">$ </span>install -d <span class="variable">${</span><span class="constant">STARDOG_LIBDIR</span>}
-<span class="variable">$ </span>cp -r lib/* <span class="variable">${</span><span class="constant">STARDOG_LIBDIR</span>}
-<span class="variable">$ </span>chown -<span class="constant">R</span> <span class="symbol">root:</span>root <span class="variable">${</span><span class="constant">STARDOG_LIBDIR</span>}
-<span class="variable">$ </span>chmod -<span class="constant">R</span> a+r <span class="variable">${</span><span class="constant">STARDOG_LIBDIR</span>}
+<pre><code>$ export STARDOG_VERSION=@@VERSION@@
+$ export STARDOG_LIBDIR=/opt/stardog-${STARDOG_VERSION}/lib
+$ install -d ${STARDOG_LIBDIR}
+$ cp -r lib/* ${STARDOG_LIBDIR}
+$ chown -R root:root ${STARDOG_LIBDIR}
+$ chmod -R a+r ${STARDOG_LIBDIR}
 </code></pre>
 
 <p>The Stardog command line tools should be copied from the distribution
@@ -478,10 +478,10 @@ directory into a location that places them into most users’ execution
 PATH. Execution permissions to the tools are <em>not</em> limited because
 access to the data directory will be <em>strictly limited</em>.</p>
 
-<pre class="highlighted"><code class="brainfuck"><span class="comment">$</span> <span class="comment">install</span> <span class="literal">-</span><span class="comment">c</span> <span class="literal">-</span><span class="comment">m</span> <span class="comment">a=rx</span> <span class="comment">\</span>
-<span class="string">.</span><span class="comment">/stardog</span> <span class="comment">/usr/bin/stardog</span>
-<span class="comment">$</span> <span class="comment">install</span> <span class="literal">-</span><span class="comment">c</span> <span class="literal">-</span><span class="comment">m</span> <span class="comment">a=rx</span> <span class="comment">\</span>
-<span class="string">.</span><span class="comment">/stardog</span>-<span class="comment">admin</span> <span class="comment">/usr/sbin/stardog</span>-<span class="comment">admin</span>
+<pre><code>$ install -c -m a=rx \
+./stardog /usr/bin/stardog
+$ install -c -m a=rx \
+./stardog-admin /usr/sbin/stardog-admin
 </code></pre>
 
 <p>The Stardog data directory stores both user data and system
@@ -489,7 +489,7 @@ configuration data, including access control information. The location
 selected for the data directory should be reliable, large enough to meet
 data requirements, and secured from unauthorized access.</p>
 
-<pre class="highlighted"><code class="coffeescript">$ <span class="reserved">export</span> STARDOG_HOME=<span class="regexp">/var/db/</span>stardog
+<pre><code>$ export STARDOG_HOME=/var/db/stardog
 </code></pre>
 
 <p>Access to the data directory is limited to the <code>stardog</code> group and the
@@ -500,19 +500,19 @@ network server to run as a user other than <code>stardog</code>; or it may
 facilitate other processes other than Stardog, i.e., data backup. The
 snippet below creates that user and group.</p>
 
-<pre class="highlighted"><code class="tex"><span class="formula">$ groupadd stardog
-$</span> useradd <span class="command">\
-</span>-d <span class="formula">$<span class="special">{</span>STARDOG_HOME<span class="special">}</span> <span class="command">\
-</span>-g stardog <span class="command">\
-</span>-s /sbin/nologin <span class="command">\
-</span>stardog
+<pre><code>$ groupadd stardog
+$ useradd \
+-d ${STARDOG_HOME} \
+-g stardog \
+-s /sbin/nologin \
+stardog
 </code></pre>
 
 <p>This snippet creates the data directory and limits its access to the
 newly created group.</p>
 
-<pre class="highlighted"><code class="brainfuck"><span class="comment">$</span> <span class="comment">install</span> <span class="literal">-</span><span class="comment">d</span> <span class="literal">-</span><span class="comment">o</span> <span class="comment">stardog</span> <span class="literal">-</span><span class="comment">g</span> <span class="comment">stardog</span> <span class="literal">-</span><span class="comment">m</span> <span class="comment">ug=rwx</span>,<span class="comment">o=</span> <span class="comment">\</span>
-<span class="comment">${STARDOG_HOME}</span>
+<pre><code>$ install -d -o stardog -g stardog -m ug=rwx,o= \
+${STARDOG_HOME}
 </code></pre>
 
 <p>Note that if a Stardog server is used to allow network access to remote
@@ -525,7 +525,7 @@ For example, the following snippet adding the <code>tomcat</code> user to the
 <code>stardog</code> group may be needed in an environment where a Stardog HTTP
 server is run as an application within Tomcat.</p>
 
-<pre class="highlighted"><code class="brainfuck"><span class="comment">$</span> <span class="comment">usermod</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">add</span>-<span class="comment">to</span>-<span class="comment">group</span> <span class="comment">stardog</span> <span class="comment">tomcat</span>
+<pre><code>$ usermod --add-to-group stardog tomcat
 </code></pre>
 
 <p>Of course the ideal deployment of the Stardog server depends on the

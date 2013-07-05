@@ -52,7 +52,7 @@ capabilities.</p>
 
 <p>If you are running the HTTP server at the following URL</p>
 
-<pre class="highlighted"><code class="smalltalk"><span class="method">http:</span>//<span class="method">localhost:</span><span class="number">12345</span>/
+<pre><code>http://localhost:12345/
 </code></pre>
 
 <p>To form the URI of a particular Stardog Database, the Database Short
@@ -60,13 +60,13 @@ Name is the first URL path segment appended to the deployment URI. For
 example, for the Database called <code>cytwombly</code>, deployed in the above
 example HTTP server, the Database Network Name might be</p>
 
-<pre class="highlighted"><code class="smalltalk"><span class="method">http:</span>//<span class="method">localhost:</span><span class="number">12345</span>/cytwombly
+<pre><code>http://localhost:12345/cytwombly
 </code></pre>
 
 <p>All the resources related to this database are identified by URL path
 segments relative to the Database Network Name; hence:</p>
 
-<pre class="highlighted"><code class="smalltalk"><span class="method">http:</span>//<span class="method">localhost:</span><span class="number">12345</span>/cytwombly/size
+<pre><code>http://localhost:12345/cytwombly/size
 </code></pre>
 
 <p>In what follows, we use a <a href="http://code.google.com/p/uri-templates/">URI
@@ -76,7 +76,7 @@ parameterize the actual request URLs, thus: <code>/{db}/size</code>.</p>
 <p>We also abuse notation to show the permissible HTTP request types and
 default MIME types, thus:</p>
 
-<pre class="highlighted"><code class="nginx"><span class="title">REQ</span> | REQ /resource/identifier → mime_type | mime_type
+<pre><code>REQ | REQ /resource/identifier → mime_type | mime_type
 </code></pre>
 
 <p>In a few cases, we use <code>void</code> as short hand for the case where there is
@@ -88,7 +88,6 @@ a response code but the response body may be empty.</p>
 <code>Content-Type</code> header set to the MIME type of the request body, where
 &#8220;valid&#8221; is a valid MIME type for N-Triples, Trig, Trix, Turtle, NQuads,
 JSON-LD, or RDF/XML:</p>
-
 <dl>
 <dt>RDF/XML</dt>
 <dd><code>application/rdf+xml</code>
@@ -112,12 +111,12 @@ JSON-LD</dd>
 <dd><code>application/ld+json</code></dd>
 </dl>
 
+
 <p>SPARQL <code>CONSTRUCT</code> queries must also include a <code>Accept</code> header set to
 one of the RDF serialization types above.</p>
 
 <p>When issuing a <code>SELECT</code> query the <code>Accept</code> header should be set to one
 of the valid MIME types for <code>SELECT</code> results:</p>
-
 <dl>
 <dt>SPARQL XML Results Format</dt>
 <dd><code>application/sparql-results+xml</code>
@@ -132,10 +131,10 @@ SPARQL Binary Results</dd>
 <dd><code>application/x-binary-rdf-results-table</code></dd>
 </dl>
 
+
 <h2 id="responsecodes">Response Codes</h2>
 
 <p>Stardog uses HTTP response codes in the following way:</p>
-
 <dl>
 <dt><code>200</code></dt>
 <dd>Indicates the operation has succeeded.
@@ -168,6 +167,7 @@ SPARQL Binary Results</dd>
 
 <dd>Indicates a failure in some internal operation.</dd>
 </dl>
+
 
 <p>Further, we provide Stardog-specific error codes in the <code>SD-Error-Code</code>
 header in the response from the server. These can be used to further
@@ -204,7 +204,7 @@ representations, HTTP response codes, and resource identifiers.</p>
 
 <h3 id="astardogdatabase">A Stardog Database</h3>
 
-<pre class="highlighted"><code class="cs">GET /{db} → <span class="keyword">void</span>
+<pre><code>GET /{db} → void
 </code></pre>
 
 <p>Returns a representation of the database. As of <strong>@@VERSION@@</strong>, this is
@@ -213,14 +213,14 @@ web console where the database can be interacted with in a browser.</p>
 
 <h3 id="databasesize">Database Size</h3>
 
-<pre class="highlighted"><code class="mel">GET /{db}/<span class="keyword">size</span> → <span class="keyword">text</span>/plain
+<pre><code>GET /{db}/size → text/plain
 </code></pre>
 
 <p>Returns the number of RDF triples in the database.</p>
 
 <h3 id="queryevaluation">Query Evaluation</h3>
 
-<pre class="highlighted"><code class="erlang"><span class="variable">GET</span> | <span class="variable">POST</span> /<span class="tuple">{db}</span>/<span class="keyword">query</span>
+<pre><code>GET | POST /{db}/query
 </code></pre>
 
 <p>The SPARQL endpoint for the database. The valid Accept types are listed
@@ -232,7 +232,7 @@ Reasoning</a> section of the
 
 <h3 id="queryplan">Query Plan</h3>
 
-<pre class="highlighted"><code class="1c">GET <span class="string">| POST /{db}/explain → text/plain</span>
+<pre><code>GET | POST /{db}/explain → text/plain
 </code></pre>
 
 <p>Returns the explanation for the execution of a query, i.e., a query
@@ -241,7 +241,7 @@ the only MIME type for the Query Plan resource is <code>text/plain</code>.</p>
 
 <h3 id="transactionbegin">Transaction Begin</h3>
 
-<pre class="highlighted"><code class="sql">POST /{db}/transaction/<span class="operator"><span class="keyword">begin</span> → text/plain
+<pre><code>POST /{db}/transaction/begin → text/plain
 </code></pre>
 
 <p>Returns a transaction identifier resource as <code>text/plain</code>, which is
@@ -275,7 +275,7 @@ Section 4.8 Man in the Middle for more information.</p>
 
 <h3 id="transactioncommit">Transaction Commit</h3>
 
-<pre class="highlighted"><code class="sql">POST /{db}/transaction/<span class="operator"><span class="keyword">commit</span>/{txId} → void | text/plain
+<pre><code>POST /{db}/transaction/commit/{txId} → void | text/plain
 </code></pre>
 
 <p>Returns a representation of the committed transaction; <code>200</code> means the
@@ -287,7 +287,7 @@ changes that were made to the database.</p>
 
 <h3 id="transactionrollback">Transaction Rollback</h3>
 
-<pre class="highlighted"><code class="sql">POST /{db}/transaction/<span class="operator"><span class="keyword">rollback</span>/{txId} → void | text/plain
+<pre><code>POST /{db}/transaction/rollback/{txId} → void | text/plain
 </code></pre>
 
 <p>Returns a representation of the transaction after it&#8217;s been rolled back.
@@ -297,7 +297,7 @@ message.</p>
 
 <h3 id="queryingtransactionally">Querying (Transactionally)</h3>
 
-<pre class="highlighted"><code class="matlab">GET | POST /<span class="cell">{db}</span>/<span class="cell">{txId}</span>/query
+<pre><code>GET | POST /{db}/{txId}/query
 </code></pre>
 
 <p>Returns a representation of a query executed within the <code>txId</code>
@@ -307,7 +307,7 @@ the valid Accept types are listed above in the <code>HTTP Headers</code> section
 
 <h3 id="addingdatatransactionally">Adding Data (Transactionally)</h3>
 
-<pre class="highlighted"><code class="matlab">POST /<span class="cell">{db}</span>/<span class="cell">{txId}</span>/add → void | text/plain
+<pre><code>POST /{db}/{txId}/add → void | text/plain
 </code></pre>
 
 <p>Returns a representation of data added to the database of the specified
@@ -318,7 +318,7 @@ response codes are <code>200</code> for success and <code>500</code> for failure
 
 <h3 id="deletingdatatransactionally">Deleting Data (Transactionally)</h3>
 
-<pre class="highlighted"><code class="matlab">POST /<span class="cell">{db}</span>/<span class="cell">{txId}</span>/remove → void | text/plain
+<pre><code>POST /{db}/{txId}/remove → void | text/plain
 </code></pre>
 
 <p>Returns a representation of data removed from the database within the
@@ -328,7 +328,7 @@ with Add in Transaction.</p>
 
 <h3 id="cleardatabase">Clear Database</h3>
 
-<pre class="highlighted"><code class="mel">POST /{db}/{txId}/<span class="keyword">clear</span> → void | <span class="keyword">text</span>/plain
+<pre><code>POST /{db}/{txId}/clear → void | text/plain
 </code></pre>
 
 <p>Removes all data from the database within the context of the
@@ -340,8 +340,8 @@ default graph in Stardog. Stay tuned. as the value of <code>graph-uri</code>.</p
 
 <h3 id="explanationofinferences">Explanation of inferences</h3>
 
-<pre class="highlighted"><code class="matlab">POST /<span class="cell">{db}</span>/reasoning/explain → RDF
-      POST /<span class="cell">{db}</span>/reasoning/<span class="cell">{txId}</span>/explain → RDF
+<pre><code>POST /{db}/reasoning/explain → RDF
+      POST /{db}/reasoning/{txId}/explain → RDF
 </code></pre>
 
 <p>Returns the explanation of the axiom which is in the body of the POST
@@ -351,7 +351,7 @@ format.</p>
 
 <h3 id="explaininonsistency">Explain Inonsistency</h3>
 
-<pre class="highlighted"><code class="1c">GET <span class="string">| POST /{db}/reasoning/explain/inconsistency → RDF</span>
+<pre><code>GET | POST /{db}/reasoning/explain/inconsistency → RDF
 </code></pre>
 
 <p>If the data in the database is inconsistent w.r.t to the TBox, a call to
@@ -360,14 +360,14 @@ inconsistency.</p>
 
 <h3 id="consistency">Consistency</h3>
 
-<pre class="highlighted"><code class="applescript">GET | POST /{db}/reasoning/consistency → <span class="type">text</span>/<span class="type">boolean</span>
+<pre><code>GET | POST /{db}/reasoning/consistency → text/boolean
 </code></pre>
 
 <p>Returns whether or not the database is consistent w.r.t to the TBox.</p>
 
 <h3 id="listingintegrityconstraints">Listing Integrity Constraints</h3>
 
-<pre class="highlighted"><code class="coffeescript">GET    <span class="regexp">/{db}/i</span>cv   → RDF
+<pre><code>GET    /{db}/icv   → RDF
 </code></pre>
 
 <p>Returns the integrity constraints for the specified database serialized
@@ -375,7 +375,7 @@ in any supported RDF format.</p>
 
 <h3 id="addingintegrityconstraints">Adding Integrity Constraints</h3>
 
-<pre class="highlighted"><code class="avrasm">POST /{db}/icv/<span class="keyword">add</span>
+<pre><code>POST /{db}/icv/add
 </code></pre>
 
 <p>Accepts a set of valid Integrity constraints serialized in any RDF
@@ -386,7 +386,7 @@ unable to be added.</p>
 
 <h3 id="removingintegrityconstraints">Removing Integrity Constraints</h3>
 
-<pre class="highlighted"><code class="cmake">POST /{db}/icv/<span class="keyword">remove</span>
+<pre><code>POST /{db}/icv/remove
 </code></pre>
 
 <p>Accepts a set of valid Integrity constraints serialized in any RDF
@@ -396,7 +396,7 @@ remove; <code>500</code> indicates an error.</p>
 
 <h3 id="clearingintegrityconstraints">Clearing Integrity Constraints</h3>
 
-<pre class="highlighted"><code class="coffeescript">POST <span class="regexp">/{db}/icv/</span>clear 
+<pre><code>POST /{db}/icv/clear 
 </code></pre>
 
 <p>Drops <strong>ALL</strong> integrity constraints for a database. <code>200</code> indicates all
@@ -404,7 +404,7 @@ constraints were successfully dropped; <code>500</code> indicates an error.</p>
 
 <h3 id="convertingconstraintstosparqlqueries">Converting Constraints to SPARQL Queries</h3>
 
-<pre class="highlighted"><code class="coffeescript">POST <span class="regexp">/{db}/icv/</span>convert
+<pre><code>POST /{db}/icv/convert
 </code></pre>
 
 <p>The body of the <code>POST</code> is a single Integrity Constraint, serialized in
@@ -419,28 +419,28 @@ representations, HTTP response codes, and resource identifiers.</p>
 
 <h3 id="listdatabases">List databases</h3>
 
-<pre class="highlighted"><code class="nginx"><span class="title">GET</span> /admin/databases → application/json
+<pre><code>GET /admin/databases → application/json
 </code></pre>
 
 <p>Lists all the databases available.</p>
 
 <p>Output JSON example:</p>
 
-<pre class="highlighted"><code class="json">{
-  "<span class="attribute">databases</span>" : <span class="value">[<span class="string">"testdb"</span>, <span class="string">"exampledb"</span>]
-}</span>
+<pre><code>{
+  &quot;databases&quot; : [&quot;testdb&quot;, &quot;exampledb&quot;]
+}
 </code></pre>
 
 <h3 id="copyadatabase">Copy a database</h3>
 
-<pre class="highlighted"><code class="haskell"><span class="type">PUT</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">db</span>}</span>/copy?to=<span class="container">{<span class="title">db_copy</span>}</span></span>
+<pre><code>PUT /admin/databases/{db}/copy?to={db_copy}
 </code></pre>
 
 <p>Copies a database <code>db</code> to another specified <code>db_copy</code>.</p>
 
 <h3 id="createanewdatabase">Create a new database</h3>
 
-<pre class="highlighted"><code class="nginx"><span class="title">POST</span> /admin/databases
+<pre><code>POST /admin/databases
 </code></pre>
 
 <p>Creates a new database; expects a multipart request with a JSON
@@ -449,21 +449,21 @@ file contents as a multipart POST request.</p>
 
 <p>Expected input:</p>
 
-<pre class="highlighted"><code class="r">JSON (application/json):
+<pre><code>JSON (application/json):
 {
-  <span class="string">"dbname"</span> : <span class="string">"testDb"</span>,
-  <span class="string">"options"</span> : {
-    <span class="string">"icv.active.graphs"</span> : <span class="string">"http://graph, http://another"</span>,
-    <span class="string">"search.enabled"</span> : true,
-    <span class="keyword">...</span>
+  &quot;dbname&quot; : &quot;testDb&quot;,
+  &quot;options&quot; : {
+    &quot;icv.active.graphs&quot; : &quot;http://graph, http://another&quot;,
+    &quot;search.enabled&quot; : true,
+    ...
   },
-  <span class="string">"files"</span> : [{ <span class="string">"name"</span>:<span class="string">"fileX.ttl"</span>, <span class="string">"context"</span>:<span class="string">"some:context"</span> }, <span class="keyword">...</span>]
+  &quot;files&quot; : [{ &quot;name&quot;:&quot;fileX.ttl&quot;, &quot;context&quot;:&quot;some:context&quot; }, ...]
 }
 </code></pre>
 
 <h3 id="dropanexistingdatabase">Drop an existing database</h3>
 
-<pre class="highlighted"><code class="haskell"><span class="type">DELETE</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">db</span>}</span></span>
+<pre><code>DELETE /admin/databases/{db}
 </code></pre>
 
 <p>Drops an existing database <code>db</code> and all the information that it
@@ -471,28 +471,28 @@ contains.</p>
 
 <h3 id="migrateanexistingdatabase">Migrate an existing database</h3>
 
-<pre class="highlighted"><code class="haskell"><span class="type">PUT</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">db</span>}</span>/migrate</span>
+<pre><code>PUT /admin/databases/{db}/migrate
 </code></pre>
 
 <p>Migrates the existing content of a legacy database to new format.</p>
 
 <h3 id="optimizeanexistingdatabase">Optimize an existing database</h3>
 
-<pre class="highlighted"><code class="haskell"><span class="type">PUT</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">db</span>}</span>/optimize</span>
+<pre><code>PUT /admin/databases/{db}/optimize
 </code></pre>
 
 <p>Optimize an existing database.</p>
 
 <h3 id="setsanexistingdatabaseonline.">Sets an existing database online.</h3>
 
-<pre class="highlighted"><code class="haskell"><span class="type">PUT</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">db</span>}</span>/online</span>
+<pre><code>PUT /admin/databases/{db}/online
 </code></pre>
 
 <p>Request message to set an existing database {db} online.</p>
 
 <h3 id="setsanexistingdatabaseoffline.">Sets an existing database offline.</h3>
 
-<pre class="highlighted"><code class="haskell"><span class="type">PUT</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">db</span>}</span>/offline</span>
+<pre><code>PUT /admin/databases/{db}/offline
 </code></pre>
 
 <p>Request message to set an existing database offline; receives optionally
@@ -506,15 +506,15 @@ open connections are closed and the database goes offline.</p>
 
 <p>Optional input:</p>
 
-<pre class="highlighted"><code class="javascript">JSON (application/json):
+<pre><code>JSON (application/json):
 {
-  <span class="string">"timeout"</span> : <span class="xml"><span class="tag">&lt;<span class="title">timeout_in_ms</span>&gt;</span>
+  &quot;timeout&quot; : &lt;timeout_in_ms&gt;
 }
-</span></code></pre>
+</code></pre>
 
 <h3 id="setoptionvaluestoanexistingdatabase.">Set option values to an existing database.</h3>
 
-<pre class="highlighted"><code class="haskell"><span class="type">POST</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">kb</span>}</span>/options</span>
+<pre><code>POST /admin/databases/{kb}/options
 </code></pre>
 
 <p>Set options in the database passed through a JSON object specification,
@@ -523,18 +523,18 @@ i.e. JSON Request for option values. Database options can be found
 
 <p>Expected input:</p>
 
-<pre class="highlighted"><code class="r">JSON (application/json):
+<pre><code>JSON (application/json):
 {
-  <span class="string">"database.name"</span> : <span class="string">"DB_NAME"</span>,
-  <span class="string">"icv.enabled"</span> : true | false,
-  <span class="string">"search.enabled"</span> : true | false,
-  <span class="keyword">...</span>
+  &quot;database.name&quot; : &quot;DB_NAME&quot;,
+  &quot;icv.enabled&quot; : true | false,
+  &quot;search.enabled&quot; : true | false,
+  ...
 }
 </code></pre>
 
 <h3 id="getoptionvaluesofanexistingdatabase.">Get option values of an existing database.</h3>
 
-<pre class="highlighted"><code class="haskell"><span class="type">PUT</span> /admin/<span class="typedef">databases/<span class="container">{<span class="title">kb</span>}</span>/options → application/json</span>
+<pre><code>PUT /admin/databases/{kb}/options → application/json
 </code></pre>
 
 <p>Retrieves a set of options passed through a JSON object specification.
@@ -543,28 +543,28 @@ the option values in the database when the call returns.</p>
 
 <p>Expected input:</p>
 
-<pre class="highlighted"><code class="r">JSON (application/json):
+<pre><code>JSON (application/json):
 {
-  <span class="string">"database.name"</span> : <span class="keyword">...</span>,
-  <span class="string">"icv.enabled"</span> : <span class="keyword">...</span>,
-  <span class="string">"search.enabled"</span> : <span class="keyword">...</span>,
-  <span class="keyword">...</span>
+  &quot;database.name&quot; : ...,
+  &quot;icv.enabled&quot; : ...,
+  &quot;search.enabled&quot; : ...,
+  ...
 }
 </code></pre>
 
 <p>Output JSON example:</p>
 
-<pre class="highlighted"><code class="r">{
-  <span class="string">"database.name"</span> : <span class="string">"testdb"</span>,
-  <span class="string">"icv.enabled"</span> : true,
-  <span class="string">"search.enabled"</span> : true,
-  <span class="keyword">...</span>
+<pre><code>{
+  &quot;database.name&quot; : &quot;testdb&quot;,
+  &quot;icv.enabled&quot; : true,
+  &quot;search.enabled&quot; : true,
+  ...
 }
 </code></pre>
 
 <h3 id="addanewusertothesystem.">Add a new user to the system.</h3>
 
-<pre class="highlighted"><code class="nginx"><span class="title">POST</span> /admin/users
+<pre><code>POST /admin/users
 </code></pre>
 
 <p>Adds a new user to the system; allows a configuration option for
@@ -573,17 +573,17 @@ false. The password <strong>must</strong> be provided for the user.</p>
 
 <p>Expected input:</p>
 
-<pre class="highlighted"><code class="applescript">JSON (<span class="type">application</span>/json):
+<pre><code>JSON (application/json):
 {
-  <span class="string">"username"</span>  : <span class="string">"bob"</span>,
-  <span class="string">"superuser"</span> : <span class="constant">true</span> | <span class="constant">false</span>
-  <span class="string">"password"</span>  : <span class="string">"passwd"</span>
+  &quot;username&quot;  : &quot;bob&quot;,
+  &quot;superuser&quot; : true | false
+  &quot;password&quot;  : &quot;passwd&quot;
 }
 </code></pre>
 
 <h3 id="changeuserpassword.">Change user password.</h3>
 
-<pre class="highlighted"><code class="coffeescript">PUT <span class="regexp">/admin/users/{user}/</span>pwd
+<pre><code>PUT /admin/users/{user}/pwd
 </code></pre>
 
 <p>Changes {user} password in the system. Receives input of new password as
@@ -591,147 +591,147 @@ a JSON Object.</p>
 
 <p>Expected input:</p>
 
-<pre class="highlighted"><code class="applescript">JSON (<span class="type">application</span>/json):
+<pre><code>JSON (application/json):
 {
-  <span class="string">"password"</span> : <span class="string">"xxxxx"</span>
+  &quot;password&quot; : &quot;xxxxx&quot;
 }
 </code></pre>
 
 <h3 id="checkifuserisenabled.">Check if user is enabled.</h3>
 
-<pre class="highlighted"><code class="coffeescript">GET <span class="regexp">/admin/users/{user}/enabled → application/</span>json
+<pre><code>GET /admin/users/{user}/enabled → application/json
 </code></pre>
 
 <p>Verifies if user is enabled in the system.</p>
 
 <p>Output JSON example:</p>
 
-<pre class="highlighted"><code class="json">{
-  "<span class="attribute">enabled</span>": <span class="value"><span class="literal">true</span>
-}</span>
+<pre><code>{
+  &quot;enabled&quot;: true
+}
 </code></pre>
 
 <h3 id="checkifuserissuperuser.">Check if user is Superuser.</h3>
 
-<pre class="highlighted"><code class="coffeescript">GET <span class="regexp">/admin/users/{user}/superuser → application/</span>json
+<pre><code>GET /admin/users/{user}/superuser → application/json
 </code></pre>
 
 <p>Verifies if the user is a superuser.</p>
 
 <p>Output JSON example:</p>
 
-<pre class="highlighted"><code class="json">{
-  "<span class="attribute">superuser</span>": <span class="value"><span class="literal">true</span>
-}</span>
+<pre><code>{
+  &quot;superuser&quot;: true
+}
 </code></pre>
 
 <h3 id="listingusers.">Listing users.</h3>
 
-<pre class="highlighted"><code class="nginx"><span class="title">GET</span> /admin/users → application/json
+<pre><code>GET /admin/users → application/json
 </code></pre>
 
 <p>Retrieves a list of users.</p>
 
 <p>Output JSON example:</p>
 
-<pre class="highlighted"><code class="json">{
-  "<span class="attribute">users</span>": <span class="value">[<span class="string">"anonymous"</span>, <span class="string">"admin"</span>]
-}</span>
+<pre><code>{
+  &quot;users&quot;: [&quot;anonymous&quot;, &quot;admin&quot;]
+}
 </code></pre>
 
 <h3 id="listinguserroles.">Listing user roles.</h3>
 
-<pre class="highlighted"><code class="coffeescript">GET <span class="regexp">/admin/users/{user}/roles → application/</span>json
+<pre><code>GET /admin/users/{user}/roles → application/json
 </code></pre>
 
 <p>Retrieves the list of the roles assigned to user.</p>
 
 <p>Output JSON example:</p>
 
-<pre class="highlighted"><code class="json">{
-  "<span class="attribute">roles</span>": <span class="value">[<span class="string">"reader"</span>]
-}</span>
+<pre><code>{
+  &quot;roles&quot;: [&quot;reader&quot;]
+}
 </code></pre>
 
 <h3 id="deletingusers.">Deleting users.</h3>
 
-<pre class="highlighted"><code class="sql"><span class="operator"><span class="keyword">DELETE</span> /admin/users/{<span class="keyword">user</span>}
+<pre><code>DELETE /admin/users/{user}
 </code></pre>
 
 <p>Removes a user from the system.</p>
 
 <h3 id="enablingusers.">Enabling users.</h3>
 
-<pre class="highlighted"><code class="coffeescript">PUT <span class="regexp">/admin/users/{user}/</span>enabled
+<pre><code>PUT /admin/users/{user}/enabled
 </code></pre>
 
 <p>Enables a user in the system; expects a JSON object in the following
 format:</p>
 
-<pre class="highlighted"><code class="json">{
-  "<span class="attribute">enabled</span>" : <span class="value"><span class="literal">true</span>
-}</span>
+<pre><code>{
+  &quot;enabled&quot; : true
+}
 </code></pre>
 
 <h3 id="settinguserroles.">Setting user roles.</h3>
 
-<pre class="highlighted"><code class="coffeescript">PUT <span class="regexp">/admin/users/{user}/</span>roles
+<pre><code>PUT /admin/users/{user}/roles
 </code></pre>
 
 <p>Sets roles for a given user; expects a JSON object specifying the roles
 for the user in the following format:</p>
 
-<pre class="highlighted"><code class="json">{
-  "<span class="attribute">roles</span>" : <span class="value">[<span class="string">"reader"</span>,<span class="string">"secTestDb-full"</span>]
-}</span>
+<pre><code>{
+  &quot;roles&quot; : [&quot;reader&quot;,&quot;secTestDb-full&quot;]
+}
 </code></pre>
 
 <h3 id="addingnewroles.">Adding new roles.</h3>
 
-<pre class="highlighted"><code class="nginx"><span class="title">POST</span> /admin/roles
+<pre><code>POST /admin/roles
 </code></pre>
 
 <p>Adds the new role to the system.</p>
 
 <p>Expected input:</p>
 
-<pre class="highlighted"><code class="applescript">JSON (<span class="type">application</span>/json):
+<pre><code>JSON (application/json):
 {
-  <span class="string">"rolename"</span> : <span class="string">""</span>
+  &quot;rolename&quot; : &quot;&quot;
 }
 </code></pre>
 
 <h3 id="listingroles.">Listing roles.</h3>
 
-<pre class="highlighted"><code class="nginx"><span class="title">GET</span> /admin/roles → application/json
+<pre><code>GET /admin/roles → application/json
 </code></pre>
 
 <p>Retrieves the list of roles registered in the system.</p>
 
 <p>Output JSON example:</p>
 
-<pre class="highlighted"><code class="json">{
-  "<span class="attribute">roles</span>": <span class="value">[<span class="string">"reader"</span>]
-}</span>
+<pre><code>{
+  &quot;roles&quot;: [&quot;reader&quot;]
+}
 </code></pre>
 
 <h3 id="listinguserswithaspecifiedrole.">Listing users with a specified role.</h3>
 
-<pre class="highlighted"><code class="coffeescript">GET <span class="regexp">/admin/roles/{role}/users → application/</span>json
+<pre><code>GET /admin/roles/{role}/users → application/json
 </code></pre>
 
 <p>Retrieves users that have the role assigned.</p>
 
 <p>Output JSON example:</p>
 
-<pre class="highlighted"><code class="json">{
-  "<span class="attribute">users</span>": <span class="value">[<span class="string">"anonymous"</span>]
-}</span>
+<pre><code>{
+  &quot;users&quot;: [&quot;anonymous&quot;]
+}
 </code></pre>
 
 <h3 id="deletingroles.">Deleting roles.</h3>
 
-<pre class="highlighted"><code class="sql"><span class="operator"><span class="keyword">DELETE</span> /admin/roles/{role}?force={force}
+<pre><code>DELETE /admin/roles/{role}?force={force}
 </code></pre>
 
 <p>Deletes an existing role from the system; the force parameter is a
@@ -740,109 +740,109 @@ forced.</p>
 
 <h3 id="assigningpermissionstoroles.">Assigning permissions to roles.</h3>
 
-<pre class="highlighted"><code class="coffeescript">PUT <span class="regexp">/admin/permissions/role/</span>{role}
+<pre><code>PUT /admin/permissions/role/{role}
 </code></pre>
 
 <p>Creates a new permission for a given role over a specified resource;
 expects input JSON Object in the following format:</p>
 
-<pre class="highlighted"><code class="sql">{
-  "action" : "read" | "write" | "<span class="operator"><span class="keyword">create</span><span class="string">" | "</span><span class="keyword">delete</span><span class="string">" | "</span><span class="keyword">revoke</span><span class="string">" | "</span><span class="keyword">execute</span><span class="string">" | "</span><span class="keyword">grant</span><span class="string">" | "</span>*<span class="string">",
-  "</span>resource_type<span class="string">" : "</span><span class="keyword">user</span><span class="string">" | "</span>role<span class="string">" | "</span>db<span class="string">" | "</span>named-graph<span class="string">" | "</span>metadata<span class="string">" | "</span>admin<span class="string">" | "</span>icv-<span class="keyword">constraints</span><span class="string">" | "</span>*<span class="string">",
-  "</span>resource<span class="string">" : ""
+<pre><code>{
+  &quot;action&quot; : &quot;read&quot; | &quot;write&quot; | &quot;create&quot; | &quot;delete&quot; | &quot;revoke&quot; | &quot;execute&quot; | &quot;grant&quot; | &quot;*&quot;,
+  &quot;resource_type&quot; : &quot;user&quot; | &quot;role&quot; | &quot;db&quot; | &quot;named-graph&quot; | &quot;metadata&quot; | &quot;admin&quot; | &quot;icv-constraints&quot; | &quot;*&quot;,
+  &quot;resource&quot; : &quot;&quot;
 }
 </code></pre>
 
 <h3 id="assigningpermissionstousers.">Assigning permissions to users.</h3>
 
-<pre class="highlighted"><code class="apache">PUT /admin/permissions/<span class="keyword">user</span>/{<span class="keyword">user</span>}
+<pre><code>PUT /admin/permissions/user/{user}
 </code></pre>
 
 <p>Creates a new permission for a given user over a specified resource;
 expects input JSON Object in the following format:</p>
 
-<pre class="highlighted"><code class="sql">{
-  "action" : "read" | "write" | "<span class="operator"><span class="keyword">create</span><span class="string">" | "</span><span class="keyword">delete</span><span class="string">" | "</span><span class="keyword">revoke</span><span class="string">" | "</span><span class="keyword">execute</span><span class="string">" | "</span><span class="keyword">grant</span><span class="string">" | "</span>*<span class="string">",
-  "</span>resource_type<span class="string">" : "</span><span class="keyword">user</span><span class="string">" | "</span>role<span class="string">" | "</span>db<span class="string">" | "</span>named-graph<span class="string">" | "</span>metadata<span class="string">" | "</span>admin<span class="string">" | "</span>icv-<span class="keyword">constraints</span><span class="string">" | "</span>*<span class="string">",
-  "</span>resource<span class="string">" : ""
+<pre><code>{
+  &quot;action&quot; : &quot;read&quot; | &quot;write&quot; | &quot;create&quot; | &quot;delete&quot; | &quot;revoke&quot; | &quot;execute&quot; | &quot;grant&quot; | &quot;*&quot;,
+  &quot;resource_type&quot; : &quot;user&quot; | &quot;role&quot; | &quot;db&quot; | &quot;named-graph&quot; | &quot;metadata&quot; | &quot;admin&quot; | &quot;icv-constraints&quot; | &quot;*&quot;,
+  &quot;resource&quot; : &quot;&quot;
 }
 </code></pre>
 
 <h3 id="deletingpermissionsfromroles.">Deleting permissions from roles.</h3>
 
-<pre class="highlighted"><code class="sql">POST /admin/permissions/role/{role}/<span class="operator"><span class="keyword">delete</span>
+<pre><code>POST /admin/permissions/role/{role}/delete
 </code></pre>
 
 <p>Deletes a permission for a given role over a specified resource; expects
 input JSON Object in the following format:</p>
 
-<pre class="highlighted"><code class="sql">{
-  "action" : "read" | "write" | "<span class="operator"><span class="keyword">create</span><span class="string">" | "</span><span class="keyword">delete</span><span class="string">" | "</span><span class="keyword">revoke</span><span class="string">" | "</span><span class="keyword">execute</span><span class="string">" | "</span><span class="keyword">grant</span><span class="string">" | "</span>*<span class="string">",
-  "</span>resource_type<span class="string">" : "</span><span class="keyword">user</span><span class="string">" | "</span>role<span class="string">" | "</span>db<span class="string">" | "</span>named-graph<span class="string">" | "</span>metadata<span class="string">" | "</span>admin<span class="string">" | "</span>icv-<span class="keyword">constraints</span><span class="string">" | "</span>*<span class="string">",
-  "</span>resource<span class="string">" : ""
+<pre><code>{
+  &quot;action&quot; : &quot;read&quot; | &quot;write&quot; | &quot;create&quot; | &quot;delete&quot; | &quot;revoke&quot; | &quot;execute&quot; | &quot;grant&quot; | &quot;*&quot;,
+  &quot;resource_type&quot; : &quot;user&quot; | &quot;role&quot; | &quot;db&quot; | &quot;named-graph&quot; | &quot;metadata&quot; | &quot;admin&quot; | &quot;icv-constraints&quot; | &quot;*&quot;,
+  &quot;resource&quot; : &quot;&quot;
 }
 </code></pre>
 
 <h3 id="deletingpermissionsfromusers.">Deleting permissions from users.</h3>
 
-<pre class="highlighted"><code class="sql">POST /admin/permissions/user/{user}/<span class="operator"><span class="keyword">delete</span>
+<pre><code>POST /admin/permissions/user/{user}/delete
 </code></pre>
 
 <p>Deletes a permission for a given user over a specified resource; expects
 input JSON Object in the following format:</p>
 
-<pre class="highlighted"><code class="sql">{
-  "action" : "read" | "write" | "<span class="operator"><span class="keyword">create</span><span class="string">" | "</span><span class="keyword">delete</span><span class="string">" | "</span><span class="keyword">revoke</span><span class="string">" | "</span><span class="keyword">execute</span><span class="string">" | "</span><span class="keyword">grant</span><span class="string">" | "</span>*<span class="string">",
-  "</span>resource_type<span class="string">" : "</span><span class="keyword">user</span><span class="string">" | "</span>role<span class="string">" | "</span>db<span class="string">" | "</span>named-graph<span class="string">" | "</span>metadata<span class="string">" | "</span>admin<span class="string">" | "</span>icv-<span class="keyword">constraints</span><span class="string">" | "</span>*<span class="string">",
-  "</span>resource<span class="string">" : ""
+<pre><code>{
+  &quot;action&quot; : &quot;read&quot; | &quot;write&quot; | &quot;create&quot; | &quot;delete&quot; | &quot;revoke&quot; | &quot;execute&quot; | &quot;grant&quot; | &quot;*&quot;,
+  &quot;resource_type&quot; : &quot;user&quot; | &quot;role&quot; | &quot;db&quot; | &quot;named-graph&quot; | &quot;metadata&quot; | &quot;admin&quot; | &quot;icv-constraints&quot; | &quot;*&quot;,
+  &quot;resource&quot; : &quot;&quot;
 }
 </code></pre>
 
 <h3 id="listingrolepermissions.">Listing role permissions.</h3>
 
-<pre class="highlighted"><code class="coffeescript">GET <span class="regexp">/admin/permissions/role/{role} → application/</span>json
+<pre><code>GET /admin/permissions/role/{role} → application/json
 </code></pre>
 
 <p>Retrieves permissions assigned to the role.</p>
 
 <p>Output JSON example:</p>
 
-<pre class="highlighted"><code class="json">{
-  "<span class="attribute">permissions</span>": <span class="value">[<span class="string">"stardog:read:*"</span>]
-}</span>
+<pre><code>{
+  &quot;permissions&quot;: [&quot;stardog:read:*&quot;]
+}
 </code></pre>
 
 <h3 id="listinguserpermissions.">Listing user permissions.</h3>
 
-<pre class="highlighted"><code class="apache">GET /admin/permissions/<span class="keyword">user</span>/{<span class="keyword">user</span>} → application/json
+<pre><code>GET /admin/permissions/user/{user} → application/json
 </code></pre>
 
 <p>Retrieves permissions assigned to the user.</p>
 
 <p>Output JSON example:</p>
 
-<pre class="highlighted"><code class="json">{
-  "<span class="attribute">permissions</span>": <span class="value">[<span class="string">"stardog:read:*"</span>]
-}</span>
+<pre><code>{
+  &quot;permissions&quot;: [&quot;stardog:read:*&quot;]
+}
 </code></pre>
 
 <h3 id="listingusereffectivepermissions.">Listing user effective permissions.</h3>
 
-<pre class="highlighted"><code class="apache">GET /admin/permissions/effective/<span class="keyword">user</span>/{<span class="keyword">user</span>} → application/json
+<pre><code>GET /admin/permissions/effective/user/{user} → application/json
 </code></pre>
 
 <p>Retrieves effective permissions assigned to the user.</p>
 
 <p>Output JSON example:</p>
 
-<pre class="highlighted"><code class="json">{
-  "<span class="attribute">permissions</span>": <span class="value">[<span class="string">"stardog:*"</span>]
-}</span>
+<pre><code>{
+  &quot;permissions&quot;: [&quot;stardog:*&quot;]
+}
 </code></pre>
 
 <h3 id="shutdownserver.">Shutdown server.</h3>
 
-<pre class="highlighted"><code class="nginx"><span class="title">POST</span> /admin/shutdown
+<pre><code>POST /admin/shutdown
 </code></pre>
 
 <p>Shuts down the Stardog Server. If successful, returns a <code>202</code> to
