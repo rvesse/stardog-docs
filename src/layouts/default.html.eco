@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title><%- @getPreparedTitle() %></title>
+<script src="/js/libs/modernizr-2.6.2.min.js"></script>
+<meta charset='utf-8'>
+<%- @getBlock("meta").toHTML() %>
+<%- @getBlock("styles").add(@site.styles).toHTML() %>
+<!--     //a block for ipad, etc... might should go in meta -->
+<body id="inner-doc" class="docs grid">
+
+<div class="navbar" id="nav1">
+<div class="row">
+      <a class="toggle" gumby-trigger="#nav1 &gt; .row &gt; ul" href="#"><i class="icon-menu"></i></a>
+      <h3 class="five columns logo">
+        <a href="http://stardog.com/">
+          <img style="max-width: 40%;" src="/img/logotype.png" gumby-retina="">
+        </a>
+      </h3>
+      <ul class="seven columns">
+        <li><a href="#">Chapters</a></li>
+        <li>
+          <a href="#">Related</a>
+          <div class="dropdown">
+            <ul>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+              <li>
+                <a href="#">I HAVE STUFF NESTED UNDER ME</a>
+                <div class="dropdown">
+                  <ul>
+                    <li><a href="">nested</a></li>
+                    <li><a href="">nested</a></li>
+                    <li><a href="">nested</a></li>
+                  </ul>
+                </div>
+              </li>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+            </ul>
+          </div>
+        </li>
+        <li><a href="#">Java API</a></li>
+        <!-- <li class="field"><input class="search input" type="search" placeholder="Search"></li> -->
+      </ul>
+    </div>
+  </div>
+
+<div id="the-header">
+  <div class="row valign">
+    <div class="three columns">
+      <h1><span id="title-masthead"><img src="/img/stardog-FLAT.png" style="max-width: 75%"/></span></h1>
+      <div>
+      <div class="medium rounded btn default pretty"><a href="http://stardog.com/dl">Download</a></div>
+      <!-- <p><a href="http://twitter.com/stardog_db"><img src="http://clarkparsia.com/images/twitter.png"/></a></p> -->
+      </div>
+    </div>
+    <div class="nine columns" id="header-quote">
+      <p><strong><%- @document.quote %></strong>&mdash;Alan Perlis, <cite>Epigrams in Programming</cite></p>
+      <h1 class=""><span id="title-subhead"><%- @document.title %></span></h1>
+      <p><em><%- @document.summary %></em></p>
+    </div>
+  </div>
+ <!-- <div class="row">
+    <div class="three columns"></div>
+    <div class="nine columns">
+
+    </div>
+  </div>
+  -->
+</div>
+
+  <div id="the-content">
+    <div class="row">
+        <div class="three columns">
+        <% if @document.toc: %>
+          <%- @partial("toc.html.eco", {tocItems: @document.tableOfContents})%>
+        <% end %>
+        </div>
+        <div class="nine columns"><%- @content %></div>
+    </div>
+  </div>
+
+  <div id="thefooter" class="container shaded">
+    <div class="row">
+      <div class="three columns">
+        <p id="social">
+        <a href="/"><i class="icon-home"></i></a>&nbsp;
+        <a href="#" id="upaway" class="skip" gumby-easing="easeInOutQuad" gumby-goto="top" gumby-duration="2000">&uarr;</a>
+        <!-- &nbsp;
+        <a href="http://twitter.com/stardog_db"><i class="icon-twitter"></i></a>
+        &nbsp;
+        <a href=""><i class="icon-google-circles"></i></a> -->
+        </p>
+      </div>
+      <div class="nine columns">
+        <% if not @document.root: %>
+          <h4>This is <span id="title-masthead"><%- @document.title %></span>, a chapter in Stardog Docs <t>version</t>.</h4>
+        <% end %>
+      <p>For comments, questions, or to report problems with this page, visit the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support Forum</a>.</p>
+      <p id="copywood">&copy;2010&ndash;<%- new Date().getFullYear() %> Clark &amp; Parsia LLC. <a href="http://creativecommons.org/licenses/by-sa/3.0/">Some rights reserved</a>.
+      </div>
+    </div>
+  </div>
+
+<%- @getBlock("scripts").add(@site.scripts).toHTML() %>

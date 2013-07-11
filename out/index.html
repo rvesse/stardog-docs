@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Stardog 1.2.3 Docs: Stardog Docs</title>
+<script src="/js/libs/modernizr-2.6.2.min.js"></script>
+<meta charset='utf-8'>
+<meta http-equiv="X-Powered-By" content="DocPad v6.44.0"/>
+<link  rel="stylesheet" href="/css/gumby.css" />
+<!--     //a block for ipad, etc... might should go in meta -->
+<body id="inner-doc" class="docs grid">
+
+<div class="navbar" id="nav1">
+<div class="row">
+      <a class="toggle" gumby-trigger="#nav1 &gt; .row &gt; ul" href="#"><i class="icon-menu"></i></a>
+      <h3 class="five columns logo">
+        <a href="http://stardog.com/">
+          <img style="max-width: 40%;" src="/img/logotype.png" gumby-retina="">
+        </a>
+      </h3>
+      <ul class="seven columns">
+        <li><a href="#">Chapters</a></li>
+        <li>
+          <a href="#">Related</a>
+          <div class="dropdown">
+            <ul>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+              <li>
+                <a href="#">I HAVE STUFF NESTED UNDER ME</a>
+                <div class="dropdown">
+                  <ul>
+                    <li><a href="">nested</a></li>
+                    <li><a href="">nested</a></li>
+                    <li><a href="">nested</a></li>
+                  </ul>
+                </div>
+              </li>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+              <li><a href="#">Item</a></li>
+            </ul>
+          </div>
+        </li>
+        <li><a href="#">Java API</a></li>
+        <!-- <li class="field"><input class="search input" type="search" placeholder="Search"></li> -->
+      </ul>
+    </div>
+  </div>
+
+<div id="the-header">
+  <div class="row valign">
+    <div class="three columns">
+      <h1><span id="title-masthead"><img src="/img/stardog-FLAT.png" style="max-width: 75%"/></span></h1>
+      <div>
+      <div class="medium rounded btn default pretty"><a href="http://stardog.com/dl">Download</a></div>
+      <!-- <p><a href="http://twitter.com/stardog_db"><img src="http://clarkparsia.com/images/twitter.png"/></a></p> -->
+      </div>
+    </div>
+    <div class="nine columns" id="header-quote">
+      <p><strong>Functions delay binding; data structures induce binding. Moral: Structure data late in the programming process.</strong>&mdash;Alan Perlis, <cite>Epigrams in Programming</cite></p>
+      <h1 class=""><span id="title-subhead">Stardog Docs</span></h1>
+      <p><em></em></p>
+    </div>
+  </div>
+ <!-- <div class="row">
+    <div class="three columns"></div>
+    <div class="nine columns">
+
+    </div>
+  </div>
+  -->
+</div>
+
+  <div id="the-content">
+    <div class="row">
+        <div class="three columns">
+        
+          <nav id="sidebar-nav-holder" class="vertical-nav" gumby-fixed="top|thefooter">
+<h3 id="tochead">Contents</h3>
+<div class="sidebar-nav">
+
+
+<ul class="toc">
+    
+    <!-- [data-target='-->
+        <li><a href="#sd-Introduction" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="#sd-Introduction">Introduction</a>
+        <!-- <li><a href="#sd-Introduction" class="skiplink">Introduction</a> -->
+            
+                
+<ul class="toc">
+    
+</ul>
+
+            
+        </li>
+    
+    <!-- [data-target='-->
+        <li><a href="#sd-The-Essential-Documentation" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="#sd-The-Essential-Documentation">The Essential Documentation</a>
+        <!-- <li><a href="#sd-The-Essential-Documentation" class="skiplink">The Essential Documentation</a> -->
+            
+                
+<ul class="toc">
+    
+</ul>
+
+            
+        </li>
+    
+    <!-- [data-target='-->
+        <li><a href="#sd-Acknowledgments" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="#sd-Acknowledgments">Acknowledgments</a>
+        <!-- <li><a href="#sd-Acknowledgments" class="skiplink">Acknowledgments</a> -->
+            
+                
+<ul class="toc">
+    
+</ul>
+
+            
+        </li>
+    
+</ul>
+
+</div>
+</nav>
+
+<!--
+          <nav id="sidebar-nav-holder" class="vertical-nav" gumby-fixed="top|[data-target='psd-templates']">
+            <ul id="sidebar-nav">
+
+                <li class="active">
+                  <a href="#grid-fundamentals" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='grid-fundamentals']">Grid Fundamentals</a>
+                </li>
+
+                <li>
+                  <a href="#basic-grid" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='basic-grid']">Basic Grid</a>
+                </li>
+
+                <li>
+                  <a href="#hybrid-grid" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='hybrid-grid']">Hybrid Grid</a>
+                </li>
+
+                <li>
+                  <a href="#pushing-columns" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='pushing-columns']">Pushing Columns</a>
+                </li>
+
+                <li>
+                  <a href="#centered-columns" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='centered-columns']">Centered Columns</a>
+                </li>
+
+                <li>
+                  <a href="#tiles" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='tiles']">Tiles</a>
+                </li>
+
+                <li>
+                  <a href="#nested-grids" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='nested-grids']">Nested Grids</a>
+                </li>
+
+                <li>
+                  <a href="#semantic-grids" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='semantic-grids']">Semantic Grids</a>
+                </li>
+
+                <li>
+                  <a href="#psd-templates" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='psd-templates']">PSD Templates</a>
+                </li>
+
+            </ul>
+          </nav>
+-->
+
+        
+        </div>
+        <div class="nine columns"><h2 id="sd-Introduction">Introduction</h2>
+<p>Stardog is a <a href="/performance">fast</a>, lightweight, commercial RDF
+database for mission-critical apps: it supports <a href="http://www.w3.org/TR/2012/WD-sparql11-query-20120105/">SPARQL
+1.1</a>; HTTP
+and the SNARL protocol for remote access and control;
+<a href="http://www.w3.org/RDF/">RDF</a> as a data model; <a href="http://www.w3.org/TR/owl2-overview/">OWL
+2</a> and rules for inference and data
+analytics.</p>
+<h3>Acquiring Stardog &amp; Support</h3>
+<p><a href="http://stardog.com/dl/">Download</a> Stardog to get started. The <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog support forum</a>,
+<a href="mailto:stardog@clarkparsia.com">stardog@clarkparsia.com</a>, is the place
+to report bugs, ask questions, etc. You can also ask questions on <a href="http://stackoverflow.com/">Stack
+Overflow</a> using the tag <em>stardog</em>.</p>
+<h3>Contributing</h3>
+<p>There are several open source components of Stardog; feel free to submit
+pull requests: <a href="https://github.com/clarkparsia/stardog-docs">stardog-docs</a>, <a href="https://github.com/clarkparsia/stardog.js">stardog.js</a>, <a href="https://github.com/clarkparsia/stardog-groovy">stardog-groovy</a>, <a href="https://github.com/clarkparsia/stardog-spring">stardog-spring</a>, and <a href="https://github.com/antoniogarrote/stardog-rb">stardog.rb</a>.</p>
+<h2 id="sd-The-Essential-Documentation">The Essential Documentation</h2>
+<p>This is documentation for Stardog 1.2.3 (11 June 2013). Check
+out the <a href="/RELEASE_NOTES.txt">release notes</a> and the <a href="/faq/">FAQ</a>.</p>
+<h3><a href="/quick-start">Quick Start Guide</a></h3>
+<p>Instructions to get up-and-running very quickly with Stardog.</p>
+<h3><a href="/admin/">Administration</a></h3>
+<ol>
+<li><a href="/admin/#cli">CLI Overview</a></li>
+<li><a href="/admin/#admin-server">Administering a Stardog Server</a></li>
+<li><a href="/admin/#admin-db">Administering a Stardog Database</a></li>
+<li><a href="/admin/#security">Configuring Security</a></li>
+<li><a href="/admin/#search">Managing Search Indexes</a></li>
+<li><a href="/admin/#optimizing-bulk-load">Optimizing Bulk Data Loading</a></li>
+<li><a href="/admin/#resource-requirements">Resource Requirements for Stardog</a></li>
+<li><a href="/admin/#using-windows">Using Stardog on Windows</a></li>
+</ol>
+<h3><a href="/using/">Using Stardog</a></h3>
+<ol>
+<li><a href="/using/#using-stardog">Using Stardog</a></li>
+<li><a href="/using/#query">Querying a Database</a></li>
+<li><a href="/using/#add-remove">Adding and Removing</a></li>
+<li><a href="/using/#export">Exporting a Database</a></li>
+<li><a href="/using/#search">Searching</a></li>
+</ol>
+<h3><a href="/security">Security</a></h3>
+<ol>
+<li><a href="/security/#model">The User &amp; Security Model</a></li>
+<li><a href="/security/#cli">Command-line Interface</a></li>
+<li><a href="/security/#api">Programmatic Access</a></li>
+<li><a href="/security/#deployment">Deploying Stardog Securely</a></li>
+</ol>
+<h3><a href="/icv">Integrity Constraint Validation</a></h3>
+<ol>
+<li><a href="/sdp/#intro">Background &amp; Terminology</a></li>
+<li><a href="/sdp/#validation">Validating RDF with Closed World Integrity Constraints</a></li>
+</ol>
+<h3><a href="/owl2">OWL 2 Reasoning</a></h3>
+<ol>
+<li><a href="/owl2/#reasoning">Using Stardog's Reasoning Capabilities</a></li>
+<li><a href="/owl2/#trouble">Not Getting Expected Answers?</a></li>
+<li><a href="/owl2/#issues">Known Issues</a></li>
+<li><a href="/owl2/#guidelines">Guidelines</a></li>
+<li><a href="/owl2/#query">Technical Background</a></li>
+</ol>
+<h3><a href="/java/">Programming with Java</a></h3>
+<ol>
+<li><a href="/java/#intro">Introduction</a></li>
+<li><a href="/java/#admin">Creating and Administering Databases</a></li>
+<li><a href="/java/#connection">Creating a Connection String</a></li>
+<li><a href="/java/#security">Security in Stardog</a></li>
+<li><a href="/java/#snarl">Using SNARL</a></li>
+<li><a href="/java/#sesame">Using Sesame</a></li>
+<li><a href="/java/#jena">Using Jena</a></li>
+<li><a href="/java/#client-server">Client-Server Stardog</a></li>
+<li><a href="/java/#embed">Embedded Stardog</a></li>
+<li><a href="/java/#pool">Connection Pooling</a></li>
+<li><a href="/java/#deprecation">Deprecation &amp; Backward Compatibility</a></li>
+</ol>
+<h3><a href="/network/">Network Programming</a></h3>
+<ol>
+<li><a href="/network/#http">SPARQL Protocol: HTTP</a></li>
+<li><a href="/network/#extended-http">Extended HTTP Protocol</a></li>
+<li><a href="/network/#snarl">SNARL: The Native Stardog Remote API</a></li>
+</ol>
+<h3><a href="/spring">Programming with Spring</a></h3>
+<ol>
+<li><a href="/spring/#intro">Introduction</a></li>
+<li><a href="/spring/#building">Building Spring for Stardog</a></li>
+<li><a href="/spring/#overview">Overview</a></li>
+<li><a href="/spring/#basic">Basic Spring</a></li>
+<li><a href="/spring/#batch">Spring Batch</a></li>
+<li><a href="/spring/#examples">Examples</a></li>
+</ol>
+<h3><a href="/groovy/">Programming with Groovy</a></h3>
+<ol>
+<li><a href="/groovy/#intro">Introduction</a></li>
+<li><a href="/groovy/#building">Building Groovy for Stardog</a></li>
+<li><a href="/groovy/#overview">Overview</a></li>
+<li><a href="/groovy/#examples">Examples</a></li>
+</ol>
+<h3><a href="http://clarkparsia.github.io/stardog.js/">Programming with Javascript</a></h3>
+<p>The documentation for <a href="http://clarkparsia.github.io/stardog.js">stardog.js</a>, which is available on <a href="https://github.com/clarkparsia/stardog.js">Github</a> and <a href="">npm</a>.</p>
+<h3><a href="/faq">Frequently Asked Questions</a></h3>
+<p>Questions that people have asked for which we have answers.</p>
+<h3><a href="/term/">Terminology</a></h3>
+<p>A <a href="/term/">glossary</a> of technical terms used throughout the
+Stardog docs.</p>
+<h3><a href="/compatibility/">Stardog Compatibility Policies</a></h3>
+<p>A statement of the policies we will pursue in evolving Stardog beyond
+the 1.0 release.</p>
+<h3><a href="/known-issues">Known Issues</a></h3>
+<p>Everything we know about that sucks.</p>
+<h3>Man Pages</h3>
+<h4><code>stardog-admin</code></h4>
+<ul>
+<li><code>db copy</code>, <code>db create</code>, <code>db drop</code>, <code>db list</code>, <code>db migrate</code>, <code>db offline</code>, <code>db online</code>, <code>db optimize</code>, <code>db status</code></li>
+<li><code>icv add</code>, <code>icv drop</code>, <code>icv remove</code></li>
+<li><code>metadata get</code>, <code>metadata set</code></li>
+<li><code>query kill</code>, <code>query list</code>, <code>query status</code></li>
+<li><code>role add</code>, <code>role grant</code>, <code>role list</code>, <code>role permission</code>, <code>role remove</code>, <code>role revoke</code></li>
+<li><code>server start</code>, <code>server stop</code></li>
+<li><code>user add</code>, <code>user disable</code>, <code>user enable</code>, <code>user addrole</code>, <code>user removerole</code>, <code>user grant</code>, <code>user list</code>, <code>user passwd</code>, <code>user permission</code>, <code>user remove</code>, <code>user revoke</code></li>
+</ul>
+<h3><code>stardog</code></h3>
+<ul>
+<li><code>data add, data export, data remove, data size.</code></li>
+<li><code>icv convert, icv validate.</code></li>
+<li><code>namespace add, namespace list, namespace remove.</code></li>
+<li><code>query execute, query explain, query search.</code></li>
+<li><code>reasoning consistency, reasoning explain.</code></li>
+</ul>
+<h2 id="sd-Acknowledgments">Acknowledgments</h2>
+<p>Thanks to all the Stardog testers, especially Robert Butler, Al Baker,
+Marko A. Rodriguez, Brian Sletten, Alin Dreghiciu, Rob Vesse, Stephane
+Fallah, John “New Model Army” Goodwin, José Devezas, Chris
+Halaschek-Wiener, Gavin Carothers, Brian Panulla, Ryan Kohl, Morton
+Swimmer, Quentin Reul, Paul Dlug, James Leigh, Alex Tucker, Ron
+Zettlemoyer, Jim Rhyne, Andrea Westerinen, Huy Phan, Zach Whitley.</p>
+</div>
+    </div>
+  </div>
+
+  <div id="thefooter" class="container shaded">
+    <div class="row">
+      <div class="three columns">
+        <p id="social">
+        <a href="/"><i class="icon-home"></i></a>&nbsp;
+        <a href="#" id="upaway" class="skip" gumby-easing="easeInOutQuad" gumby-goto="top" gumby-duration="2000">&uarr;</a>
+        <!-- &nbsp;
+        <a href="http://twitter.com/stardog_db"><i class="icon-twitter"></i></a>
+        &nbsp;
+        <a href=""><i class="icon-google-circles"></i></a> -->
+        </p>
+      </div>
+      <div class="nine columns">
+        
+      <p>For comments, questions, or to report problems with this page, visit the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support Forum</a>.</p>
+      <p id="copywood">&copy;2010&ndash;2013 Clark &amp; Parsia LLC. <a href="http://creativecommons.org/licenses/by-sa/3.0/">Some rights reserved</a>.
+      </div>
+    </div>
+  </div>
+
+<script >(function(){
+	/* Did we just livereload? */
+var log = true && localStorage && console && console.log && true;
+if ( log && localStorage.getItem('/docpad-livereload/reloaded') === 'yes' ) {
+	localStorage.removeItem('/docpad-livereload/reloaded');
+	console.log('LiveReloaded at', new Date())
+}
+
+/* Listen for the regenerated event and perform a reload of the page when the event occurs */
+var listen = function(){
+	var socket = io.connect('/docpad-livereload');
+	socket.on('regenerated',function(){
+		if ( log ) {
+	localStorage.setItem('/docpad-livereload/reloaded', 'yes');
+}
+document.location.reload();
+	});
+};
+	if ( typeof io !== 'undefined' ) {
+		listen();
+	} else {
+		/* Inject socket.io into our page then listen once loaded */
+var inject = function(){
+	var t = document.createElement('script');
+	t.type = 'text/javascript';
+	t.async = true;
+	t.src = '/socket.io/socket.io.js';
+	t.onload = listen;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(t,s);
+};
+		var readyStateCheckInterval = setInterval(function() {
+  if (document.readyState === "complete") {
+    inject();
+    clearInterval(readyStateCheckInterval);
+  }
+}, 10);
+	}
+})();</script><script defer="defer"  src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script><script defer="defer"  src="/js/libs/gumby.js"></script><script defer="defer"  src="/js/libs/ui/gumby.fittext.js"></script><script defer="defer"  src="/js/libs/ui/gumby.fixed.js"></script><script defer="defer"  src="/js/libs/ui/gumby.navbar.js"></script><script defer="defer"  src="/js/libs/ui/gumby.retina.js"></script><script defer="defer"  src="/js/libs/ui/gumby.skiplink.js"></script><script defer="defer"  src="/js/libs/ui/gumby.tabs.js"></script><script defer="defer"  src="/js/libs/ui/gumby.toggleswitch.js"></script><script defer="defer"  src="/js/libs/gumby.init.js"></script><script defer="defer"  src="/js/plugins.js"></script><script defer="defer"  src="/js/main.js"></script>

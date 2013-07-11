@@ -1,0 +1,33 @@
+<p>quote: **A good system can&#39;t have a weak command language.
+title: Quick Start Guide
+layout: default
+related: “”
+toc: false</p>
+<p>This guide explains the basic steps to get you started quickly with
+Stardog on a Unix machine. We test every Stardog release extensively with various
+flavors of Linux and OS X. Please report a bug if you find issues on
+other platforms.</p>
+<p>First, tell Stardog where its home directory (where databases and other
+files will be stored) is:If you‘re using some weird Unix shell that
+doesn’t create environment variables in this way, adjust accordingly.
+Stardog requires <code>STARDOG_HOME</code> to be defined.</p>
+<pre class="highlighted"><code class="ruby"><span class="variable">$ </span>export <span class="constant">STARDOG_HOME</span>=<span class="regexp">/data/stardog</span></code></pre>
+<p>Second, copy the <code>stardog-license-key.bin</code>You&#39;ll get this either with an
+evaluation copy of Stardog or with a licensed copy. into place:</p>
+<pre class="highlighted"><code class="ruby"><span class="variable">$ </span>cp stardog-license-key.bin <span class="variable">$STARDOG_HOME</span></code></pre>
+<p>Of course <code>stardog-license-key.bin</code> has to be readable by the Stardog
+process.</p>
+<p>Third, start the Stardog server. By default the server will expose SNARL
+and HTTP interfaces—on ports 5820 and 5822, respectively.</p>
+<pre class="highlighted"><code class="ruby"><span class="variable">$ </span>.<span class="regexp">/stardog-admin server start</code></pre>
+<p>Fourth, create a database with an input file; use the <code>--server</code>
+parameter to specify which server:</p>
+<pre class="highlighted"><code class="brainfuck"><span class="comment">$</span> <span class="string">.</span><span class="comment">/stardog</span>-<span class="comment">admin</span> <span class="comment">db</span> <span class="comment">create</span> <span class="literal">-</span><span class="comment">n</span> <span class="comment">myDB</span> <span class="literal">-</span><span class="comment">t</span> <span class="comment">D</span> <span class="literal">-</span><span class="comment">u</span> <span class="comment">admin</span> <span class="literal">-</span><span class="comment">p</span> <span class="comment">admin</span> <span class="comment">examples/data/University0_0</span>.<span class="comment">owl</code></pre>
+<p>Fifth, optionally, admire the pure RDF bulk loading power…woof!</p>
+<p>Sixth, query the database:</p>
+<pre class="highlighted"><code class="sql">$ ./stardog query myDB "<span class="operator"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> ?s <span class="keyword">WHERE</span> { ?s ?p ?o } LIMIT <span class="number">10</span><span class="string">"</code></pre>
+<h1>Notes {.fn}</h1>
+<p><a href="#" title="Back to top">⌂</a></p>
+<p>For comments, questions, or to report problems with this page, please
+email the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support
+Forum</a>.</p>

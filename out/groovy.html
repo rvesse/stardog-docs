@@ -1,0 +1,72 @@
+<p><a href="/"><img src="/_/img/sdog-bare.png" alt=""></a></p>
+<blockquote>
+<p><strong>Making something variable is easy. Controlling duration of constancy
+is the trick.</strong>—Alan Perlis, Epigrams in Programming</p>
+</blockquote>
+<h1>Stardog Groovy {#title}</h1>
+<h1>Introduction {#chapter}</h1>
+<p><a href="http://http://groovy.codehaus.org//">Groovy</a> is an agile and dynamic
+programming language for the JVM, making popular programming features
+such as closures available to Java developers. Stardog&#39;s Groovy support
+makes life easier for developers who need to work with RDF, SPARQL, and
+OWL by way of Stardog.</p>
+<p>The Groovy for Stardog <a href="http://github.com/clarkparsia/stardog-groovy">source
+code</a> is available on
+Github.</p>
+<h1>Building Groovy for Stardog {#chapter}</h1>
+<p>To build Groovy for Stardog, you need a release of Stardog; we use
+<a href="http://www.gradle.org/">Gradle</a> to build Stardog for Groovy. Then,</p>
+<ul>
+<li>edit <code>build.gradle</code> to point <code>stardogLocation</code> at a Stardog release
+directory;</li>
+<li>run <code>gradlew build</code>, which eventually results in a
+<code>stardog-groovy.jar</code> in <code>build/libs</code>; finally,</li>
+<li><code>gradlew install</code> does a build, generates a POM, and installs the
+POM in local Maven repo; alternately,</li>
+<li><p><code>mvn install</code> will work, too:</p>
+<pre class="highlighted"><code class="brainfuck"><span class="comment">mvn</span> <span class="comment">install:install</span>-<span class="comment">file</span>
+      <span class="literal">-</span><span class="comment">DgroupId=com</span>.<span class="comment">clarkparsia</span>.<span class="comment">stardog</span>
+      <span class="literal">-</span><span class="comment">DartifactId=stardog</span>-<span class="comment">groovy</span>
+      <span class="literal">-</span><span class="comment">Dversion=1</span>.<span class="comment">1</span>.<span class="comment">1</span>
+      <span class="literal">-</span><span class="comment">Dfile=stardog</span>-<span class="comment">groovy</span>.<span class="comment">jar</span>
+      <span class="literal">-</span><span class="comment">Dpackaging=jar</span>
+      <span class="literal">-</span><span class="comment">DpomFile=pom</span>.<span class="comment">xml</code></pre>
+</li>
+</ul>
+<h1>Overview {#chapter}</h1>
+<p>Groovy for Stardog <strong>@@SPRING_VERSION@@</strong> provides a set of Groovy API
+wrappers for developers to build applications with Stardog and take
+advantage of native Groovy features. For example, you can create a
+Stardog connection pool in a single line, much like Groovy SQL support.
+In Groovy for Stardog, queries can be iterated over using closures and
+transaction safe closures can be executed over a connection.</p>
+<p>For the first release, Groovy for Stardog includes
+<code>com.clarkparsia.stardog.ext.groovy.Stardog</code> with the following methods:</p>
+<ol>
+<li><code>Stardog(map)</code> constructor for managing Stardog connection pools</li>
+<li><code>each(String, Closure)</code> for executing a closure over a query&#39;s
+results, including projecting SPARQL result variables into the
+closure.</li>
+<li><code>query(String, Closure)</code> for executing a closure over a query&#39;s
+results, passing the BindingSet to the closure</li>
+<li><code>insert(List)</code> for inserting a list of vars as a triple, or a list
+of list of triples for insertion</li>
+<li><code>remove(List)</code> for removing a triple from the database</li>
+<li><code>withConnection</code> for executing a closure with a transaction safe
+instance of
+<a href="http://stardog.com/docs/java/snarl/com/clarkparsia/stardog/api/Connection.html">Connection</a></li>
+</ol>
+<p>In addition to the core capabilities, Groovy for Stardog also integrates
+with the Spring bindings and can use a <code>DataSource</code> to initialize the
+constructor. Combining both together creates an easy to use solution for
+other Groovy environments, such as <a href="http://www.grails.org">Grails</a>.</p>
+<h1>Examples {#chapter}</h1>
+<h2>Create a Connection</h2>
+<h2>SPARQL Vars projected into Groovy Closures</h2>
+<h2>Add and remove triples</h2>
+<h2>withConnection closure example</h2>
+<h1>Notes {.fn}</h1>
+<p><a href="#" title="Back to top">⌂</a></p>
+<p>For comments, questions, or to report problems with this page, please
+email the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support
+Forum</a>.</p>

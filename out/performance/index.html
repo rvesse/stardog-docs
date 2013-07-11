@@ -1,0 +1,358 @@
+<p><a href="/"><img src="/_/img/sdog-bare.png" alt=""></a></p>
+<blockquote>
+<p><strong>In computing, the mean time to failure keeps getting shorter.</strong>—Alan
+Perlis, Epigrams in Programming</p>
+</blockquote>
+<h1>Stardog Perf {#title}</h1>
+<p>In this chapter, we&#39;ll detail some basic performance numbers for
+Stardog, both load speed and query speed.As is always the case, the most
+important performance numbers are the ones you run on <em>your</em> data.</p>
+<h1>Loading RDF {#chapter}</h1>
+<p>When Stardog creates a database, you can provide RDF to be bulk loaded
+into the database. This is the optimal way to insert large amounts of
+data into Stardog. We provide some <a href="../admin/#resource-requirements">basic
+guidelines</a> for the resources required
+to bulk load large amounts of data.</p>
+<p>Dataset</p>
+<p># triples</p>
+<p># files</p>
+<p>Index Strategy</p>
+<p>Load Time (h:mm:ss)</p>
+<p>Load kTPS(Kilo Triples/Second)</p>
+<p>Machine</p>
+<p>BSBM 100M</p>
+<p>100.0M</p>
+<p>1</p>
+<p>QUADS</p>
+<p>0:24:57</p>
+<p>66.8</p>
+<p>Server1</p>
+<p>BSBM 100M</p>
+<p>100.0M</p>
+<p>10</p>
+<p>QUADS</p>
+<p>0:20:13</p>
+<p>82.4</p>
+<p>Server1</p>
+<p>BSBM 1B</p>
+<p>997.9M</p>
+<p>1</p>
+<p>QUADS</p>
+<p>5:12:41</p>
+<p>53.2</p>
+<p>Server1</p>
+<p>SP2B 100M</p>
+<p>100.0M</p>
+<p>1</p>
+<p>QUADS</p>
+<p>0:21:27</p>
+<p>77.7</p>
+<p>Server1</p>
+<p>SP2B 250M</p>
+<p>250.0M</p>
+<p>1</p>
+<p>QUADS</p>
+<p>1:00:51</p>
+<p>68.5</p>
+<p>Server1</p>
+<p>LUBM 1k</p>
+<p>138.3M</p>
+<p>1</p>
+<p>QUADS</p>
+<p>0:21:23</p>
+<p>107.7</p>
+<p>Server1</p>
+<p>LUBM 10k</p>
+<p>1243.7M</p>
+<p>10</p>
+<p>TRIPLES</p>
+<p>1:33:45</p>
+<p>221.9</p>
+<p>EC2</p>
+<p>LUBM 10k</p>
+<p>1243.7M</p>
+<p>10</p>
+<p>QUADS</p>
+<p>2:13:27</p>
+<p>155.3</p>
+<p>EC2</p>
+<p>LUBM 30k</p>
+<p>4144.7M</p>
+<p>30</p>
+<p>QUADS</p>
+<p>17:19:01</p>
+<p>66.5</p>
+<p>EC2</p>
+<p>LUBM 60k</p>
+<p>8290.3M</p>
+<p>60</p>
+<p>TRIPLES</p>
+<p>125:09:26</p>
+<p>18.4</p>
+<p>EC2</p>
+<p>Stardog Bulk Load performance</p>
+<p>Server1: 2 x Six-core AMD Opteron 2439SE @ 2.8 GHz 32 GB RAM, RAID 0
+(striping) array of 4 x 750GB hard drives at 7200 rpm. EC2 is a
+<a href="http://aws.amazon.com/ec2/instance-types/">High-Memory Quad XL
+instance</a>.</p>
+<h1>SP2B {#chapter}</h1>
+<p>The
+<a href="http://dbis.informatik.uni-freiburg.de/index.php?project=SP2B">SP2B</a>
+benchmark builds on DBLP attempting to create real-world queries which
+utilize many different aspects of SPARQL query performance. It&#39;s an
+excellent torture test for a SPARQL engine as <a href="http://arxiv.org/pdf/0806.4627v2.pdf">evidenced in their
+initial results</a>. Stardog performs
+quite well on SP2B which we believe is indicative of our focus on query
+performance, particularly for difficult, analytic type SPARQL queries.</p>
+<p>For reference, our earlier SP2B numbers can be seen
+<a href="http://weblog.clarkparsia.com/2011/05/31/stardog-performance-sp2b-benchmark/">here</a>.</p>
+<p>Q1</p>
+<p>Q2</p>
+<p>Q3a</p>
+<p>Q3b</p>
+<p>Q3c</p>
+<p>Q4</p>
+<p>Q5a</p>
+<p>Q5b</p>
+<p>Q6</p>
+<p>Q7</p>
+<p>Q8</p>
+<p>Q9</p>
+<p>Q10</p>
+<p>Q11</p>
+<p>Q12a</p>
+<p>Q12b</p>
+<p>Q12c</p>
+<p># results</p>
+<p>1</p>
+<p>248,738</p>
+<p>192,373</p>
+<p>1,317</p>
+<p>0</p>
+<p>18,362,955</p>
+<p>210,662</p>
+<p>210,662</p>
+<p>417,625</p>
+<p>1,200</p>
+<p>493</p>
+<p>4</p>
+<p>656</p>
+<p>10</p>
+<p>1</p>
+<p>1</p>
+<p>0</p>
+<p>Avg Time (ms)</p>
+<p>0.45</p>
+<p>2,167.95</p>
+<p>466.2</p>
+<p>2.9</p>
+<p>4.95</p>
+<p>64,435.25</p>
+<p>T</p>
+<p>1,471.8</p>
+<p>3,680.55</p>
+<p>753.35</p>
+<p>421.3</p>
+<p>1359.8</p>
+<p>0.85</p>
+<p>612.4</p>
+<p>733.1</p>
+<p>369.1</p>
+<p>0</p>
+<p>Stardog SP2B 5M</p>
+<p>\</p>
+<p>Q1</p>
+<p>Q2</p>
+<p>Q3a</p>
+<p>Q3b</p>
+<p>Q3c</p>
+<p>Q4</p>
+<p>Q5a</p>
+<p>Q5b</p>
+<p>Q6</p>
+<p>Q7</p>
+<p>Q8</p>
+<p>Q9</p>
+<p>Q10</p>
+<p>Q11</p>
+<p>Q12a</p>
+<p>Q12b</p>
+<p>Q12c</p>
+<p># results</p>
+<p>1</p>
+<p>1,876,999</p>
+<p>594,890</p>
+<p>4,075</p>
+<p>0</p>
+<p>-</p>
+<p>696,681</p>
+<p>696,681</p>
+<p>1,945,167</p>
+<p>5,099</p>
+<p>493</p>
+<p>4</p>
+<p>656</p>
+<p>10</p>
+<p>1</p>
+<p>1</p>
+<p>1</p>
+<p>Avg Time (ms)</p>
+<p>0.45</p>
+<p>12,914.35</p>
+<p>795.55</p>
+<p>11.0</p>
+<p>15.2</p>
+<p>T</p>
+<p>T</p>
+<p>7,074.25</p>
+<p>30,765.2</p>
+<p>8,003.95</p>
+<p>442</p>
+<p>6,784.05</p>
+<p>0.95</p>
+<p>2,950.7</p>
+<p>7,100</p>
+<p>395.25</p>
+<p>0.2</p>
+<p>Stardog SP2B 25M</p>
+<p>All SP2B numbers were collected on an iMac running OSX 10.6.8 2.8Ghz
+Intel i7. The default Stardog configuration was used, except the process
+was given 8G of RAM. Each query was run 5 times for a warmup and the
+average was then collected over 25 additional executions of the query.
+Execution times include parsing, planning, and optimization, but do not
+include any result serialization; the embedded Stardog server was used
+so the results were not serialized over the wire. Query times are in
+<strong>milliseconds</strong>, so our result for Q4 @ 5M is 64,435.25 <strong>ms</strong>, or just
+over 1 minute.</p>
+<p>Query 5a did not produce results within the 1 hr timeout (T) specified
+in the original study, nor did query 4 at 25M.</p>
+<h1>BSBM {#chapter}</h1>
+<p>The <a href="http://www4.wiwiss.fu-berlin.de/bizer/berlinsparqlbenchmark/">BSBM SPARQL
+benchmark</a>
+uses generated data based on an e-commerce use case; the data set is
+comprised of a set of products and vendor &amp; consumer information, such
+as reviews, about the products. BSBM uses a set of queries called a
+query mix based around a search and navigation pattern of a consumer
+looking for a product.</p>
+<p>The last results published by the BSBM authors are
+<a href="http://www4.wiwiss.fu-berlin.de/bizer/BerlinSPARQLBenchmark/results/V6/">available</a>.
+Other database vendors have published their own numbers independently
+since the last study and are available online.</p>
+<p>Our BSBM numbers reflect the full query mix using the same seed to
+generate the data sets as provided in the last published BSBM results.
+The numbers in the table represent the query mixes per hour (QMpH) as
+reported by the BSBM test driver. 25 Warmups were executed followed by
+100 runs, this was repeated 5 times and the average QMpH was taken for
+each. 300 runs were used for 128 &amp; 255 concurrent clients to ensure that
+each thread was utilized at least once for a run.</p>
+<p>Dev1</p>
+<p>Dev2</p>
+<p>Server</p>
+<p>Server w/ 16G</p>
+<p>EC2</p>
+<p>Single Client</p>
+<p>23,811.83</p>
+<p>13,456.60</p>
+<p>22,698.14</p>
+<p>25,653.92</p>
+<p>19,691.46</p>
+<p>MT 4</p>
+<p>63,116.72</p>
+<p>82,832.94</p>
+<p>85,460.98</p>
+<p>97,441.88</p>
+<p>60,853.48</p>
+<p>MT 8</p>
+<p>83,348.36</p>
+<p>123,346.19</p>
+<p>153,345.42</p>
+<p>181,567.47</p>
+<p>67,336.72</p>
+<p>MT 16</p>
+<p>84,232.34</p>
+<p>145,474.24</p>
+<p>215,479.83</p>
+<p>256,089.42</p>
+<p>68,837.71</p>
+<p>MT 64</p>
+<p>83,277.24</p>
+<p>140,989.11</p>
+<p>232,004.95</p>
+<p>258,293.93</p>
+<p>67,873.73</p>
+<p>MT 128</p>
+<p>143,205.89</p>
+<p>241,373.41</p>
+<p>277,605.49</p>
+<p>70,334.39</p>
+<p>MT 255</p>
+<p>134,528.47</p>
+<p>240,240.40</p>
+<p>273,721.59</p>
+<p>70,037.50</p>
+<p>Stardog BSBM 10M results</p>
+<p>\</p>
+<p>Dev1</p>
+<p>Dev2</p>
+<p>Server</p>
+<p>Server w/ 16G</p>
+<p>EC2</p>
+<p>Single Client</p>
+<p>10,553.84</p>
+<p>10,017.67</p>
+<p>9,200.93</p>
+<p>9,808.69</p>
+<p>8,254.39</p>
+<p>MT 4</p>
+<p>28,424.51</p>
+<p>39,428.96</p>
+<p>35,277.63</p>
+<p>38,171.86</p>
+<p>28,793.58</p>
+<p>MT 8</p>
+<p>39,952.62</p>
+<p>57,891.07</p>
+<p>65,224.94</p>
+<p>71,211.84</p>
+<p>30,019.72</p>
+<p>MT 16</p>
+<p>38,108.93</p>
+<p>66,790.67</p>
+<p>95,653.91</p>
+<p>106,146.16</p>
+<p>29,551.78</p>
+<p>MT 64</p>
+<p>37,591.20</p>
+<p>62,485.25</p>
+<p>102,286.73</p>
+<p>118,012.20</p>
+<p>28,102.12</p>
+<p>MT 128</p>
+<p>60,509.47</p>
+<p>95,366.01</p>
+<p>124,466.95</p>
+<p>26,841.89</p>
+<p>MT 255</p>
+<p>58,028.40</p>
+<p>90,812.58</p>
+<p>124,123.85</p>
+<p>25,271.50</p>
+<p>Stardog BSBM 100M results</p>
+<p>Hardware used in tests as follows:</p>
+<ul>
+<li>Dev1 is an iMac running OSX 10.6.8 2.8Ghz Intel i7, 16G RAM</li>
+<li>Dev2 is a Linux box CPU: i7-3930K @ 3.2 GHz six cores,
+hyperthreading, 32 GB RAM, SSD SATA 3 HD</li>
+<li>Server is a Linux box: 2 x Intel Xeon X5650 @ 2.67 Ghz. each CPU is
+6 cores with hyperthreading, 48 GB RAM.</li>
+<li>EC2 is a <a href="http://aws.amazon.com/ec2/instance-types/">High-Memory Double XL
+instance</a>.</li>
+</ul>
+<p>Tests were run with 4G of RAM allocated to the JVM unless noted
+otherwise. 128 &amp; 255 client tests were not run on Dev1 because of issues
+with the ulimit &amp; the max number of open sockets.</p>
+<h1>Notes {.fn}</h1>
+<p><a href="#" title="Back to top">⌂</a></p>
+<p>For comments, questions, or to report problems with this page, please
+email the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support
+Forum</a>.</p>

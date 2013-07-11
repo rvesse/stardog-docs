@@ -1,0 +1,139 @@
+<p><a href="/"><img src="/_/img/sdog-bare.png" alt=""></a></p>
+<blockquote>
+<p><strong>It goes against the grain of modern education to teach children to
+program. What fun is there in making plans, acquiring discipline in
+organizing thoughts, devoting attention to detail and learning to be
+self-critical?</strong>—Alan Perlis, Epigrams in Programming</p>
+</blockquote>
+<h1>Stardog Spring {#title}</h1>
+<h1>Introduction {#chapter}</h1>
+<p><a href="http://www.springsource.org/">Spring</a> is a platform to build and run
+enterprise applications in Java. Stardog&#39;s Spring support makes life
+easier for enterprise developers who need to work with Semantic Web
+technology—including RDF, SPARQL, and OWL—by way of Stardog.</p>
+<p>The Spring for Stardog <a href="http://github.com/clarkparsia/stardog-spring">source
+code</a> is available on
+Github. A more featureful version of will be available in <a href="/enterprise">Stardog
+Enterprise Edition</a>.</p>
+<h1>Building Spring for Stardog {#chapter}</h1>
+<p>To build Spring for Stardog, you need a release of Stardog; we use
+<a href="http://www.gradle.org/">Gradle</a> to build Stardog for Spring. Then,</p>
+<ul>
+<li>edit <code>build.gradle</code> to point <code>stardogLocation</code> at a Stardog release
+directory;</li>
+<li>run <code>gradlew</code>, which will download and bootstrap a gradle build
+environment;</li>
+<li>then run <code>gradlew build</code>, which eventually results in a
+<code>stardog-spring.jar</code> in <code>build/libs</code>; finally,</li>
+<li><code>gradlew install</code> does a build, generates a POM, and installs the
+POM in local Maven repo; alternately,</li>
+<li><p><code>mvn install</code> will work, too:</p>
+<pre class="highlighted"><code class="brainfuck"><span class="comment">mvn</span> <span class="comment">install:install</span>-<span class="comment">file</span>
+      <span class="literal">-</span><span class="comment">DgroupId=com</span>.<span class="comment">clarkparsia</span>.<span class="comment">stardog</span>
+      <span class="literal">-</span><span class="comment">DartifactId=stardog</span>-<span class="comment">spring</span>
+      <span class="literal">-</span><span class="comment">Dversion=1</span>.<span class="comment">1</span>.<span class="comment">1</span>
+      <span class="literal">-</span><span class="comment">Dfile=stardog</span>-<span class="comment">spring</span>.<span class="comment">jar</span>
+      <span class="literal">-</span><span class="comment">Dpackaging=jar</span>
+      <span class="literal">-</span><span class="comment">DpomFile=pom</span>.<span class="comment">xml</code></pre>
+</li>
+</ul>
+<h1>Overview {#chapter}</h1>
+<p>Spring for Stardog <strong>@@SPRING_VERSION@@</strong> provides a set of
+capabilities for rapidly building Stardog-backed applications with the
+Spring Framework. As with many other parts of Spring, Stardog&#39;s Spring
+integration uses the template design pattern for abstracting standard
+boilerplate away from application developers.</p>
+<p>At the lowest level, Spring for Stardog includes</p>
+<ol>
+<li><code>DataSouce</code> and <code>DataSourceFactoryBean</code> for managing Stardog
+connections</li>
+<li><code>SnarlTemplate</code> for transaction- and connection-pool safe Stardog
+programming</li>
+<li><code>DataImporter</code> for easy bootstrapping of input data into Stardog</li>
+</ol>
+<p>In addition to the core capabilities, Spring for Stardog also integrates
+with the Spring Batch framework. Spring Batch enables complex batch
+processing jobs to be created to accomplish tasks such as ETL or legacy
+data migration. The standard ItemReader and ItemWriter interfaces are
+implemented with a separate callback writing records using the SNARL
+Adder API.</p>
+<p>Future releases of Spring for Stardog will address other common
+enterprise capabilities: Spring Integration, Spring Data, etc.</p>
+<h1>Basic Spring {#chapter}</h1>
+<p>There are three Beans to add to a Spring application context:</p>
+<ul>
+<li><code>DataSourceFactoryBean</code>:
+<code>com.clarkparsia.stardog.ext.spring.DataSourceFactoryBean</code></li>
+<li><code>SnarlTemplate</code>: <code>com.clarkparsia.stardog.ext.spring.SnarlTemplate</code></li>
+<li><code>DataImporter</code>: <code>com.clarkparsia.stardog.ext.spring.DataImporter</code></li>
+</ul>
+<p><code>DataSourceFactoryBean</code> is a Spring <code>FactoryBean</code> that configures and
+produces a <code>DataSource</code>. All of the Stardog <code>ConnectionConfiguration</code>
+and <code>ConnectionPoolConfig</code> methods are also property names of the
+<code>DataSourceFactoryBean</code>—for example, “to”, “url”, “createIfNotPresent”.</p>
+<p><code>DataSource</code> is a Spring for Stardog class, similar to
+<code>javax.sql.DataSource</code>, that can be used to retrieve a <code>Connection</code> from
+the <code>ConnectionPool</code>. This additional abstraction serves as place to add
+Spring-specific capabilities (e.g. spring-tx support in the future)
+without directly requiring Spring in Stardog.</p>
+<p><code>SnarlTemplate</code> provides a template abstraction over much of Stardog&#39;s
+native API, <a href="../java">SNARL</a>, and follows the same approach of other
+Spring template, i.e., <code>JdbcTemplate</code>, <code>JmsTemplate</code>, and so on.</p>
+<p>Spring for Stardog also comes with convenience mappers, for
+automatically mapping result set bindings into common data types. The
+<code>SimpleRowMapper</code> projects the <code>BindingSet</code> as a <code>List&gt;</code> and a
+<code>SingleMapper</code> that accepts a constructor parameter for binding a single
+parameter for a single result set.</p>
+<p>For example:</p>
+<p>The key methods on <code>SnarlTemplate</code> include the following:</p>
+<pre class="highlighted"><code class="erlang"><span class="function"><span class="title">query</span><span class="params">(<span class="variable">String</span> sparql<span class="variable">Query</span>, <span class="variable">Map</span> args, <span class="variable">RowMapper</span>)</span></code></pre>
+<p><code>query()</code> executes the SELECT query with provided argument list, and
+invokes the mapper for result rows.</p>
+<pre class="highlighted"><code class="erlang"><span class="function"><span class="title">doWithAdder</span><span class="params">(<span class="variable">AdderCallback</span>)</span></code></pre>
+<p><code>doWithAdder()</code> is a transaction- and connection-pool safe adder call.</p>
+<pre class="highlighted"><code class="erlang"><span class="function"><span class="title">doWithGetter</span><span class="params">(<span class="variable">String</span> subject, <span class="variable">String</span> predicate, <span class="variable">GetterCallback</span>)</span></code></pre>
+<p><code>doWithGetter()</code> is the connection pool boilerplate method for the
+<code>Getter</code> interface, including the programmatic filters.</p>
+<pre class="highlighted"><code class="erlang"><span class="function"><span class="title">doWithRemover</span><span class="params">(<span class="variable">RemoverCallback</span>)</span></code></pre>
+<p><code>doWithRemover()</code> As above, the remover method that is transaction and
+pool safe.</p>
+<pre class="highlighted"><code class="erlang"><span class="function"><span class="title">execute</span><span class="params">(<span class="variable">ConnectionCallback</span>)</span></code></pre>
+<p><code>execute()</code> lets you work with a connection directly; again, transaction
+and pool safe.</p>
+<pre class="highlighted"><code class="erlang"><span class="function"><span class="title">construct</span><span class="params">(<span class="variable">String</span> construct<span class="variable">Sparql</span>, <span class="variable">Map</span> args, <span class="variable">GraphMapper</span>)</span></code></pre>
+<p><code>construct()</code> executes a SPARQL CONSTRUCT query with provided argument
+list, and invokes the <code>GraphMapper</code> for the result set.</p>
+<p><code>DataImporter</code> is a new class that automates the loading of RDF files
+into Stardog at initialization time.</p>
+<p>It uses the Spring Resource API, so files can be loaded anywhere that is
+resolvable by the Resource API: classpath, file, url, etc. It has a
+single load method for further run-time loading and can load a list of
+files at initialization time. The list assumes a uniform set of file
+formats, so if there are many different types of files to load with
+different RDF formats, there would be different <code>DataImporter</code> beans
+configured in Spring.</p>
+<p>Here&#39;s a sample <code>applicationContext</code>:</p>
+<h1>Spring Batch {#chapter}</h1>
+<p>In addition to the base <code>DataSource</code> and <code>SnarlTemplate</code>, Spring Batch
+support adds the following:</p>
+<ul>
+<li><code>SnarlItemReader</code>:
+<code>com.clarkparsia.stardog.ext.spring.batch.SnarlItemReader</code></li>
+<li><code>SnarlItemWriter</code>:
+<code>com.clarkparsia.stardog.ext.spring.batch.SnarlItemWriter</code></li>
+<li><code>BatchAdderCallback</code>:
+<code>com.clarkparsia.stardog.ext.spring.batch.BatchAdderCallback</code></li>
+</ul>
+<p>These beans can then be used within Spring Batch job definition, for
+example:</p>
+<h1>Examples {#chapter}</h1>
+<h2>query() with SELECT queries</h2>
+<h2>doWithGetter</h2>
+<h2>doWithAdder</h2>
+<h2>doWithRemover</h2>
+<h2>construct()</h2>
+<h1>Notes {.fn}</h1>
+<p><a href="#" title="Back to top">⌂</a></p>
+<p>For comments, questions, or to report problems with this page, please
+email the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support
+Forum</a>.</p>
