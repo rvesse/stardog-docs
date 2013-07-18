@@ -1,6 +1,6 @@
 ---
 quote: "It is easier to write an incorrect program than understand a correct one."
-title: "Integrity Constraint Validation"
+title: "ICV"
 layout: "default"
 related: ""
 toc: true

@@ -6,7 +6,7 @@ related: ""
 toc: true
 ---
 
-In this chapter--which I have written reluctantly--we describe the administration of Stardog Server and
+In this chapter we describe the administration of Stardog Server and
 Stardog databases, including how to use the various
 Stardog command-line programs and how to configure a Stardog Server and
 its databases. An important part of Stardog administration is security,
@@ -226,7 +226,7 @@ Finally, in the case where the scheme is SNARL, the machine is
 "localhost", and the port is the default SNARL port, a connection string
 may consist of the "databaseName" only.
 
-## Stardog Server Administration
+## Server Admin
 
 Stardog Server is multi-protocol beast: it supports both SNARL and HTTP
 protocols. The default port for SNARL is **5820**; the default port for
@@ -342,8 +342,8 @@ specify the location of the server you wish to shut down
 ### Serving Stardog Documentation
 
 By default, if you start Stardog Server with HTTP enabled, then Stardog
-will serve the system documentation at `http://SERVER/docs` (which is
-why "docs" is an invalid database name).
+will serve the system documentation at `http://${server}/docs` (which is
+why "docs" is a reserved database name).
 
 In a production deployment, you might want to disable documentation
 serving, which you can do by passing `--no-docs` on server startup or by
@@ -359,8 +359,9 @@ pass a different value to `--home`.
 
 ### Access & Audit Logging
 
-See `stardog.properties` for a complete discussion of how access and
-audit logging work in Stardog Server. Basically, audit logging is a
+See the `stardog.properties` file (in the distribution) for a complete 
+discussion of how access and audit logging work in Stardog Server. 
+Basically, audit logging is a
 superset of the events in access logging. Access logging covers the most
 commonly required logging events; you should consider enabling audit
 logging if you really need to log *every* every server event. Logging
@@ -373,17 +374,16 @@ plain text (both based on ProtocolBuffer message formats); the type of
 logging (audit or access); the logging location (which may be "off disk"
 or even "off machine") Logging to a centralized logging facility
 requires a Java plugin that implements the Stardog Server logging
-interface; see the [Java Chapter](../java/) for more information; and
+interface; see the [Java Chapter](/java/) for more information; and
 the log rotation policy (file size or time).
 
-Slow query logging is also available. See the "Managing Queries" section
+Slow query logging is also available. See the [Managing Queries]() section
 below.
 
-## Administering Databases
+## Database Admin
 
 Stardog is a multi-tenancacy system and will happily provide access to
 multiple, distinct, disjoint databases.
-
 
 ### Configuring a Database
 
@@ -645,6 +645,15 @@ modeling, and other factors.
 
 See `stardog-admin help db create` for all the details including
 examples.
+
+### Database Archetypes 
+<t>new2</t>
+
+#### Stardog Web Archetype
+
+#### SKOS Archetype
+
+#### PROV Archetype
 
 ### Namespace Prefix Bindings
 
@@ -1180,7 +1189,7 @@ there is very little disk space used outside the databases. To calculate
 the total disk space needed for multiple databases, one can simply sum
 up the disk space needed by each database.
 
-### Using Stardog on Windows
+## Using Stardog on Windows
 
 Stardog provides Windows batch (`.bat`) files for use on Windows; they
 provide roughly the same set of functionality provided by the Bash

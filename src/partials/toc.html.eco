@@ -1,63 +1,27 @@
-<nav id="sidebar-nav-holder" class="vertical-nav" gumby-fixed="top|thefooter">
-<h3 id="tochead">Contents</h3>
-<div class="sidebar-nav">
+---
+cacheable: false
+---
+<!-- <% if @document.root: %>
+	<h3 id="tochead">Contents</h3>
+<% else: %>
+	<h3 id="tochead"><%- @document.shortTitle or @document.title %> Contents</h3>
+<% end %> -->
 <% renderToc = (items) => %>
-<ul class="toc">
     <% for item in items: %>
     <!-- [data-target='-->
-        <li><a href="#<%- item.id %>" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="#<%- item.id %>"><%- item.text %></a>
+        <li>
+            <a href="#<%- item.id %>" class="skip" gumby-easing="easeOutQuad" gumby-duration="300" gumby-goto="#<%- item.id %>">
+            <strong><%- item.text %></strong>
+        </a>
         <!-- <li><a href="#<%- item.id %>" class="skiplink"><%- item.text %></a> -->
             <% if item.children: %>
+                <ul class="sidebar-nav">
                 <%- renderToc(item.children) %>
+                </ul>
             <% end %>
         </li>
     <% end %>
-</ul>
 <% end %>
-<%- renderToc @tocItems %>
-</div>
-</nav>
-
-<!--
-          <nav id="sidebar-nav-holder" class="vertical-nav" gumby-fixed="top|[data-target='psd-templates']">
-            <ul id="sidebar-nav">
-
-                <li class="active">
-                  <a href="#grid-fundamentals" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='grid-fundamentals']">Grid Fundamentals</a>
-                </li>
-
-                <li>
-                  <a href="#basic-grid" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='basic-grid']">Basic Grid</a>
-                </li>
-
-                <li>
-                  <a href="#hybrid-grid" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='hybrid-grid']">Hybrid Grid</a>
-                </li>
-
-                <li>
-                  <a href="#pushing-columns" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='pushing-columns']">Pushing Columns</a>
-                </li>
-
-                <li>
-                  <a href="#centered-columns" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='centered-columns']">Centered Columns</a>
-                </li>
-
-                <li>
-                  <a href="#tiles" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='tiles']">Tiles</a>
-                </li>
-
-                <li>
-                  <a href="#nested-grids" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='nested-grids']">Nested Grids</a>
-                </li>
-
-                <li>
-                  <a href="#semantic-grids" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='semantic-grids']">Semantic Grids</a>
-                </li>
-
-                <li>
-                  <a href="#psd-templates" class="skip" gumby-easing="easeOutQuad" gumby-duration="600" gumby-goto="[data-target='psd-templates']">PSD Templates</a>
-                </li>
-
-            </ul>
-          </nav>
--->
+<ul class="sidebar-nav">
+    <%- renderToc @tocItems %>
+</ul>

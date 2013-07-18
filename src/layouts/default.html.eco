@@ -1,108 +1,93 @@
 <!doctype html>
 <html lang="en">
-<head>
-<title><%- @getPreparedTitle() %></title>
-<script src="/js/libs/modernizr-2.6.2.min.js"></script>
-<meta charset='utf-8'>
-<%- @getBlock("meta").toHTML() %>
-<%- @getBlock("styles").add(@site.styles).toHTML() %>
+  <head>
+  <title><%- @getPreparedTitle() %></title>
+  <script src="/js/libs/modernizr-2.6.2.min.js"></script>
+  <meta charset='utf-8'>
+  <%- @getBlock("meta").toHTML() %>
+  <%- @getBlock("styles").add(@site.styles).toHTML() %>
+  <%- @getBlock("scripts").add(@site.scripts).toHTML() %>
+
 <!--     //a block for ipad, etc... might should go in meta -->
-<body id="inner-doc" class="docs grid">
+  </head>
 
-<div class="navbar" id="nav1">
-<div class="row">
-      <a class="toggle" gumby-trigger="#nav1 &gt; .row &gt; ul" href="#"><i class="icon-menu"></i></a>
-      <h3 class="five columns logo">
-        <a href="http://stardog.com/">
-          <img style="max-width: 40%;" src="/img/logotype.png" gumby-retina="">
-        </a>
-      </h3>
-      <ul class="seven columns">
-        <li><a href="#">Chapters</a></li>
-        <li>
-          <a href="#">Related</a>
-          <div class="dropdown">
-            <ul>
-              <li><a href="#">Item</a></li>
-              <li><a href="#">Item</a></li>
-              <li><a href="#">Item</a></li>
-              <li>
-                <a href="#">I HAVE STUFF NESTED UNDER ME</a>
-                <div class="dropdown">
-                  <ul>
-                    <li><a href="">nested</a></li>
-                    <li><a href="">nested</a></li>
-                    <li><a href="">nested</a></li>
-                  </ul>
-                </div>
-              </li>
-              <li><a href="#">Item</a></li>
-              <li><a href="#">Item</a></li>
-              <li><a href="#">Item</a></li>
-            </ul>
-          </div>
-        </li>
-        <li><a href="#">Java API</a></li>
-        <!-- <li class="field"><input class="search input" type="search" placeholder="Search"></li> -->
-      </ul>
-    </div>
-  </div>
-
-<div id="the-header">
-  <div class="row valign">
-    <div class="three columns">
-      <h1><span id="title-masthead"><img src="/img/stardog-FLAT.png" style="max-width: 75%"/></span></h1>
-      <div>
-      <div class="medium rounded btn default pretty"><a href="http://stardog.com/dl">Download</a></div>
-      <!-- <p><a href="http://twitter.com/stardog_db"><img src="http://clarkparsia.com/images/twitter.png"/></a></p> -->
+<body>
+<!--
+  <div class="" id="the-content">
+    <div class="wrapper shaded" id="topblock">
+    <div class="row">
+      <div class="four columns">
+        <a href="/"><img class="resrc" src="http://app.resrc.it/S=H55/R=L/http://docs.stardog.com/img/logotype.png"/></a>
+      </div>
+      <div class="eight columns">
+        
       </div>
     </div>
-    <div class="nine columns" id="header-quote">
-      <p><strong><%- @document.quote %></strong>&mdash;Alan Perlis, <cite>Epigrams in Programming</cite></p>
-      <h1 class=""><span id="title-subhead"><%- @document.title %></span></h1>
-      <p><em><%- @document.summary %></em></p>
-    </div>
   </div>
- <!-- <div class="row">
-    <div class="three columns"></div>
-    <div class="nine columns">
+-->
+<div id="page-wrap">
+ <div id="the-content">
+  <div id="theborder" class="wrapper">
+    <!-- full bleed top border styling.... -->
+      <div class="twelve columns"></div>
+  </div>
+
+    <div class="row">
+        <div class="four columns stretch-container" id="sidebar1">
+          <nav id="sidebar-nav-holder" class="fixed vertical-nav stretch-y" gumby-fixed="top">
+            <img id="thelogo" src="http://docs.stardog.com/img/sd.png"/>
+            <% if @document.toc: %>
+              <%- @partial("toc.html.eco", @, {tocItems: @document.tableOfContents})%>
+              <p id="tocnav">
+              <% if not @document.root: %>
+                <a  class="iconlinks" href="/"><i style="padding-left:0px; margin-left:0px;" class="icon-home"></i></a>&nbsp;
+              <% end %>
+              <a href="#" id="" class="skip iconlinks" gumby-easing="easeInOutQuad" gumby-goto="top" gumby-duration="2000">
+                <i style="padding-left:0px; margin-left:0px;" class="icon-publish"></i>
+              </a>
+              </p>
+            <% end %>
+          </nav>
+        </div>
+
+        <div class="eight columns">
+          <!-- woof! -->
+            <div class="row">
+              <p id="quote"><em><strong><%- @document.quote %></strong></em>&mdash;Alan Perlis, <cite>Epigrams in Programming</cite></p>
+              <div class="pull_left"><h1 id="title-subhead"><%- @document.title %></h1></div>
+            </div>
+          <!-- summary -->
+          <% if @document.summary: %>
+            <p id="summary"><em><%- @document.summary %></em></p>
+          <% end %>
+          <div id="mdblock">
+            <%- @content %>
+          </div>
+        </div>
 
     </div>
   </div>
-  -->
 </div>
 
-  <div id="the-content">
-    <div class="row">
-        <div class="three columns">
-        <% if @document.toc: %>
-          <%- @partial("toc.html.eco", {tocItems: @document.tableOfContents})%>
-        <% end %>
+<div class="wrapper shaded" id="subfoot">
+      <section class="row">
+        <div class="twelve columns">
+            <div class="four columns">
+              <a style="text-decoration: none; border-bottom: 0;" href="http://clarkparsia.com/"><img id="footer-logo" style="max-width: 50%;" src="/img/cp.png"></a>
+              <!-- follow us on Twitter -->
+              <!-- docpad services plugin thingie -->
+            </div>
+            <div class="eight columns">
+              <% if not @document.root: %>
+                <h4>This is <span id="footer-subhead"><%- @document.title %></span>, part of <a href="http://docs.stardog.com/">Stardog Docs</a> <t>version</t>.</h4>
+              <% end %>
+              <p class="copywood">For comments, questions, or to report problems with this page, visit the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support Forum</a>.</p>
+              <p class="copywood">&copy;2010&ndash;<%- new Date().getFullYear() %> Clark &amp; Parsia LLC. <a href="http://creativecommons.org/licenses/by-sa/3.0/">Some rights reserved</a>.
+            </div>
         </div>
-        <div class="nine columns"><%- @content %></div>
-    </div>
-  </div>
+      </section>
+</div>
 
-  <div id="thefooter" class="container shaded">
-    <div class="row">
-      <div class="three columns">
-        <p id="social">
-        <a href="/"><i class="icon-home"></i></a>&nbsp;
-        <a href="#" id="upaway" class="skip" gumby-easing="easeInOutQuad" gumby-goto="top" gumby-duration="2000">&uarr;</a>
-        <!-- &nbsp;
-        <a href="http://twitter.com/stardog_db"><i class="icon-twitter"></i></a>
-        &nbsp;
-        <a href=""><i class="icon-google-circles"></i></a> -->
-        </p>
-      </div>
-      <div class="nine columns">
-        <% if not @document.root: %>
-          <h4>This is <span id="title-masthead"><%- @document.title %></span>, a chapter in Stardog Docs <t>version</t>.</h4>
-        <% end %>
-      <p>For comments, questions, or to report problems with this page, visit the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support Forum</a>.</p>
-      <p id="copywood">&copy;2010&ndash;<%- new Date().getFullYear() %> Clark &amp; Parsia LLC. <a href="http://creativecommons.org/licenses/by-sa/3.0/">Some rights reserved</a>.
-      </div>
-    </div>
-  </div>
+</body>
 
-<%- @getBlock("scripts").add(@site.scripts).toHTML() %>
+</html>

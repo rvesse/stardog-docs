@@ -1,28 +1,39 @@
-[![](/_/img/sdog-bare.png)](/)
+---
+quote: "It goes against the grain of modern education to teach children to program. What fun is there in making plans, acquiring discipline in organizing thoughts, devoting attention to detail and learning to be self-critical?"
+title: Programming with Spring
+shortTitle: Spring
+layout: default
+toc: true
+summary: Spring is a platform to build and run enterprise applications in Java. Stardog's Spring support makes life easier for enterprise developers who need to work with Semantic Web technology&mdash;including RDF, SPARQL, and OWL&mdash;by way of Stardog.
+---
 
-> **It goes against the grain of modern education to teach children to
-> program. What fun is there in making plans, acquiring discipline in
-> organizing thoughts, devoting attention to detail and learning to be
-> self-critical?**—Alan Perlis, Epigrams in Programming
+The Spring for Stardog [source code](http://github.com/clarkparsia/stardog-spring) is available on Github. 
 
-Stardog Spring {#title}
-==============
+## Overview 
 
-Introduction {#chapter}
-============
+Spring for Stardog makes it possible to rapidly build Stardog-backed applications with the Spring Framework. As with many other parts of Spring, Stardog's Spring
+integration uses the template design pattern for abstracting standard
+boilerplate away from application developers.
 
-[Spring](http://www.springsource.org/) is a platform to build and run
-enterprise applications in Java. Stardog's Spring support makes life
-easier for enterprise developers who need to work with Semantic Web
-technology—including RDF, SPARQL, and OWL—by way of Stardog.
+At the lowest level, Spring for Stardog includes
 
-The Spring for Stardog [source
-code](http://github.com/clarkparsia/stardog-spring) is available on
-Github. A more featureful version of will be available in [Stardog
-Enterprise Edition](/enterprise).
+1.  `DataSouce` and `DataSourceFactoryBean` for managing Stardog
+    connections
+2.  `SnarlTemplate` for transaction- and connection-pool safe Stardog
+    programming
+3.  `DataImporter` for easy bootstrapping of input data into Stardog
 
-Building Spring for Stardog {#chapter}
-===========================
+In addition to the core capabilities, Spring for Stardog also integrates
+with the Spring Batch framework. Spring Batch enables complex batch
+processing jobs to be created to accomplish tasks such as ETL or legacy
+data migration. The standard ItemReader and ItemWriter interfaces are
+implemented with a separate callback writing records using the SNARL
+Adder API.
+
+Future releases of Spring for Stardog will address other command
+enterprise capabilities: Spring Integration, Spring Data, etc.
+
+## Building Spring for Stardog
 
 To build Spring for Stardog, you need a release of Stardog; we use
 [Gradle](http://www.gradle.org/) to build Stardog for Spring. Then,
@@ -45,56 +56,28 @@ To build Spring for Stardog, you need a release of Stardog; we use
               -Dpackaging=jar
               -DpomFile=pom.xml
 
-Overview {#chapter}
-========
 
-Spring for Stardog **@@SPRING\_VERSION@@** provides a set of
-capabilities for rapidly building Stardog-backed applications with the
-Spring Framework. As with many other parts of Spring, Stardog's Spring
-integration uses the template design pattern for abstracting standard
-boilerplate away from application developers.
-
-At the lowest level, Spring for Stardog includes
-
-1.  `DataSouce` and `DataSourceFactoryBean` for managing Stardog
-    connections
-2.  `SnarlTemplate` for transaction- and connection-pool safe Stardog
-    programming
-3.  `DataImporter` for easy bootstrapping of input data into Stardog
-
-In addition to the core capabilities, Spring for Stardog also integrates
-with the Spring Batch framework. Spring Batch enables complex batch
-processing jobs to be created to accomplish tasks such as ETL or legacy
-data migration. The standard ItemReader and ItemWriter interfaces are
-implemented with a separate callback writing records using the SNARL
-Adder API.
-
-Future releases of Spring for Stardog will address other common
-enterprise capabilities: Spring Integration, Spring Data, etc.
-
-Basic Spring {#chapter}
-============
+## Basic Spring 
 
 There are three Beans to add to a Spring application context:
 
--   `DataSourceFactoryBean`:
-    `com.clarkparsia.stardog.ext.spring.DataSourceFactoryBean`
+-   `DataSourceFactoryBean`: `com.clarkparsia.stardog.ext.spring.DataSourceFactoryBean`
 -   `SnarlTemplate`: `com.clarkparsia.stardog.ext.spring.SnarlTemplate`
 -   `DataImporter`: `com.clarkparsia.stardog.ext.spring.DataImporter`
 
 `DataSourceFactoryBean` is a Spring `FactoryBean` that configures and
 produces a `DataSource`. All of the Stardog `ConnectionConfiguration`
 and `ConnectionPoolConfig` methods are also property names of the
-`DataSourceFactoryBean`—for example, "to", "url", "createIfNotPresent".
+`DataSourceFactoryBean`--for example, "to", "url", "createIfNotPresent".
 
 `DataSource` is a Spring for Stardog class, similar to
 `javax.sql.DataSource`, that can be used to retrieve a `Connection` from
 the `ConnectionPool`. This additional abstraction serves as place to add
-Spring-specific capabilities (e.g. spring-tx support in the future)
+Spring-specific capabilities (e.g. `spring-tx` support in the future)
 without directly requiring Spring in Stardog.
 
 `SnarlTemplate` provides a template abstraction over much of Stardog's
-native API, [SNARL](../java), and follows the same approach of other
+native API, [SNARL](/java), and follows the same approach of other
 Spring template, i.e., `JdbcTemplate`, `JmsTemplate`, and so on.
 
 Spring for Stardog also comes with convenience mappers, for
@@ -103,7 +86,7 @@ automatically mapping result set bindings into common data types. The
 `SingleMapper` that accepts a constructor parameter for binding a single
 parameter for a single result set.
 
-For example:
+For example,
 
 The key methods on `SnarlTemplate` include the following:
 
@@ -149,8 +132,7 @@ configured in Spring.
 
 Here's a sample `applicationContext`:
 
-Spring Batch {#chapter}
-============
+## Spring Batch 
 
 In addition to the base `DataSource` and `SnarlTemplate`, Spring Batch
 support adds the following:
@@ -165,31 +147,14 @@ support adds the following:
 These beans can then be used within Spring Batch job definition, for
 example:
 
-Examples {#chapter}
-========
+## Examples 
 
-query() with SELECT queries
----------------------------
+### query() with SELECT queries
 
-doWithGetter
-------------
+### doWithGetter
 
-doWithAdder
------------
+### doWithAdder
 
-doWithRemover
--------------
+### doWithRemover
 
-construct()
------------
-
-Notes {.fn}
-=====
-
-[⌂](# "Back to top")
-
-For comments, questions, or to report problems with this page, please
-email the [Stardog Support
-Forum](https://groups.google.com/a/clarkparsia.com/group/stardog/about).
-
-
+### construct()

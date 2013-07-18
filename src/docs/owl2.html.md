@@ -1,8 +1,9 @@
 ---
 quote: "The proof of a system's value is its existence."
 layout: "default"
-title: "Reasoning & Inference"
+title: "OWL & Rule Reasoning"
 toc: true
+shortTitle: Reasoning
 ---
 
 ##Introduction

@@ -1,6 +1,6 @@
 ---
 quote: "The string is a stark data structure and everywhere it is passed there is much duplication of process. It is a perfect vehicle for hiding information."
-title: "Using: Query, Add, Remove, Search"
+title: "Using Stardog"
 layout: default
 related: ""
 toc: true

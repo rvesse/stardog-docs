@@ -6,7 +6,7 @@ docpadConfig = {
     # Out Path
     # Where should we put our generated website files?
     # If it is a relative path, it will have the resolved `rootPath` prepended to it
-    outPath: 'out'  # default
+    outPath: 'published'  # default
 
     # Src Path
     # Where can we find our source website files?
@@ -52,10 +52,12 @@ docpadConfig = {
     # Complete listing of default values can be found here: http://docpad.org/docs/template-data
     templateData:
         # Specify some site properties
-        version: "1.2.3" #update me on new release
-        reldate: "11 June 2013"
+        version: "2.0.0" #update me on new release
+        springVersion: "2.0.0"
+        reldate: "31 August 2013"
         secnote: '<div class="metro danger large label">Security Notice</div>'
         shout: '<div class="metro warning medium label">NOTE</div>'
+        new2: "<div class='metro medium label primary'>New in 2.0</div>"
         site:
             scripts: [
                       "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"

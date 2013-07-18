@@ -1,8 +1,9 @@
 ---
 quote: 'If you can imagine a society in which the computer-robot is the only menial, you can imagine anything.'
-title: Network Programming
+title: HTTP Programming
 layout: default
 related: ""
+shortTitle: HTTP
 toc: true
 summary: 'This chapter describes how to interact with Stardog over a network using SPARQL, HTTP, and SNARL protocols.'
 ---

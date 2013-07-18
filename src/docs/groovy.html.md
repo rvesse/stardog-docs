@@ -1,13 +1,10 @@
-[![](/_/img/sdog-bare.png)](/)
-
-> **Making something variable is easy. Controlling duration of constancy
-> is the trick.**—Alan Perlis, Epigrams in Programming
-
-Stardog Groovy {#title}
-==============
-
-Introduction {#chapter}
-============
+---
+quote: Making something variable is easy. Controlling duration of constancy is the trick.
+title: Programming with Groovy
+shortTitle: Groovy
+layout: default
+toc: true
+---
 
 [Groovy](http://http://groovy.codehaus.org//) is an agile and dynamic
 programming language for the JVM, making popular programming features
@@ -19,32 +16,9 @@ The Groovy for Stardog [source
 code](http://github.com/clarkparsia/stardog-groovy) is available on
 Github.
 
-Building Groovy for Stardog {#chapter}
-===========================
+## Overview 
 
-To build Groovy for Stardog, you need a release of Stardog; we use
-[Gradle](http://www.gradle.org/) to build Stardog for Groovy. Then,
-
--   edit `build.gradle` to point `stardogLocation` at a Stardog release
-    directory;
--   run `gradlew build`, which eventually results in a
-    `stardog-groovy.jar` in `build/libs`; finally,
--   `gradlew install` does a build, generates a POM, and installs the
-    POM in local Maven repo; alternately,
--   `mvn install` will work, too:
-
-        mvn install:install-file
-              -DgroupId=com.clarkparsia.stardog
-              -DartifactId=stardog-groovy
-              -Dversion=1.1.1
-              -Dfile=stardog-groovy.jar
-              -Dpackaging=jar
-              -DpomFile=pom.xml
-
-Overview {#chapter}
-========
-
-Groovy for Stardog **@@SPRING\_VERSION@@** provides a set of Groovy API
+Groovy for Stardog <t>springVersion</t> provides a set of Groovy API
 wrappers for developers to build applications with Stardog and take
 advantage of native Groovy features. For example, you can create a
 Stardog connection pool in a single line, much like Groovy SQL support.
@@ -72,28 +46,45 @@ with the Spring bindings and can use a `DataSource` to initialize the
 constructor. Combining both together creates an easy to use solution for
 other Groovy environments, such as [Grails](http://www.grails.org).
 
-Examples {#chapter}
-========
+## Building Groovy for Stardog 
 
-Create a Connection
--------------------
+To build Groovy for Stardog, you need a release of Stardog; we use
+[Gradle](http://www.gradle.org/) to build Stardog for Groovy. Then,
 
-SPARQL Vars projected into Groovy Closures
-------------------------------------------
+1.   edit `build.gradle` to point `stardogLocation` at a Stardog release
+    directory;
+1.   run `gradlew build`, which eventually results in a
+    `stardog-groovy.jar` in `build/libs`; finally,
+1.   `gradlew install` does a build, generates a POM, and installs the
+    POM in local Maven repo; alternately,
 
-Add and remove triples
-----------------------
+`mvn install` will work, too:
 
-withConnection closure example
-------------------------------
+```java
+mvn install:install-file
+    -DgroupId=com.clarkparsia.stardog
+    -DartifactId=stardog-groovy
+    -Dversion=1.1.1
+    -Dfile=stardog-groovy.jar
+    -Dpackaging=jar
+    -DpomFile=pom.xml```
 
-Notes {.fn}
-=====
+## Examples
 
-[⌂](# "Back to top")
+Here are some examples of the more interesting parts of Stardog Groovy.
 
-For comments, questions, or to report problems with this page, please
-email the [Stardog Support
-Forum](https://groups.google.com/a/clarkparsia.com/group/stardog/about).
+### Create a Connection
 
+<gist>4652565?file=StardogConnection.groovy</gist>
 
+### SPARQL Vars Projected into Groovy Closures
+
+<gist>4652590?file=Projection.groovy</gist>
+
+###  Add & Remove Triples
+
+<gist>4652608?file=StardogAddRemove.groovy</gist>
+
+### `withConnection` Closure
+
+<gist>4652621?file=StardogWithConnection.groovy

@@ -1,17 +1,15 @@
-[![](/_/img/sdog-bare.png)](/)
-
-> **It's difficult to extract sense from strings, but they're the only
-> communication coin we can count on.**—Alan Perlis, Epigrams in
-> Programming
-
-Stardog Admin {#title}
-=============
+---
+quote: It's difficult to extract sense from strings, but they're the only communication coin we can count on.
+layout: default
+title: Terminology
+shortTitle: Terms
+toc: false
+---
 
 In the Stardog documentation, the following terms have a specific
 technical meaning.
 
-Terminology {#chapter}
-===========
+## Terminology
 
 Stardog Database Management System, aka Stardog Server, aka Stardog
 :   An instance of Stardog: only one Stardog Server may run per JVM. A
@@ -65,14 +63,4 @@ Security Realm
 :   A Security Realm defines the users and their permissions for each
     Database in an Stardog Server. There is only one Security Realm per
     Stardog Server.
-
-Notes {.fn}
-=====
-
-[⌂](# "Back to top")
-
-For comments, questions, or to report problems with this page, please
-email the [Stardog Support
-Forum](https://groups.google.com/a/clarkparsia.com/group/stardog/about).
-
 
