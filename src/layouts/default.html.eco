@@ -6,9 +6,7 @@
   <meta charset='utf-8'>
   <%- @getBlock("meta").toHTML() %>
   <%- @getBlock("styles").add(@site.styles).toHTML() %>
-  <%- @getBlock("scripts").add(@site.scripts).toHTML() %>
-
-<!--     //a block for ipad, etc... might should go in meta -->
+  <!--     //a block for ipad, etc... might should go in meta -->
   </head>
 
 <body>
@@ -40,10 +38,13 @@
               <%- @partial("toc.html.eco", @, {tocItems: @document.tableOfContents})%>
               <p id="tocnav">
               <% if not @document.root: %>
-                <a  class="iconlinks" href="/"><i style="padding-left:0px; margin-left:0px;" class="icon-home"></i></a>&nbsp;
+                <a  class="iconlinks" href="/"><i style="padding-left:0px; margin-left:0px;" class="icon-home iconlinks"></i></a>&nbsp;
               <% end %>
               <a href="#" id="" class="skip iconlinks" gumby-easing="easeInOutQuad" gumby-goto="top" gumby-duration="2000">
-                <i style="padding-left:0px; margin-left:0px;" class="icon-publish"></i>
+                <i style="padding-left:0px; margin-left:0px;" class="icon-publish iconlinks"></i>
+              </a> &nbsp;
+              <a href="https://twitter.com/stardog_db" class="iconlinks">
+                <i style="padding-left:0px; margin-left:0px;" class="icon-twitter iconlinks"></i>
               </a>
               </p>
             <% end %>
@@ -74,8 +75,9 @@
         <div class="twelve columns">
             <div class="four columns">
               <a style="text-decoration: none; border-bottom: 0;" href="http://clarkparsia.com/"><img id="footer-logo" style="max-width: 50%;" src="/img/cp.png"></a>
+              <div>
+              </div>
               <!-- follow us on Twitter -->
-              <!-- docpad services plugin thingie -->
             </div>
             <div class="eight columns">
               <% if not @document.root: %>
@@ -87,6 +89,9 @@
         </div>
       </section>
 </div>
+
+<%- @getBlock("scripts").add(@site.scripts).toHTML() %>
+
 
 </body>
 

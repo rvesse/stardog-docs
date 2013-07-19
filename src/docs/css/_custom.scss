@@ -5,7 +5,7 @@ code,tt,pre,kbd,samp,var, pre span {font-family: "Ubuntu Mono"; font-weight: $fo
 
 a {
   text-decoration: none;
-  padding-bottom: 1px;
+  padding-bottom: 0px;
   color: $sd-med-blue;
   border-bottom: 1px solid $sd-med-blue;
 }
@@ -135,7 +135,7 @@ tr:nth-of-type(odd) td
 }
 
 .copywood {
-  font-size: $small;
+  font-size: $norm;
 }
 
 .copywood a {
@@ -227,7 +227,14 @@ cite {font-style: italic;}
 }
 
 .iconlinks {
-  color: $sd-med-blue;
+  text-decoration: none;
+  color:$body-font-color;
+  background-color: $global-bg-color;
+}
+
+.iconlinks:hover {
+  background-color: $global-bg-color;
+  text-decoration: none;
 }
 
 #quote {  

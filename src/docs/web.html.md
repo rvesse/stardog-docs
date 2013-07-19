@@ -13,6 +13,8 @@ Stardog Web is a web framework for rapidly building Stardog-based apps. Stardog 
 
 Stardog Web automagically generates Web apps for browsing and managing RDF. These apps can be built via configuration and can be customized or extended in several ways, including new HTML templates and JavaScript modules. 
 
+<!-- this needs a 2 col list badly! -->
+
 Out of the box functionality includes:
 
 1. Visualize classes and their instances
@@ -24,7 +26,7 @@ Out of the box functionality includes:
 7. Manage queries (create, delete, update)
 8. Visualize query results
 9. Save query results
-10. Faceted browse [Pelorus]()
+10. Faceted browse [Pelorus](http://pelorus.clarkparsia.com/)
 11. full text search
 12. Enforce access control
 13. Manage provenance data

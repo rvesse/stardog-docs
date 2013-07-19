@@ -56,7 +56,7 @@ Covers basic installation and starting a Stardog Server in five easy steps.
 4.  [Exporting a Database](/using/#export)
 5.  [Searching](/using/#search)
 
-### [Using the Stardog Console](/console/)
+### [Stardog Console](/console/)
 1. Accessing Stardog Console
 1. Managing Stardog with the Console
 1. SPARQL Query
@@ -119,13 +119,13 @@ Everything from reasoning, data validation, and SPARQL to programming Stardog wi
 10. [Connection Pooling](/java/#pool)
 11. [Deprecation & Backward Compatibility](/java/#deprecation)
 
-#### [HTTP Programming](/http/)
+### [HTTP Programming](/http/)
 
 1.  [SPARQL Protocol: HTTP](/network/#http)
 2.  [Extended HTTP Protocol](/network/#extended-http)
 3.  [SNARL: The Native Stardog Remote API](/network/#snarl)
 
-#### [Programming with Spring](/spring)
+### [Programming with Spring](/spring)
 
 1.  [Introduction](/spring/#intro)
 2.  [Building Spring for Stardog](/spring/#building)
@@ -134,14 +134,14 @@ Everything from reasoning, data validation, and SPARQL to programming Stardog wi
 5.  [Spring Batch](/spring/#batch)
 6.  [Examples](/spring/#examples)
 
-#### [Programming with Groovy](/groovy/)
+### [Programming with Groovy](/groovy/)
 
 1.  [Introduction](/groovy/#intro)
 2.  [Building Groovy for Stardog](/groovy/#building)
 3.  [Overview](/groovy/#overview)
 4.  [Examples](/groovy/#examples)
 
-#### [Programming with Javascript](http://clarkparsia.github.io/stardog.js/)
+### [Programming with Javascript](http://clarkparsia.github.io/stardog.js/)
 
 The documentation for [stardog.js](http://clarkparsia.github.io/stardog.js), which is available on [Github](https://github.com/clarkparsia/stardog.js) and [npm]().
 
