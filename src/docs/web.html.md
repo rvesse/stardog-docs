@@ -17,19 +17,22 @@ Stardog Web automagically generates Web apps for browsing and managing RDF. Thes
 
 Out of the box functionality includes:
 
-1. Visualize classes and their instances
-2. Visualize instances and their property assertions
-3. Visualize class/property hierarchies
-4. Visualize axioms and rules
-5. Visualize subgraphs graphically
-6. Execute arbitrary SPARQL queries against RDF
-7. Manage queries (create, delete, update)
-8. Visualize query results
-9. Save query results
-10. Faceted browse [Pelorus](http://pelorus.clarkparsia.com/)
-11. full text search
-12. Enforce access control
-13. Manage provenance data
+<ul class="two_up tiles">
+    <li><strong>&middot;</strong> Execute arbitrary SPARQL queries against RDF</li>
+    <li><strong>&middot;</strong> Manage queries (create, delete, update)</li>
+    <li><strong>&middot;</strong> Visualize&mdash;<ol>
+        <li>classes and their instances,</li>
+        <li>their property assertions,</li>
+        <li>class/property hierarchies,</li>
+        <li>axioms and rules,</li>
+        <li>query results,</li>
+        <li> subgraphs</li>
+    </li>
+    <li><strong>&middot;</strong> Save query results</li>
+    <li><strong>&middot;</strong> Faceted browsing via [Pelorus](http://pelorus.clarkparsia.com/)</li>
+    <li><strong>&middot;</strong> full text search</li>
+    <li><strong>&middot;</strong> Enforce access control</li>
+</ul>
 
 ### Oodles of Open Source Goodness
 
@@ -51,13 +54,13 @@ So the basic workflow for building Stardog-based apps was always the same and we
 
 Stardog Web project lifecycle looks a bit like this:
 
-- beg, borrow, steal, or integrate some RDF data
-- install Stardog Web
-- generate a Stardog Web app
-- configure the app
-- run, test, customize, and extend the app
-- lather, rinse, repeat...
-- deploy the app
+1. beg, borrow, steal, or integrate some RDF data
+1. install Stardog Web
+1. generate a Stardog Web app1. 
+1. configure the app
+1. run, test, customize, and extend the app
+1. lather, rinse, repeat...
+1. deploy the app
 
 ### Installing Stardog Web
 
@@ -71,7 +74,7 @@ Then, verify that you have Web access (to be able to access the NPM registry & r
 $ npm config get prefix
 ```
 
-If the prefix is not `/usr/local`, you can change it using one of the methods described [here](https://npmjs.org/doc/config.html).
+If the prefix is not `/usr/local`, you can change it using one of the methods described [here](https://npmjs.org/doc/config.html).<fn>[http://yeoman.io/generators.html](http://yeoman.io/generators.html)In the following, we assume the `egad-0.x.x.zip` distribution file has been decompressed into the `<package_dir>` directory.</fn>
 
 Next, run this:
 
@@ -376,7 +379,7 @@ Some of the known issues in the current release are:
 * There may be some errors in the web service with data containing bnodes.Annex Platform Services is a RESTful web service that provides a series of abstractions for semantic services. Provides a graph browsing interfaces with common RESTful resources and operations, using JSON-LD as the serialization format, which makes it perfect for MV* JS applications.
 
 
-## Cleaning the application directory
+### Cleaning the application directory
 
 To clean the application directory, one can use the command:
 
@@ -384,7 +387,7 @@ To clean the application directory, one can use the command:
     
 Which will delete all EGAD generated files (excluding all configuration & files added by the user).
 
-# Deploying
+### Deploying
 
 An optimized version of the appication (CSS & JS minified/optimized) can be obtained by running
 
@@ -520,7 +523,7 @@ The module scafolding tool generates the following files as showed in the previo
         }
         
 
-## Adding your own module code
+## Extending Stardog Web
 
 The only EGAD specific bits of code are in `main.js`, defining the EGAD module, and the structure is pretty much the same as a [Backbone.js Router](http://backbonejs.org/#Router). An EGAD module follows the structure of a [Require.js](http://requirejs.org/docs/api.html#packages) package.
 
@@ -532,8 +535,7 @@ You can find the EGAD api in the file `app/scripts/egad.js` of your application 
 
 ### Annex API
 
-In order to retrive information from the Annex platform, you need to use the `api.js` code. Which defines tools to query the Annex endpoints based on the Annex RESTful internface. For more details on the Annex API, please refer to the _Middleware_ document.
-
+In order to retrive information from the Annex platform, you need to use the `api.js` code. Which defines tools to query the Annex endpoints based on the Annex RESTful interface. For more details on the Annex API, please refer to the _Middleware_ document.
 
 We use the `bootstrap`-based color-scheme [framework](https://github.com/rriepe/1pxdeep) for customizing the look and feel of the EGAD apps. In order to build and apply a customized version of `bootstrap.css`, use the attached `LESS` project and follow these steps:
 
@@ -554,7 +556,7 @@ In order to start development on EGAD, such as adding new build targets or addin
 3. Once you have the EGAD Repository locally, `cd` to it and execute `npm install` to download all the development dependencies.
 4. Run the test cases with the command: `npm test`
 
-## Generator Structure
+### Generator Structure
 
 The EGAD Generator follows the structure of a Yeoman Generator API v2.0, in which targets are defined for scafolding a web application. Usually there's an `app` target, which could take a set of arguments (defined by the generator) and generate the required files for the web application using a [Web Stack](https://github.com/clarkparsia/generator-egad/wiki/Web-Stack).
 
@@ -578,33 +580,6 @@ The structure of the EGAD Generator is the following:
     
 
 
-
-## Sections
-
-### Project docs
-
-* [Roadmap](https://github.com/clarkparsia/generator-egad/wiki/Roadmap)
-* [Changelog](https://github.com/clarkparsia/generator-egad/wiki/Changelog)
-* [Known Issues](https://github.com/clarkparsia/generator-egad/wiki/Known-Issues)
-
-### Using EGAD
-
-* [Requirements](https://github.com/clarkparsia/generator-egad/wiki/Requirements)
-* [Installation Package](https://github.com/clarkparsia/generator-egad/wiki/Installation-Package)
-* [Configuration](https://github.com/clarkparsia/generator-egad/wiki/Configuration)
-* [Creating an EGAD App](https://github.com/clarkparsia/generator-egad/wiki/Creating-an-EGAD-App)
-* [Creating an EGAD Module](https://github.com/clarkparsia/generator-egad/wiki/Creating-an-EGAD-Module)
-* [Configure Homepage](https://github.com/clarkparsia/generator-egad/wiki/Configure-Homepage)
-
-
-### Development on EGAD
-
-* [Web Stack](https://github.com/clarkparsia/generator-egad/wiki/Web-Stack)
-* [Development](https://github.com/clarkparsia/generator-egad/wiki/Development)
-* [Middleware](https://github.com/clarkparsia/generator-egad/wiki/Middleware)
-
-
-[1] [http://yeoman.io/generators.html](http://yeoman.io/generators.html)In the following, we assume the `egad-0.x.x.zip` distribution file has been decompressed into the `<package_dir>` directory.
 
 
 
@@ -651,8 +626,7 @@ _-- TBD --_
 Features will include all necessary changes to run EGAD gen as a Cloud based services, to generate webapps/repositories on demand.This page describes all the technologies used for the web development included in EGAD generated apps. EGAD web apps are based in a MV* HTML5 web stack, following the single page pattern, in which all the application is state aware in the client side, using JavaScript all over the place.
 
 
-
-##Change Log
+### Change Log
 
 ### v0.4.5
 

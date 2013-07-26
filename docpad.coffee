@@ -35,7 +35,6 @@ docpadConfig = {
         'layouts'
     ]
 
-
     # Render Passes
     # How many times should we render documents that reference other documents?
     renderPasses: 1  # default
@@ -55,9 +54,10 @@ docpadConfig = {
         version: "2.0.0" #update me on new release
         springVersion: "2.0.0"
         reldate: "31 August 2013"
-        secnote: '<div class="metro danger large label">Security Notice</div>'
-        shout: '<div class="metro warning medium label">NOTE</div>'
-        new2: "<div class='metro medium label primary'>New in 2.0</div>"
+        secnote: '<div class="metro danger label">Security Notice</div>'
+        shout: '<div class="metro warning large btn">NOTE</div>'
+        new2: "<div class='metro label primary'>New in 2.0</div>"
+        FIXME: "<div class='metro large btn warning'>@FIXME</div>"
         site:
             scripts: [
                       "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
@@ -117,7 +117,7 @@ docpadConfig = {
 
     # Skip Unsupported Plugins
     # Set to `false` to load all plugins whether or not they are compatible with our DocPad version or not
-    skipUnsupportedPlugins: true  # default
+    skipUnsupportedPlugins: false  # default
 
     # Enable Unlisted Plugins
     # Set to false to only enable plugins that have been explicity set to `true` inside `enabledPlugins`
@@ -127,14 +127,17 @@ docpadConfig = {
     enabledPlugins:  # example
         # Disable the Pokemon Plugin
         pokemon: false
-
+        footnotes: true
         # Enable the Digimon Plugin
         # Unless, enableUnlistedPlugins is set to false, all plugins are enabled by default
         digimon: true
+        frontmatter: false
 
     # Configure Plugins
     # Should contain the plugin short names on the left, and the configuration to pass the plugin on the right
     plugins:  # example
+        footnotes:
+            test: true
         markedOptions:
             gfm: true
             tables: true

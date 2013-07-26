@@ -64,25 +64,27 @@
           <div id="mdblock">
             <%- @content %>
           </div>
+          <div class="hidden" id="footnote-container">
+            <h2>Notes</h2>
+          </div>
         </div>
-
     </div>
   </div>
 </div>
+
 
 <div class="wrapper shaded" id="subfoot">
       <section class="row">
         <div class="twelve columns">
             <div class="four columns">
               <a style="text-decoration: none; border-bottom: 0;" href="http://clarkparsia.com/"><img id="footer-logo" style="max-width: 50%;" src="/img/cp.png"></a>
-              <div>
-              </div>
+              <div> </div>
               <!-- follow us on Twitter -->
             </div>
             <div class="eight columns">
               <% if not @document.root: %>
                 <h4>This is <span id="footer-subhead"><%- @document.title %></span>, part of <a href="http://docs.stardog.com/">Stardog Docs</a> <t>version</t>.</h4>
-              <% end %>
+              <%end%>
               <p class="copywood">For comments, questions, or to report problems with this page, visit the <a href="https://groups.google.com/a/clarkparsia.com/group/stardog/about">Stardog Support Forum</a>.</p>
               <p class="copywood">&copy;2010&ndash;<%- new Date().getFullYear() %> Clark &amp; Parsia LLC. <a href="http://creativecommons.org/licenses/by-sa/3.0/">Some rights reserved</a>.
             </div>

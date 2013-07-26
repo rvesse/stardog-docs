@@ -23,7 +23,7 @@ does not materialize inferences; but, rather, reasoning is performed at
 query time according to a given reasoning level. This allows for maximum
 flexibility while maintaining excellent performance and scalability.
 
-<div><a id="reasoning-levels"></a></div>
+### Reasoning Levels
 
 Stardog supports several reasoning levels; the reasoning level determines the kinds of inference rules or axioms that are to be considered during query evaluation:
 
@@ -61,8 +61,7 @@ property is to use the default graph only.
 
 ### Query Answering
 
-All of Stardog's interfaces (API, network, and command-line as of
-@@VERSION@@) support reasoning during query evaluation.
+All of Stardog's interfaces (API, network, and CLI) support reasoning during query evaluation.
 
 ### Command Line
 
@@ -70,15 +69,19 @@ In order to evaluate queries in Stardog using reasoning via the command
 line, a specific reasoning level must be specified in the [connection
 string](../admin/):
 
-    $ ./stardog query "myDB;reasoning=QL" "SELECT ?s { ?s a :C } LIMIT 10"
+```bash
+$ ./stardog query "myDB;reasoning=QL" "SELECT ?s { ?s a :C } LIMIT 10"
+```
 
 ### HTTP
 
 For HTTP, the reasoning level is specified with the other connection
 parameters in the request header `SD-Connection-String`:
 
-    $ curl -u admin:admin -X GET -H "SD-Connection-String: reasoning=QL" \
+```bash
+$ curl -u admin:admin -X GET -H "SD-Connection-String: reasoning=QL" \
       "http://localhost:5822/myDB/query?query=..."
+```
 
 ### `ReasoningConnection` API
 
@@ -88,9 +91,9 @@ details on specifying the reasoning level programmatically.
 
 Currently, the API has two methods:
 
--   isConsistent(), which can be used to check if the current KB is
+-   `isConsistent()`, which can be used to check if the current KB is
     consistent with respect to the reasoning level.
--   isSatisfiable(URI theURIClass), which can be used to check if the
+-   `isSatisfiable(URI theURIClass)`, which can be used to check if the
     given class if satisfiable with respect to the current KB and
     reasoning level.
 
@@ -107,7 +110,9 @@ statements.
 Explanations can be retrieved using the CLI command `explain inference`
 by providing an input file that contains the inferences to be explained:
 
-    $ stardog reasoning explain "myDB;reasoning=EL" inference_to_explain.ttl
+```bash
+$ stardog reasoning explain "myDB;reasoning=EL" inference_to_explain.ttl
+```
 
 The output is displayed in a concise syntax designed to be legible; but
 it can be rendered in any one of the supported RDF syntaxes if desired.
@@ -136,8 +141,9 @@ Here's a few things that you might want to try:
     reasoning level used by simply including the following line in the
     logging.properties file in `STARDOG_HOME`:
 
+```java
         com.clarkparsia.blackout.level = ALL
-
+```
 -   **Are you using DL?** Stardog supports schema-only reasoning for OWL
     2 DL, which effectively means that only TBox queries—queries that
     contain [TBox BGPs](#query_types) only—will return complete query
@@ -202,12 +208,10 @@ Stardog supports the following SWRL built-in functions:
 
 -   [Built-ins for comparisons](http://www.w3.org/Submission/SWRL/#8.1).
 -   [Math built-ins](http://www.w3.org/Submission/SWRL/#8.2).
--   [Built-ins for boolean
-    values](http://www.w3.org/Submission/SWRL/#8.3).
+-   [Built-ins for boolean values](http://www.w3.org/Submission/SWRL/#8.3).
 -   [Built-ins for strings](http://www.w3.org/Submission/SWRL/#8.4),
     with the exception of `swrlb:tokenize`.
--   [Built-ins for date, time, and
-    duration](http://www.w3.org/Submission/SWRL/#8.4).
+-   [Built-ins for date, time, and duration](http://www.w3.org/Submission/SWRL/#8.4).
 -   Stardog built-in function library:
     * `tag:stardog:api:functions:ln`
     * `tag:stardog:api:functions:log`
@@ -220,38 +224,89 @@ Stardog supports the following SWRL built-in functions:
     * `tag:stardog:api:functions:toDegrees`
     * `tag:stardog:api:functions:toRadians`
 
-### SWRL Examples
+### Stardog Rules Syntax <t>new2</t>
+
+<t>fixme</t>
+
+### Rule Examples
 
 User-defined rules in SWRL provide a different sort of "user interface"
 with respect to OWL 2 reasoning in Stardog. Some problems (and some
 people) are simply a better fit for a rules-based approach to modeling
 and reasoning than to an axioms-based approach. What follows are a few
 (trivial and contrived) examples of user-defined rules in SWRL (using
-Datalog syntax; Stardog requires the canonical RDF serialization of
-SWRL, however).
+Stardog Rules syntax).
 
 #### Basic Rules
 
 A person between 13 and 19 (inclusive) years of age is a teenager:
 
-    :Teenager(?x) <- :Person(?x), swrlb:greaterThanOrEqual(?age, 13),
-                     swrlb:lessThanOrEqual(?age, 19),
-                     :hasAge(?x, ?age)
+```sparql
+PREFIX swrlb: <http://www.w3.org/2003/11/swrlb#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+IF {
+      ?x a :Person; hasAge ?age.
+      ?age swrlb:greaterThanOrEqual 13^xsd:int;
+           swrlb:lessThanOrEqual 19^xsd:int.
+}
+THEN {
+      ?x a :Teenager.
+}
+```
 
 A person who's an uncle of a niece:
 
-    :UncleOfNiece(?x) <- :Person(?x), :Male(?x), :hasSibling(?x, ?y),
-                      :isParentOf(?y, ?z), :Female(?z)
+```sparql
+IF {
+      $x a Person; a :Male; :hasSibling $y;
+      $y :isParentOf $z;
+      $z a :Female.
+}
+THEN {
+      $x a :UncleOfNiece.
+}
+```
+
+You can use SPARQL 1.1 property paths (and bnodes for unnecessary variables (that is, ones that aren't used in the `THEN`)) to render this rule even more concisely:
+
+```sparql
+IF {
+      $x a :Person, :Male; :hasSibling/:isParentOf [a :Female]
+}
+THEN {
+      $x a :UncleOfNiece.
+}
+```
 
 A person who's male and has a niece or nephew is an uncle of his
 niece(s) and nephew(s):
 
-    :isUncleOf(?x, ?z) <- :isSiblingOf(?x, ?y), :isParentOf(?y, ?z), :Male(?x)
+```sparql
+IF {
+      ?x :isSiblingOf ?y; a :Male.
+      ?y :isParentOf ?z.
+      #or with property paths this can be:
+      #?x a :Male; :isSiblingOf/:isParentOf ?z
+}
+THEN {
+      ?x :isUncleOf ?z.
+}
+```
 
 A super user can read all of the things!
 
-    :Role(?z), :hasRole(?x, ?z), :readPermission(?z, ?y) <- :SuperUser(?x)
-                       :Resource(?y), http://www.w3.org/ns/sparql#UUID(?z)
+```sparql
+IF {
+      ?x a :SuperUser.
+      ?y a :Resource.
+      ?z a <http://www.w3.org/ns/sparql#UUID>.
+}
+THEN {
+      ?z a :Role.
+      ?x :hasRole ?z; :readPermission ?y.
+}
+```
 
 ## Special Predicates
 
@@ -358,49 +413,54 @@ technique: Stardog rewrites the user's query with respect to the schema, and the
 executes the resulting expanded query (EQ) against the data. As can be
 seen in Figure 2, the rewriting process involves five different phases.
 
-![](/docs/owl2/blackout.png)
+![](/img/blackout.png)
 
 Figure 1. Query Answering
 
-![](/docs/owl2/blackout-internals.png)
+![](/img/blackout-internals.png)
 
 Figure 2. Query Rewriting
 
 We illustrate the query answering process by means of an example.
-Consider a Stardog database, MyDB~1~, containing the following schema
+Consider a Stardog database, MyDB<sub>1</sub>, containing the following schema
 axioms:
 
-      :SeniorManager rdfs:subClassOf :manages some :Manager
-      :manages some :Employee rdfs:subClassOf :Manager
-      :Manager rdfs:subClassOf :Employee
-
+```manchester
+ :SeniorManager rdfs:subClassOf :manages some :Manager
+ :manages some :Employee rdfs:subClassOf :Manager
+ :Manager rdfs:subClassOf :Employee
+```
 
 Which says that a senior manager manages at least one manager, that
 every person that manages an employee is a manager, and that every
-manager is also an employee. Moreover, let us assume MyDB~1~ also
+manager is also an employee. Moreover, let us assume MyDB<sub>1</sub> also
 contains the following data assertions:
 
-      :Bill rdf:type :SeniorManager
-      :Robert rdf:type :Manager
-      :Ana :manages :Lucy
-      :Lucy rdf:type :Employee
-
+```manchester
+:Bill rdf:type :SeniorManager
+:Robert rdf:type :Manager
+:Ana :manages :Lucy
+:Lucy rdf:type :Employee
+```
 
 Finally, let us assume that we want to retrieve the set of all
 employees. We do this by posing the following query:
 
-    SELECT ?employee WHERE { ?employee rdf:type :Employee }
+```sparql
+SELECT ?employee WHERE { ?employee rdf:type :Employee }
+```
 
 Given the knowledge captured in the schema, we expect all individuals
 occurring in the data to be part of the answer. In order to answer this
 query, Stardog first **rewrites** it using the schema. In this case, the
 original query is rewritten into four queries:
 
-      SELECT ?employee WHERE { ?employee rdf:type :Employee }
-      SELECT ?employee WHERE { ?employee rdf:type :Manager }
-      SELECT ?employee WHERE { ?employee rdf:type :SeniorManager }
-      SELECT ?employee WHERE { ?employee :manages ?x. ?x rdf:type :Employee }
-
+```sparql
+SELECT ?employee WHERE { ?employee rdf:type :Employee }
+SELECT ?employee WHERE { ?employee rdf:type :Manager }
+SELECT ?employee WHERE { ?employee rdf:type :SeniorManager }
+SELECT ?employee WHERE { ?employee :manages ?x. ?x rdf:type :Employee }
+```
 
 The final step consists of executing these four queries over the data.
 
@@ -451,24 +511,26 @@ more difficult is to evaluate it over the data.
 For example, suppose our schema contains a very thorough and detailed
 set of subclasses of the class `:Employee`:
 
-      :Manager rdfs:subClassOf :Employee
-      :SeniorManager rdfs:subClassOf :Manager
-      ...
+```manchester
+:Manager rdfs:subClassOf :Employee
+:SeniorManager rdfs:subClassOf :Manager
+...
 
-      :Supervisor rdfs:subClassOf :Employee
-      :DepartmentSupervisor rdfs:subClassOf :Supervisor
-      ...
+:Supervisor rdfs:subClassOf :Employee
+:DepartmentSupervisor rdfs:subClassOf :Supervisor
+...
 
-      :Secretary rdfs:subClassOf :Employee
-      ...
-
+:Secretary rdfs:subClassOf :Employee
+...
+```
 
 If we wanted to retrieve the set of all employees, Blackout would
 produce an EQ containing a query of the following form for every
 subclass `:Ci` of `:Employee`:
 
-      SELECT ?employee WHERE { ?employee rdf:type :Ci }
-
+```sparql
+SELECT ?employee WHERE { ?employee rdf:type :Ci }
+```
 
 At this point, it is easy to see that **the more specific the query, the
 better** as general queries—that is, queries that contain concepts high
@@ -483,20 +545,25 @@ an optimization technique implemented in Blackout called *query
 subsumption*. In order to grasp the intuition behind it, let us consider
 the following query asking for people and the employees they manage:
 
-      SELECT ?manager ?employee WHERE { ?manager :manages ?employee. ?employee rdf:type :Employee }
-
+```sparql
+SELECT ?manager ?employee WHERE 
+  { ?manager :manages ?employee. 
+    ?employee rdf:type :Employee. }
+```
 
 We know that this query would cause a large EQ given the deep hierarchy
-of `:Employee` in MyDB~1~. However, if we added the following single
+of `:Employee` in MyDB<sub>1</sub>. However, if we added the following single
 range axiom:
 
+```manchester
       :manages rdfs:range :Employee
-
+```
 
 then the EQ would collapse to:
 
-      SELECT ?manager ?employee WHERE { ?manager :manages ?employee }
-
+```sparql
+ SELECT ?manager ?employee WHERE { ?manager :manages ?employee }
+```
 
 which is considerably less difficult to evaluate.
 
@@ -523,24 +590,26 @@ The most common data assertions are class and property assertions. Class
 assertions are used to state that a particular individual is an instance
 of a given class. Property assertions are used to state that two
 particular individuals (or an individual and a literal) are related via
-a given property. For example, suppose we have a DB MyDB~2~ that
+a given property. For example, suppose we have a DB MyDB<sub>2</sub> that
 contains the following data assertions:We use the usual standard
 prefixes for RDF(S) and OWL.
 
-      :clark_and_parsia rdf:type :Company
-      :clark_and_parsia :maintains :Stardog
-
+```manchester
+:clark_and_parsia rdf:type :Company
+:clark_and_parsia :maintains :Stardog
+```
 
 stating that `:clark_and_parsia` is a company, and that
 `:clark_and_parsia` maintains `:Stardog`.
 
 The most common schema axioms are subclass axioms. Subclass axioms are
 used to state that every instance of a particular class is also an
-instance of another class. For example, suppose that MyDB~2~ contains
+instance of another class. For example, suppose that MyDB<sub>2</sub> contains
 the following TBox axiom:
 
-      :Company rdfs:subClassOf :Organization
-
+```manchester
+:Company rdfs:subClassOf :Organization
+```
 
 stating that companies are a type of organization.
 
@@ -552,27 +621,27 @@ contain.
 
 A BGP is said to be an ABox BGP if it is of one of the following forms:
 
--   **term~1~** rdf:type **uri**
--   **term~1~** **uri** **term~2~**
--   **term~1~** owl:differentFrom **term~2~**
--   **term~1~** owl:sameAs **term~2~**
+-   **term<sub>1</sub>** `rdf:type` **uri**
+-   **term<sub>1</sub>** **uri** **term<sub>2</sub>**
+-   **term<sub>1</sub>** `owl:differentFrom` **term<sub>2</sub>**
+-   **term<sub>1</sub>** `owl:sameAs` **term<sub>2</sub>**
 
 A BGP is said to be a TBox BGP if it is of one of the following forms:
 
--   **term~1~** rdfs:subClassOf **term~2~**
--   **term~1~** owl:disjointWith **term~2~**
--   **term~1~** owl:equivalentClass **term~2~**
--   **term~1~** rdfs:subPropertyOf **term~2~**
--   **term~1~** owl:equivalentProperty **term~2~**
--   **term~1~** owl:inverseOf **term~2~**
--   **term~1~** owl:propertyDisjointWith **term~2~**
--   **term~1~** rdfs:domain **term~2~**
--   **term~1~** rdfs:range **term~2~**
+-   **term<sub>1</sub>** `rdfs:subClassOf` **term<sub>2</sub>**
+-   **term<sub>1</sub>** `owl:disjointWith` **term<sub>2</sub>**
+-   **term<sub>1</sub>** `owl:equivalentClass` **term<sub>2</sub>**
+-   **term<sub>1</sub>** `rdfs:subPropertyOf` **term<sub>2</sub>**
+-   **term<sub>1</sub>** `owl:equivalentProperty` **term<sub>2</sub>**
+-   **term<sub>1</sub>** `owl:inverseOf` **term<sub>2</sub>**
+-   **term<sub>1</sub>** `owl:propertyDisjointWith` **term<sub>2</sub>**
+-   **term<sub>1</sub>** `rdfs:domain` **term<sub>2</sub>**
+-   **term<sub>1</sub>** `rdfs:range` **term<sub>2</sub>**
 
 A BGP is said to be a Hybrid BGP if it is of one of the following forms:
 
--   **term~1~** rdf:type **?var**
--   **term~1~** **?var** **term~2~**
+-   **term<sub>1</sub>** `rdf:type` **?var**
+-   **term<sub>1</sub>** **?var** **term<sub>2</sub>**
 
 where **term** (possibly with subscripts) is either an URI or variable;
 **uri** is a URI; and **?var** is a variable.
@@ -586,67 +655,73 @@ Intuitively, reasoning with a DB means to make implicit knowledge
 explicit. There are two main use cases for reasoning: infer implicit
 knowledge and discover modeling errors.
 
-With respect to the first use case, recall that MyDB~2~ contains the
+With respect to the first use case, recall that MyDB<sub>2</sub> contains the
 following assertion and axiom:
 
-      :clark_and_parsia rdf:type :Company
-      :Company rdfs:subClassOf :Organization
-
+```manchester
+ :clark_and_parsia rdf:type :Company
+ :Company rdfs:subClassOf :Organization
+```
 
 From this DB, we can use Stardog in order to *infer* that
 `:clark_and_parsia` is an organization:
 
-      :clark_and_parsia rdf:type :Organization
-
+```
+:clark_and_parsia rdf:type :Organization
+```
 
 Using reasoning in order to infer implicit knowledge in the context of
 an enterprise application can lead to simpler queries. Let us suppose,
-for example, that MyDB~2~ contains a complex class hierarchy including
+for example, that MyDB<sub>2</sub> contains a complex class hierarchy including
 several types of organization (including company). Let us further
 suppose that our application requires to use Stardog in order to get the
 list of all considered organizations. If Stardog were used **with
 reasoning**, then we would need only issue the following simple query:
 
-      SELECT ?org WHERE { ?org rdf:type :Organization}
-
+```sparql
+SELECT ?org WHERE { ?org rdf:type :Organization}
+```
 
 In contrast, if we were using Stardog **with no reasoning**, then we
 would have to issue the following considerably more complex query that
 considers all possible types of organization:
 
-      SELECT ?org WHERE { { ?org rdf:type :Organization } UNION
-                          { ?org rdf:type :Company } UNION
-                          ...
-                        }
-
+```sparql
+SELECT ?org WHERE 
+              { { ?org rdf:type :Organization } UNION
+              { ?org rdf:type :Company } UNION
+...
+}
+```
 
 Stardog can also be used in order to discover modeling errors in a DB.
 The most common modeling errors are *unsatisfiable* classes and
 *inconsistent* DBs.
 
 An unsatisfiable class is simply a class that cannot have any instances.
-Say, for example, that we added the following axioms to MyDB~2~:
+Say, for example, that we added the following axioms to MyDB<sub>2</sub>:
 
-      :Company owl:disjointWith :Organization
-      :LLC owl:equivalentClass :Company and :Organization
-
+```manchester
+ :Company owl:disjointWith :Organization
+ :LLC owl:equivalentClass :Company and :Organization
+```
 
 stating that companies cannot be organizations and vice versa, and that
 an LLC is a company and an organization. The disjointness axiom causes
 the class `:LLC` to be unsatisfiable because, for the DB to be
-contradiction-free, there can be no instances of `:LLC`.
+free of any logical contradiction, there can be no instances of `:LLC`.
 
 Asserting (or inferring) that an unsatisfiable class has an instance,
-causes the DB to be *inconsistent*. In the particular case of MyDB~2~,
+causes the DB to be *inconsistent*. In the particular case of MyDB<sub>2</sub>,
 we know that `:clark_and_parsia` is a company AND an organization (see
 above); therefore, we also know that it is an instance of `:LLC`, and as
-`:LLC` is known to be unsatisfiable, we have that MyDB~2~ is
+`:LLC` is known to be unsatisfiable, we have that MyDB<sub>2</sub> is
 inconsistent.
 
 Using reasoning in order to discover modeling errors in the context of
 an enterprise application is useful in order to maintain a correct
 contradiction-free model of the domain. In our example, we discovered
-that `:LLC` is unsatisfiable and MyDB~2~ is inconsistent, which leads us
+that `:LLC` is unsatisfiable and MyDB<sub>2</sub> is inconsistent, which leads us
 to believe that there is a modeling error in our DB. In this case, it is
 easy to see that the problem is the disjointness axiom between
 `:Company` and `:Organization`.

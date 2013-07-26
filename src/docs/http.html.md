@@ -10,27 +10,25 @@ summary: 'This chapter describes how to interact with Stardog over a network usi
 
 In the [Programming with Java](../java/) chapter, we consider
 interacting with Stardog programatically from a Java program. In this
-chapter we consider interacting with Stardog over a network. In some use
+chapter we consider interacting with Stardog over HTTP. In some use
 cases or deployment scenarios, it may be necessary to interact with or
 control Stardog remotely over an IP-based network. For those purposes,
-Stardog supports [SPARQL 1.0 HTTP Protocol](http://www.w3.org/TR/rdf-sparql-protocol/); the [SPARQL 1.1 Graph Store HTTP Protocol](http://www.w3.org/TR/sparql11-http-rdf-update/); the Stardog-native Extended HTTP Protocol; and SNARL, an RPC-style protocol
+Stardog supports [SPARQL 1.0 HTTP Protocol](http://www.w3.org/TR/rdf-sparql-protocol/); the [SPARQL 1.1 Graph Store HTTP Protocol](http://www.w3.org/TR/sparql11-http-rdf-update/); the Stardog HTTP Protocol; and SNARL, an RPC-style protocol
 based on [Google Protocol Buffers](http://code.google.com/apis/protocolbuffers/).
 
 ## SPARQL Protocol
 
 Stardog supports the standard SPARQL Protocol HTTP bindings in a very
-obvious way. Since the Extended HTTP Protocol is a superset of SPARQL
+obvious way. Since the Stardog HTTP Protocol is a superset of SPARQL
 Protocol, the latter is documented below alongside the former.
 
 Stardog supports SPARQL 1.1's Service Description format. See the
 [spec](http://www.w3.org/TR/2013/REC-sparql11-service-description-20130321/)
 if you want details.
 
-## Extended HTTP
+## Stardog HTTP Protocol
 
-In addition to SPARQL Protocol for RDF support, Stardog supports an
-Extended HTTP Protocol with additional resource representations and
-capabilities.
+The Stardog HTTP Protocol supports SPARQL Protocol 1.1 and additional resource representations and capabilities.
 
 The Stardog HTTP API v3 is also available on Apiary:
 [http://docs.stardog.apiary.io/](http://docs.stardog.apiary.io/).
@@ -139,7 +137,7 @@ representations, HTTP response codes, and resource identifiers.
 
 ### A Stardog Database
 
-```http
+```httpstardog
 GET /{db} → void
 ```
 
@@ -149,7 +147,7 @@ web console where the database can be interacted with in a browser.
 
 ### Database Size
 
-```http
+```httpstardog
 GET /{db}/size → text/plain
 ```
 
@@ -157,7 +155,7 @@ Returns the number of RDF triples in the database.
 
 ### Query Evaluation
 
-```http
+```httpstardog
 GET | POST /{db}/query
 ```
 
@@ -168,7 +166,7 @@ To issue SPARQL queries with reasoning over HTTP, see the [Using Reasoning](http
 
 ### Query Plan
 
-```http
+```httpstardog
 GET | POST /{db}/explain → text/plain
 ```
 
@@ -178,7 +176,7 @@ the only MIME type for the Query Plan resource is `text/plain`.
 
 ### Transaction Begin
 
-```http
+```httpstardog
 POST /{db}/transaction/begin → text/plain
 ```
 
@@ -203,7 +201,7 @@ as a MitM attack. See [RFC 2617](http://tools.ietf.org/html/rfc2617) for more in
 
 ### Transaction Commit
 
-```http
+```httpstardog
 POST /{db}/transaction/commit/{txId} → void | text/plain
 ```
 
@@ -216,7 +214,7 @@ changes that were made to the database.
 
 ### Transaction Rollback
 
-```http
+```httpstardog
 POST /{db}/transaction/rollback/{txId} → void | text/plain
 ```
 
@@ -226,7 +224,7 @@ rollback failed and the text returned in the result is the failure
 message.
 
 ### Querying (Transactionally)
-```http
+```httpstardog
 GET | POST /{db}/{txId}/query
 ```
 
@@ -237,7 +235,7 @@ the valid Accept types are listed above in the `HTTP Headers` section.
 
 ### Adding Data (Transactionally)
 
-```http
+```httpstardog
 POST /{db}/{txId}/add → void | text/plain
 ```
 
@@ -249,7 +247,7 @@ response codes are `200` for success and `500` for failure.
 
 ### Deleting Data (Transactionally)
 
-```http
+```httpstardog
 POST /{db}/{txId}/remove → void | text/plain
 ```
 
@@ -260,7 +258,7 @@ with Add in Transaction.
 
 ### Clear Database
 
-```http
+```httpstardog
 POST /{db}/{txId}/clear → void | text/plain
 ```
 
@@ -271,7 +269,7 @@ named graph. To clear only the default graph, pass `DEFAULT` as the value of `gr
 
 ### Explanation of Inferences
 
-```http
+```httpstardog
 POST /{db}/reasoning/explain → RDF
 POST /{db}/reasoning/{txId}/explain → RDF
 ```
@@ -282,7 +280,7 @@ returns the explanation for why that axiom was inferred as Turtle.
 
 ### Explanation of Inconsistency
 
-``` http
+```httpstardog
 GET | POST /{db}/reasoning/explain/inconsistency → RDF
 ```
 
@@ -291,7 +289,7 @@ inconsistency.
 
 ### Consistency
 
-``` http
+```httpstardog
 GET | POST /{db}/reasoning/consistency → text/boolean
 ```
 
@@ -299,7 +297,7 @@ Returns whether or not the database is consistent w.r.t to the TBox.
 
 ### Listing Integrity Constraints
 
-``` http
+```httpstardog
 GET /{db}/icv → RDF
 ```     
 
@@ -307,7 +305,7 @@ Returns the integrity constraints for the specified database serialized in any s
 
 ### Adding Integrity Constraints
 
-``` http 
+```httpstardog 
 POST /{db}/icv/add
 ```
 
@@ -319,7 +317,7 @@ unable to be added.
 
 ### Removing Integrity Constraints
 
-``` http
+```httpstardog
 POST /{db}/icv/remove
 ```   
 
@@ -330,7 +328,7 @@ remove; `500` indicates an error.
 
 ### Clearing Integrity Constraints
 
-``` http
+```httpstardog
 POST /{db}/icv/clear 
 ```      
 
@@ -339,7 +337,7 @@ constraints were successfully dropped; `500` indicates an error.
 
 ### Converting Constraints to SPARQL Queries
 
-``` http
+```httpstardog
     POST /{db}/icv/convert
 ```
 
@@ -354,21 +352,21 @@ To administer Stardog over HTTP, use the following resource
 representations, HTTP response codes, and resource identifiers.
 
 ### List databases
-``` http
+```httpstardog
 GET /admin/databases → application/json
 ```
 Lists all the databases available.
 
 Output JSON example:
 
-```javascript
+``` javascript
     {
       "databases" : ["testdb", "exampledb"]
     }
 ```
 ### Copy a database
 
-``` http
+```httpstardog
 PUT /admin/databases/{db}/copy?to={db_copy}
 ```
 
@@ -376,7 +374,7 @@ Copies a database `db` to another specified `db_copy`.
 
 ### Create a new database
 
-``` http
+```httpstardog
     POST /admin/databases
 ```
 
@@ -400,7 +398,7 @@ Expected input (`application/json`):
 
 ### Drop an existing database
 
-``` http
+```httpstardog
     DELETE /admin/databases/{db}
 ```
 
@@ -409,7 +407,7 @@ contains. Goodbye Callahan!
 
 ### Migrate an existing database
 
-``` http
+```httpstardog
     PUT /admin/databases/{db}/migrate
 ```
 
@@ -417,7 +415,7 @@ Migrates the existing content of a legacy database to new format.
 
 ### Optimize an existing database
 
-``` http
+```httpstardog
     PUT /admin/databases/{db}/optimize
 ```
 
@@ -425,7 +423,7 @@ Optimize an existing database.
 
 ### Sets an existing database online.
 
-``` http
+```httpstardog
     PUT /admin/databases/{db}/online
 ```
 
@@ -433,7 +431,7 @@ Request message to set an existing database {db} online.
 
 ### Sets an existing database offline.
 
-``` http
+```httpstardog
     PUT /admin/databases/{db}/offline
 ```
 
@@ -456,7 +454,7 @@ Optional input (`application/json`):
 
 ### Set option values to an existing database.
 
-``` http
+```httpstardog
     POST /admin/databases/{kb}/options
 ```
 
@@ -477,7 +475,7 @@ Expected input (`application/json`):
 
 ### Get option values of an existing database.
 
-``` http
+```httpstardog
 PUT /admin/databases/{kb}/options → application/json
 ```
 
@@ -509,7 +507,7 @@ Output JSON example:
 
 ### Add a new user to the system.
 
-``` http
+```httpstardog
     POST /admin/users
 ```
 
@@ -529,7 +527,7 @@ Expected input:
 
 ### Change user password.
 
-``` http
+```httpstardog
     PUT /admin/users/{user}/pwd
 ```
 
@@ -546,7 +544,7 @@ Expected input:
 
 ### Check if user is enabled.
 
-``` http
+```httpstardog
     GET /admin/users/{user}/enabled → application/json
 ```
 
@@ -562,7 +560,7 @@ Output JSON example:
 
 ### Check if user is superuser.
 
-```http
+```httpstardog
     GET /admin/users/{user}/superuser → application/json
 ```
 
@@ -576,7 +574,7 @@ Verifies if the user is a superuser:
 
 ### Listing users.
 
-``` http
+```httpstardog
     GET /admin/users → application/json
 ```
 
@@ -592,7 +590,7 @@ Output JSON example:
 
 ### Listing user roles.
 
-``` http
+```httpstardog
     GET /admin/users/{user}/roles → application/json
 ```
 
@@ -607,7 +605,7 @@ Output JSON example:
 ```
 ### Deleting users.
 
-```http
+```httpstardog
     DELETE /admin/users/{user}
 ```
 
@@ -615,7 +613,7 @@ Removes a user from the system.
 
 ### Enabling users.
 
-```http
+```httpstardog
     PUT /admin/users/{user}/enabled
 ```
 
@@ -630,7 +628,7 @@ format:
 
 ### Setting user roles.
 
-```http
+```httpstardog
     PUT /admin/users/{user}/roles
 ```
 
@@ -645,7 +643,7 @@ for the user in the following format:
 
 ### Adding new roles.
 
-``` http
+```httpstardog
     POST /admin/roles
 ```
 
@@ -661,7 +659,7 @@ Expected input:
 
 ### Listing roles.
 
-``` http
+```httpstardog
 GET /admin/roles → application/json
 ```
 
@@ -677,7 +675,7 @@ Output JSON example:
 
 ### Listing users with a specified role.
 
-``` http
+```httpstardog
 GET /admin/roles/{role}/users → application/json
 ```
 
@@ -693,7 +691,7 @@ Output JSON example:
 
 ### Deleting roles.
 
-``` http
+```httpstardog
 DELETE /admin/roles/{role}?force={force}
 ```
 
@@ -703,7 +701,7 @@ forced.
 
 ### Assigning permissions to roles.
 
-``` http
+```httpstardog
 PUT /admin/permissions/role/{role}
 ```
 
@@ -720,7 +718,7 @@ expects input JSON Object in the following format:
 
 ### Assigning permissions to users.
 
-```http
+```httpstardog
 PUT /admin/permissions/user/{user}
 ```
 
@@ -737,7 +735,7 @@ expects input JSON Object in the following format:
 
 ### Deleting permissions from roles.
 
-``` http
+```httpstardog
 POST /admin/permissions/role/{role}/delete
 ```
 
@@ -754,7 +752,7 @@ input JSON Object in the following format:
 
 ### Deleting permissions from users.
 
-``` http
+```httpstardog
 POST /admin/permissions/user/{user}/delete
 ```
 
@@ -771,7 +769,7 @@ input JSON Object in the following format:
 
 ### Listing role permissions.
 
-``` http
+```httpstardog
 GET /admin/permissions/role/{role} → application/json
 ```
 
@@ -787,7 +785,7 @@ Output JSON example:
 
 ### Listing user permissions.
 
-``` http
+```httpstardog
 GET /admin/permissions/user/{user} → application/json
 ```
 
@@ -803,7 +801,7 @@ Output JSON example:
 
 ### Listing user effective permissions.
 
-``` http
+```httpstardog
 GET /admin/permissions/effective/user/{user} → application/json
 ```
 
@@ -819,7 +817,7 @@ Output JSON example:
 
 ### Shutdown server.
 
-``` http
+```httpstardog
 POST /admin/shutdown
 ```
 

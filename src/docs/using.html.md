@@ -8,31 +8,27 @@ toc: true
 
 While Stardog is a full-featured RDF database, its primary purpose is to
 execute queries against RDF data which it has under direct
-management.[^1] Stardog supports the
-[SPARQL](http://www.cambridgesemantics.com/2008/09/sparql-by-example)
-query language, a W3C standard.
-
-[^1]: This implies that Stardog will not retrieve data from the Web
+management.<fn>This implies that Stardog will not retrieve data from the Web
 or from any other network via HTTP URLs in order to query that data. If
 you want to query data using Stardog, you must add that data to a new or
 existing Stardog database. A future version of Stardog will
-support [SDQ](http://weblog.clarkparsia.com/2011/03/07/sdq-information-integration-i%0An-the-real-world/), a distributed query system, that will lift this restriction.
+support [SDQ](http://weblog.clarkparsia.com/2011/03/07/sdq-information-integration-i%0An-the-real-world/), a distributed query system, that will lift this restriction.</fn> Stardog supports the [SPARQL](http://www.cambridgesemantics.com/2008/09/sparql-by-example) query language, a W3C standard.
 
 ## Querying a Database
 
 Stardog currently supports all of the [SPARQL 1.1 Query
 language](http://www.w3.org/TR/sparql11-query/). Support is planned for
-[SPARQL 1.1
-Update](http://www.w3.org/TR/2012/PR-sparql11-update-20121108) in a
+[SPARQL 1.1 Update](http://www.w3.org/TR/2012/PR-sparql11-update-20121108) in a
 future release. Stardog does not support SPARQL 1.1 federation (the
-SERVICE keyword). Stardog also supports the [OWL 2 Direct Semantics
-entailment
-regime](http://www.w3.org/TR/2012/CR-sparql11-entailment-20121108/).
+`SERVICE` keyword). Stardog also supports the [OWL 2 Direct Semantics
+entailment regime](http://www.w3.org/TR/2012/CR-sparql11-entailment-20121108/).
 
 To execute a SPARQL query against a Stardog database, use the `query`
 subcommand:
 
-    $ stardog query myDb "select * where { ?s ?p ?o }"
+```bash
+$ stardog query myDb "select * where { ?s ?p ?o }"
+```
 
 Detailed information on using the query command in Stardog can be found
 on its [manpage](/docs/man/query-execute.html)
@@ -44,7 +40,9 @@ time. See the [Creating a Database](../admin/#create) section for bulk
 loading data at database creation time. To add data to an existing
 Stardog database, use the [add](/docs/man/data-add.html) command:
 
-    $ stardog data add myDatabase 1.rdf 2.rdf 3.rdf
+```bash
+$ stardog data add myDatabase 1.rdf 2.rdf 3.rdf
+```
 
 The optional arguments are `-f` (or `--format`) to specify the RDF
 serialization type of the files to be loaded; if you specify the wrong
@@ -67,17 +65,23 @@ To remove data from a Stardog database,
 
 For example,
 
-    $ stardog data remove -g http://foo myDatabase
+```bash
+$ stardog data remove -g http://foo myDatabase
+```
 
 will remove the named graph `http://foo` and all its triples from
 `myDatabase`.
 
-    $ stardog data remove myDatabase 1.rdf
+```bash
+$ stardog data remove myDatabase 1.rdf
+```
 
 will remove the triples in `1.rdf` from (the default graph of)
 `myDatabase`.
 
-    $ stardog data remove -g http://foo -f TURTLE myDatabase 2.rdf 3.rdf
+```bash
+$ stardog data remove -g http://foo -f TURTLE myDatabase 2.rdf 3.rdf
+```
 
 will remove the triples in the Turtle files `2.rdf` and `3.rdf` from the
 named graph `http://foo` of `myDatabase`.
@@ -113,9 +117,11 @@ To export data from a Stardog database back to RDF,
 
 For example,
 
-    $ stardog data export --format TURTLE myDatabase myDatabase_output.ttl
+```bash
+$ stardog data export --format TURTLE myDatabase myDatabase_output.ttl
 
-    $ stardog data export --graph-uri http://example.org/context myDatabase myDatabase_output.nt
+$ stardog data export --graph-uri http://example.org/context myDatabase myDatabase_output.nt
+```
 
 ## Searching 
 Stardog includes an RDF-aware semantic search capability: it will index
@@ -135,12 +141,13 @@ access the search index in a SPARQL query.
 
 For example,
 
-    SELECT DISTINCT ?s ?score 
-    WHERE {
-    ?s ?p ?l.
-    ( ?l ?score ) <http://jena.hpl.hp.com/ARQ/property#textMatch> ( 'mac' 0.5 50 ). 
-    }
-
+```bash
+SELECT DISTINCT ?s ?score 
+WHERE {
+?s ?p ?l.
+( ?l ?score ) <http://jena.hpl.hp.com/ARQ/property#textMatch> ( 'mac' 0.5 50 ). 
+}
+```
 This query selects the top 50 literals, and their scores, which match
 'mac' and whose scores are above a threshold of 0.5. These literals are
 then joined with the generic BGP `?s ?p ?l` to get the resources (?s)
@@ -152,29 +159,35 @@ you like to enhance your initial search results.
 ### Searching with the Command Line
 
 First, check out the CLI help for the
-[search](/docs/man/query-search.html) subcommand...I'll wait.
+[search](/docs/man/query-search.html) subcommand:
 
-    $ stardog help query search
+```bash
+$ stardog help query search
+```
 
 Okay, now let's do a search over the O'Reilly book catalog in RDF for
 everything mentioning "html":
 
-    $ stardog query search -q "html" -l 10 catalog
+```bash
+$ stardog query search -q "html" -l 10 catalog
+```
 
 The results?
 
-    Index    Score    Hit
-    ====================
-    0    6.422    urn:x-domain:oreilly.com:product:9780596527402.IP
-    1    6.422    urn:x-domain:oreilly.com:product:9780596003166.IP
-    2    6.422    urn:x-domain:oreilly.com:product:9781565924949.IP
-    3    6.422    urn:x-domain:oreilly.com:product:9780596002251.IP
-    4    6.422    urn:x-domain:oreilly.com:product:9780596101978.IP
-    5    6.422    urn:x-domain:oreilly.com:product:9780596154066.IP
-    6    6.422    urn:x-domain:oreilly.com:product:9780596157616.IP
-    7    6.422    urn:x-domain:oreilly.com:product:9780596805876.IP
-    8    6.422    urn:x-domain:oreilly.com:product:9780596527273.IP
-    9    6.422    urn:x-domain:oreilly.com:product:9780596002961.IP
+```bash
+Index    Score    Hit
+====================
+0    6.422    urn:x-domain:oreilly.com:product:9780596527402.IP
+1    6.422    urn:x-domain:oreilly.com:product:9780596003166.IP
+2    6.422    urn:x-domain:oreilly.com:product:9781565924949.IP
+3    6.422    urn:x-domain:oreilly.com:product:9780596002251.IP
+4    6.422    urn:x-domain:oreilly.com:product:9780596101978.IP
+5    6.422    urn:x-domain:oreilly.com:product:9780596154066.IP
+6    6.422    urn:x-domain:oreilly.com:product:9780596157616.IP
+7    6.422    urn:x-domain:oreilly.com:product:9780596805876.IP
+8    6.422    urn:x-domain:oreilly.com:product:9780596527273.IP
+9    6.422    urn:x-domain:oreilly.com:product:9780596002961.IP
+```
 
 ### Query Syntax
 

@@ -7,10 +7,9 @@ toc: true
 ---
 
 In this chapter we describe the administration of Stardog Server and
-Stardog databases, including how to use the various
-Stardog command-line programs and how to configure a Stardog Server and
-its databases. An important part of Stardog administration is security,
-which is discussed in a separate [chapter](../security).
+Stardog databases, including the various
+Stardog command-line programs, configuration options, etc. Security is an important part of Stardog administration; it's
+discussed in a separate [chapter](../security).
 
 ## Command Line Interface
 
@@ -57,8 +56,8 @@ $ stardog-admin
 
 ### Security Considerations
 
-The rationale for separating functionality into two CLI programs is
-largely based on security, since `stardog-admin` will need, in
+We split the functionality into two CLI programs
+because of security: `stardog-admin` will need, in
 production environments, to have considerably tighter access
 restrictions than `stardog`.
 
@@ -69,7 +68,7 @@ default user "admin" and password "admin" in `stardog-admin` commands
 if no user or password are given. This is obviously **not secure**;
 before any serious use of Stardog is contemplated, read the
 [security](../security) chapter at least twice, and
-then---minimally---change the administrative password to something we
+then--minimally--change the administrative password to something we
 haven't published on the interwebs!
 
 ### Command Groups
@@ -78,7 +77,9 @@ The CLI tools both contain a lot of functionality; we've introduced
 "command groups" to make CLI subcommands easier to find. To print help
 for a particular command group, just ask for help:
 
-    $ stardog help [command_group_name]
+```bash
+$ stardog help [command_group_name]
+```
 
 The command groups and their subcommands include
 
@@ -94,32 +95,38 @@ The command groups and their subcommands include
 The main help command for either CLI tool will print a listing of the
 command groups:
 
-    usage: stardog  []
+```bash
+usage: stardog  []
 
-    The most commonly used stardog commands are:
-        data        Commands which can modify or dump the contents of a database
-        help        Display help information
-        icv         Commands for working with Stardog Integrity Constraint support
-        namespace   Commands which work with the namespaces defined for a database
-        query       Commands which query a Stardog database
-        reasoning   Commands which use the reasoning capabilities of a Stardog database
-        version     Prints information about this version of Stardog
-
-    See 'stardog help ' for more information on a specific command.
+The most commonly used stardog commands are:
+    data        Commands which can modify or dump the contents of a database
+    help        Display help information
+    icv         Commands for working with Stardog Integrity Constraint support
+    namespace   Commands which work with the namespaces defined for a database
+    query       Commands which query a Stardog database
+    reasoning   Commands which use the reasoning capabilities of a Stardog database
+    version     Prints information about this version of Stardog
+    
+See 'stardog help ' for more information on a specific command.
+```
 
 To get more information about a particular command, simply issue the
 help command for it including its command group:
 
-    $ stardog help query execute
+```bash
+$ stardog help query execute
+```
 
 Finally, everything here about command groups, commands, and online help
 works equally well for `stardog-admin`.
 
 The result of all these changes is a better user experience:
 
-    $ stardog reasoning consistency -u myUsername -p myPassword -r QL myDB
+```bash
+$ stardog reasoning consistency -u myUsername -p myPassword -r QL myDB
 
-    $ stardog-admin db migrate -u myUsername -p myPassword myDb
+$ stardog-admin db migrate -u myUsername -p myPassword myDb
+```
 
 ### Autocomplete
 
@@ -129,37 +136,48 @@ first want to make sure bash completion is installed:
 
 #### Homebrew
 
-    $ brew install bash-completion
+```bash
+$ brew install bash-completion
+```
 
 Then enable it in .bash\_profile:
 
-    if [ -f `brew --prefix`/etc/bash_completion ]; then
-    . `brew --prefix`/etc/bash_completion
-    fi
-
+```bash
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+  . `brew --prefix`/etc/bash_completion
+fi
+```
 #### MacPorts
 
 First, you really should be using Homebrew; you feel me?
 
 If not, then:
 
-    $ sudo port install bash-completion
+```bash
+$ sudo port install bash-completion
+```
 
 Enable it in .bash\_profile:
 
-    if [ -f /opt/local/etc/bash_completion ]; then
-        . /opt/local/etc/bash_completion
-    fi
+```bash
+if [ -f /opt/local/etc/bash_completion ]; then
+   . /opt/local/etc/bash_completion
+fi
+```
 
 Finally, an example for our Linux friends:
 
 #### Ubuntu
 
-    $ sudo apt-get install bash-completion
+```bash
+$ sudo apt-get install bash-completion
+```
 
 #### Fedora
 
-    $ sudo yum install bash-completion
+```bash
+$ sudo yum install bash-completion
+```
 
 #### All Platforms
 
@@ -170,7 +188,9 @@ bash\_completion.d directory, typically one of
 Alternately you can put it anywhere you want, but tell `.bash_profile`
 about it:
 
-    source ~/.stardog-completion.sh
+```bash
+source ~/.stardog-completion.sh
+```
 
 ### How to Make a Connection String
 
@@ -210,12 +230,14 @@ machine name and port the Stardog Server is running on; any (optional)
 URL path to the database (it's very unlikely you'll need this); and the
 name of the database:
 
-    {scheme}{machineName}:{port}/{databaseName};{connectionOptions}
-    snarl://server/billion-triples-punk
-    http://localhost:5000/myDatabase
-    http://169.175.100.5:1111/myOtherDatabase;reasoning=QL
-    snarl://stardog:8888/the_database
-    snarl://localhost:1024/db1;reasoning=NONE
+```http
+{scheme}{machineName}:{port}/{databaseName};{connectionOptions}
+snarl://server/billion-triples-punk
+http://localhost:5000/myDatabase
+http://169.175.100.5:1111/myOtherDatabase;reasoning=QL
+snarl://stardog:8888/the_database
+snarl://localhost:1024/db1;reasoning=NONE
+```
 
 Using the default ports for SNARL and HTTP protocols simplifies
 connection strings. `connectionOptions` are a series of `;` delimited
@@ -318,11 +340,15 @@ The simplest way to start the server—running on the default ports,
 detaching to run as a daemon, and writing `stardog.pid` and
 `stardog.log` to the current working directory— is
 
-    $ stardog-admin server start
+```bash
+$ stardog-admin server start
+```
 
 To specify parameters:
 
-    $ stardog-admin server start --logfile=stardog.log --no-docs --http=8080
+```bash
+$ stardog-admin server start --logfile=stardog.log --no-docs --http=8080
+```
 
 `--no-docs` will tell Stardog not to serve its documentation over HTTP
 at `http://SERVER/docs`, which it will otherwise do by default.
@@ -333,7 +359,9 @@ Note: ports can be specified using the properties `--snarl` and
 
 To shut down the server:
 
-    $ stardog-admin server stop
+```bash
+$ stardog-admin server stop
+```
 
 If you started stardog on a port other than the default, or want to shut
 down a remote server, you can simply use the `--server` option to
@@ -615,11 +643,15 @@ block until other database activity is completed or terminated. See
 
 To set a database from offline to online:
 
-    $ stardog-admin db offline myDatabase
+```bash
+$ stardog-admin db offline myDatabase
+```
 
 To set the database online:
 
-    $ stardog-admin db online myDatabase
+```bash
+$ stardog-admin db online myDatabase
+```
 
 If Stardog Server is shutdown while a database is offline, the database
 will be offline the next time the server starts.
@@ -646,48 +678,25 @@ modeling, and other factors.
 See `stardog-admin help db create` for all the details including
 examples.
 
-### Database Archetypes 
-<t>new2</t>
+### Database Archetypes <t>new2</t>
+
+Stardog database archetypes are a new feature in 2.0. A database archetype is a named, vendor-defined or user-defined bundle of data and functionality to be applied at database-creation time. Archetypes are primarily for supporting various data standards or toolchain configurations in a simple way.
+
+For example, the [SKOS]() standard from W3C defines an OWL vocabulary for building taxonomies, thesauruses, etc. SKOS is made up by a vocabulary, some constraints, some kinds of reasoning, and (typically) some SPARQL queries. If you are developing an app that uses SKOS and Stardog, without the archetype feature, you are responsible for assembling all that SKOS stuff yourself. Which is tedious, error-prone, and not very rewarding even when it's done right.
+
+Rather than putting that burden on Stardog users, we've created database archetypes as a mechanism to collect these "bundles of stuff" which, as a developer, you can then simply attach to a particular database.
+
+The last point to make is that archetypes are composable: you can mix-and-match them at database creation time as needed.
+
+In the 2.0 release, we're supporting three database archetypes: [PROV](), [SKOS](), and [Stardog Web]().
 
 #### Stardog Web Archetype
 
 #### SKOS Archetype
 
+The SKOS archetype is for databases that will contain SKOS data, ...
+
 #### PROV Archetype
-
-### Namespace Prefix Bindings
-
-SPARQL queries can become verbose because of the (often redundant)
-`PREFIX` declarations in the prologue of each query. Stardog allows
-database administrators to persist and manage custom namespace prefix
-bindings, which works in the following way:
-
-1.  At database creation time, if data is loaded to the database that
-    contains namespace prefixes, then those are persisted for the life
-    of the database. Any subsequent queries to the database may simply
-    omit the `PREFIX` declarations:
-
-        $ stardog query myDB "select * {?s rdf:type owl:Class}"
-
-2.  To add new bindings, use the `namespace` subcommand in the CLI:
-
-        $ stardog namespace add myDb --prefix ex --uri 'http://example.org/test#'
-
-3.  To modify an existing binding, delete the existing one and then add
-    a new one:
-4.  Finally, to see all of the existing namespace prefix bindings:
-
-        $ stardog namespace list myDB
-
-If no files are used during database creation, or if the files do not
-define any prefixes (e.g. NTriples), then the "Big Four" default
-prefixes are stored: RDF, RDFS, XSD, and OWL.
-
-When executing queries in the CLI, the default table format for SPARQL
-`SELECT` results will use the bindings as qnames. SPARQL `CONSTRUCT`
-query output (including export) will also use the stored prefixes.
-
-To reiterate, namespace prefix bindings are *per database*, not global.
 
 ### Database Creation Templates
 
@@ -702,14 +711,18 @@ specific database passed in CLI parameters.
 To create a new database with the default options by simply providing a
 name and a set of initial datasets to load:
 
-    $ stardog-admin db create -n myDb input.ttl another_file.rdf moredata.rdf.gz
+```bash
+$ stardog-admin db create -n myDb input.ttl another_file.rdf moredata.rdf.gz
+```
 
 Datasets can be loaded later as well, though bulk loading at creation
 time is the fastest way to load data.
 
 To create (in this case, an empty) database from a template file:
 
-    $ stardog-admin db create -c database.properties
+```bash
+$ stardog-admin db create -c database.properties
+```
 
 At a minimum, the configuration file must have a value for
 `database.name` option.
@@ -718,7 +731,9 @@ Finally, if you only want to change only a few configuration options you
 can directly provide the values for these options in the CLI args as
 follows:
 
-    $ stardog-admin db create -n db -o icv.enabled=true icv.reasoning.type=QL -- input.ttl
+```bash
+$ stardog-admin db create -n db -o icv.enabled=true icv.reasoning.type=QL -- input.ttl
+```
 
 Note that '--' is used in this case when -o is the last option to
 delimit the value for -o from the files to be bulk loaded.
@@ -780,8 +795,52 @@ command.
         </tr>
       </tbody>
       <caption>Options for the Stardog <tt>create</tt> command.</caption>
+</table>
 
-    </table>
+### Namespace Prefix Bindings
+
+SPARQL queries can become verbose because of the (often redundant)
+`PREFIX` declarations in the prologue of each query. Stardog allows
+database administrators to persist and manage custom namespace prefix
+bindings, which works in the following way:
+
+1.  At database creation time, if data is loaded to the database that
+    contains namespace prefixes, then those are persisted for the life
+    of the database. Any subsequent queries to the database may simply
+    omit the `PREFIX` declarations:
+
+```bash
+$ stardog query myDB "select * {?s rdf:type owl:Class}"
+```
+
+2.  To add new bindings, use the `namespace` subcommand in the CLI:
+
+```bash
+$ stardog namespace add myDb --prefix ex --uri 'http://example.org/test#'
+```
+
+3.  To modify an existing binding, delete the existing one and then add
+    a new one:
+
+```bash
+$ stardog namespace remove myDb --prefix ex
+```
+
+4.  Finally, to see all of the existing namespace prefix bindings:
+
+```bash
+$ stardog namespace list myDB
+```
+
+If no files are used during database creation, or if the files do not
+define any prefixes (e.g. NTriples), then the "Big Four" default
+prefixes are stored: RDF, RDFS, XSD, and OWL.
+
+When executing queries in the CLI, the default table format for SPARQL
+`SELECT` results will use the bindings as qnames. SPARQL `CONSTRUCT`
+query output (including export) will also use the stored prefixes.
+
+To reiterate, namespace prefix bindings are *per database*, not global.
 
 ### Index Strategies
 
@@ -801,7 +860,7 @@ any time, but query performance may degrade in such cases.
 
 To create a database which indexes only RDF triples, set the option
 `index.named.graphs` to `false` at database creation time. The CLI
-provides a shorthand option&mdash;`-i` or `--index-triples-only`&mdash;which is
+provides a shorthand option--`-i` or `--index-triples-only`--which is
 equivalent.
 
 Please note that this option can only be set at database creation time
@@ -867,7 +926,9 @@ order to be dropped.
 
 It takes as its only argument a valid database name. For example,
 
-    $ stardog-admin db drop my_db
+```bash
+$ stardog-admin db drop my_db
+```
 
 ### Using Integrity Constraint Validation
 
@@ -898,7 +959,9 @@ to migrate. `migrate` won't necessarily work between arbitrary Stardog
 version, so before upgrading check the release notes for a new version
 carefully to see whether migration is required or possible.
 
-    $ stardog-admin db migrate myDatabase
+```bash
+$ stardog-admin db migrate myDatabase
+```
 
 will update `myDatabase` to the latest database format.
 
@@ -908,14 +971,18 @@ You can get some information about a database (online/offline status,
 creation time, last modification time, etc.) by running the following
 command:
 
-    $ stardog-admin get my_db_name
+```bash
+$ stardog-admin get my_db_name
+```
 
 This will return all the metadata stored about the database, including
 the values of configuration options used for this database instance. If
 you want to get the value for a specific option then you can run the
 following command:
 
-    $ stardog-admin get -o index.named.graphs my_db_name
+```bash
+$ stardog-admin get -o index.named.graphs my_db_name
+```
 
 ### Managing Queries
 
@@ -946,44 +1013,48 @@ per-database custom values, too. Any database without a custom value
 inherits the server-wide value. To disable query timeout, set
 `query.timeout` to `0`.
 
-#### Command-line Tools
-
-The query management command-line tools are simple and easy to use.
-
-##### Listing Queries
+#### Listing Queries
 
 To see all running queries, use the `query list` subcommand:
 
-    $ stardog-admin query list
+```bash
+$ stardog-admin query list
+```
 
 The results are formatted tabularly:
 
-    +----+----------+-------+--------------+
-    | ID | Database | User  | Elapsed time |
-    +----+----------+-------+--------------+
-    | 2  | test     | admin | 00:00:20.165 |
-    | 3  | test     | admin | 00:00:16.223 |
-    | 4  | test     | admin | 00:00:08.769 |
-    +----+----------+-------+--------------+
+```bash
++----+----------+-------+--------------+
+| ID | Database | User  | Elapsed time |
++----+----------+-------+--------------+
+| 2  | test     | admin | 00:00:20.165 |
+| 3  | test     | admin | 00:00:16.223 |
+| 4  | test     | admin | 00:00:08.769 |
++----+----------+-------+--------------+
 
-    3 queries running
+3 queries running
+```
 
 You can see the user who owns the query (superuser's can see all running
 queries), as well as the elapsed time and the database against which the
 query is running. The ID column is the key to deleting queries.
 
-##### Deleting Queries
+#### Deleting Queries
 
 To delete a running query, simply pass its ID to the `query kill`
 subcommand:
 
-    $ stardog-admin query kill 3
+```bash
+$ stardog-admin query kill 3
+```
 
 The output confirms the query kill completing successfully:
 
-    Query 3 killed successfully
+```bash
+Query 3 killed successfully
+```
 
-##### Automatically Killing Queries
+#### Automatically Killing Queries
 
 For production use, especially when a Stardog database is exposed to
 arbitrary query input, some of which may not execute in an acceptable
@@ -1004,29 +1075,33 @@ example, '1h' for 1 hour, '5m' for 5 minutes, '90s' for 90 seconds, and
 
 The default, out-of-the-box value of `query.timeout` is five minutes.
 
-##### Query Status
+#### Query Status
 
 To see more detail about one running query, use the `query status`
 subcommand:
 
-    $ stardog-admin query status 1
+```bash
+$ stardog-admin query status 1
+```
 
 The resulting output includes query metadata, including the query
 itself:
 
-    Username: admin
-    Database: test
-    Started : 2013-02-06 09:10:45 AM
-    Elapsed : 00:01:19.187
-    Query   :
-    select ?x ?p ?o1 ?y ?o2
-    where {
-      ?x ?p ?o1.
-      ?y ?p ?o2.
-      filter (?o1 > ?o2).
+```bash
+Username: admin
+Database: test
+Started : 2013-02-06 09:10:45 AM
+Elapsed : 00:01:19.187
+Query   :
+select ?x ?p ?o1 ?y ?o2
+   where {
+     ?x ?p ?o1.
+     ?y ?p ?o2.
+     filter (?o1 > ?o2).
     }
-    order by ?o1
-    limit 5
+order by ?o1
+limit 5
+```
 
 #### Slow Query Logging
 
@@ -1035,7 +1110,7 @@ primarily because there isn't a sensible default meaning of "slow
 query", which is entirely relative to queries, access patterns, dataset
 sizes, etc. While slow query logging has very minimal overhead, what
 counts as a slow query in some context may be quite acceptable in
-another. To enable slow query logging, see the Stardog Server Properties
+another. To enable slow query logging, see the [Stardog Server Properties](<t>FIXME</t>)
 discussion above.
 
 #### Protocols and Java API
@@ -1149,7 +1224,38 @@ JVM.
 The following table shows minimum recommended JVM memory and system
 memory requirements for Stardog:
 
-[table]
+<table dir="ltr" border="1" cellspacing="0" cellpadding="2" summary="Stardog memory usage">
+      <thead>
+        <tr>
+          <th># triples</th>
+          <th>JVM memory</th>
+          <th>System memory</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>10 million</td>
+          <td>2GB</td>
+          <td>4GB</td>
+        </tr>
+        <tr>
+          <td>100 million</td>
+          <td>3GB</td>
+          <td>8GB</td>
+        </tr>
+        <tr>
+          <td>1 billion</td>
+          <td>4GB</td>
+          <td>16GB</td>
+        </tr>
+        <tr>
+          <td>10 billion</td>
+          <td>8GB</td>
+          <td>64GB</td>
+        </tr>
+      </tbody>
+      <caption>Recommended memory resources</caption>
+    </table>
 
 By default, Stardog CLI sets the maximum JVM memory to 2GB. This setting
 works fine for most small to medium database sizes (up to 100 million
@@ -1169,7 +1275,33 @@ data, average length of resource identifiers and literals, and how much
 the data is compressed. The following table shows average disk space
 used by a Stardog database:
 
-[table]
+<table dir="ltr" border="1" cellspacing="0" cellpadding="2" summary="Stardog disk usage">
+      <thead>
+        <tr>
+          <th># triples</th>
+          <th>Disk space used</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>10 million</td>
+          <td>700MB - 1GB</td>
+        </tr>
+        <tr>
+          <td>100 million</td>
+          <td>7GB - 10GB</td>
+        </tr>
+        <tr>
+          <td>1 billion</td>
+          <td>70GB - 100GB</td>
+        </tr>
+        <tr>
+          <td>10 billion</td>
+          <td>700GB - 1TB</td>
+        </tr>
+      </tbody>
+      <caption>Average disk space used</caption>
+    </table>
 
 These numbers are given for information purposes and the actual disk
 usage for a database may be significantly different in practice. Also it
@@ -1215,13 +1347,13 @@ that is available in the directory from which Stardog is run via the
 `JAVA_HOME` environment variable. If this is not set, it will simply
 execute `java` from within that directory.
 
-#### Running Stardog as a Windows Service
+### Running Stardog as a Windows Service
 
 You can run Stardog as a Windows Service using the following
 configuration. Please, note, that the following assumes commands are
 executed from a Command Prompt with administrative privileges:
 
-##### Installing the Service
+#### Installing the Service
 
 Change the directory to the Stardog installation directory:
 
