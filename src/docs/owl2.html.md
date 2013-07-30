@@ -125,7 +125,7 @@ Note that there is probably more than one explanation for an inference,
 but Stardog returns only a single explanation. We plan to compute
 multiple explanations in a future version.
 
-## Not Getting Expected Answers?
+## Not Seeing Expected Answers?
 
 Here's a few things that you might want to try:
 
@@ -166,7 +166,7 @@ Stardog <t>version</t> does not
 -   Perform equality reasoning. Only *explicit* `owl:sameAs` and
     `owl:differentFrom` data assertions will be taken into account for
     query answering.
--   Perform datatype reasoning and user-defined datatypes.
+-   Perform datatype reasoning or respect user-defined datatypes.
 
 ## User-defined Rule Reasoning
 
@@ -176,7 +176,11 @@ approach. A user-defined rules approach complements the OWL axiom-based
 approach nicely and increases the expressive power of a reasoning system
 from the user's point of view. Many RDF databases support user-defined
 rules only. Stardog is one of the only RDF databases that
-comprehensively supports both axioms and rules.
+comprehensively supports both axioms and rules. Some problems (and some
+people) are simply a better fit for a rules-based approach to modeling
+and reasoning than to an axioms-based approach. 
+
+**Remember**: there isn't a one-size-fits-all answer to the question "rules or axioms or both?" Use the thing that makes the most sense to you and to the people you're working with, etc.
 
 Stardog supports user-defined rule reasoning together with a rich set of
 built-in functions using the [SWRL](http://www.w3.org/Submission/SWRL/)
@@ -188,58 +192,21 @@ are part of the schema, they will be used for reasoning automatically
 when using the **SL** reasoning level.
 
 Assertions implied by the rules *will not* be materialized. Instead,
-rules are used to expand queries just as regular axioms (see [Stardog's
-approach to query answering](#approach)).
-
-### Syntax
-
-Stardog supports two different syntaxes for defining rules. The first,
-which you shouldn't use, is the standard RDF/XML syntax for SWRL. It
-has the advantage of being supported in many toosl; but it's painfully
-awful to read or write. Seriously, don't use it.
-
-The second is native Stardog Rules syntax and is based on SPARQL syntax,
-so you can re-use what you already know about SPARQL to write rules. This...
-
-
-### Supported Built-Ins
-
-Stardog supports the following SWRL built-in functions:
-
--   [Built-ins for comparisons](http://www.w3.org/Submission/SWRL/#8.1).
--   [Math built-ins](http://www.w3.org/Submission/SWRL/#8.2).
--   [Built-ins for boolean values](http://www.w3.org/Submission/SWRL/#8.3).
--   [Built-ins for strings](http://www.w3.org/Submission/SWRL/#8.4),
-    with the exception of `swrlb:tokenize`.
--   [Built-ins for date, time, and duration](http://www.w3.org/Submission/SWRL/#8.4).
--   Stardog built-in function library:
-    * `tag:stardog:api:functions:ln`
-    * `tag:stardog:api:functions:log`
-    * `tag:stardog:api:functions:atan`
-    * `tag:stardog:api:functions:asin`
-    * `tag:stardog:api:functions:acos`
-    * `tag:stardog:api:functions:sinh`
-    * `tag:stardog:api:functions:cosh`
-    * `tag:stardog:api:functions:tang`
-    * `tag:stardog:api:functions:toDegrees`
-    * `tag:stardog:api:functions:toRadians`
+rules are used to expand queries just as regular axioms are in Stardog. **Note**: to trigger rules to "fire", execute a query. It's that simple.
 
 ### Stardog Rules Syntax <t>new2</t>
+Stardog supports two different syntaxes for defining rules. The first is native Stardog Rules syntax and is based on SPARQL syntax, so you can re-use what you already know about SPARQL to write rules. **Unless you have specific requirements otherwise, you should use this syntax for user-defined rules in Stardog.** The second, the *de facto* standard RDF/XML syntax for SWRL. It has the advantage of being supported in many tools; but it's not fun to read or to write. You probably don't want to use it.
 
-<t>fixme</t>
+Stardog Rules Syntax is basically SPARQL "basic graph patterns" (BGPs) plus some very explicit new syntax (`IF-THEN`) to denote the head and the body of a rule. You define URI prefixes in the normal way (examples below) and use regular SPARQL variables for rule variables. As you can see below, some SPARQL 1.1 syntactic sugar--property paths, especially, but also bnode syntax--make comples Stardog Rules quite concise and elegant.
 
 ### Rule Examples
 
-User-defined rules in SWRL provide a different sort of "user interface"
-with respect to OWL 2 reasoning in Stardog. Some problems (and some
-people) are simply a better fit for a rules-based approach to modeling
-and reasoning than to an axioms-based approach. What follows are a few
-(trivial and contrived) examples of user-defined rules in SWRL (using
-Stardog Rules syntax).
+What follows are a few examples of user-defined rules using
+Stardog Rules syntax and some of the builtins Stardog supports.
 
 #### Basic Rules
 
-A person between 13 and 19 (inclusive) years of age is a teenager:
+This rule says that a person between 13 and 19 (inclusive) years of age is a teenager:
 
 ```sparql
 PREFIX swrlb: <http://www.w3.org/2003/11/swrlb#>
@@ -255,7 +222,7 @@ THEN {
 }
 ```
 
-A person who's an uncle of a niece:
+This rule says that a male person with a sibling who is the parent of a female is an " uncle of a niece":
 
 ```sparql
 IF {
@@ -279,15 +246,14 @@ THEN {
 }
 ```
 
-A person who's male and has a niece or nephew is an uncle of his
+Aside: that's pure awesome.
+
+And of course a person who's male and has a niece or nephew is an uncle of his
 niece(s) and nephew(s):
 
 ```sparql
 IF {
-      ?x :isSiblingOf ?y; a :Male.
-      ?y :isParentOf ?z.
-      #or with property paths this can be:
-      #?x a :Male; :isSiblingOf/:isParentOf ?z
+     ?x a :Male; :isSiblingOf/:isParentOf ?z
 }
 THEN {
       ?x :isUncleOf ?z.
@@ -308,10 +274,31 @@ THEN {
 }
 ```
 
+### Supported Built-Ins
+
+Stardog supports the following SWRL built-in functions (which may be used in  either syntax):
+
+-   [Built-ins for comparisons](http://www.w3.org/Submission/SWRL/#8.1).
+-   [Math built-ins](http://www.w3.org/Submission/SWRL/#8.2).
+-   [Built-ins for boolean values](http://www.w3.org/Submission/SWRL/#8.3).
+-   [Built-ins for strings](http://www.w3.org/Submission/SWRL/#8.4),
+    with the exception of `swrlb:tokenize`.
+-   [Built-ins for date, time, and duration](http://www.w3.org/Submission/SWRL/#8.4).
+-   Stardog built-in function library:
+    * `tag:stardog:api:functions:ln`
+    * `tag:stardog:api:functions:log`
+    * `tag:stardog:api:functions:atan`
+    * `tag:stardog:api:functions:asin`
+    * `tag:stardog:api:functions:acos`
+    * `tag:stardog:api:functions:sinh`
+    * `tag:stardog:api:functions:cosh`
+    * `tag:stardog:api:functions:tang`
+    * `tag:stardog:api:functions:toDegrees`
+    * `tag:stardog:api:functions:toRadians`
+
 ## Special Predicates
 
-something something...
-
+Stardog supports some builtin predicates with special meaning in order to queries and rules easier to read and write. These special predicates are primarily syntactic sugar for more complex structures.
 
 ### Direct/Strict Subclasses, Subproperties, & Direct Types
 
@@ -325,11 +312,12 @@ predicates:
 -   `sdle:directSubPropertyOf`
 -   `sdle:strictSubPropertyOf`
 
-Where the `sdle` prefix stands for `http://pellet.owldl.com/ns/sdle#`.
+Where the `sdle` prefix binds to `http://pellet.owldl.com/ns/sdle#`.
 
-We define the meaning of these predicates by relating each of them to an
-analogous triple pattern.The predicates `sdle:directSubPropertyOf` and
-`sdle:strictSubPropertyOf` are defined analogously.
+We show what these each of these predicates means by relating them to an
+equivalent triple pattern; that is, you can just write the predicate rather than the (more unwieldy) triple pattern. 
+
+The predicates `sdle:directSubPropertyOf` and `sdle:strictSubPropertyOf` are defined analogously.
 
     :ind sdle:directType :c1 ->
 
@@ -354,24 +342,32 @@ analogous triple pattern.The predicates `sdle:directSubPropertyOf` and
       :c3 sdle:strictSubClassOf :c2 .
     }
 
-These triple patterns can be used instead of the triple containing our
-built-in predicate in SELECT, CONSTRUCT, or ASK queries.
 
 ### New Individuals with SWRL
 
-One cannot create new individuals (i.e., new instances of classes) using
-SWRL. This restriction is well-motivated as it can lead to
-non-termination issues. Stardog weakens this restriction in some crucial
+Stardog also supports a special predicate that extends the expressivity of SWRL rules. According to the SWLR spec, you can't new individuals (i.e., new instances of classes) in a SWRL rule.
+
+**Note:** Don't get hung up by the tech vocabulary here..."new individual" just means that you can't have a rule that adds a new instance of some RDF or OWL class as a result of the rule firing (i.e., you can't have a "type triple" in the body of a rule).
+
+This restriction is well-motivated as it can easily cause rules to be non-terminating, that is, they never reach a fixed point, which causes big problems. Stardog's user-defined rules weakens this restriction in some crucial
 aspects, subject to the following restrictions, conditions, and
-warnings. **Note that this support is effectively a gun with which users
-may shoot themselves in the foot if they do not use it carefully.**
+warnings. 
 
-We can create new individuals with a rule by using the (non-standard)
-built-in predicate `http://www.w3.org/ns/sparql#UUID` as follows:
+**This special predicate is basically a loaded with which users may shoot themselves in the foot if they aren't very careful.**
 
-    :Parent(?y) <- :Person(?x), http://www.w3.org/ns/sparql#UUID(?y).
+So despite the general restriction in SWLR, in Stardog we actually can create new individuals with a rule by using the (non-standard) built-in predicate `http://www.w3.org/ns/sparql#UUID` as follows:
 
-This rule will be used to create a *random* bnode for each instance of
+```sparql
+IF {
+    ?x a :Parent
+}
+THEN {
+    ...
+}
+:Parent(?y) <- :Person(?x), http://www.w3.org/ns/sparql#UUID(?y).
+```
+
+This rule will create a *random* bnode for each instance of
 the class `:Person` and also to assert that each new instance is also an
 instance of `:Parent`.
 
@@ -408,10 +404,10 @@ And then modify the original rule accordingly:
 
 ## Query Rewriting
 
-Query answering with reasoning in Stardog is based on the *query rewriting*
-technique: Stardog rewrites the user's query with respect to the schema, and then
-executes the resulting expanded query (EQ) against the data. As can be
-seen in Figure 2, the rewriting process involves five different phases.
+Reasoning in Stardog is based (mostly) on a *query rewriting*
+technique: Stardog rewrites the user's query with respect to any schema or rules, and then executes the resulting expanded query (EQ) against the data in the normal way. This process is completely automated and requires no intervention from the user per se. 
+
+As can be seen in Figure 2, the rewriting process involves five different phases.
 
 ![](/img/blackout.png)
 
@@ -422,8 +418,7 @@ Figure 1. Query Answering
 Figure 2. Query Rewriting
 
 We illustrate the query answering process by means of an example.
-Consider a Stardog database, MyDB<sub>1</sub>, containing the following schema
-axioms:
+Consider a Stardog database, MyDB<sub>1</sub>, containing the following schema:
 
 ```manchester
  :SeniorManager rdfs:subClassOf :manages some :Manager
@@ -433,7 +428,9 @@ axioms:
 
 Which says that a senior manager manages at least one manager, that
 every person that manages an employee is a manager, and that every
-manager is also an employee. Moreover, let us assume MyDB<sub>1</sub> also
+manager is also an employee.
+
+Let's also assume that MyDB<sub>1</sub>
 contains the following data assertions:
 
 ```manchester
@@ -443,17 +440,14 @@ contains the following data assertions:
 :Lucy rdf:type :Employee
 ```
 
-Finally, let us assume that we want to retrieve the set of all
+Finally, let's say that we want to retrieve the set of all
 employees. We do this by posing the following query:
 
 ```sparql
 SELECT ?employee WHERE { ?employee rdf:type :Employee }
 ```
 
-Given the knowledge captured in the schema, we expect all individuals
-occurring in the data to be part of the answer. In order to answer this
-query, Stardog first **rewrites** it using the schema. In this case, the
-original query is rewritten into four queries:
+To answer this query, Stardog first **rewrites** it using the information in the schema. So the original query is rewritten into four queries:
 
 ```sparql
 SELECT ?employee WHERE { ?employee rdf:type :Employee }
@@ -462,29 +456,28 @@ SELECT ?employee WHERE { ?employee rdf:type :SeniorManager }
 SELECT ?employee WHERE { ?employee :manages ?x. ?x rdf:type :Employee }
 ```
 
-The final step consists of executing these four queries over the data.
+Then Stardog executes these queries over the data.
 
 The form of the EQ depends on the reasoning level. For OWL 2 QL, every
-EQ produced by Stardog *is guaranteed to be expanded into a set of
-queries*. If the reasoning level is OWL 2 RL or EL, then the EQ *may*
+EQ produced by Stardog is **guaranteed to be expanded into a set of
+queries**. If the reasoning level is OWL 2 RL or EL, then the EQ *may*
 (but may not) include a recursive rule. If a recursive rule is included,
 Stardog's answers will be sound but incomplete with respect to the
-semantics of the requested reasoning level.
+semantics of the reasoning level.<fn>We're working on changes to Stardog's reasoner so that it's complete in the case where recursive rules exist; these changes will be available in the 2.x release cycle.</fn>
 
 ### Why Query Rewriting?
 
-Query rewriting has several advantages over the (primary) alternative
-technique, i.e., materialization. In this approach, it is the data that
-gets expanded with respect to the schema, not the query. That is, the
-axioms in the schema are used as rules to generate new triples. However,
-materialization introduces some issues:
+Query rewriting has several advantages over the alternative
+technique, materialization. In materialization, the data 
+gets expanded with respect to the schema, not the query. The
+schema is used to generate new triples, typicaly when data is added or removed from the system. However, materialization introduces some issues:
 
 -   **data freshness**. Materialization has to be performed every time
     the data or the schema change. This is particularly unsuitable for
     applications where the data changes frequently.
 -   **data size**. Depending on the schema, materialization can
     significantly increase the size of the data. A relatively simple
-    class hierarchy with a single level of subclasses can duplicate the
+    class hierarchy with a single level of subclasses increases the
     size of the data.
 -   **OWL 2 profile reasoning**. Given the fact that QL, RL, and EL, are
     not comparable with respect to expressive power, an application that
@@ -496,17 +489,16 @@ materialization introduces some issues:
 
 ## Performance Hints
 
-The [query rewriting approach implemented by Stardog](#approach) implies
-guidelines that might contribute to more efficient query answering.
+The query rewriting approach suggests some guidelines for more efficient query answering.
 
 ### Hierarchies and Queries
 
 **Avoid unnecessarily deep class/property hierarchies**. If you do not
 need to model several different types of a given class or property in
-your schema, then do not. The reason shallow hierarchies are desirable
+your schema, then don't do that! The reason shallow hierarchies are desirable
 is that the maximal hierarchy depth in the ontology partly determines
 the maximal size of the EQs produced by Stardog. The larger the EQ, the
-more difficult is to evaluate it over the data.
+more difficult it is to evaluate, generally.
 
 For example, suppose our schema contains a very thorough and detailed
 set of subclasses of the class `:Employee`:
@@ -524,7 +516,7 @@ set of subclasses of the class `:Employee`:
 ...
 ```
 
-If we wanted to retrieve the set of all employees, Blackout would
+If we wanted to retrieve the set of all employees, Stardog would
 produce an EQ containing a query of the following form for every
 subclass `:Ci` of `:Employee`:
 
@@ -532,18 +524,14 @@ subclass `:Ci` of `:Employee`:
 SELECT ?employee WHERE { ?employee rdf:type :Ci }
 ```
 
-At this point, it is easy to see that **the more specific the query, the
-better** as general queries—that is, queries that contain concepts high
-up in the class hierarchy defined by the schema—as the one above, will
-typically yield larger EQs.
+Thus, **the more specific the query, the better**. Why? More general queries--that is, queries that contain concepts high up in the class hierarchy defined by the schema--will typically yield larger EQs.
 
 ### Domains and Ranges
 
 **Specify domain and range of the properties in the schema**. These
-types of axiom can help reduce the size of the EQs significantly due to
-an optimization technique implemented in Blackout called *query
-subsumption*. In order to grasp the intuition behind it, let us consider
-the following query asking for people and the employees they manage:
+types of axiom can help reduce the size of the EQs significantly. Why?
+
+Consider the following query asking for people and the employees they manage:
 
 ```sparql
 SELECT ?manager ?employee WHERE 
@@ -551,8 +539,8 @@ SELECT ?manager ?employee WHERE
     ?employee rdf:type :Employee. }
 ```
 
-We know that this query would cause a large EQ given the deep hierarchy
-of `:Employee` in MyDB<sub>1</sub>. However, if we added the following single
+We know that this query would cause a large EQ given a deep hierarchy
+of `:Employee` subclasses. However, if we added the following single
 range axiom:
 
 ```manchester
@@ -565,12 +553,11 @@ then the EQ would collapse to:
  SELECT ?manager ?employee WHERE { ?manager :manages ?employee }
 ```
 
-which is considerably less difficult to evaluate.
+which is considerably cheaper to evaluate.
 
 ## Terminology
 
-The preceeding discussion employs the following terms of art with the following
-definitions.
+This chapter uses the following terms of art.
 
 ### Databases
 
@@ -646,14 +633,14 @@ A BGP is said to be a Hybrid BGP if it is of one of the following forms:
 where **term** (possibly with subscripts) is either an URI or variable;
 **uri** is a URI; and **?var** is a variable.
 
-When executing a query, ABox BGPs are handled by Blackout, TBox BGPs are
-executed by Pellet, and Hybrid BGPs by a combination of both.
+When executing a query, ABox BGPs are handled by Stardog. TBox BGPs are
+executed by Pellet embedded in Stardog. Hybrid BGPs by a combination of both.
 
 ### Reasoning
 
 Intuitively, reasoning with a DB means to make implicit knowledge
 explicit. There are two main use cases for reasoning: infer implicit
-knowledge and discover modeling errors.
+knowledge and to discover modeling errors.
 
 With respect to the first use case, recall that MyDB<sub>2</sub> contains the
 following assertion and axiom:
@@ -713,7 +700,7 @@ free of any logical contradiction, there can be no instances of `:LLC`.
 
 Asserting (or inferring) that an unsatisfiable class has an instance,
 causes the DB to be *inconsistent*. In the particular case of MyDB<sub>2</sub>,
-we know that `:clark_and_parsia` is a company AND an organization (see
+we know that `:clark_and_parsia` is a company *and* an organization (see
 above); therefore, we also know that it is an instance of `:LLC`, and as
 `:LLC` is known to be unsatisfiable, we have that MyDB<sub>2</sub> is
 inconsistent.
@@ -760,7 +747,4 @@ followed by RL and EL; however, strictly speaking, no profile is more
 expressive than any other as they provide incomparable sets of
 constructs.
 
-Stardog supports the three profiles of OWL 2 by making use of Blackout
-and Pellet. Notably, since TBox BGPs are handled completely by Pellet,
-Stardog supports reasoning for the whole of OWL 2 for queries containing
-TBox BGPs only.
+Stardog supports the three profiles of OWL 2. Notably, since TBox BGPs are handled completely by Pellet, Stardog supports reasoning for the whole of OWL 2 for queries containing TBox BGPs only.

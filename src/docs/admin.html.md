@@ -1197,7 +1197,7 @@ for you:
     strategy](#index-strategies)
 
 ## Capacity Planning
-The three system resources used by Stardog are CPU, memory, and disk. In
+The primary system resources used by Stardog are CPU, memory, and disk.<fn>Of course Stardog also uses file handles and sockets, but we don't discuss those here.</fn> In
 what follows we primarily discuss memory and disk. Stardog will take
 advantage of multiple CPUs, cores, and core-based threads in data
 loading and in throughput-heavy or multi-user loads. And obviously
