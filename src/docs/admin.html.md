@@ -893,29 +893,29 @@ will work fine and doesn't need to be changed. The corollary of this
 claim is that you shouldn't change this value in a production system
 till you've tested the effects of a change in a non-production system.
 
-### Using Compressed Data
+### Loading Compressed Data
 
-Stardog supports loading data from compressed files directly so there is
-no need to uncompress files before loading. Compressed input is actually
-typically faster to load since it minimizes disk access so the
-recommended way to load large input files is to load them in compressed
-format.
+Stardog supports loading data from compressed files directly: there's 
+no need to uncompress files before loading since compressed input may be faster to load. In any event, loading compressed data is the recommended way to load large input files.Stardog supports GZIP and ZIP compressions natively.<fn>In Stardog <t>version</t> compressed data may only be loaded at database creation time. We will support adding compressed data to an existing database in a future release.</fn>
 
-Stardog supports GZIP and ZIP compressions natively. If a file name
-passed to create or add commands (through CLI or API) will be
-interpreted to be a gzip file if the file name ends with '.gz'. The RDF
+#### GZIP
+
+A file 
+passed to `create` will be treated as compressed if the file name ends with '.gz'. The RDF
 format of the file is determined by the extension that comes before
-'.gz'. So, if a file named 'test.ttl.gz' is used as input, Stardog will
-perform gzip decompression during loading and parse the file with Turtle
+'.gz'. If a file named 'test.ttl.gz' is used as input, Stardog will
+perform GZIP decompression during loading and parse the file with Turtle
 parser. All the formats supported by Stardog (RDF/XML, Turtle, Trig,
-etc.) can be used with gzip compression.
+etc.) can be used with GZIP compression.
 
-The zip support works differently since zipped files can contain
-multiple files inside. When an input file name ends with '.zip', Stardog
-performs zip decompression and tries to load all the files inside the
-zip file. The RDF format of the files inside the zip file is determined
+#### ZIP 
+
+The ZIP support works differently since zipped files can contain
+multiple files. When an input file name ends with '.zip', Stardog
+performs ZIP decompression and tries to load all the files inside the
+ZIP file. The RDF format of the files inside the zip file is determined
 by their file names as usual. If there is an unrecognized file extension
-(e.g. '.txt') that file will be skipped.
+(e.g. '.txt'), that file will be skipped.
 
 ### Dropping a Database
 
