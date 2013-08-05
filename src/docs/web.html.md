@@ -13,20 +13,20 @@ Stardog Web is a web framework for rapidly building Stardog-based apps. Stardog 
 
 Stardog Web automagically generates Web apps for browsing and managing RDF. These apps can be built via configuration and can be customized or extended in several ways, including new HTML templates and JavaScript modules. 
 
-<!-- this needs a 2 col list badly! -->
-
 Out of the box functionality includes:
 
 <ul class="two_up tiles">
     <li><strong>&middot;</strong> Execute arbitrary SPARQL queries against RDF</li>
     <li><strong>&middot;</strong> Manage queries (create, delete, update)</li>
-    <li><strong>&middot;</strong> Visualize&mdash;<ol>
+    <li><strong>&middot;</strong> Visualize
+        <ul>
         <li>classes and their instances,</li>
         <li>their property assertions,</li>
         <li>class/property hierarchies,</li>
         <li>axioms and rules,</li>
         <li>query results,</li>
         <li> subgraphs</li>
+    </ul>
     </li>
     <li><strong>&middot;</strong> Save query results</li>
     <li><strong>&middot;</strong> Faceted browsing via [Pelorus](http://pelorus.clarkparsia.com/)</li>
@@ -34,25 +34,15 @@ Out of the box functionality includes:
     <li><strong>&middot;</strong> Enforce access control</li>
 </ul>
 
-### Oodles of Open Source Goodness
+### Gobs of Open Source Goodness
 
-Stardog Web is built on top Stardog and Annex, our Linked Data middleware, and also uses--
-
-* [Yeoman](http://yeoman.io) (build tool for the generated web apps)
-* [Backbone.js](http://backbonejs.org/) (Routing and MV*)
-* [Backbone.LayoutManager](https://github.com/tbranyen/backbone.layoutmanager) (handling nested Views efficiently)
-* [Lodash](http://lodash.com/) (Backbone.js dependency; more efficient than underscore.js)
-* [Require.js](http://requirejs.org/) 
-* [Handlebars.js](http://handlebarsjs.com/) 
-* [Bootstrap](http://twitter.github.com/bootstrap/) 
-* [jQuery](http://jquery.com/)
-* [CSS3](http://www.w3.org/TR/2001/WD-css3-roadmap-20010523/) & [Less](http://lesscss.org/)
+Stardog Web is built on top Stardog and Annex, our Linked Data middleware, and also uses [Yeoman](http://yeoman.io), [Backbone](http://backbonejs.org/), [Backbone.LayoutManager](https://github.com/tbranyen/backbone.layoutmanager), [Lodash](http://lodash.com/), [Require](http://requirejs.org/), [Handlebars](http://handlebarsjs.com/), [Bootstrap](http://twitter.github.com/bootstrap/), [jQuery](http://jquery.com/), [CSS3](http://www.w3.org/TR/2001/WD-css3-roadmap-20010523/), and [Less](http://lesscss.org/)
 
 ## Building an App
 
-So the basic workflow for building Stardog-based apps was always the same and we got tired of doing it manually every time. Stardog Web automates the boring parts, which lets us all concentrate on the fun stuff.
+The typical workflow for building Stardog-based apps was always the same and we got tired of doing it manually every time. Stardog Web automates the boring parts, which lets us all concentrate on the fun stuff.
 
-Stardog Web project lifecycle looks a bit like this:
+A Stardog Web project lifecycle looks a bit like this:
 
 1. beg, borrow, steal, or integrate some RDF data
 1. install Stardog Web
@@ -64,11 +54,11 @@ Stardog Web project lifecycle looks a bit like this:
 
 ### Installing Stardog Web
 
-Stardog Web consists of two node.js packages, a generator and a CLI, which are provided in the installation distribution as `tar.gz` files. 
+Stardog Web consists of two Node packages, a generator and a CLI, which are provided in the installation distribution as `tar.gz` files. 
 
-First, install [Node.js](http://nodejs.org/). We'll wait.
+First, install [Node](http://nodejs.org/). We'll wait.
 
-Then, verify that you have Web access (to be able to access the NPM registry & repositories) and check that the `npm` prefix is pointing to `/usr/local`. You can verify the value of the prefix as follows:
+Next, verify that you have Web access (to be able to access the NPM registry & repositories) and check that the `npm` prefix is pointing to `/usr/local`. You can verify the value of the prefix as follows:
 
 ```bash
 $ npm config get prefix
@@ -76,21 +66,21 @@ $ npm config get prefix
 
 If the prefix is not `/usr/local`, you can change it using one of the methods described [here](https://npmjs.org/doc/config.html).<fn>[http://yeoman.io/generators.html](http://yeoman.io/generators.html)In the following, we assume the `egad-0.x.x.zip` distribution file has been decompressed into the `<package_dir>` directory.</fn>
 
-Next, run this:
+Then run this:
 
 ```bash
- $ npm install -g <package_dir>/egad-cli-0.x.tar.gz <package_dir>/generator-egad-0.x.tar.gz
+$ npm install -g <package_dir>/egad-cli-0.x.tar.gz <package_dir>/generator-egad-0.x.tar.gz
 ```
 
-Finally, ...test the setup?
+Finally, ...test the setup? @fixme
 
-EGAD depends on the following components:
+Stardog Web depends on 
 
 * [Node.js](http://nodejs.org/) = v0.8.x (Not tested in v0.10.x yet, but it should work)
 * [NPM](https://npmjs.org/) (Included in Nodejs)
 * [Yeoman v1.0 BETA](http://yeoman.io/) (latest version)
 * Annex Middleware Services (`annex.war` provided in the installation package)
-* [Stardog 1.2.3](http://stardog.com)
+* [Stardog >= 1.2.3](http://stardog.com)
 * Servlet container ([Caucho Resin](http://www.caucho.com/) recommended)
 
 ### Installing Stardog
@@ -99,170 +89,232 @@ Stardog Web works with...Stardog. If you already have Stardog installed, you sho
 
 ### Provisioning Stardog 
 
-Create a Stardog database containing the data for your EGAD app and expose it in an SPARQL endpoint. Please see [Stardog docs](http://stardog.com/docs/) for details about database creation. Once a database has been created, we can expose it in an SPARQL endpoint by simply starting the corresponding Stardog server:
+Create a Stardog database containing the data for your Stardog Web app and expose it in an SPARQL endpoint. Please see [Stardog docs](http://stardog.com/docs/) for details about database creation. Once a database has been created, we can expose it in an SPARQL endpoint by simply starting the corresponding Stardog server:
 
-    $ stardog-admin --disable-security server start
+```bash
+$ stardog-admin --disable-security server start
+```
 
-<t>secnote</t> Stardog Web v0.4.5 (and earlier) requires Stardog Server to run with security disabled.
+<t>secnote</t> Stardog Web v0.4.5 (and earlier) requires Stardog Server to run with security disabled. We'll fix this bug in a future release.
 
 #### Custom Namespaces
 
-Add all the required prefixes that will be used in the EGAD app. You can list prefixes defined in the Stardog DB using the following command:
+Add the required prefixes that will be used in the app. You can list prefixes defined in the Stardog database using the following command:
 
-    stardog namespace list -c snarl://localhost/<DB>
+```bash
+stardog namespace list -c snarl://localhost/<DB>
+```
 
 By default, Stardog defines a set of common namespaces:
 
-    +--------+---------------------------------------------+
-    | Prefix |                  Namespace                  |
-    +--------+---------------------------------------------+
-    | rdf    | http://www.w3.org/1999/02/22-rdf-syntax-ns# |
-    | rdfs   | http://www.w3.org/2000/01/rdf-schema#       |
-    | xsd    | http://www.w3.org/2001/XMLSchema#           |
-    | owl    | http://www.w3.org/2002/07/owl#              |
-    +--------+---------------------------------------------+
+```bash
++--------+---------------------------------------------+
+| Prefix |                  Namespace                  |
++--------+---------------------------------------------+
+| rdf    | http://www.w3.org/1999/02/22-rdf-syntax-ns# |
+| rdfs   | http://www.w3.org/2000/01/rdf-schema#       |
+| xsd    | http://www.w3.org/2001/XMLSchema#           |
+| owl    | http://www.w3.org/2002/07/owl#              |
++--------+---------------------------------------------+
+```
 
-To add your prefixes, you can execute the `stardog namespace add` command, e.g:
+To add your prefixes, you can execute the `stardog namespace add` command:
 
-    stardog namespace add --prefix test --uri \
-      'http://example.org/test#' -c snarl://localhost/myDB -u admin -p admin
-    
+```bash
+stardog namespace add --prefix test --uri \
+   'http://example.org/test#' -c snarl://localhost/myDB -u admin -p admin
+```
+
 ### Installing Annex Middleware
 
-Annex is the Linked Data middleware service that connects Stardog Web to Stardog. It must be installed and configured to run on a J2EE container (we recommend Caucho Resin) on the same machine (?) as Stardog (for now).
+Annex is the middleware service that connects Stardog Web to Stardog. It must be installed<fn>**Note:** We will distribute Annex in Stardog in the 2.x release cycle and it won't have to be separately installed.</fn> and configured to run on a J2EE container--we recommend Caucho Resin--on the same machine as Stardog (for now).
 
-Annex is distributed as a single WAR file (`annex.war`). Simply deploy the WAR file in a servlet container. Typically, this can be accomplished by copying the WAR file into the container's `webapps` folder and starting the container. Currently, each EGAD application uses its own instance of Annex; therefore, we recommend changing the name of the WAR file in the `webapps` accordingly:
+Annex is distributed as a single WAR file (`annex.war`). Simply deploy the WAR file in a servlet container. Typically this can be accomplished by copying the WAR file into the container's `webapps` folder and (re)starting the container. Currently, each Stardog Web application uses its own instance of Annex; therefore, we recommend changing the name of the WAR file in the `webapps` accordingly:
 
-    $ cp <package_dir>/annex.war <container_dir>/webapps/annex-<appname>.war
+```bash
+$ cp <package_dir>/annex.war <container_dir>/webapps/annex-<appname>.war
+```
 
+In order to be used by a Stardog Web application, one needs to specify where the data resides as well as provide valid credentials. This information can be specified in the `web.xml`, by modifying the following properties: 
 
-In order to be used by an EGAD application, one needs to specify where the data resides as well as provide valid credentials. This information can be specified in the `web.xml`, by modifying the following properties: 
+```xml
+<init-param>
+    <param-name>annex.db.host</param-name>
+    <param-value>localhost:5820</param-value>
+</init-param>
 
-    <init-param>
-      <param-name>annex.db.host</param-name>
-      <param-value>localhost:5820</param-value>
-    </init-param>
-  
-  <init-param>
-      <param-name>annex.db.repository</param-name>    <!-- name of the Stardog DB -->
-      <param-value>myDB</param-value>
-  </init-param>
+<init-param>
+    <param-name>annex.db.repository</param-name>
+    <!-- name of the Stardog DB -->
+    <param-value>myDB</param-value>
+</init-param>
 
-  <init-param>
-      <param-name>annex.db.user</param-name>
-      <param-value>admin</param-value>
-  </init-param>
+<init-param>
+    <param-name>annex.db.user</param-name>
+    <param-value>admin</param-value>
+</init-param>
 
-  <init-param>
-      <param-name>annex.db.password</param-name>
-      <param-value>admin</param-value>
-  </init-param>
-  
+<init-param>
+    <param-name>annex.db.password</param-name>
+    <param-value>admin</param-value>
+</init-param>
+```
+
 #### Apache Tomcat Notes
   
+There are a few wrinkles if you want to use Tomcat:
+
 * You need to add the following configuration option to the `catalina.properties` file in `<tomcat_dir>/conf/catalina.properties`
 
-        org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
+```java
+org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
+```
     
-* There is a known tomcat bug in versions `< 7.0.30`, that happens when tomcat starts and initializes the applications, by which Annex is affected. For more details on the issue, please refer to the [bug report](https://issues.apache.org/bugzilla/show_bug.cgi?id=53535). In order for annex to work properly with tomcat, please update to the latest version of the container.
-
-### Generating a Stardog Web App
-
-
-
-    
-Other services provided are: search, schema inspector and query. For more information on the available resources and interfaces in the Annex Platform, please refer to the [API documentation](http://docs.annex.apiary.io/).
-
-
+* There is a known tomcat bug in versions earlier than 7.0.30. For more details on the issue, please refer to the [bug report](https://issues.apache.org/bugzilla/show_bug.cgi?id=53535). In order for Annex to work properly with Tomcat, please update to a later version.
 
 ### Configuring Stardog Web
 
-Stardog Web's builtin functionality is configured, customized, and (partially) extended by editing the configuration file (usually `config.ttl` or `config.json`) in JSON or Turtle.
+Stardog Web's functionality is configured, customized, and (partially) extended by editing a configuration file (usually `config.ttl` or `config.json`) in JSON or Turtle. Your Stardog Web app may also be customized and extended by writing new templates, new JavaScript components, or new middleware. More about that [here](). @fixme
 
-The EGAD toolkit receives a configuration file with JSON format, which specifies all the properties and modules to include in the application that it will generate.
+Note that the references to `rdf:type` URIs in the configuration file can be done according to the `namespaces` map defined in the same file. These namespaces should be the same (prefix and namespace) as the ones defined in the Stardog database previously.<fn>Stardog Web will actively maintain these in a future release. Till then: hold fast!</fn>
 
-Note that the references to `rdf:type` URIs in the configuration file can be done according to the `namespaces` map defined in the same file. These namespaces should be the same (prefix and namespace) as the ones defined in the database in previous steps.
+Here's an example configuration file which we comment on next...
 
-An example of the configuration file is:
+<!--
+```javascript
+{ 
+   "name": "My Application",
+   "label": "App",
+   "sparqlEndpoint": "http://192.168.69.111:5822/gov/query",
+   "apiEndpoint": "http://192.168.69.111:8080/annex-gov/api",
+   "editData": false,
+   "namespaces": {
+       "http://www.w3.org/1999/02/22-rdf-syntax-ns#":"rdf",
+       "http://www.w3.org/2000/01/rdf-schema#": "rdfs",
+       "http://www.w3.org/2001/XMLSchema#": "xsd",
+       "http://www.w3.org/2002/07/owl#": "owl",
+       "http://purl.org/dc/elements/1.1/": "dc"
+   },
+   "modules": {
+       "home": {
+           "content": "mycontent/myhome.html"
+       },
+       "browse": true,
+       "query": {
+           "label": "Query Panel",
+           "mainUrl": "#!/query"
+       },
+       "search": {
+           "label": "Search",
+           "mainUrl": "#!/search"
+       },
+       "navbar": {
+           "items": [ 
+               { "htmlId":"lientry", 
+                 "label": "Data Entry", 
+                 "type":"browse",
+                 "using": "dgtwc:DataEntry",
+                 "icon": "icon-tasks"
+               }
+           ]
+       },
+       "footer": true
+   },
+   "collections": {
+       "default": {
+           "limit": 20
+       },
+       "dgtwc:DataEntry": {
+           "using":"dgtwc:DataEntry",
+           "usingLabel":":title"
+       }
+   }
+}```
+-->
 
-    {
-        "name": "Data.gov EGAD Application",
-        "label": "Data.gov",
-        "sparqlEndpoint": "http://192.168.69.111:5822/gov/query",
-        "apiEndpoint": "http://192.168.69.111:8080/annex-gov/api",
-        "editData": false,
-        "namespaces": {
-            "http://www.w3.org/1999/02/22-rdf-syntax-ns#":"rdf",
-            "http://www.w3.org/2000/01/rdf-schema#": "rdfs",
-            "http://www.w3.org/2001/XMLSchema#": "xsd",
-            "http://www.w3.org/2002/07/owl#": "owl",
-            "http://purl.org/dc/elements/1.1/": "dc"
-        },
-        "modules": {
-            "home": {
-                "content": "mycontent/myhome.html"
-            },
-            "browse": true,
-            "query": {
-                "label": "Query Panel",
-                "mainUrl": "#!/query"
-            },
-            "search": {
-                "label": "Search",
-                "mainUrl": "#!/search"
-            },
-            "navbar": {
-                "items": [ { "htmlId":"lientry", "label": "Data Entry", "type":"browse","using": "dgtwc:DataEntry", "icon": "icon-tasks" }
-                ]
-            },
-            "footer": true
-        },
-        "collections": {
-            "default": {
-                "limit": 20
-            },
-            "dgtwc:DataEntry": {
-                "using":"dgtwc:DataEntry",
-                "usingLabel":":title"
-            }
-        }
-    }
+Or:
 
-    
-Top level configuration settings should always be present, even if the values are empty objects. The following settings are used for EGAD:
+```sparql
+@prefix      :  <tag:clarkparsia:egad:configuration#> .
+@prefix   rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix  rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix   xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix   owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix    dc:  <http://purl.org/dc/elements/1.1/> .
+@prefix dgtwc:  <http://data-gov.tw.rpi.edu/2009/data-gov-twc.rdf#> .
 
+:DataGov a :App;
+  :name "Data.gov EGAD Application"^^xsd:string ;
+  :label "Data.gov"^^xsd:string ;
+  :sparqlEndpoint <http://192.168.69.111:5822/gov/query> ;
+  :apiEndpoint <http://192.168.69.111:8080/annex-gov/api> ;
+  :editData "true"^^xsd:boolean ;
+  :modules :home, :browse, :query, :search, :treebrowser, :navbar, :footer;
+  :collections :defaultCollection, :entryCollection.
 
-`name` :: `String`
-: This is the application name, displayed at the footer of the web application.
+:defaultCollection a :CollectionDefaultSetting ;
+  :limit "20"^^xsd:int .
 
-`label` :: `String`
-: App short label to be displayed at the top left side in the navigation bar.
+:entryCollection a :CollectionSetting ;
+  :using dgtwc:DataEntry ;
+  :usingLabel dc:title .
 
-`sparqlEndpoint` :: `String`
-: This is the SPARQL endpoint that will be used to explore the schema and generate the EGAD Web application. This endpoint is also used in the Query Panel (if enabled).
+:someCollection a :CollectionSetting
+  :using dgtwc:DataEntry ;
+  :limit "20"^^xsd:int ;
+  :usingLabel rdfs:label ;
+  :fields ( dc:title dc:created ) .
 
-`apiEndpoint` :: `String`
-: This is the endpoint used by the client application generated, which is an annex API endpoint, abstracting all data in the RDF repository as a RESTful service using /{collection}/{ind} routes. If deploying to a remote server, make sure **not** to use `localhost`, since this is sent to the client and the client webapp will try to find all references (to the API) as localhost, instead use the API or server reference.
+:home a :Module ;
+  :content "mycontent/myhome.html"^^xsd:string .
 
-`editData` :: `Boolean`
-: Enables/disables data mutations in the application using add/edit/delete actions.
+:browse a :Module .
 
-`namespaces` :: `Object`
-: This is a list of namespace : prefix to use, they represent the namespaces used in the data set.
+:query a :Module ;
+  :linkLabel "Query Panel" ;
+  :linkUrl "#!/query" .
 
-`collections` :: `Object`
-: Configurations for collection display.
+:search a :Module ;
+  :linkLabel "Search" ;
+  :linkUrl "#!/search" .
 
-`collections > default` :: `Object`
-: Defines the default configuration for the collection listings.
+:treebrowser a :Module .
 
-`collections > default > limit` :: `Number`
-: Sets the limit of elements to show in the collection view.
+# the navbar items
+:navbar a :Module ;
+  :items ( :navItemEntry ) .
 
-`modules` :: `Object`
-: Sets the modules to use in the application, either system modules or custom user modules. Modules can receive a configuration object or just activate them using `true` value. To deactivate a module just set the value to `false`.
+:navItemEntry :htmlId "lientry" ;
+  :label "Data Entry" ;
+  :type "browse" ;
+  :using dgtwc:DataEntry ;
+  :icon "icon-tasks" .
 
-Some of the System Modules inclused in EGAD are:
+:footer a :Module .```
+
+The top-level configuration settings should always be present, even if the values are empty objects.
+
+- `:name`: This is the application name, displayed at the footer of the web application.
+
+- `:label`: App short label to be displayed at the top left side in the navigation bar.
+
+- `:sparqlEndpoint`: This is the SPARQL endpoint that will be used to explore the schema and generate the EGAD Web application. This endpoint is also used in the Query Panel (if enabled).
+
+- `apiEndpoint`: This is the endpoint used by the client application generated, which is an annex API endpoint, abstracting all data in the RDF repository as a RESTful service using /{collection}/{ind} routes. If deploying to a remote server, make sure **not** to use `localhost`, since this is sent to the client and the client webapp will try to find all references (to the API) as localhost, instead use the API or server reference.
+
+- `editData`: Enables/disables data mutations in the application using add/edit/delete actions.
+
+- `namespaces`: This is a list of namespace : prefix to use, they represent the namespaces used in the data set.
+
+- `collections`: Configurations for collection display.
+
+- `collections > default` :: `Object`: Defines the default configuration for the collection listings.
+
+- `collections > default > limit` :: `Number`: Sets the limit of elements to show in the collection view.
+
+- `modules` :: `Object`: Sets the modules to use in the application, either system modules or custom user modules. Modules can receive a configuration object or just activate them using `true` value. To deactivate a module just set the value to `false`.
+
+Some of the Stardog Web builtin modules include the following.
 
 * home - Enables content in the homepage of the application. Receives an object with the content attribute refering to a html template to include as home content relative to the app directory, e.g.:
 
@@ -348,6 +400,10 @@ or
 
         <myApp>$ egad create -j config.js
     
+### Generating a Stardog Web App
+   
+Other services provided are: search, schema inspector and query. For more information on the available resources and interfaces in the Annex Platform, please refer to the [API documentation](http://docs.annex.apiary.io/).
+
 # Testing
 
 Once an EGAD application has been created, it can be tested using the `run` command of the EGAD CLI (make sure Annex & Stardog are up and running):
@@ -578,10 +634,6 @@ The structure of the EGAD Generator is the following:
     - config.js.example			<-- example of the configuration file to use in the 'all' target generator
     - package.json				<-- NPM package description file
     
-
-
-
-
 
 ### “Basic Features”
 

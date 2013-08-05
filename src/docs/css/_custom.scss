@@ -25,11 +25,9 @@ h2 a,h3 a,h4 a,h5 a,h6 a, p#tocnav a, .sidebar-nav a, i a, a img#thelogo, .fn-ma
   border: 0;
 }
 
-//Should be using some special units!
 pre {
        margin-bottom: $base-line-height;
        margin-left: $base-line-height / 2;
-
 }
 
 dd {
@@ -47,7 +45,7 @@ dl {  margin-bottom: $base-line-height; }
  #tochead {
   font-weight: $font-weight-medium;
   color: $sd-med-blue;
-  padding-top: 6px;
+  padding-top: 5px;
  }
 
 #footer-subhead {
@@ -151,15 +149,6 @@ p#social a {
   margin-bottom: 40px;
 }
 
-//#inner-doc #sidebar-nav-holder.fixed {
-//  top: 10px;
-//}
-//@media only screen and (max-width: 768px) {
-//  #inner-doc #sidebar-nav-holder.fixed {
-//    width: 100%;
-//  }
-//}
-
 .sidebar-nav-holder.end {
   position: absolute;
 }
@@ -167,6 +156,7 @@ p#social a {
 .sidebar-nav {
   list-style: none;
   margin-bottom: 8px;
+  margin-left: 0px;
 }
 
 .sidebar-nav {
