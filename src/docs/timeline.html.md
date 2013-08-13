@@ -6,7 +6,7 @@ related: ""
 toc: false
 ---
 
-This chapter gives an overview of major features and other notable changes to Stardog. For a complete list of changes, including notable bug fixes, see the [Release Notes](/docs/RELEASE_NOTES.txt).
+This page briefly lists major features and other notable changes to Stardog from 1.0 to 2.0; it will be updated for each new release. For a complete list of changes, including notable bug fixes, see the [Release Notes](/docs/RELEASE_NOTES.txt).
 
 ## 2.0
 
