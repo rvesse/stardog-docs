@@ -121,9 +121,10 @@ protocol](../network/#extended-http) and SNARL API. See the examples
 included in the distribution for more details about retrieving
 explanations programmatically.
 
-Note that there is probably more than one explanation for an inference,
-but Stardog returns only a single explanation. We plan to compute
-multiple explanations in a future version.
+<div id="sd-Proof-Trees"></div>
+### Proof Trees <t>new2</t>
+
+Blah, blah, Evren did some awesome stuff what's new blah blah.
 
 ## Not Seeing Expected Answers?
 
@@ -194,6 +195,7 @@ when using the **SL** reasoning level.
 Assertions implied by the rules *will not* be materialized. Instead,
 rules are used to expand queries just as regular axioms are in Stardog. **Note**: to trigger rules to "fire", execute a query. It's that simple.
 
+<div id="sd-Stardog-Rules-Syntax"></div>
 ### Stardog Rules Syntax <t>new2</t>
 Stardog supports two different syntaxes for defining rules. The first is native Stardog Rules syntax and is based on SPARQL syntax, so you can re-use what you already know about SPARQL to write rules. **Unless you have specific requirements otherwise, you should use this syntax for user-defined rules in Stardog.** The second, the *de facto* standard RDF/XML syntax for SWRL. It has the advantage of being supported in many tools; but it's not fun to read or to write. You probably don't want to use it.
 

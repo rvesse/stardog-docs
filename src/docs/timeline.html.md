@@ -10,15 +10,15 @@ This chapter gives an overview of major features and other notable changes to St
 
 ## 2.0
 
-- [SPARQL 1.1 Update](/using)
-- [Web Console](/console)
-- [JMX monitoring](/admin/#jmx)
-- HTTP & SNARL servers unified into a single server (default port 5820)
-- [Stardog Web](/web) application development framework
-- [Database archetypes]() for PROV, SKOS; user-extensible for user-defined ontologies, schemas, etc.
-- [Stardog Rules Syntax](/owl2/): new syntax for user-defined rules
-- Performance improvements for SPARQL query evaluation
-- Nested explanations of inferences using proof trees
+- [SPARQL 1.1 Update](/using/#sd-Updating); the most requested feature ever!
+- [Web Console](/console): a Stardog Web app for managing Stardog Databases; includes Linked Data Server, etc.
+- [JMX monitoring](/admin/#sd-JMX); includes graphical monitoring via Web Console
+- [HTTP & SNARL servers unified](/admin/#sd-HTTP-SNARL-Unification) into a single server (default port 5820)
+- [Stardog Web](/web): our semantic app framework
+- [Database archetypes](/admin/#sd-Archetypes) for PROV, SKOS; extensible for user-defined ontologies, schemas, etc.
+- [Stardog Rules Syntax](/owl2/#sd-Stardog-Rules-Syntax): new syntax for user-defined rules
+- [Performance improvements](/performance) for SPARQL query evaluation
+- [Hierarchical explanations](/owl2/#sd-Proof-Trees) of inferences using proof trees
 
 ## 1.2
 

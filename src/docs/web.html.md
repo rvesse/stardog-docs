@@ -8,6 +8,7 @@ shortTitle: Web
 ---
 
 ## Introducing Stardog Web
+<t>new2</t>
 
 Stardog Web is a web framework for rapidly building Stardog-based apps. Stardog Web combines Stardog RDF database with some Java middleware, node, and client-side JavaScript libraries for a featureful, configuration-first development experience.
 
@@ -15,24 +16,19 @@ Stardog Web automagically generates Web apps for browsing and managing RDF. Thes
 
 Out of the box functionality includes:
 
-<ul class="two_up tiles">
-    <li><strong>&middot;</strong> Execute arbitrary SPARQL queries against RDF</li>
-    <li><strong>&middot;</strong> Manage queries (create, delete, update)</li>
-    <li><strong>&middot;</strong> Visualize
-        <ul>
-        <li>classes and their instances,</li>
-        <li>their property assertions,</li>
-        <li>class/property hierarchies,</li>
-        <li>axioms and rules,</li>
-        <li>query results,</li>
-        <li> subgraphs</li>
-    </ul>
-    </li>
-    <li><strong>&middot;</strong> Save query results</li>
-    <li><strong>&middot;</strong> Faceted browsing via [Pelorus](http://pelorus.clarkparsia.com/)</li>
-    <li><strong>&middot;</strong> full text search</li>
-    <li><strong>&middot;</strong> Enforce access control</li>
-</ul>
+- Execute arbitrary SPARQL queries against RDF
+- Manage queries (create, delete, update)
+- Visualize:
+    - classes and their instances,
+    - their property assertions,
+    - class/property hierarchies,
+    - axioms and rules,
+    - query results,
+    - subgraphs
+- Save query results
+- Faceted browsing via [Pelorus](http://pelorus.clarkparsia.com/)
+- full text search
+- Enforce access control
 
 ### Gobs of Open Source Goodness
 

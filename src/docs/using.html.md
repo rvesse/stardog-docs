@@ -14,13 +14,11 @@ you want to query data using Stardog, you must add that data to a new or
 existing Stardog database. A future version of Stardog will
 support [SDQ](http://weblog.clarkparsia.com/2011/03/07/sdq-information-integration-i%0An-the-real-world/), a distributed query system, that will lift this restriction.</fn> Stardog supports the [SPARQL](http://www.cambridgesemantics.com/2008/09/sparql-by-example) query language, a W3C standard.
 
-## Querying a Database
+## Querying
 
 Stardog currently supports all of the [SPARQL 1.1 Query
-language](http://www.w3.org/TR/sparql11-query/). Support is planned for
-[SPARQL 1.1 Update](http://www.w3.org/TR/2012/PR-sparql11-update-20121108) in a
-future release. Stardog does not support SPARQL 1.1 federation (the
-`SERVICE` keyword). Stardog also supports the [OWL 2 Direct Semantics
+language](http://www.w3.org/TR/sparql11-query/). <fn>Stardog does not support SPARQL 1.1 federation (the
+`SERVICE` keyword).</fn> Stardog also supports the [OWL 2 Direct Semantics
 entailment regime](http://www.w3.org/TR/2012/CR-sparql11-entailment-20121108/).
 
 To execute a SPARQL query against a Stardog database, use the `query`
@@ -30,10 +28,14 @@ subcommand:
 $ stardog query myDb "select * where { ?s ?p ?o }"
 ```
 
-Detailed information on using the query command in Stardog can be found
-on its [manpage](/docs/man/query-execute.html)
+<!-- show a few more examples? -->
 
-## Updating a Database
+Detailed information on using the query command in Stardog can be found
+on its [manpage](/docs/man/query-execute.html).
+
+## Updating
+
+There are many ways to update the data in a Stardog database; the most commonly used methods are the CLI and SPARQL Update queries, both of which we discuss below.
 
 ### SPARQL Update <t>new2</t>
 
@@ -141,7 +143,7 @@ lax mode may lead to unexpected SPARQL query results. For example,
 malformed literals (`"2.5"^^xsd:int`) used in filter evaluation may lead
 to undesired results.
 
-## Exporting a Database
+## Exporting
 
 To export data from a Stardog database back to RDF,
 [export](/docs/man/data-export.html) is used by specifying—

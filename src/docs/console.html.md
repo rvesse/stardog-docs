@@ -7,6 +7,9 @@ quote: Interfaces keep things tidy, but don't accelerate growth: Functions do.
 ---
 
 ## Introduction
+<t>new2</t>
+
+Blah blah blah. Lots of screen shots.
 
 ## Linked Data Management
 

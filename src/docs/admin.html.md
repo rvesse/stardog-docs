@@ -255,6 +255,9 @@ protocols. The default port for SNARL is **5820**; the default port for
 HTTP is **5822**. **All administrative functions work over SNARL or HTTP
 protocols.**
 
+<div id="sd-HTTP-SNARL-Unification"></div>
+### HTTP & SNARL Server Unification <t>new2</t>
+
 To use any of these commands against a remote server, pass a global
 `--server` argument with an HTTP or SNARL URL.
 
@@ -366,6 +369,11 @@ $ stardog-admin server stop
 If you started stardog on a port other than the default, or want to shut
 down a remote server, you can simply use the `--server` option to
 specify the location of the server you wish to shut down
+
+<div id="sd-JMX"></div>
+### Monitoring the Server with JMX <t>new2</t>
+
+Blah blah blah watchdog blah blah blah.
 
 ### Serving Stardog Documentation
 
@@ -678,6 +686,7 @@ modeling, and other factors.
 See `stardog-admin help db create` for all the details including
 examples.
 
+<div id="sd-Archetypes"></div>
 ### Database Archetypes <t>new2</t>
 
 Stardog database archetypes are a new feature in 2.0. A database archetype is a named, vendor-defined or user-defined bundle of data and functionality to be applied at database-creation time. Archetypes are primarily for supporting various data standards or toolchain configurations in a simple way.

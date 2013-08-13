@@ -9,7 +9,7 @@ summary: In this chapter, we'll detail some basic performance numbers for Stardo
 
 ## Performance Tuning, Tips, Tricks
 
-See the following:
+See the following: @FIXME
 
 1. basic approach: Stardog is read-biased; we will trade some slowdowns in writes for proportional (or greater, ideally) speedups in reads
 1. capacity planning

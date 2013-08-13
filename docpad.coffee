@@ -56,7 +56,7 @@ docpadConfig = {
         reldate: "31 August 2013"
         secnote: '<div class="metro danger label">Security Notice</div>'
         shout: '<div class="metro warning large btn">NOTE</div>'
-        new2: "<div class='metro label primary'>New in 2.0</div>"
+        new2: "<div class='metro label warning'>New in 2.0</div>"
         FIXME: "<div class='metro large btn warning'>@FIXME</div>"
         site:
             scripts: [
