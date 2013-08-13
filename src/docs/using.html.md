@@ -33,7 +33,44 @@ $ stardog query myDb "select * where { ?s ?p ?o }"
 Detailed information on using the query command in Stardog can be found
 on its [manpage](/docs/man/query-execute.html)
 
-## Adding & Removing Data
+## Updating a Database
+
+### SPARQL Update <t>new2</t>
+
+SPARQL 1.1 Update can be used to insert RDF into or delete RDF from a Stardog database using SPARQL query forms `INSERT` and `DELETE`, respectively.
+
+```sparql
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX ns: <http://example.org/ns#>
+INSERT DATA
+{ GRAPH <http://example/bookStore> { <http://example/book1>  ns:price  42 } }
+```
+
+An example of deleting RDF:
+
+```sparql
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+DELETE DATA
+{
+  <http://example/book2> dc:title "David Copperfield" ;
+                         dc:creator "Edmund Wells" .
+}
+```
+
+Or they can be combined with `WHERE` clauses:
+
+```sparql
+PREFIX foaf:  <http://xmlns.com/foaf/0.1/>
+
+WITH <http://example/addresses>
+DELETE { ?person foaf:givenName 'Bill' }
+INSERT { ?person foaf:givenName 'William' }
+WHERE
+  { ?person foaf:givenName 'Bill' } 
+```
+
+### Adding Data with the CLI
 
 The most efficient way to load data into Stardog is at database creation
 time. See the [Creating a Database](../admin/#create) section for bulk
@@ -54,6 +91,8 @@ that same type.
 
 If you want to add data to a named graph, specify it via the
 `--graph-uri` or `-g` options.
+
+### Removing Data with the CLI
 
 To remove data from a Stardog database,
 [remove](/docs/man/data-remove.html) is used by specifying—

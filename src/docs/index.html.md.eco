@@ -45,7 +45,7 @@ Zettlemoyer, Jim Rhyne, Andrea Westerinen, Huy Phan, Zach Whitley, Maurice Rabb.
 
 ## Using Stardog 
 
-Covers basic installation and starting a Stardog Server in five easy steps.
+Covers basic installation and starting a Stardog Server in *five easy steps*.
 
 ### [The Basics: Query, Write, Search](/using/)
 <%- @partial("using.html") %>
@@ -111,6 +111,10 @@ the 1.0 release.
 
 ### [Known Issues](/known-issues)
 Everything we know about that sucks.
+
+### [What's New?](/timeline)
+
+A rundown of new features and other notable changes to major releases since 1.0. 
 
 ## The Man Pages
 

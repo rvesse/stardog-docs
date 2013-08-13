@@ -1,23 +1,24 @@
 ---
-quote: " Every program is a part of some other program and rarely fits."
+quote: "Every program is a part of some other program and rarely fits."
 title: "What's New?"
 layout: default
 related: ""
-toc: true
+toc: false
 ---
 
 This chapter gives an overview of major features and other notable changes to Stardog. For a complete list of changes, including notable bug fixes, see the [Release Notes](/docs/RELEASE_NOTES.txt).
 
 ## 2.0
 
-- [SPARQL 1.1 Update]()
-- [Web Console]()
-- [JMX monitoring]()
+- [SPARQL 1.1 Update](/using)
+- [Web Console](/console)
+- [JMX monitoring](/admin/#jmx)
 - HTTP & SNARL servers unified into a single server (default port 5820)
-- [Stardog Web]() application development framework
-- [open source Stardog client libraries](http://github.com/clarkparsia/stardog-java-client)
-- The "Big Jar" solution
-- New syntax for user-defined rules: [Stardog Rules Syntax]()
+- [Stardog Web](/web) application development framework
+- [Database archetypes]() for PROV, SKOS; user-extensible for user-defined ontologies, schemas, etc.
+- [Stardog Rules Syntax](/owl2/): new syntax for user-defined rules
+- Performance improvements for SPARQL query evaluation
+- Nested explanations of inferences using proof trees
 
 ## 1.2
 
