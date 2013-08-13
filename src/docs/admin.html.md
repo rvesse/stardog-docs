@@ -667,8 +667,8 @@ create a database with the same name as an existing database.Stardog
 database names must conform to the regular expression,
 `[A-Za-z]{1}[A-Za-z0-9_-] `.
 
-**Note: there are three reserved words that may not be used for the
-names of Stardog databases:** `system`, `admin`, and `docs`.
+**Note: there are four reserved words that may not be used for the
+names of Stardog databases:** `system`, `admin`, `watchdog`, and `docs`.
 
 Minimally, the only thing you must know to create a Stardog database is
 a database *name*; alternately, you may customize some other database
@@ -768,12 +768,6 @@ command.
           <td></td>
 
           <td><tt>False</tt></td>
-        </tr>
-        <tr>
-          <td><tt>--guard</tt>, <tt>-g <i>arg</i></tt></td>
-          <td>Specifies that ICV guard mode should enabled for this database. Transactional writes to database that are invalid with respect to constraints will fail.</td>
-          <td><tt>OFF</tt> disables guard mode; a reasoning type enables it.</td>
-          <td>Disabled</td>
         </tr>
         <tr>
           <td><tt>--type</tt>, <tt>-t</tt></td>
