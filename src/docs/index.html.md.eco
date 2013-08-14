@@ -7,7 +7,7 @@ toc: true
 summary: 
 ---
 
-This is **Stardog <t>version</t>** (<t>reldate</t>--[release notes](/RELEASE_NOTES.txt)) documentation. Check out the [Quick Start Guide](/quick-start/) to get Stardog installed and running in *five easy steps*.
+This is **Stardog <t>version</t>** (<t>reldate</t>--[release notes](/RELEASE_NOTES.txt) and [timeline](/timeline)) documentation. Check out the [Quick Start Guide](/quick-start/) to get Stardog installed and running in *five easy steps*.
 
 ## Introducing Stardog
 
@@ -20,7 +20,7 @@ Stardog is a graph database--fast, lightweight, pure Java storage for mission-cr
 analytics
 - Java, JavaScript, Ruby, Python, .Net, Groovy, Spring, etc.
 
-### Acquiring Stardog & Support
+### Downloading Stardog
 
 [Download](http://stardog.com/dl/) Stardog to get started. The [Stardog support forum](https://groups.google.com/a/clarkparsia.com/group/stardog/about),
 [stardog@clarkparsia.com](mailto:stardog@clarkparsia.com), is the place
@@ -67,17 +67,17 @@ Administering Stardog Server, databases, including configuration and deployment 
 
 Everything from reasoning, data validation, and SPARQL to programming Stardog with Java, JavaScript, and many other languages. Includes the documentation for Stardog Web.
 
+### [Programming with Java](/java/)
+<%- @partial("java.html")%>
+
+### [Building Stardog Web Apps](/web/)
+<%- @partial("web.html")%>
+
 ### [Integrity Constraint Validation](/icv)
 <%- @partial("icv.html")%>
 
 ### [OWL 2 Reasoning](/owl2)
 <%- @partial("owl2.html")%>
-
-### [Building Stardog Web Apps](/web/)
-<%- @partial("web.html")%>
-
-### [Programming with Java](/java/)
-<%- @partial("java.html")%>
 
 ### [HTTP Programming](/http/)
 <%- @partial("http.html")%>
@@ -94,7 +94,10 @@ The documentation for [stardog.js](http://clarkparsia.github.io/stardog.js), whi
 
 ## Understanding Stardog
 
-Background information on tuning, known issues, compatibility policies, etc.
+Background information on tuning, terminology, known issues, compatibility policies, etc.
+
+### [The Man Pages](/manpages)
+<%- @partial("manpages.html") %>
 
 ### [Stardog Performance: Benchmarks, Tuning, Tips](/performance)
 <%- @partial("performance.html")%>
@@ -102,37 +105,12 @@ Background information on tuning, known issues, compatibility policies, etc.
 ### [Frequently Asked Questions](/faq)
 <%- @partial("faq.html")%>
 
-### [Terminology](/terms/)
-A glossary of technical terms used in these docs.
-
 ### [Stardog Compatibility Policies](/compatibility/)
 A statement of the policies we will pursue in evolving Stardog beyond
 the 1.0 release.
 
 ### [Known Issues](/known-issues)
-Everything we know about that sucks.
+Check here first before reporting an issue or bug.
 
-### [What's New?](/timeline)
-
-A rundown of new features and other notable changes to major releases since 1.0. 
-
-## The Man Pages
-
-### `stardog` CLI
-
-1. ` data add, data export, data remove, data size.`
-1. ` icv convert, icv validate.`
-1. ` namespace add, namespace list, namespace remove.`
-1. ` query execute, query explain, query search.`
-1. ` reasoning consistency, reasoning explain.`
-
-### `stardog-admin` CLI
-
-1. `db copy`, `db create`, `db drop`, `db list`, `db migrate`, `db offline`, `db online`, `db optimize`, `db status`
-1.`icv add`, `icv drop`, `icv remove`
-1. `metadata get`, `metadata set`
-1. `query kill`, `query list`, `query status`
-1. `role add`, `role grant`, `role list`, `role permission`, `role remove`, `role revoke`
-1. `server start`, `server stop`
-1. `user add`, `user disable`, `user enable`, `user addrole`, `user removerole`, `user grant`, `user list`, `user passwd`, `user permission`, `user remove`, `user revoke`
-
+### [Terminology](/terms/)
+A glossary of technical terms used in these docs.

@@ -31,7 +31,7 @@ $ stardog query myDb "select * where { ?s ?p ?o }"
 <!-- show a few more examples? -->
 
 Detailed information on using the query command in Stardog can be found
-on its [manpage](/docs/man/query-execute.html).
+on its [`man` page](/docs/man/query-execute.html).
 
 ## Updating
 

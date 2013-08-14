@@ -1,6 +1,6 @@
 ---
 quote: "Every program is a part of some other program and rarely fits."
-title: "What's New?"
+title: "What's New and When?"
 layout: default
 related: ""
 toc: false
