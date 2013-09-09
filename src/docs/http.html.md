@@ -5,7 +5,7 @@ layout: default
 related: ""
 shortTitle: HTTP
 toc: true
-summary: 'This chapter describes how to interact with Stardog over a network using SPARQL, HTTP, and SNARL protocols.'
+summary: 'This chapter describes how to interact with Stardog over a network using HTTP.'
 ---
 
 In the [Programming with Java](../java/) chapter, we consider

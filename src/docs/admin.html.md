@@ -371,9 +371,19 @@ down a remote server, you can simply use the `--server` option to
 specify the location of the server you wish to shut down
 
 <div id="sd-JMX"></div>
-### Monitoring the Server with JMX <t>new2</t>
+### Server Monitoring with Watchdog & JMX <t>new2</t>
 
 Blah blah blah watchdog blah blah blah.
+
+you can't configure it. we do x,y,z and that's it.
+
+to disable it, do blah.
+
+it's avaialable over http at get /{db}/watchdog
+
+you can use visualvm or the like to monitor locally or remotely.
+
+on the roadmap for more stuff is a, b, c
 
 ### Serving Stardog Documentation
 

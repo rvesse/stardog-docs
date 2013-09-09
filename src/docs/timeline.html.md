@@ -19,6 +19,9 @@ This page briefly lists major features and other notable changes to Stardog from
 - [Stardog Rules Syntax](/owl2/#sd-Stardog-Rules-Syntax): new syntax for user-defined rules
 - [Performance improvements](/performance) for SPARQL query evaluation
 - [Hierarchical explanations](/owl2/#sd-Proof-Trees) of inferences using proof trees
+- [SL reasoning profile](/owl2/#sd-Profiles)
+- Client and server dependencies cleanly separated
+- Evaluation of non-recursive datalog queries to improve reasoning performance
 
 ## 1.2
 
