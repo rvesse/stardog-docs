@@ -365,7 +365,10 @@ $ stardog-admin server stop
 
 If you started stardog on a port other than the default, or want to shut
 down a remote server, you can simply use the `--server` option to
-specify the location of the server you wish to shut down
+specify the location of the server you wish to shut down.
+
+By default Stardog will bind it's server to `0.0.0.0`.  You can specify a different
+network interface for Stardog to bind to using the `--bind` property of `server start`.
 
 <div id="sd-JMX"></div>
 ### Server Monitoring with Watchdog & JMX <t>new2</t>
