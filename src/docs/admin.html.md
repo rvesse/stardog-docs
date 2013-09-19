@@ -370,17 +370,28 @@ specify the location of the server you wish to shut down
 <div id="sd-JMX"></div>
 ### Server Monitoring with Watchdog & JMX <t>new2</t>
 
-Blah blah blah watchdog blah blah blah.
+Stardog includes integration with JMX called Watchdog.  In addition to providing
+some basic JVM information, Watchdog also exports information about the Stardog
+DBMS configuration as well as stats for all of the databases within the system, 
+such as the total number of open connections, size, and average query time.
 
-you can't configure it. we do x,y,z and that's it.
+#### Accessing Watchdog
 
-to disable it, do blah.
+To access Watchdog, you can simply use a tool like VisualVM or JConsole 
+to attach to the process running the JVM, or connect directly to the JMX server.
 
-it's avaialable over http at get /{db}/watchdog
+You can also access information from Watchdog in the web console for the database,
+or by performing a `GET` on `/{db}/watchdog` which will return a simple JSON object
+containing the information available via JMX.
 
-you can use visualvm or the like to monitor locally or remotely.
+#### Configuring Watchdog
 
-on the roadmap for more stuff is a, b, c
+By default, Watchdog will bind an RMI server for remote access on port 5833.  If you
+want to change which port Watchdog binds the remote server to, you can set the property
+`watchdog.port` via `stardog.properties` find in your `$STARDOG_HOME`.  If you wish
+to disable remote access to JMX altogether you can set `watchdog.remote.access` to `false` 
+in `stardog.properties`.  Finally, if you wish to disable Watchdog completely, just
+set `watchdog.enabled` to `false` in `stardog.properties`.
 
 ### Locking Stardog Home
 
