@@ -12,6 +12,8 @@ This document serves as a guide for migrating your SNARL 1 API based code to the
 * All deprecated methods have been removed.
 * All `com.clarkparsia` packages have been moved to `com.complexible`.
 * `com.clarkparsia.stardog.reasoning.ReasoningType` has been moved to `com.complexible.stardog.reasoning.api.ReasoningType`.
+* `com.clarkparsia.openrdf.query` has been moved to `org.openrdf.queryrender`.
+* The rest of `com.clarkparsia.openrdf` has been moved to `com.complexible.common.openrdf`.
 * All methods marked @Beta have been promoted.
 
 ##Queries
