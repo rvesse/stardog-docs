@@ -335,12 +335,12 @@ The following twiddly knobs for Stardog Server are available in
 
 ### Starting & Stopping the Server
 
-**Note**: Unlike the other `stardog-admin` subcommands, starting and
-stopping the server may only be run locally, i.e., on the same machine
-as Stardog Server will run on.
+**Note**: Unlike the other `stardog-admin` subcommands, starting the 
+server may only be run locally, i.e., on the same machine
+the Stardog Server will run on.
 
-The simplest way to start the server—running on the default ports,
-detaching to run as a daemon, and writing `stardog.pid` and
+The simplest way to start the server—running on the default port,
+detaching to run as a daemon, and writing
 `stardog.log` to the current working directory— is
 
 ```bash
@@ -350,15 +350,12 @@ $ stardog-admin server start
 To specify parameters:
 
 ```bash
-$ stardog-admin server start --logfile=stardog.log --no-docs --http=8080
+$ stardog-admin server start --logfile=mystardog.log --no-docs --port=8080
 ```
 
-`--no-docs` will tell Stardog not to serve its documentation over HTTP
-at `http://SERVER/docs`, which it will otherwise do by default.
-
-Note: ports can be specified using the properties `--snarl` and
-`--http`. The HTTP interface can be disabled by using the flag
-`--no-http`; the SNARL interface may not be disabled.
+Note: the port can be specified using the property `--port`. 
+The HTTP interface can be disabled by using the flag
+`--no-http` and the SNARL interface via `--no-snarl`.
 
 To shut down the server:
 
@@ -384,16 +381,6 @@ it's avaialable over http at get /{db}/watchdog
 you can use visualvm or the like to monitor locally or remotely.
 
 on the roadmap for more stuff is a, b, c
-
-### Serving Stardog Documentation
-
-By default, if you start Stardog Server with HTTP enabled, then Stardog
-will serve the system documentation at `http://${server}/docs` (which is
-why "docs" is a reserved database name).
-
-In a production deployment, you might want to disable documentation
-serving, which you can do by passing `--no-docs` on server startup or by
-disabling HTTP altogether.
 
 ### Locking Stardog Home
 
