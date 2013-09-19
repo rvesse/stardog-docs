@@ -8,38 +8,47 @@ quote: Interfaces keep things tidy, but don't accelerate growth: Functions do.
 
 ## Introduction 
 
-Stardog 2.0 introduces the Web Console, a web app for every Stardog database that makes administration and interaction with data quick and easy. The Console includes a Linked Data management capability--including data editing--browsing, search, query, and JMX monitoring.
+Stardog 2.0 introduces the Web Console, a responsive web app for every Stardog database that makes administration and interaction with data quick and easy. The Console includes a Linked Data management capability--including data editing--browsing, search, query, and JMX monitoring.
 
 The Console is a pure client-side Javascript application that uses middleware REST services that run in the same JVM container as Stardog, which means you can also use those services, together with [Stardog Web framework](/web), to build additional Console capabilities or to build your own Stardog-backed web apps.
 
-
 ## Database View
-![Stardog Web Console: Foo](/img/console/home.png "")
+![Stardog Web Console: Database View](/img/console/home.png "")
 
 ## Server Monitoring
-![Stardog Web Console: Foo](/img/console/jmx.png "")
+![Stardog Web Console: JMX](/img/console/jmx.png "")
 
 ## Linked Data
 
 Console includes a comprehensive Linked Data management capability.
 
 ### Schema Browsing
-![Stardog Web Console: Foo](/img/console/schema.png "")
+![Stardog Web Console: Schema](/img/console/schema.png "")
 
 ### Instance Browsing
-![Stardog Web Console: Foo](/img/console/browse.png "")
+![Stardog Web Console: Instance Browsing](/img/console/browse.png "")
 
 ### Editing
-![Stardog Web Console: Foo](/img/console/edit.png "")
+![Stardog Web Console: Instance Editing](/img/console/edit.png "")
 
 ## SPARQL Query
 
 Console includes SPARQL query and search widgets, including data exploration.
 
-![Stardog Web Console: Foo](/img/console/query.png "")
+![Stardog Web Console: SPARQL](/img/console/query.png "")
 
 ### Exploration Queries
-![Stardog Web Console: Foo](/img/console/explore.png "")
+![Stardog Web Console: Exploration](/img/console/explore.png "")
 
 ## Semantic Search
-![Stardog Web Console: Foo](/img/console/search.png "")
+![Stardog Web Console: Search](/img/console/search.png "")
+
+##Responsive
+
+And, of course, the Console is mobile-friendly.
+
+![Stardog Web Console: Responsive](/img/console/resp1.png "")
+![Stardog Web Console: Responsive](/img/console/resp2.png "")
+![Stardog Web Console: Responsive](/img/console/resp3.png "")
+![Stardog Web Console: Responsive](/img/console/resp4.png "")
+
