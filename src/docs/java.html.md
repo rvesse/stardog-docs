@@ -18,6 +18,8 @@ them in that order.
 If you're a Spring developer, you might want to read the [Programming with
 Spring](../spring) chapter.
 
+If you prefer a ORM-style approach, you might want to checkout [Empire](https://github.com/mhgrove/Empire), which is an implementation of [JPA](http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html) for RDF that works with Stardog.
+
 ### Examples
 
 The *best* way to learn to program Stardog with Java is to study the

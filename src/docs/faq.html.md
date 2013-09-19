@@ -11,11 +11,7 @@ Some frequently asked questions for which we have answers.
 
 **Question:** Does Stardog support SPARQL 1.1?
 
-**Answer:** Yes. As of Stardog 1.1 (released 14 November 2012), Stardog
-supports SPARQL 1.1. However, there are still a few odds and ends of
-SPARQL 1.1 that we don't yet support.
-
-**Revised Answer:** Stardog 2.0 supports SPARQL 1.1 protocol and query language, including updates.
+**Answer:** Yes. 
 
 ## Deadlocks and Slowdowns
 
@@ -30,10 +26,10 @@ failing to close them when you are done will cause files, streams,
 lions, tigers, and bears to be held open. If you do that enough, then
 you'll eventually exhaust all of the resources in their respective
 pools, which can cause slowness or, in some cases, deadlocks waiting for
-resources to be returned to their pools.
+resources to be returned.
 
 Similarly close your connections when you are done with them. Failing to
-close Connections, Iterations, QueryResults, and other *closeable*
+close `Connections`, `Iterations`, `QueryResults`, and other *closeable*
 objects will lead to undesirable behavior.
 
 ## Bulk Update Performance
@@ -42,15 +38,11 @@ objects will lead to undesirable behavior.
 Stardog; is this the ideal strategy with respect to performance?
 
 **Question:** I'm adding millions of triples to Stardog and I'm
-wondering it that's the best approach?
+wondering if that's the best approach?
 
-**Answer:** The answer to both questions is to stop doing that...
+**Answer:** The answer to both questions is "not really"...
 
-In other words, there is a sweet spot for Stardog bulk update
-performance. The best performance for writes isn't found by
-parsimoniously writing only one or a few triples at a time; or, on the
-other end of the spectrum, holding writes till there are millions of
-triples. Generally update performance is best if you write between 1k
+Generally overall update performance is best if you write between 1k
 and 100k triples at a time. You may need to experiment to find the sweet
 spot with respect to your data, database size, the size of the
 differential index, and update frequency.

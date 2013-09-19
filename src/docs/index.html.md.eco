@@ -65,7 +65,7 @@ Administering Stardog Server, databases, including configuration and deployment 
 
 ## Programming Stardog
 
-Everything from reasoning, data validation, and SPARQL to programming Stardog with Java, JavaScript, and many other languages. Includes the documentation for Stardog Web.
+Everything from reasoning, data validation, and SPARQL to programming Stardog with Java, JavaScript, and many other languages, as well as the documentation for Stardog Web.
 
 ### [Programming with Java](/java/)
 <%- @partial("java.html")%>
@@ -91,6 +91,9 @@ Everything from reasoning, data validation, and SPARQL to programming Stardog wi
 ### [Programming with Javascript](http://clarkparsia.github.io/stardog.js/)
 
 The documentation for [stardog.js](http://clarkparsia.github.io/stardog.js), which is available on [Github](https://github.com/clarkparsia/stardog.js) and [npm]().
+
+### [SNARL Migration Guide](/migration)
+<%- @partial("migration.html") %>
 
 ## Understanding Stardog
 

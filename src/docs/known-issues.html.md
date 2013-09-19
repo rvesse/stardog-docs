@@ -6,9 +6,6 @@ quote: We kid ourselves if we think that the ratio of procedure to data in an ac
 
 The known issues in Stardog <t>version</t>--
 
-1. Stardog doesn't support SPARQ 1.1 UPDATE query
-    language, federation, UPDATE protocol (but the HTTP protocol support is a superset of SPARQL 1.1 UPDATE protocol anyway), or any entailment regimes other than
-    OWL 2 Direct Semantics. **WILLFIX**
 1. Our `CONSTRUCT` slightly deviates from [SPARQL 1.1 specification](http://www.w3.org/TR/sparql11-query/#construct) in that it does not implicitly `DISTINCT` query results; rather, it implicitly applies `REDUCED` semantics to `CONSTRUCT` query results.<fn>Strictly speaking, this is a Sesame parser deviation from the SPARQL 1.1 spec with which we happen to agree.</fn>
 1.  Asking for all individuals with reasoning via the query
     `{?s a owl:Thing}` might also retrieve some classes and properties.
@@ -26,8 +23,7 @@ The known issues in Stardog <t>version</t>--
     format doesn't allow base URIs and relative URIs in N-Triples data
     will cause errors.
 5.  Queries with `FROM NAMED` with a named graph that is *not* in
-    Stardog will **not** cause Stardog to believe that it is, in fact,
-    Maven, i.e., to automagically download the data from an arbitrary
+    Stardog will **not** cause Stardog to download the data from an arbitrary
     HTTP URL and include it in the query. Stardog will *only* evaluate
     queries over data that has been loaded into it.
 6.  SPARQL queries without a context or named graph are executed against
