@@ -11,6 +11,7 @@ This document serves as a guide for migrating your SNARL 1 API based code to the
 ##Deprecating and Renaming
 * All deprecated methods have been removed.
 * All `com.clarkparsia` packages have been moved to `com.complexible`.
+* `com.clarkparsia.stardog.reasoning.ReasoningType` has been moved to `com.complexible.stardog.reasoning.api.ReasoningType`.
 * All methods marked @Beta have been promoted.
 
 ##Queries
