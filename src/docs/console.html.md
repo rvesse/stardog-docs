@@ -6,25 +6,40 @@ toc: true
 quote: Interfaces keep things tidy, but don't accelerate growth: Functions do.
 ---
 
-## Introduction
-<t>new2</t>
+## Introduction 
 
-Blah blah blah. Lots of screen shots.
+Stardog 2.0 introduces the Web Console, a web app for every Stardog database that makes administration and interaction with data quick and easy. The Console includes a Linked Data management capability--including data editing--browsing, search, query, and JMX monitoring.
 
-## Linked Data Management
+The Console is a pure client-side Javascript application that uses middleware REST services that run in the same JVM container as Stardog, which means you can also use those services, together with [Stardog Web framework](/web), to build additional Console capabilities or to build your own Stardog-backed web apps.
 
-### Browsing
+
+## Database View
+![Stardog Web Console: Foo](/img/console/home.png "")
+
+## Server Monitoring
+![Stardog Web Console: Foo](/img/console/jmx.png "")
+
+## Linked Data
+
+Console includes a comprehensive Linked Data management capability.
+
+### Schema Browsing
+![Stardog Web Console: Foo](/img/console/schema.png "")
+
+### Instance Browsing
+![Stardog Web Console: Foo](/img/console/browse.png "")
 
 ### Editing
+![Stardog Web Console: Foo](/img/console/edit.png "")
 
-## SPARQL Query Panel
+## SPARQL Query
+
+Console includes SPARQL query and search widgets, including data exploration.
+
+![Stardog Web Console: Foo](/img/console/query.png "")
 
 ### Exploration Queries
-
-## Schema Browsing
+![Stardog Web Console: Foo](/img/console/explore.png "")
 
 ## Semantic Search
-
-## Pelorus: Faceted Navigation
-
-## Monitoring
+![Stardog Web Console: Foo](/img/console/search.png "")
