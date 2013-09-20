@@ -40,7 +40,7 @@ $ ./stardog-admin server start
 Fourth, create a database with an input file:
 
 ```bash
-$ ./stardog-admin db create -n myDB -t D -u admin -p admin examples/data/University0_0.owl
+$ ./stardog-admin db create -n myDB examples/data/University0_0.owl
 ```
 
 Fifth, query the database:
