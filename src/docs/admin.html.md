@@ -350,7 +350,7 @@ $ stardog-admin server start
 To specify parameters:
 
 ```bash
-$ stardog-admin server start --logfile=mystardog.log --no-docs --port=8080
+$ stardog-admin server start --logfile mystardog.log --no-docs --port=8080
 ```
 
 Note: the port can be specified using the property `--port`. 
@@ -1340,9 +1340,7 @@ up the disk space needed by each database.
 Stardog provides Windows batch (`.bat`) files for use on Windows; they
 provide roughly the same set of functionality provided by the Bash
 scripts which are used on \*nix systems. There are however, a few small
-differences between the two. You cannot change the logfile with the
-global `--logfile` option using the .bat scripts, it will always just
-log to the console. Additionally, when you start a server with
+differences between the two. When you start a server with
 `server start`, this does not detach to the background, it will run in
 the current console.
 
