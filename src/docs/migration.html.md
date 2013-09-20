@@ -70,3 +70,7 @@ When programmatically starting a Stardog server in your application, you *must* 
 ## Protocols
 
 As of Stardog 2.0, Stardog's supported protocols, SNARL & HTTP, now run on the *same* port.  There is no need to start separate servers or specify different ports.  The new unified Stardog server will automatically detect what protocol you are using and forward the traffic appropriately.  The default port for the server remains `5820`. 
+
+## Command line
+
+The global options --home, --logfile, --disable-security for `server start` command have been turned into regular options. See the `stardog-admin help server start` for details.
