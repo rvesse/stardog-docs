@@ -48,7 +48,3 @@ Console includes SPARQL query and search widgets, including data exploration.
 And, of course, the Console is mobile-friendly.
 
 ![Stardog Web Console: Responsive](/img/console/resp1.png "")
-![Stardog Web Console: Responsive](/img/console/resp2.png "")
-![Stardog Web Console: Responsive](/img/console/resp3.png "")
-![Stardog Web Console: Responsive](/img/console/resp4.png "")
-

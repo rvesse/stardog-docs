@@ -31,25 +31,24 @@ process.
 <t>shout</t> Stardog won't run without a valid `stardog-license-key.bin` in `STARDOG_HOME`.
 
 Third, start the Stardog server. By default the server will expose SNARL
-and HTTP interfaces—on ports 5820 and 5822, respectively.
+and HTTP interfaces on port 5820.<n>That is, the server listens to one port (5820) and handles both protocols.</n>
 
 ```bash
 $ ./stardog-admin server start
 ```
 
-Fourth, create a database with an input file; use the `--server`
-parameter to specify which server:
+Fourth, create a database with an input file:
 
 ```bash
-$ ./stardog-admin db create -n myDB -t D -u admin -p admin \ examples/data/University0_0.owl
+$ ./stardog-admin db create -n myDB -t D -u admin -p admin examples/data/University0_0.owl
 ```
 
-Fifth, optionally, admire the pure RDF bulk loading power...woof!
-
-Sixth, query the database:
+Fifth, query the database:
 
 ```bash
 $ ./stardog query myDB "SELECT DISTINCT ?s WHERE { ?s ?p ?o } LIMIT 10"
 ```
 
-Seventh, go have a beer: you've earned it!
+You can use the Web Console to search or query the new database you created by hitting `http://localhost:5820/myDB` in yr browser.
+
+Now, go have a drink: you've earned it.
