@@ -70,9 +70,6 @@ Everything from reasoning, data validation, and SPARQL to programming Stardog wi
 ### [Programming with Java](/java/)
 <%- @partial("java.html")%>
 
-### [Building Stardog Web Apps](/web/)
-<%- @partial("web.html")%>
-
 ### [Integrity Constraint Validation](/icv)
 <%- @partial("icv.html")%>
 

@@ -14,7 +14,6 @@ This page briefly lists major features and other notable changes to Stardog from
 - [Web Console](/console): a Stardog Web app for managing Stardog Databases; includes Linked Data Server, etc.
 - [JMX monitoring](/admin/#sd-JMX); includes graphical monitoring via Web Console
 - [HTTP & SNARL servers unified](/admin/#sd-HTTP-SNARL-Unification) into a single server (default port 5820)
-- [Stardog Web](/web): our semantic app framework
 - [Database archetypes](/admin/#sd-Archetypes) for PROV, SKOS; extensible for user-defined ontologies, schemas, etc.
 - [Stardog Rules Syntax](/owl2/#sd-Stardog-Rules-Syntax): new syntax for user-defined rules
 - [Performance improvements](/performance) for SPARQL query evaluation
