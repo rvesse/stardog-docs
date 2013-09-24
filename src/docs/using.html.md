@@ -247,11 +247,11 @@ For a more detailed discussion, see the [Lucene
 docs](http://lucene.apache.org/java/3_3_0/queryparsersyntax.html).
 
 
-## Obfuscating Data
+## Obfuscating
 
-When sharing sensitive data with others you might want to obfuscate the data so that sensitive fields will not be visible to others. This feature can be used to submit Stardog bug reports using sensitive data.
+When sharing sensitive RDF data with others, you might want to (selectively) obfuscate it so that sensitive bits are not present, but non-sensitive bits remain. For example, this feature can be used to submit Stardog bug reports using sensitive data.
 
-Data obfuscation works very similar to the export command and supports the same set of arguments:
+Data obfuscation works much the same way as the `export` command and supports the same set of arguments:
 
 ```bash
 $ stardog data obfuscate myDatabase obfDatabase.ttl
@@ -263,9 +263,9 @@ By default, all URIs, bnodes, and string literals in the database will be obfusc
 $ stardog data obfuscate --config obfConfig.ttl myDatabase  obfDatabase.ttl
 ```
 
-Configuration can specify which URIs and strings will be obfuscated by defining inclusion and exclusion filters. See the example config file provided in the distribution for details.
+The configuration specifies which URIs and strings will be obfuscated by defining inclusion and exclusion filters. See the example configuration file provided in the distribution for details.
 
-Once the data is obfuscated, queries written against the original data will not return any results. Stradog provides query obfuscation capability too so that the queries can be executed against the obfuscated data. If a custom configuration file is used to obfuscate the data then the same configuration should be used for obfuscating the query as well:
+Once the data is obfuscated, queries written against the original data will no longer work. Stradog provides query obfuscation capability, too, so that queries can be executed against the obfuscated data. If a custom configuration file is used to obfuscate the data, then the same configuration should be used for obfuscating the queries as well:
 
 ```bash
 $ stardog query obfuscate --config obfConfig.ttl myDatabase myQuery.sparql > obfQuery.ttl

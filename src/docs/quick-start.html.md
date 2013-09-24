@@ -4,8 +4,6 @@ title: Quick Start Guide
 layout: default
 related: ""
 toc: false
-summary: 'This guide explains the basic steps to get you started quickly with Stardog on a Unix machine. We test every Stardog release extensively with various flavors of Linux and OS X. Please report a bug if you find issues on other platforms.'
-
 ---
 
 First, tell Stardog where its home directory (where databases and other
@@ -49,6 +47,6 @@ Fifth, query the database:
 $ ./stardog query myDB "SELECT DISTINCT ?s WHERE { ?s ?p ?o } LIMIT 10"
 ```
 
-You can use the Web Console to search or query the new database you created by hitting `http://localhost:5820/myDB` in yr browser.
+You can use the Web Console to search or query the new database you created by hitting [http://localhost:5820/myDB](http://localhost:5820/myDB) in yr browser.
 
 Now, go have a drink: you've earned it.
