@@ -124,7 +124,45 @@ explanations programmatically.
 <div id="sd-Proof-Trees"></div>
 ### Proof Trees <t>new2</t>
 
-Blah, blah, Evren did some awesome stuff what's new blah blah.
+Proof trees are a hierarchical presentation of multiple explanations (of inferences) to make data, schemas, and rules more intelligible. Proof tree<n>Triggered using the `--format tree` option of the `reasoning explain` CLI command.</n> provides an explanation for an inference or an
+inconsistency in a *hierarchical structure*. Nodes in the proof tree may
+represent an assertion in a Stardog database. Multiple assertion nodes are
+grouped under an inferred node.
+
+#### Example
+
+For example, if we are explaining the inferred triple `:Alice
+rdf:type :Employee` , the root of the proof tree will show that
+inference:
+
+```
+INFERRED :Alice rdf:type :Employee
+```
+
+The children of an inferred node will provide more explanation for
+that inference:
+
+```
+INFERRED :Alice rdf:type :Employee
+    ASSERTED :Manager rdfs:subClassOf :Employee
+    INFERRED :Alice rdf:type :Manager
+```
+
+The fully expanded proof tree will show the asserted triples and
+axioms for every inference:
+
+```
+INFERRED :Alice rdf:type :Employee
+    ASSERTED :Manager rdfs:subClassOf :Employee
+    INFERRED :Alice rdf:type :Manager
+        ASSERTED :Alice :supervises :Bob
+        ASSERTED :supervises rdfs:domain :Manager
+```
+
+The CLI explanation command prints the proof tree using indented text;
+but, using the SNARL API, it is simple to create a tree widget
+in a GUI to show the explanation tree, such that users can expand and
+collapse details in the explanation.
 
 ## Not Seeing Expected Answers?
 

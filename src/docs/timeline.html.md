@@ -3,7 +3,7 @@ quote: "Every program is a part of some other program and rarely fits."
 title: "What's New and When?"
 layout: default
 related: ""
-toc: false
+toc: true
 ---
 
 This page briefly lists major features and other notable changes to Stardog from 1.0 to 2.0; it will be updated for each new release. For a complete list of changes, including notable bug fixes, see the [Release Notes](/docs/RELEASE_NOTES.txt).
