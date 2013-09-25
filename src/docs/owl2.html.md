@@ -124,7 +124,7 @@ explanations programmatically.
 <div id="sd-Proof-Trees"></div>
 ### Proof Trees <t>new2</t>
 
-Proof trees are a hierarchical presentation of multiple explanations (of inferences) to make data, schemas, and rules more intelligible. Proof tree<n>Triggered using the `--format tree` option of the `reasoning explain` CLI command.</n> provides an explanation for an inference or an
+Proof trees are a hierarchical presentation of multiple explanations (of inferences) to make data, schemas, and rules more intelligible. Proof tree<fn>Triggered using the `--format tree` option of the `reasoning explain` CLI command.</fn> provides an explanation for an inference or an
 inconsistency in a *hierarchical structure*. Nodes in the proof tree may
 represent an assertion in a Stardog database. Multiple assertion nodes are
 grouped under an inferred node.
@@ -164,48 +164,7 @@ but, using the SNARL API, it is simple to create a tree widget
 in a GUI to show the explanation tree, such that users can expand and
 collapse details in the explanation.
 
-## Not Seeing Expected Answers?
 
-Here's a few things that you might want to try:
-
--   **Do you know what to expect?** The [OWL 2
-    primer](http://www.w3.org/TR/owl2-primer/) is always a good place to
-    start.
--   **Is the schema where you think it is?** Stardog might be extracting
-    the wrong schema. You have to tell Stardog where to find the schema.
-    See [Schema Extraction](#tbox_extraction) for details.
--   **Are you using the right reasoning level?** Perhaps some of the
-    modeling constructs (a.k.a. axioms) in your database are being
-    ignored. You can find out which axioms are being ignored due to the
-    reasoning level used by simply including the following line in the
-    logging.properties file in `STARDOG_HOME`:
-
-```java
-        com.clarkparsia.blackout.level = ALL
-```
--   **Are you using DL?** Stardog supports schema-only reasoning for OWL
-    2 DL, which effectively means that only TBox queries—queries that
-    contain [TBox BGPs](#query_types) only—will return complete query
-    results.
-
--   **Are you using SWRL?** As from version 2.0, SWRL rules are only taken
-    into account using the **SL** reasoning level.
-
-## Known Issues
-
-Stardog <t>version</t> does not
-
--   Follow ontology `owl:imports` statements automatically; any imported
-    OWL ontologies that are required for reasoning must be loaded into a
-    Stardog database in the normal way.
--   Handle recursive queries. If recursion is necessary to answer the
-    query with respect to the schema, results will be sound (no wrong
-    answers) but potentially incomplete (some correct answers not
-    returned) with respect to the requested reasoning type.
--   Perform equality reasoning. Only *explicit* `owl:sameAs` and
-    `owl:differentFrom` data assertions will be taken into account for
-    query answering.
--   Perform datatype reasoning or respect user-defined datatypes.
 
 ## User-defined Rule Reasoning
 
@@ -219,7 +178,9 @@ comprehensively supports both axioms and rules. Some problems (and some
 people) are simply a better fit for a rules-based approach to modeling
 and reasoning than to an axioms-based approach. 
 
-**Remember**: there isn't a one-size-fits-all answer to the question "rules or axioms or both?" Use the thing that makes the most sense to you and to the people you're working with, etc.
+**Remember**: there isn't a one-size-fits-all answer to the question 
+"rules or axioms or both?" Use the thing that makes the most sense to you 
+and to the people you're working with, etc.
 
 Stardog supports user-defined rule reasoning together with a rich set of
 built-in functions using the [SWRL](http://www.w3.org/Submission/SWRL/)
@@ -231,20 +192,191 @@ are part of the schema, they will be used for reasoning automatically
 when using the **SL** reasoning level.
 
 Assertions implied by the rules *will not* be materialized. Instead,
-rules are used to expand queries just as regular axioms are in Stardog. **Note**: to trigger rules to "fire", execute a query. It's that simple.
+rules are used to expand queries just as regular axioms are in Stardog. 
+**Note**: to trigger rules to "fire", execute a query. It's that simple.
 
 <div id="sd-Stardog-Rules-Syntax"></div>
 ### Stardog Rules Syntax <t>new2</t>
-Stardog supports two different syntaxes for defining rules. The first is native Stardog Rules syntax and is based on SPARQL syntax, so you can re-use what you already know about SPARQL to write rules. **Unless you have specific requirements otherwise, you should use this syntax for user-defined rules in Stardog.** The second, the *de facto* standard RDF/XML syntax for SWRL. It has the advantage of being supported in many tools; but it's not fun to read or to write. You probably don't want to use it.
 
-Stardog Rules Syntax is basically SPARQL "basic graph patterns" (BGPs) plus some very explicit new syntax (`IF-THEN`) to denote the head and the body of a rule. You define URI prefixes in the normal way (examples below) and use regular SPARQL variables for rule variables. As you can see below, some SPARQL 1.1 syntactic sugar--property paths, especially, but also bnode syntax--make comples Stardog Rules quite concise and elegant.
+Stardog supports two different syntaxes for defining rules. The first 
+is native Stardog Rules syntax and is based on SPARQL, so you
+can re-use what you already know about SPARQL to write rules. 
+**Unless you have specific requirements otherwise, you should use this 
+syntax for user-defined rules in Stardog.** The second, the *de facto* 
+standard RDF/XML syntax for SWRL. It has the advantage of being supported 
+in many tools; but it's not fun to read or to write. You probably 
+don't want to use it. Better: don't use this syntax!
 
-### Rule Examples
+Stardog Rules Syntax is basically SPARQL "basic graph patterns" (BGPs) 
+plus some very explicit new bits (`IF-THEN`) to denote the head 
+and the body of a rule.<fn>Quick refresher: the `IF` clause defines the conditions to match in the data; if they match, then the contents of the `THEN` clause "fire", that is, they are inferred and, thus, available for other queries, rules, or axioms, etc.</fn> You define URI prefixes in the normal way  (examples below) and 
+use regular SPARQL variables for rule variables. 
+As you can see, some SPARQL 1.1 syntactic sugar--property 
+paths, especially, but also bnode syntax--make complex 
+Stardog Rules quite concise and elegant.
 
-What follows are a few examples of user-defined rules using
-Stardog Rules syntax and some of the builtins Stardog supports.
+#### How to Use Stardog Rules
 
-#### Basic Rules
+There are three things to sort out:
+
+1. Where to put these rules?
+2. How to represent these rules?
+3. What are the gotchas?
+
+First, the rules go into the database, of course; and, in particular, they go into 
+the named graph in which Stardog expects to find the TBox. This setting by 
+default in Stardog is the "default graph", i.e., unless you've changed 
+the value of `reasoning.schema.graphs`, you're probably going to be 
+fine; that is, just add the rules to the database and it will all 
+work out.<n>Of course if you've tweaked `reasoning.schema.graphs`, then you 
+should put the rules into the named graphs that are specifed
+in that configuration parameter.</n>
+
+Second, you represent the rules with specially constructed RDF triples. Here's
+a kind of template example:
+
+```turtle
+@prefix rule: <tag:stardog:api:rule:> .
+[] a rule:SPARQLRule;
+   rule:content """
+   ...la di dah the rule goes here!
+   """.
+```
+
+So there's a namespace--`tag:stardog:api:rule:`--that has a predicate, `content`, and a class, `SPARQLRule`. The object of this triple contains *one* rule in Stardog Rules syntax. A more realistic example:
+
+```sparql
+@prefix rule: <tag:stardog:api:rule:> .
+
+[] a rule:SPARQLRule ;
+  rule:content """
+    PREFIX :<urn:test:>
+      IF {
+            ?r a :Rectangle ; 
+               :width ?w ;
+               :height ?h
+            BIND (?w * ?h AS ?area)
+          } 
+      THEN { 
+              ?r :area ?area 
+          }""" .
+```
+
+That's pretty easy!<fn>We'll produce a complete tutorial and spec for an upcoming 2.0.x release.</fn>
+
+Third, what are the gotchas? There are two:
+
+1. The RDF serialization of rules in, say, a Turtle file has to use the `tag:stardog:api:rule:` namespace URI and then whatever prefix, if any, mechanism that's valid for that serialization. In the examples here, we use Turtle. Hence, we use `@prefix`, etc.
+2. However, the namespace URIs used *by the rules themselves* can be defined in only two places: the string that contains the rule--in the example above, you can see the default namespace is `urn:test:`--or in the Stardog database in which the rules are stored. Either place will work; if there are conflicts, the "closest definition wins", that is, if `foo:Example` is defined in both the rule content and in the Stardog database, the definition in the rule content is the one that Stardog will use.
+
+#### Stardog Rules Examples
+
+```sparql
+PREFIX rule: <tag:stardog:api:rule:>
+PREFIX : <urn:test:>
+PREFIX gr: <http://purl.org/goodrelations/v1#>
+
+:Product1 gr:hasPriceSpecification [ gr:hasCurrencyValue 100.0 ] .
+:Product2 gr:hasPriceSpecification [ gr:hasCurrencyValue 500.0 ] .
+:Product3 gr:hasPriceSpecification [ gr:hasCurrencyValue 2000.0 ] .
+
+[] a rule:SPARQLRule ;
+   rule:content """
+       PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+       PREFIX gr: <http://purl.org/goodrelations/v1#>
+       PREFIX :<urn:test:>
+     IF {
+        ?offering gr:hasPriceSpecification ?ps .
+        ?ps gr:hasCurrencyValue ?price .
+        FILTER (?price >= 200.00).
+     }
+     THEN {
+        ?offering a :ExpensiveProduct .
+     }
+   """.
+```
+
+This example is self-contained: it contains some data (the `:Product...` triples) and a rule. It also demonstrates the use of SPARQL's `FILTER` to do numerical (and other) comparisons.
+
+Here's a more complex example that includes four rules and, again, some data.
+
+```sparql
+PREFIX rule: <tag:stardog:api:rule:>
+PREFIX : <urn:test:>
+
+:c a :Circle ;
+   :radius 10 .
+
+:t a :Triangle ;
+   :base 4 ;
+   :height 10 .
+   
+:r a :Rectangle ;
+   :width 5 ;
+   :height 8 .
+   
+:s a :Rectangle ;
+   :width 10 ;
+   :height 10 .
+
+[] a rule:SPARQLRule ;
+   rule:content """
+     PREFIX :<urn:test:>
+     IF {
+        ?r a :Rectangle ; 
+           :width ?w ;
+           :height ?h
+        BIND (?w * ?h AS ?area)
+     } 
+     THEN { 
+         ?r :area ?area 
+     }""" .
+     
+[] a rule:SPARQLRule ;
+   rule:content """
+     PREFIX :<urn:test:>
+     IF {
+        ?t a :Triangle ; 
+           :base ?b ;
+           :height ?h
+        BIND (?b * ?h / 2 AS ?area)
+     } 
+     THEN { 
+         ?t :area ?area 
+     }""" .
+          
+[] a rule:SPARQLRule ;
+   rule:content """
+     PREFIX :<urn:test:>
+     PREFIX afn: <http://jena.hpl.hp.com/ARQ/function#>   
+     PREFIX swrlb: <http://www.w3.org/2003/11/swrlb#>
+     IF {
+          ?c a :Circle ; 
+             :radius ?r
+             BIND (afn:pi() * swrlb:pow(?r, 2) AS ?area)
+     } 
+     THEN { 
+         ?c :area ?area 
+     }""" .
+     
+     
+[] a rule:SPARQLRule ;
+   rule:content """
+     PREFIX :<urn:test:>
+     IF {
+          ?r a :Rectangle ; 
+             :width ?w ;
+             :height ?h
+             FILTER (?w = ?h)
+     } 
+     THEN { 
+         ?r a :Square 
+     }""" .
+```
+
+This example also demonstrates how to use SPARQL's `BIND` to introduce intermediate variables and do calculations with or to them.
+
+Let's look at some other rules, but just the rule content this time for concision, to see some use of other SPARQL features.
 
 This rule says that a person between 13 and 19 (inclusive) years of age is a teenager:
 
@@ -254,15 +386,14 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 IF {
       ?x a :Person; hasAge ?age.
-      ?age swrlb:greaterThanOrEqual 13^xsd:int;
-           swrlb:lessThanOrEqual 19^xsd:int.
-}
+      FILTER (?age >= 13 && ?age <= 19)
+      }
 THEN {
       ?x a :Teenager.
 }
 ```
 
-This rule says that a male person with a sibling who is the parent of a female is an " uncle of a niece":
+This rule says that a male person with a sibling who is the parent of a female is an "uncle of a niece":
 
 ```sparql
 IF {
@@ -393,9 +524,9 @@ This restriction is well-motivated as it can easily cause rules to be non-termin
 aspects, subject to the following restrictions, conditions, and
 warnings. 
 
-**This special predicate is basically a loaded with which users may shoot themselves in the foot if they aren't very careful.**
+**This special predicate is basically a loaded gun with which you may shoot themselves in the foot if you aren't very careful.**
 
-So despite the general restriction in SWLR, in Stardog we actually can create new individuals with a rule by using the (non-standard) built-in predicate `http://www.w3.org/ns/sparql#UUID` as follows:
+So despite the general restriction in SWRL, in Stardog we actually can create new individuals with a rule by using the (non-standard) built-in predicate `http://www.w3.org/ns/sparql#UUID` as follows:
 
 ```sparql
 IF {
@@ -788,3 +919,46 @@ expressive than any other as they provide incomparable sets of
 constructs.
 
 Stardog supports the three profiles of OWL 2. Notably, since TBox BGPs are handled completely by Pellet, Stardog supports reasoning for the whole of OWL 2 for queries containing TBox BGPs only.
+
+## Not Seeing Expected Answers?
+
+Here's a few things that you might want to try:
+
+-   **Do you know what to expect?** The [OWL 2
+    primer](http://www.w3.org/TR/owl2-primer/) is always a good place to
+    start.
+-   **Is the schema where you think it is?** Stardog might be extracting
+    the wrong schema. You have to tell Stardog where to find the schema.
+    See [Schema Extraction](#tbox_extraction) for details.
+-   **Are you using the right reasoning level?** Perhaps some of the
+    modeling constructs (a.k.a. axioms) in your database are being
+    ignored. You can find out which axioms are being ignored due to the
+    reasoning level used by simply including the following line in the
+    logging.properties file in `STARDOG_HOME`:
+
+```java
+        com.clarkparsia.blackout.level = ALL
+```
+-   **Are you using DL?** Stardog supports schema-only reasoning for OWL
+    2 DL, which effectively means that only TBox queries—queries that
+    contain [TBox BGPs](#query_types) only—will return complete query
+    results.
+
+-   **Are you using SWRL?** As from version 2.0, SWRL rules are only taken
+    into account using the **SL** reasoning level.
+
+## Known Issues
+
+Stardog <t>version</t> does not
+
+-   Follow ontology `owl:imports` statements automatically; any imported
+    OWL ontologies that are required for reasoning must be loaded into a
+    Stardog database in the normal way.
+-   Handle recursive queries. If recursion is necessary to answer the
+    query with respect to the schema, results will be sound (no wrong
+    answers) but potentially incomplete (some correct answers not
+    returned) with respect to the requested reasoning type.
+-   Perform equality reasoning. Only *explicit* `owl:sameAs` and
+    `owl:differentFrom` data assertions will be taken into account for
+    query answering.
+-   Perform datatype reasoning or respect user-defined datatypes.
