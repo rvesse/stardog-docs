@@ -350,7 +350,7 @@ $ stardog-admin server start
 To specify parameters:
 
 ```bash
-$ stardog-admin server start --logfile mystardog.log --no-docs --port=8080
+$ stardog-admin server start --logfile mystardog.log --port=8080
 ```
 
 Note: the port can be specified using the property `--port`. 
