@@ -176,10 +176,10 @@ from the user's point of view. Many RDF databases support user-defined
 rules only. Stardog is one of the only RDF databases that
 comprehensively supports both axioms and rules. Some problems (and some
 people) are simply a better fit for a rules-based approach to modeling
-and reasoning than to an axioms-based approach. 
+and reasoning than to an axioms-based approach.
 
-**Remember**: there isn't a one-size-fits-all answer to the question 
-"rules or axioms or both?" Use the thing that makes the most sense to you 
+**Remember**: there isn't a one-size-fits-all answer to the question
+"rules or axioms or both?" Use the thing that makes the most sense to you
 and to the people you're working with, etc.
 
 Stardog supports user-defined rule reasoning together with a rich set of
@@ -192,27 +192,27 @@ are part of the schema, they will be used for reasoning automatically
 when using the **SL** reasoning level.
 
 Assertions implied by the rules *will not* be materialized. Instead,
-rules are used to expand queries just as regular axioms are in Stardog. 
+rules are used to expand queries just as regular axioms are in Stardog.
 **Note**: to trigger rules to "fire", execute a query. It's that simple.
 
 <div id="sd-Stardog-Rules-Syntax"></div>
 ### Stardog Rules Syntax <t>new2</t>
 
-Stardog supports two different syntaxes for defining rules. The first 
+Stardog supports two different syntaxes for defining rules. The first
 is native Stardog Rules syntax and is based on SPARQL, so you
-can re-use what you already know about SPARQL to write rules. 
-**Unless you have specific requirements otherwise, you should use this 
-syntax for user-defined rules in Stardog.** The second, the *de facto* 
-standard RDF/XML syntax for SWRL. It has the advantage of being supported 
-in many tools; but it's not fun to read or to write. You probably 
+can re-use what you already know about SPARQL to write rules.
+**Unless you have specific requirements otherwise, you should use this
+syntax for user-defined rules in Stardog.** The second, the *de facto*
+standard RDF/XML syntax for SWRL. It has the advantage of being supported
+in many tools; but it's not fun to read or to write. You probably
 don't want to use it. Better: don't use this syntax!
 
-Stardog Rules Syntax is basically SPARQL "basic graph patterns" (BGPs) 
-plus some very explicit new bits (`IF-THEN`) to denote the head 
-and the body of a rule.<fn>Quick refresher: the `IF` clause defines the conditions to match in the data; if they match, then the contents of the `THEN` clause "fire", that is, they are inferred and, thus, available for other queries, rules, or axioms, etc.</fn> You define URI prefixes in the normal way  (examples below) and 
-use regular SPARQL variables for rule variables. 
-As you can see, some SPARQL 1.1 syntactic sugar--property 
-paths, especially, but also bnode syntax--make complex 
+Stardog Rules Syntax is basically SPARQL "basic graph patterns" (BGPs)
+plus some very explicit new bits (`IF-THEN`) to denote the head
+and the body of a rule.<fn>Quick refresher: the `IF` clause defines the conditions to match in the data; if they match, then the contents of the `THEN` clause "fire", that is, they are inferred and, thus, available for other queries, rules, or axioms, etc.</fn> You define URI prefixes in the normal way  (examples below) and
+use regular SPARQL variables for rule variables.
+As you can see, some SPARQL 1.1 syntactic sugar--property
+paths, especially, but also bnode syntax--make complex
 Stardog Rules quite concise and elegant.
 
 #### How to Use Stardog Rules
@@ -223,14 +223,14 @@ There are three things to sort out:
 2. How to represent these rules?
 3. What are the gotchas?
 
-First, the rules go into the database, of course; and, in particular, they go into 
-the named graph in which Stardog expects to find the TBox. This setting by 
-default in Stardog is the "default graph", i.e., unless you've changed 
-the value of `reasoning.schema.graphs`, you're probably going to be 
-fine; that is, just add the rules to the database and it will all 
-work out.<n>Of course if you've tweaked `reasoning.schema.graphs`, then you 
+First, the rules go into the database, of course; and, in particular, they go into
+the named graph in which Stardog expects to find the TBox. This setting by
+default in Stardog is the "default graph", i.e., unless you've changed
+the value of `reasoning.schema.graphs`, you're probably going to be
+fine; that is, just add the rules to the database and it will all
+work out.<fn>Of course if you've tweaked `reasoning.schema.graphs`, then you
 should put the rules into the named graphs that are specifed
-in that configuration parameter.</n>
+in that configuration parameter.</fn>
 
 Second, you represent the rules with specially constructed RDF triples. Here's
 a kind of template example:
@@ -252,13 +252,13 @@ So there's a namespace--`tag:stardog:api:rule:`--that has a predicate, `content`
   rule:content """
     PREFIX :<urn:test:>
       IF {
-            ?r a :Rectangle ; 
+            ?r a :Rectangle ;
                :width ?w ;
                :height ?h
             BIND (?w * ?h AS ?area)
-          } 
-      THEN { 
-              ?r :area ?area 
+          }
+      THEN {
+              ?r :area ?area
           }""" .
 ```
 
@@ -310,11 +310,11 @@ PREFIX : <urn:test:>
 :t a :Triangle ;
    :base 4 ;
    :height 10 .
-   
+
 :r a :Rectangle ;
    :width 5 ;
    :height 8 .
-   
+
 :s a :Rectangle ;
    :width 10 ;
    :height 10 .
@@ -323,54 +323,54 @@ PREFIX : <urn:test:>
    rule:content """
      PREFIX :<urn:test:>
      IF {
-        ?r a :Rectangle ; 
+        ?r a :Rectangle ;
            :width ?w ;
            :height ?h
         BIND (?w * ?h AS ?area)
-     } 
-     THEN { 
-         ?r :area ?area 
+     }
+     THEN {
+         ?r :area ?area
      }""" .
-     
+
 [] a rule:SPARQLRule ;
    rule:content """
      PREFIX :<urn:test:>
      IF {
-        ?t a :Triangle ; 
+        ?t a :Triangle ;
            :base ?b ;
            :height ?h
         BIND (?b * ?h / 2 AS ?area)
-     } 
-     THEN { 
-         ?t :area ?area 
+     }
+     THEN {
+         ?t :area ?area
      }""" .
-          
+
 [] a rule:SPARQLRule ;
    rule:content """
      PREFIX :<urn:test:>
-     PREFIX afn: <http://jena.hpl.hp.com/ARQ/function#>   
+     PREFIX afn: <http://jena.hpl.hp.com/ARQ/function#>
      PREFIX swrlb: <http://www.w3.org/2003/11/swrlb#>
      IF {
-          ?c a :Circle ; 
+          ?c a :Circle ;
              :radius ?r
              BIND (afn:pi() * swrlb:pow(?r, 2) AS ?area)
-     } 
-     THEN { 
-         ?c :area ?area 
+     }
+     THEN {
+         ?c :area ?area
      }""" .
-     
-     
+
+
 [] a rule:SPARQLRule ;
    rule:content """
      PREFIX :<urn:test:>
      IF {
-          ?r a :Rectangle ; 
+          ?r a :Rectangle ;
              :width ?w ;
              :height ?h
              FILTER (?w = ?h)
-     } 
-     THEN { 
-         ?r a :Square 
+     }
+     THEN {
+         ?r a :Square
      }""" .
 ```
 
@@ -486,7 +486,7 @@ predicates:
 Where the `sdle` prefix binds to `http://pellet.owldl.com/ns/sdle#`.
 
 We show what these each of these predicates means by relating them to an
-equivalent triple pattern; that is, you can just write the predicate rather than the (more unwieldy) triple pattern. 
+equivalent triple pattern; that is, you can just write the predicate rather than the (more unwieldy) triple pattern.
 
 The predicates `sdle:directSubPropertyOf` and `sdle:strictSubPropertyOf` are defined analogously.
 
@@ -522,7 +522,7 @@ Stardog also supports a special predicate that extends the expressivity of SWRL 
 
 This restriction is well-motivated as it can easily cause rules to be non-terminating, that is, they never reach a fixed point, which causes big problems. Stardog's user-defined rules weakens this restriction in some crucial
 aspects, subject to the following restrictions, conditions, and
-warnings. 
+warnings.
 
 **This special predicate is basically a loaded gun with which you may shoot themselves in the foot if you aren't very careful.**
 
@@ -576,7 +576,7 @@ And then modify the original rule accordingly:
 ## Query Rewriting
 
 Reasoning in Stardog is based (mostly) on a *query rewriting*
-technique: Stardog rewrites the user's query with respect to any schema or rules, and then executes the resulting expanded query (EQ) against the data in the normal way. This process is completely automated and requires no intervention from the user per se. 
+technique: Stardog rewrites the user's query with respect to any schema or rules, and then executes the resulting expanded query (EQ) against the data in the normal way. This process is completely automated and requires no intervention from the user per se.
 
 As can be seen in Figure 2, the rewriting process involves five different phases.
 
@@ -639,7 +639,7 @@ semantics of the reasoning level.<fn>We're working on changes to Stardog's reaso
 ### Why Query Rewriting?
 
 Query rewriting has several advantages over the alternative
-technique, materialization. In materialization, the data 
+technique, materialization. In materialization, the data
 gets expanded with respect to the schema, not the query. The
 schema is used to generate new triples, typicaly when data is added or removed from the system. However, materialization introduces some issues:
 
@@ -705,8 +705,8 @@ types of axiom can help reduce the size of the EQs significantly. Why?
 Consider the following query asking for people and the employees they manage:
 
 ```sparql
-SELECT ?manager ?employee WHERE 
-  { ?manager :manages ?employee. 
+SELECT ?manager ?employee WHERE
+  { ?manager :manages ?employee.
     ?employee rdf:type :Employee. }
 ```
 
@@ -845,7 +845,7 @@ would have to issue the following considerably more complex query that
 considers all possible types of organization:
 
 ```sparql
-SELECT ?org WHERE 
+SELECT ?org WHERE
               { { ?org rdf:type :Organization } UNION
               { ?org rdf:type :Company } UNION
 ...
