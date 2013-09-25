@@ -348,12 +348,11 @@ PREFIX : <urn:test:>
 [] a rule:SPARQLRule ;
    rule:content """
      PREFIX :<urn:test:>
-     PREFIX afn: <http://jena.hpl.hp.com/ARQ/function#>
-     PREFIX swrlb: <http://www.w3.org/2003/11/swrlb#>
+     PREFIX math: <http://www.w3.org/2005/xpath-functions/math#>
      IF {
           ?c a :Circle ;
              :radius ?r
-             BIND (afn:pi() * swrlb:pow(?r, 2) AS ?area)
+             BIND (math:pi() * math:pow(?r, 2) AS ?area)
      }
      THEN {
          ?c :area ?area
@@ -387,7 +386,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 IF {
       ?x a :Person; hasAge ?age.
       FILTER (?age >= 13 && ?age <= 19)
-      }
+}
 THEN {
       ?x a :Teenager.
 }
