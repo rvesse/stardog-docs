@@ -499,7 +499,7 @@ equivalent triple pattern; that is, you can just write the predicate rather than
     
 `:c1 sp:directSubClassOf :c2`
 ```sparql
-    :c1 sdle:strictSubClassOf :c2 .
+    :c1 sp:strictSubClassOf :c2 .
     FILTER NOT EXISTS {
       :c1 sp:strictSubClassOf :c3 .
       :c3 sp:strictSubClassOf :c2 .
