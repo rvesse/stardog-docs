@@ -489,29 +489,33 @@ Where the `sp` prefix binds to `tag:stardog:api:property:`. Stardog also recogni
 We show what these each of these predicates means by relating them to an
 equivalent triple pattern; that is, you can just write the predicate rather than the (more unwieldy) triple pattern.
 
-`:c1 sp:strictSubClassOf :c2` 
 ```sparql
-   :c1 rdfs:subClassOf :c2 .
-   FILTER NOT EXISTS {
-      :c1 owl:equivalentClass :c2 .
-   }
- ```
-    
-`:c1 sp:directSubClassOf :c2`
-```sparql
-    :c1 sp:strictSubClassOf :c2 .
-    FILTER NOT EXISTS {
-      :c1 sp:strictSubClassOf :c3 .
-      :c3 sp:strictSubClassOf :c2 .
-    }
+# c1 is a subclass of c2 but not equivalent to c2
+
+:c1 sp:strictSubClassOf :c2      =>       :c1 rdfs:subClassOf :c2 .
+                                          FILTER NOT EXISTS {
+                                             :c1 owl:equivalentClass :c2 .
+                                          }
 ```
-`:ind sp:directType :c1`
+    
 ```sparql
-    :ind rdf:type :c1 .
-    FILTER NOT EXISTS {
-      :ind rdf:type :c2 .
-      :c2 sp:strictSubClassOf :c1 .
-    }
+# c1 is a strict subclass of c2 and there is no c3 between c1 and c2 in the strict subclass hierarchy
+
+:c1 sp:directSubClassOf :c2      =>       :c1 sp:strictSubClassOf :c2 .
+                                          FILTER NOT EXISTS {
+                                             :c1 sp:strictSubClassOf :c3 .
+                                             :c3 sp:strictSubClassOf :c2 .
+                                          }
+```
+
+```sparql
+# ind is an instance of c1 but not an instance of any strict subclass of c1
+
+:ind sp:directType :c1           =>       :ind rdf:type :c1 .
+                                          FILTER NOT EXISTS {
+                                             :ind rdf:type :c2 .
+                                             :c2 sp:strictSubClassOf :c1 .
+                                          }
 ```
 
 The predicates `sp:directSubPropertyOf` and `sp:strictSubPropertyOf` are defined analogously.
