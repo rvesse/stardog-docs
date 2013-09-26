@@ -245,7 +245,7 @@ a kind of template example:
 
 So there's a namespace--`tag:stardog:api:rule:`--that has a predicate, `content`, and a class, `SPARQLRule`. The object of this triple contains *one* rule in Stardog Rules syntax. A more realistic example:
 
-```sparql
+```turtle
 @prefix rule: <tag:stardog:api:rule:> .
 
 [] a rule:SPARQLRule ;
@@ -271,7 +271,7 @@ Third, what are the gotchas? There are two:
 
 #### Stardog Rules Examples
 
-```sparql
+```turtle
 PREFIX rule: <tag:stardog:api:rule:>
 PREFIX : <urn:test:>
 PREFIX gr: <http://purl.org/goodrelations/v1#>
@@ -300,7 +300,7 @@ This example is self-contained: it contains some data (the `:Product...` triples
 
 Here's a more complex example that includes four rules and, again, some data.
 
-```sparql
+```turtle
 PREFIX rule: <tag:stardog:api:rule:>
 PREFIX : <urn:test:>
 
@@ -352,7 +352,7 @@ PREFIX : <urn:test:>
      IF {
           ?c a :Circle ;
              :radius ?r
-             BIND (math:pi() * math:pow(?r, 2) AS ?area)
+          BIND (math:pi() * math:pow(?r, 2) AS ?area)
      }
      THEN {
          ?c :area ?area
@@ -366,7 +366,7 @@ PREFIX : <urn:test:>
           ?r a :Rectangle ;
              :width ?w ;
              :height ?h
-             FILTER (?w = ?h)
+          FILTER (?w = ?h)
      }
      THEN {
          ?r a :Square
