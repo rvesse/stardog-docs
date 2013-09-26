@@ -476,42 +476,45 @@ Besides the standard RDF(S) predicates `rdf:type`, `rdfs:subClassOf` and
 `rdfs:subPropertyOf`, Stardog supports the following special built-in
 predicates:
 
--   `sdle:directType`
--   `sdle:directSubClassOf`
--   `sdle:strictSubClassOf`
--   `sdle:directSubPropertyOf`
--   `sdle:strictSubPropertyOf`
+-   `sp:directType`
+-   `sp:directSubClassOf`
+-   `sp:strictSubClassOf`
+-   `sp:directSubPropertyOf`
+-   `sp:strictSubPropertyOf`
 
-Where the `sdle` prefix binds to `http://pellet.owldl.com/ns/sdle#`.
+Where the `sp` prefix binds to `tag:stardog:api:property:`. Stardog also recognizes `sesame:directType`, 
+`sesame:directSubClassOf`, and `sesame:strictSubClassOf` predicates where the prefix `sesame` binds to
+`http://www.openrdf.org/schema/sesame#`.
 
 We show what these each of these predicates means by relating them to an
 equivalent triple pattern; that is, you can just write the predicate rather than the (more unwieldy) triple pattern.
 
-The predicates `sdle:directSubPropertyOf` and `sdle:strictSubPropertyOf` are defined analogously.
-
-    :ind sdle:directType :c1 ->
-
+`:c1 sp:strictSubClassOf :c2` 
+```sparql
+   :c1 rdfs:subClassOf :c2 .
+   FILTER NOT EXISTS {
+      :c1 owl:equivalentClass :c2 .
+   }
+ ```
+    
+`:c1 sp:directSubClassOf :c2`
+```sparql
+    :c1 sdle:strictSubClassOf :c2 .
+    FILTER NOT EXISTS {
+      :c1 sp:strictSubClassOf :c3 .
+      :c3 sp:strictSubClassOf :c2 .
+    }
+```
+`:ind sp:directType :c1`
+```sparql
     :ind rdf:type :c1 .
     FILTER NOT EXISTS {
       :ind rdf:type :c2 .
-      :c2 sdle:strictSubClassOf :c1 .
+      :c2 sp:strictSubClassOf :c1 .
     }
+```
 
-    :c1 sdle:strictSubClassOf :c2 ->
-
-    :c1 rdfs:subClassOf :c2 .
-    FILTER NOT EXISTS {
-      :c1 owl:equivalentClass :c2 .
-    }
-
-    :c1 sdle:directSubClassOf :c2 ->
-
-    :c1 sdle:strictSubClassOf :c2 .
-    FILTER NOT EXISTS {
-      :c1 sdle:strictSubClassOf :c3 .
-      :c3 sdle:strictSubClassOf :c2 .
-    }
-
+The predicates `sp:directSubPropertyOf` and `sp:strictSubPropertyOf` are defined analogously.
 
 ### New Individuals with SWRL
 
