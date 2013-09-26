@@ -33,7 +33,11 @@
     <div class="row">
         <div class="four columns stretch-container" id="sidebar1">
           <nav id="sidebar-nav-holder" class="fixed vertical-nav stretch-y" gumby-fixed="top">
-            <img id="thelogo" src="http://docs.stardog.com/img/sd.png"/>
+            <div id="sidebar-logo">
+              <a id="a52" style="text-decoration: none; background-color: none; border: none; color: none;" href="http://stardog.com/">
+                <img id="thelogo" src="http://docs.stardog.com/img/sd.png"/>       
+              </a>
+            </div>
             <% if @document.toc: %>
               <%- @partial("toc.html.eco", @, {tocItems: @document.tableOfContents})%>
               <p id="tocnav">
