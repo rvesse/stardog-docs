@@ -276,179 +276,76 @@ $ stardog query obfuscate --config obfConfig.ttl myDatabase myQuery.sparql > obf
 Stardog supports all the functions in SPARQL language plus some additional function from XPATH  and SWRL. These functions can be used in queries or rules. Some functions appear in multiple namespaces and all the namespaces are recognized.
 
 Functions from the following namespaces are recognized:
-<html>
-	<head><meta content="text/html;charset=UTF-8"/></head>
-	<body>
-		<table border=1>
-			<tr>
-				<th>Prefix</th>
-				<th>Namespace</th>
-			</tr>
-			<tr>
-				<td>stardog</td>
-				<td>stardog</td>
-			</tr>
-			<tr>
-				<td>fn</td>
-				<td>fn</td>
-			</tr>
-			<tr>
-				<td>math</td>
-				<td>math</td>
-			</tr>
-			<tr>
-				<td>swrlb</td>
-				<td>swrlb</td>
-			</tr>
-			<tr>
-				<td>afn</td>
-				<td>afn</td>
-			</tr>
-		</table>
-	</body>
-</html>
+
+Prefix     | Namespace                               
+---------- | ----------------------------------------
+stardog    | [tag:stardog:api:functions:](#)
+fn         | [http://www.w3.org/2005/xpath-functions#](http://www.w3.org/2005/xpath-functions#)
+math       | [http://www.w3.org/2005/xpath-functions/math#](http://www.w3.org/2005/xpath-functions/math#)
+swrlb      | [http://www.w3.org/2003/11/swrlb#](http://www.w3.org/2003/11/swrlb#)
+afn        | [http://jena.hpl.hp.com/ARQ/function#](http://jena.hpl.hp.com/ARQ/function#)
 
 The list of function URIs recognized by Stardog are shown in the following table. Note that, some of these functions exist in SPARQL specification which means they can be used without an explicit namespace.
-<html>
-	<head><meta content="text/html;charset=UTF-8"/></head>
-	<body>
-		<table border=1>
-			<tr>
-				<th>Function name</th>
-				<th>Recognized URIs</th>
-			</tr>
-			<tr>
-				<td>concat</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#concat">fn:concat</a>, <a href="http://www.w3.org/2003/11/swrlb#stringConcat">swrlb:stringConcat</a></td>
-			</tr>
-			<tr>
-				<td>contains</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#contains">fn:contains</a>, <a href="http://www.w3.org/2003/11/swrlb#contains">swrlb:contains</a></td>
-			</tr>
-			<tr>
-				<td>containsIgnoreCase</td>
-				<td><a href="http://www.w3.org/2003/11/swrlb#containsIgnoreCase">swrlb:containsIgnoreCase</a></td>
-			</tr>
-			<tr>
-				<td>date</td>
-				<td><a href="http://www.w3.org/2003/11/swrlb#date">swrlb:date</a></td>
-			</tr>
-			<tr>
-				<td>dateTime</td>
-				<td><a href="http://www.w3.org/2003/11/swrlb#dateTime">swrlb:dateTime</a></td>
-			</tr>
-			<tr>
-				<td>day</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#day-from-dateTime">fn:day-from-dateTime</a></td>
-			</tr>
-			<tr>
-				<td>dayTimeDuration</td>
-				<td><a href="http://www.w3.org/2003/11/swrlb#dayTimeDuration">swrlb:dayTimeDuration</a></td>
-			</tr>
-			<tr>
-				<td>encode_for_uri</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#encode-for-uri">fn:encode-for-uri</a></td>
-			</tr>
-			<tr>
-				<td>exp</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions/math#exp">math:exp</a>, <a href="http://jena.hpl.hp.com/ARQ/function#e">afn:e</a></td>
-			</tr>
-			<tr>
-				<td>hours</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#hours-from-dateTime">fn:hours-from-dateTime</a></td>
-			</tr>
-			<tr>
-				<td>lcase</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#lower-case">fn:lower-case</a>, <a href="http://www.w3.org/2003/11/swrlb#lowerCase">swrlb:lowerCase</a></td>
-			</tr>
-			<tr>
-				<td>max</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#max">fn:max</a>, <a href="http://jena.hpl.hp.com/ARQ/function#max">afn:max</a></td>
-			</tr>
-			<tr>
-				<td>min</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#min">fn:min</a>, <a href="http://jena.hpl.hp.com/ARQ/function#min">afn:min</a></td>
-			</tr>
-			<tr>
-				<td>minutes</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#minutes-from-dateTime">fn:minutes-from-dateTime</a></td>
-			</tr>
-			<tr>
-				<td>month</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#month-from-dateTime">fn:month-from-dateTime</a></td>
-			</tr>
-			<tr>
-				<td>normalizeSpace</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#normalize-space">fn:normalize-space</a>, <a href="http://www.w3.org/2003/11/swrlb#normalizeSpace">swrlb:normalizeSpace</a></td>
-			</tr>
-			<tr>
-				<td>pi</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions/math#pi">math:pi</a>, <a href="http://jena.hpl.hp.com/ARQ/function#pi">afn:pi</a></td>
-			</tr>
-			<tr>
-				<td>replace</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#replace">fn:replace</a></td>
-			</tr>
-			<tr>
-				<td>seconds</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#seconds-from-dateTime">fn:seconds-from-dateTime</a></td>
-			</tr>
-			<tr>
-				<td>sqrt</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions/math#sqrt">math:sqrt</a>, <a href="http://jena.hpl.hp.com/ARQ/function#sqrt">afn:sqrt</a></td>
-			</tr>
-			<tr>
-				<td>strafter</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#substring-after">fn:substring-after</a>, <a href="http://www.w3.org/2003/11/swrlb#substringAfter">swrlb:substringAfter</a></td>
-			</tr>
-			<tr>
-				<td>strbefore</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#substring-before">fn:substring-before</a>, <a href="http://www.w3.org/2003/11/swrlb#substringBefore">swrlb:substringBefore</a></td>
-			</tr>
-			<tr>
-				<td>strends</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#ends-with">fn:ends-with</a>, <a href="http://www.w3.org/2003/11/swrlb#endsWith">swrlb:endsWith</a></td>
-			</tr>
-			<tr>
-				<td>stringEqualIgnoreCase</td>
-				<td><a href="http://www.w3.org/2003/11/swrlb#stringEqualIgnoreCase">swrlb:stringEqualIgnoreCase</a></td>
-			</tr>
-			<tr>
-				<td>strlen</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#string-length">fn:string-length</a>, <a href="http://www.w3.org/2003/11/swrlb#stringLength">swrlb:stringLength</a></td>
-			</tr>
-			<tr>
-				<td>strstarts</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#starts-with">fn:starts-with</a>, <a href="http://www.w3.org/2003/11/swrlb#startsWith">swrlb:startsWith</a></td>
-			</tr>
-			<tr>
-				<td>substring</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#substring">fn:substring</a>, <a href="http://www.w3.org/2003/11/swrlb#substring">swrlb:substring</a></td>
-			</tr>
-			<tr>
-				<td>time</td>
-				<td><a href="http://www.w3.org/2003/11/swrlb#time">swrlb:time</a></td>
-			</tr>
-			<tr>
-				<td>timezone</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#timezone-from-dateTime">fn:timezone-from-dateTime</a></td>
-			</tr>
-			<tr>
-				<td>translate</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#translate">fn:translate</a>, <a href="http://www.w3.org/2003/11/swrlb#translate">swrlb:translate</a></td>
-			</tr>
-			<tr>
-				<td>ucase</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#upper-case">fn:upper-case</a>, <a href="http://www.w3.org/2003/11/swrlb#upperCase">swrlb:upperCase</a></td>
-			</tr>
-			<tr>
-				<td>year</td>
-				<td><a href="http://www.w3.org/2005/xpath-functions#year-from-dateTime">fn:year-from-dateTime</a></td>
-			</tr>
-			<tr>
-				<td>yearMonthDuration</td>
-				<td><a href="http://www.w3.org/2003/11/swrlb#yearMonthDuration">swrlb:yearMonthDuration</a></td>
-			</tr>
-		</table>
-	</body>
-</html>
+
+Function name             | Recognized URIs          
+:-----------------------  | :----------------------- 
+abs                       | [fn:numeric-abs](http://www.w3.org/2005/xpath-functions#numeric-abs), [swrlb:abs](http://www.w3.org/2003/11/swrlb#abs)
+acos                      | [math:acos](http://www.w3.org/2005/xpath-functions/math#acos)
+add                       | [fn:numeric-add](http://www.w3.org/2005/xpath-functions#numeric-add)
+asin                      | [math:asin](http://www.w3.org/2005/xpath-functions/math#asin)
+atan                      | [math:atan](http://www.w3.org/2005/xpath-functions/math#atan)
+ceil                      | [fn:numeric-ceil](http://www.w3.org/2005/xpath-functions#numeric-ceil), [swrlb:ceiling](http://www.w3.org/2003/11/swrlb#ceiling)
+concat                    | [fn:concat](http://www.w3.org/2005/xpath-functions#concat), [swrlb:stringConcat](http://www.w3.org/2003/11/swrlb#stringConcat)
+contains                  | [fn:contains](http://www.w3.org/2005/xpath-functions#contains), [swrlb:contains](http://www.w3.org/2003/11/swrlb#contains)
+containsIgnoreCase        | [swrlb:containsIgnoreCase](http://www.w3.org/2003/11/swrlb#containsIgnoreCase)
+cos                       | [math:cos](http://www.w3.org/2005/xpath-functions/math#cos), [swrlb:cos](http://www.w3.org/2003/11/swrlb#cos)
+cosh                      | [stardog:cosh](tag:stardog:api:functions:cosh)
+date                      | [swrlb:date](http://www.w3.org/2003/11/swrlb#date)
+dateTime                  | [swrlb:dateTime](http://www.w3.org/2003/11/swrlb#dateTime)
+day                       | [fn:day-from-dateTime](http://www.w3.org/2005/xpath-functions#day-from-dateTime)
+dayTimeDuration           | [swrlb:dayTimeDuration](http://www.w3.org/2003/11/swrlb#dayTimeDuration)
+divide                    | [fn:numeric-divide](http://www.w3.org/2005/xpath-functions#numeric-divide), [swrlb:divide](http://www.w3.org/2003/11/swrlb#divide)
+encode_for_uri            | [fn:encode-for-uri](http://www.w3.org/2005/xpath-functions#encode-for-uri)
+exp                       | [math:exp](http://www.w3.org/2005/xpath-functions/math#exp), [afn:e](http://jena.hpl.hp.com/ARQ/function#e)
+floor                     | [fn:numeric-floor](http://www.w3.org/2005/xpath-functions#numeric-floor), [swrlb:floor](http://www.w3.org/2003/11/swrlb#floor)
+hours                     | [fn:hours-from-dateTime](http://www.w3.org/2005/xpath-functions#hours-from-dateTime)
+integerDivide             | [fn:numeric-integer-divide](http://www.w3.org/2005/xpath-functions#numeric-integer-divide), [swrlb:integerDivide](http://www.w3.org/2003/11/swrlb#integerDivide)
+lcase                     | [fn:lower-case](http://www.w3.org/2005/xpath-functions#lower-case), [swrlb:lowerCase](http://www.w3.org/2003/11/swrlb#lowerCase)
+log                       | [math:log](http://www.w3.org/2005/xpath-functions/math#log)
+log10                     | [math:log10](http://www.w3.org/2005/xpath-functions/math#log10)
+max                       | [fn:max](http://www.w3.org/2005/xpath-functions#max), [afn:max](http://jena.hpl.hp.com/ARQ/function#max)
+min                       | [fn:min](http://www.w3.org/2005/xpath-functions#min), [afn:min](http://jena.hpl.hp.com/ARQ/function#min)
+minutes                   | [fn:minutes-from-dateTime](http://www.w3.org/2005/xpath-functions#minutes-from-dateTime)
+mod                       | [swrlb:mod](http://www.w3.org/2003/11/swrlb#mod)
+month                     | [fn:month-from-dateTime](http://www.w3.org/2005/xpath-functions#month-from-dateTime)
+multiply                  | [fn:numeric-multiply](http://www.w3.org/2005/xpath-functions#numeric-multiply)
+normalizeSpace            | [fn:normalize-space](http://www.w3.org/2005/xpath-functions#normalize-space), [swrlb:normalizeSpace](http://www.w3.org/2003/11/swrlb#normalizeSpace)
+pi                        | [math:pi](http://www.w3.org/2005/xpath-functions/math#pi), [afn:pi](http://jena.hpl.hp.com/ARQ/function#pi)
+pow                       | [math:pow](http://www.w3.org/2005/xpath-functions/math#pow), [swrlb:pow](http://www.w3.org/2003/11/swrlb#pow)
+replace                   | [fn:replace](http://www.w3.org/2005/xpath-functions#replace)
+round                     | [fn:numeric-round](http://www.w3.org/2005/xpath-functions#numeric-round), [swrlb:round](http://www.w3.org/2003/11/swrlb#round)
+roundHalfToEven           | [fn:numeric-round-half-to-even](http://www.w3.org/2005/xpath-functions#numeric-round-half-to-even), [swrlb:roundHalfToEven](http://www.w3.org/2003/11/swrlb#roundHalfToEven)
+seconds                   | [fn:seconds-from-dateTime](http://www.w3.org/2005/xpath-functions#seconds-from-dateTime)
+sin                       | [math:sin](http://www.w3.org/2005/xpath-functions/math#sin), [swrlb:sin](http://www.w3.org/2003/11/swrlb#sin)
+sinh                      | [stardog:sinh](tag:stardog:api:functions:sinh)
+sqrt                      | [math:sqrt](http://www.w3.org/2005/xpath-functions/math#sqrt), [afn:sqrt](http://jena.hpl.hp.com/ARQ/function#sqrt)
+strafter                  | [fn:substring-after](http://www.w3.org/2005/xpath-functions#substring-after), [swrlb:substringAfter](http://www.w3.org/2003/11/swrlb#substringAfter)
+strbefore                 | [fn:substring-before](http://www.w3.org/2005/xpath-functions#substring-before), [swrlb:substringBefore](http://www.w3.org/2003/11/swrlb#substringBefore)
+strends                   | [fn:ends-with](http://www.w3.org/2005/xpath-functions#ends-with), [swrlb:endsWith](http://www.w3.org/2003/11/swrlb#endsWith)
+stringEqualIgnoreCase     | [swrlb:stringEqualIgnoreCase](http://www.w3.org/2003/11/swrlb#stringEqualIgnoreCase)
+strlen                    | [fn:string-length](http://www.w3.org/2005/xpath-functions#string-length), [swrlb:stringLength](http://www.w3.org/2003/11/swrlb#stringLength)
+strstarts                 | [fn:starts-with](http://www.w3.org/2005/xpath-functions#starts-with), [swrlb:startsWith](http://www.w3.org/2003/11/swrlb#startsWith)
+substring                 | [fn:substring](http://www.w3.org/2005/xpath-functions#substring), [swrlb:substring](http://www.w3.org/2003/11/swrlb#substring)
+subtract                  | [fn:numeric-subtract](http://www.w3.org/2005/xpath-functions#numeric-subtract), [swrlb:subtract](http://www.w3.org/2003/11/swrlb#subtract)
+tan                       | [math:tan](http://www.w3.org/2005/xpath-functions/math#tan), [swrlb:tan](http://www.w3.org/2003/11/swrlb#tan)
+tanh                      | [stardog:tanh](tag:stardog:api:functions:tanh)
+time                      | [swrlb:time](http://www.w3.org/2003/11/swrlb#time)
+timezone                  | [fn:timezone-from-dateTime](http://www.w3.org/2005/xpath-functions#timezone-from-dateTime)
+toDegrees                 | [stardog:toDegrees](tag:stardog:api:functions:toDegrees)
+toRadians                 | [stardog:toRadians](tag:stardog:api:functions:toRadians)
+translate                 | [fn:translate](http://www.w3.org/2005/xpath-functions#translate), [swrlb:translate](http://www.w3.org/2003/11/swrlb#translate)
+ucase                     | [fn:upper-case](http://www.w3.org/2005/xpath-functions#upper-case), [swrlb:upperCase](http://www.w3.org/2003/11/swrlb#upperCase)
+unaryMinus                | [fn:numeric-unary-minus](http://www.w3.org/2005/xpath-functions#numeric-unary-minus), [swrlb:unaryMinus](http://www.w3.org/2003/11/swrlb#unaryMinus)
+unaryPlus                 | [fn:numeric-unary-plus](http://www.w3.org/2005/xpath-functions#numeric-unary-plus), [swrlb:unaryPlus](http://www.w3.org/2003/11/swrlb#unaryPlus)
+year                      | [fn:year-from-dateTime](http://www.w3.org/2005/xpath-functions#year-from-dateTime)
+yearMonthDuration         | [swrlb:yearMonthDuration](http://www.w3.org/2003/11/swrlb#yearMonthDuration)
