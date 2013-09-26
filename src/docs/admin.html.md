@@ -479,140 +479,32 @@ remains online.
 
 The following table summarizes the options:
 
-<table>
-      <thead>
-        <tr>
-        <th>Config Option</th>
-        <th>Mutability</th>
-        <th>Default</th>
-        <th>API</th>
-      </tr>
-    </thead>
-    <tfoot>
-       <tr>
-        <th>Config Option</th>
-        <th>Mutability</th>
-        <th>Default</th>
-        <th>API</th>
-      </tr>
-    </tfoot>
-    <tbody>
-      <tr>
-        <td>database.name</td>
-        <td>false</td>
-        <td></td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#NAME">DatabaseOptions.NAME</a></td>
-      </tr>
-      <tr>
-        <td>database.online</td>
-        <td>false</td>
-        <td>true</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#ONLINE">DatabaseOptions.ONLINE</a></td>
-      </tr>
-      <tr>
-        <td>icv.active.graphs</td>
-        <td>false</td>
-        <td>default</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#ICV_ACTIVE_GRAPHS">DatabaseOptions.ICV_ACTIVE_GRAPHS</a></td>
-      </tr>
-      <tr>
-        <td>icv.enabled</td>
-        <td>true</td>
-        <td>false</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#ICV_ENABLED">DatabaseOptions.ICV_ENABLED</a></td>
-      </tr>
-      <tr>
-        <td>icv.reasoning.type</td>
-        <td>true</td>
-        <td>NONE</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#ICV_REASONING_TYPE">DatabaseOptions.ICV_REASONING_TYPE</a></td>
-      </tr>
-      <tr>
-        <td>index.differential.enable.limit</td>
-        <td>true</td>
-        <td>1000000</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#DIFF_INDEX_MIN_LIMIT">IndexOptions.DIFF_INDEX_MIN_LIMIT</a></td>
-      </tr>
-      <tr>
-        <td>index.differential.merge.limit</td>
-        <td>true</td>
-        <td>10000</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#DIFF_INDEX_MAX_LIMIT">IndexOptions.DIFF_INDEX_MAX_LIMIT</a></td>
-      </tr>
-      <tr>
-        <td>index.literals.canonical</td>
-        <td>false</td>
-        <td>true</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#CANONICAL_LITERALS">IndexOptions.CANONICAL_LITERALS</a></td>
-      </tr>
-      <tr>
-        <td>index.named.graphs</td>
-        <td>false</td>
-        <td>true</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#INDEX_NAMED_GRAPHS">IndexOptions.INDEX_NAMED_GRAPHS</a></td>
-      </tr>
-      <tr>
-        <td>index.persist</td>
-        <td>true</td>
-        <td>false</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#PERSIST">IndexOptions.PERSIST</a></td>
-      </tr>
-      <tr>
-        <td>index.persist.sync</td>
-        <td>true</td>
-        <td>true</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#SYNC">IndexOptions.SYNC</a></td>
-      </tr>
-      <tr>
-        <td>index.statistics.update.automatic</td>
-        <td>true</td>
-        <td>true</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#AUTO_STATS_UPDATE">IndexOptions.AUTO_STATS_UPDATE</a></td>
-      </tr>
-      <tr>
-        <td>index.type</td>
-        <td>false</td>
-        <td>Disk</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/index/IndexOptions.html#INDEX_TYPE">IndexOptions.INDEX_TYPE</a></td>
-      </tr>
-      <tr>
-        <td>reasoning.consistency.automatic</td>
-        <td>true</td>
-        <td>false</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#CONSISTENCY_AUTOMATIC">DatabaseOptions.CONSISTENCY_AUTOMATIC</a></td>
-      </tr>
-      <tr>
-        <td>reasoning.punning.enabled</td>
-        <td>false</td>
-        <td>false</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#PUNNING_ENABLED">DatabaseOptions.PUNNING_ENABLED</a></td>
-      </tr>
-      <tr>
-        <td>reasoning.schema.graphs</td>
-        <td>true</td>
-        <td>default</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#SCHEMA_GRAPHS">DatabaseOptions.SCHEMA_GRAPHS</a></td>
-      </tr>
-      <tr>
-        <td>search.enabled</td>
-        <td>false</td>
-        <td>false</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#SEARCHABLE">DatabaseOptions.SEARCHABLE</a></td>
-      </tr>
-      <tr>
-        <td>search.reindex.mode</td>
-        <td>false</td>
-        <td>wait</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#SEARCH_REINDEX_MODE">DatabaseOptions.SEARCH_REINDEX_MODE</a></td>
-      </tr>
-      <tr>
-        <td>transactions.durable</td>
-        <td>true</td>
-        <td>false</td>
-        <td><a href="../java/snarl/com/clarkparsia/stardog/DatabaseOptions.html#TRANSACTIONS_DURABLE">DatabaseOptions.TRANSACTIONS_DURABLE</a></td>
-      </tr>
-    </tbody>
-</table>
+Config Option                       | Mutability | Default    | API                 
+:---------------------------------  | :--------  | :--------  | :------------------ 
+database.archetypes                 | Yes        |            | [DatabaseOptions.ARCHETYPES](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#ARCHETYPES)
+database.name                       | No         |            | [DatabaseOptions.NAME](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#NAME)
+database.namespaces                 | Yes        | rdf, rdfs, xsd, owl, stardog | [DatabaseOptions.NAMESPACES](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#NAMESPACES)
+database.online                     | No         | true       | [DatabaseOptions.ONLINE](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#ONLINE)
+icv.active.graphs                   | No         | default    | [DatabaseOptions.ICV_ACTIVE_GRAPHS](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#ICV_ACTIVE_GRAPHS)
+icv.consistency.automatic           | No         | false      | [DatabaseOptions.ICV_CONSISTENCY_AUTOMATIC](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#ICV_CONSISTENCY_AUTOMATIC)
+icv.enabled                         | Yes        | false      | [DatabaseOptions.ICV_ENABLED](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#ICV_ENABLED)
+icv.reasoning.type                  | Yes        | NONE       | [DatabaseOptions.ICV_REASONING_TYPE](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#ICV_REASONING_TYPE)
+index.connection.timeout            | Yes        | 3600000    | [IndexOptions.INDEX_CONNECTION_TIMEOUT_MS](/docs/java/snarl/com/complexible/stardog/index/IndexOptions.html#INDEX_CONNECTION_TIMEOUT_MS)
+index.differential.enable.limit     | Yes        | 1000000    | [IndexOptions.DIFF_INDEX_MIN_LIMIT](/docs/java/snarl/com/complexible/stardog/index/IndexOptions.html#DIFF_INDEX_MIN_LIMIT)
+index.differential.merge.limit      | Yes        | 10000      | [IndexOptions.DIFF_INDEX_MAX_LIMIT](/docs/java/snarl/com/complexible/stardog/index/IndexOptions.html#DIFF_INDEX_MAX_LIMIT)
+index.literals.canonical            | No         | true       | [IndexOptions.CANONICAL_LITERALS](/docs/java/snarl/com/complexible/stardog/index/IndexOptions.html#CANONICAL_LITERALS)
+index.named.graphs                  | No         | true       | [IndexOptions.INDEX_NAMED_GRAPHS](/docs/java/snarl/com/complexible/stardog/index/IndexOptions.html#INDEX_NAMED_GRAPHS)
+index.persist                       | Yes        | false      | [IndexOptions.PERSIST](/docs/java/snarl/com/complexible/stardog/index/IndexOptions.html#PERSIST)
+index.persist.sync                  | Yes        | true       | [IndexOptions.SYNC](/docs/java/snarl/com/complexible/stardog/index/IndexOptions.html#SYNC)
+index.statistics.update.automatic   | Yes        | true       | [IndexOptions.AUTO_STATS_UPDATE](/docs/java/snarl/com/complexible/stardog/index/IndexOptions.html#AUTO_STATS_UPDATE)
+index.type                          | No         | Disk       | [IndexOptions.INDEX_TYPE](/docs/java/snarl/com/complexible/stardog/index/IndexOptions.html#INDEX_TYPE)
+query.timeout                       | Yes        |            | [DatabaseOptions.QUERY_TIMEOUT](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#QUERY_TIMEOUT)
+reasoning.consistency.automatic     | Yes        | false      | [DatabaseOptions.CONSISTENCY_AUTOMATIC](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#CONSISTENCY_AUTOMATIC)
+reasoning.punning.enabled           | No         | false      | [DatabaseOptions.PUNNING_ENABLED](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#PUNNING_ENABLED)
+reasoning.schema.graphs             | Yes        | default    | [DatabaseOptions.SCHEMA_GRAPHS](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#SCHEMA_GRAPHS)
+search.enabled                      | Yes        | false      | [DatabaseOptions.SEARCHABLE](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#SEARCHABLE)
+transactions.durable                | Yes        | false      | [DatabaseOptions.TRANSACTIONS_DURABLE](/docs/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#TRANSACTIONS_DURABLE)
+
 
 
 #### Legal Values of Configuration Options
