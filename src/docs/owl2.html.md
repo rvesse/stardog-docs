@@ -446,25 +446,7 @@ THEN {
 
 ### Supported Built-Ins
 
-Stardog supports the following SWRL built-in functions (which may be used in  either syntax):
-
--   [Built-ins for comparisons](http://www.w3.org/Submission/SWRL/#8.1).
--   [Math built-ins](http://www.w3.org/Submission/SWRL/#8.2).
--   [Built-ins for boolean values](http://www.w3.org/Submission/SWRL/#8.3).
--   [Built-ins for strings](http://www.w3.org/Submission/SWRL/#8.4),
-    with the exception of `swrlb:tokenize`.
--   [Built-ins for date, time, and duration](http://www.w3.org/Submission/SWRL/#8.4).
--   Stardog built-in function library:
-    * `tag:stardog:api:functions:ln`
-    * `tag:stardog:api:functions:log`
-    * `tag:stardog:api:functions:atan`
-    * `tag:stardog:api:functions:asin`
-    * `tag:stardog:api:functions:acos`
-    * `tag:stardog:api:functions:sinh`
-    * `tag:stardog:api:functions:cosh`
-    * `tag:stardog:api:functions:tang`
-    * `tag:stardog:api:functions:toDegrees`
-    * `tag:stardog:api:functions:toRadians`
+Stardog supports a wide variety of functions from SPARQL, XPath, SWRL, and some native Stardog functions, too. All of them may be used in either Stardog Rules syntax or in SWRL syntax. The supported functions are enumerated [here](/using/#functions).
 
 ## Special Predicates
 
