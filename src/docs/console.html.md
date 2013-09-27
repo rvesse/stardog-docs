@@ -10,8 +10,6 @@ quote: Interfaces keep things tidy, but don't accelerate growth: Functions do.
 
 Stardog 2.0 introduces the Web Console, a responsive web app for every Stardog database that makes administration and interaction with data quick and easy. The Console includes a Linked Data management capability--including data editing--browsing, search, query, and JMX monitoring.
 
-The Console is a pure client-side Javascript application that uses middleware REST services that run in the same JVM container as Stardog, which means you can also use those services, together with [Stardog Web framework](/web), to build additional Console capabilities or to build your own Stardog-backed web apps.
-
 ## Database View
 ![Stardog Web Console: Database View](/img/console/home.png "")
 
