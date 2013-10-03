@@ -504,62 +504,104 @@ The predicates `sp:directSubPropertyOf` and `sp:strictSubPropertyOf` are defined
 
 ### New Individuals with SWRL
 
-Stardog also supports a special predicate that extends the expressivity of SWRL rules. According to the SWLR spec, you can't new individuals (i.e., new instances of classes) in a SWRL rule.
+Stardog also supports a special predicate that extends the expressivity of SWRL rules. According to the SWLR spec, 
+you can't create new individuals (i.e., new instances of classes) in a SWRL rule.
 
-**Note:** Don't get hung up by the tech vocabulary here..."new individual" just means that you can't have a rule that adds a new instance of some RDF or OWL class as a result of the rule firing (i.e., you can't have a "type triple" in the body of a rule).
+**Note:** Don't get hung up by the tech vocabulary here..."new individual" just means that you can't have a rule 
+that adds a new instance of some RDF or OWL class as a result of the rule firing.
 
-This restriction is well-motivated as it can easily cause rules to be non-terminating, that is, they never reach a fixed point, which causes big problems. Stardog's user-defined rules weakens this restriction in some crucial
-aspects, subject to the following restrictions, conditions, and
-warnings.
+This restriction is well-motivated as it can easily cause rules to be non-terminating, that is, they never reach 
+a fixed point, which causes big problems. Stardog's user-defined rules weakens this restriction in some crucial
+aspects, subject to the following restrictions, conditions, and warnings.
 
-**This special predicate is basically a loaded gun with which you may shoot themselves in the foot if you aren't very careful.**
+**This special predicate is basically a loaded gun with which you may shoot yourselves in the foot if you aren't very careful.**
 
-So despite the general restriction in SWRL, in Stardog we actually can create new individuals with a rule by using the (non-standard) built-in predicate `http://www.w3.org/ns/sparql#UUID` as follows:
+So despite the general restriction in SWRL, in Stardog we actually can create new individuals with a rule by using 
+the function `UUID()` as follows:
 
 ```sparql
 IF {
-    ?x a :Parent
+    ?person a :Person .
+    BIND (UUID() AS ?parent) .
 }
 THEN {
-    ...
+    ?parent a :Parent .
 }
-:Parent(?y) <- :Person(?x), http://www.w3.org/ns/sparql#UUID(?y).
 ```
 
-This rule will create a *random* bnode for each instance of
-the class `:Person` and also to assert that each new instance is also an
-instance of `:Parent`.
+**Note:** Alternatively, we can use the predicate `<http://www.w3.org/ns/sparql#UUID>` as a unary SWRL built-in.
+
+This rule will create a *random* URI for each instance of the class `:Person` and also assert that each new instance 
+is an instance of `:Parent`.
 
 #### Remarks
 
-The new individual built-in can **only be used in the body of rules and
-it cannot be the only body atom**. The URIs for the generated bnodes are
-meaningless in the sense that they should not be used in further
-queries; that is to say, these bnodes are not guaranteed by Stardog to
-be stable. Due to normalization, rules with more than one atom in the
-head are broken up into several rules. Thus,
+* The URIs for the generated individuals are meaningless in the sense that they should not be used in further
+queries; that is to say, these URIs are not guaranteed by Stardog to be stable.
+* Due to normalization, rules with more than one atom in the head are broken up into several rules. Thus,
 
-    :Male(?y), :Parent(?y) <- :Person(?x), http://www.w3.org/ns/sparql#UUID(?y).
+```sparql
+IF {
+    ?person a :Person .
+    BIND (UUID() AS ?parent) .
+}
+THEN {
+    ?parent a :Parent ;
+            a :Male .
+}
+```
 
-will be normalized into:
+will be normalized into two rules:
 
-    :Male(?y) <- :Person(?x), http://www.w3.org/ns/sparql#UUID(?y).
+```sparql
+IF {
+    ?person a :Person .
+    BIND (UUID() AS ?parent) .
+}
+THEN {
+    ?parent a :Parent .
+}
+```
 
-    :Parent(?y) <- :Person(?x), http://www.w3.org/ns/sparql#UUID(?y).
+```sparql
+IF {
+    ?person a :Person .
+    BIND (UUID() AS ?parent) .
+}
+THEN {
+    ?parent a :Male .
+}
+```
 
 As a consequence, in this case, instead of stating that the new
 individual is both an instance of `:Male` and `:Parent`, we would create
 two *different* new individuals, and assert that one is male and the
 other is a parent. If you need to assert various things about the new
-individual, we recommend the use of extra rules. In the previous
+individual, we recommend the use of extra rules/axioms. In the previous
 example, we can introduce a new class (`:Father`) and add the following
 rule to our schema:
 
-    :Male(?x), :Parent(?x) <- :Father(?x).
+```sparql
+IF {
+    ?person a :Father .
+}
+THEN {
+    ?parent a :Parent ;
+            a :Male .
+}
+```
 
 And then modify the original rule accordingly:
 
-    :Father(?y) <- :Person(?x), http://www.w3.org/ns/sparql#UUID(?y).
+```sparql
+IF {
+    ?person a :Person .
+    BIND (UUID() AS ?parent) .
+}
+THEN {
+    ?parent a :Father .
+}
+```
 
 ## Query Rewriting
 
