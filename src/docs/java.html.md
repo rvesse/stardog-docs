@@ -37,7 +37,7 @@ below.
 
 ### Creating & Administering Databases
 
-`StardogDBMS` provides simple programmatic access to all administrative
+`AdminConnection` provides simple programmatic access to all administrative
 functions available in Stardog.
 
 #### Creating a Database
@@ -48,25 +48,25 @@ line of code:
 <gist>1333782?file=CreateTempMemDb.java</gist>
 
 You can also use the
-[`memory`](../java/snarl/com/clarkparsia/stardog/StardogDBMS.html#memory())
+[`memory`](../java/snarl/com/complexible/stardog/api/admin/AdminConnection.html#memory())
 and
-[`disk`](../java/snarl/com/clarkparsia/stardog/StardogDBMS.html#disk())
+[`disk`](../java/snarl/com/complexible/stardog/api/admin/AdminConnection.html#disk())
 functions to configure and create a database in any way you prefer.
 These methods return
-[`DatabaseBuilder`](../java/snarl/com/clarkparsia/stardog/DatabaseBuilder.html)
+[`DatabaseBuilder`](../java/snarl/com/complexible/stardog/DatabaseBuilder.html)
 objects which you can use to configure the options of the database you'd
 like to create. Finally, the
-[`create`](../java/snarl/com/clarkparsia/stardog/DatabaseBuilder.html#create())
+[`create`](../java/snarl/com/complexible/stardog/DatabaseBuilder.html#create())
 method takes the list of files to bulk load into the database when you
 create it and returns a valid
-[`ConnectionConfiguration`](../java/snarl/com/clarkparsia/stardog/api/ConnectionConfiguration.html)
+[`ConnectionConfiguration`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html)
 which can be used to create new
-[`Connections`](../java/snarl/com/clarkparsia/stardog/api/Connection.html)
+[`Connections`](../java/snarl/com/complexible/stardog/api/Connection.html)
 to your database.
 
 It is important to note that you **must** take
 care to always log out of the server when you are done working with
-`StardogDBMS`.
+`AdminConnection`.
 
 <gist>1333782?file=CreateMemSearchDb.java</gist>
 
@@ -87,22 +87,22 @@ Also note, Stardog database administration can be performed from the
 ### Creating a Connection String 
 
 As you can see, the
-[`ConnectionConfiguration`](../java/snarl/com/clarkparsia/stardog/api/ConnectionConfiguration.html)
+[`ConnectionConfiguration`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html)
 (in
-[`com.clarkparsia.stardog.api`](../java/snarl/com/clarkparsia/stardog/api/package-summary.html)
+[`com.clarkparsia.stardog.api`](../java/snarl/com/complexible/stardog/api/package-summary.html)
 package) class is where the initial action takes place:
 
 <gist>1045578?file=L4044.java</gist>
 
 The
-[`to()`](../java/snarl/com/clarkparsia/stardog/api/ConnectionConfiguration.html#to())
+[`to()`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html#to())
 method takes a `Database Name` (as a string); and then
-[`connect()`](../java/snarl/com/clarkparsia/stardog/api/ConnectionConfiguration.html#connect())
+[`connect()`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html#connect())
 actually connects to the database using all specified properties on the
 configuration. This class and its constructor methods are used for *all* of Stardog's
 Java APIs: SNARL (native Stardog API), Sesame, Jena, as well as HTTP and
 SNARL protocol. In the latter cases, you must also call
-[`url()`](../java/snarl/com/clarkparsia/stardog/api/ConnectionConfiguration.html#url(java.lang.String))
+[`url()`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html#url(java.lang.String))
 and pass it a valid URL to the Stardog server using the HTTP or SNARL
 protocols.
 
@@ -110,8 +110,7 @@ Without the call to `url()`, `ConnectionConfiguration` will attempt
 to connect to a local, embedded version of the Stardog server. The
 `Connection` still operates in the standard client-server mode, the only
 difference is that the server is running in the *same* JVM as your
-application. You can use the convenience methods on `StardogDBMS` to start
-and stop the embedded server.
+application.
 
 **Note**: Whether using SNARL, Sesame, or Jena, most (perhaps all)
 Stardog Java code will use `ConnectionConfiguration` to get a handle on
@@ -120,7 +119,7 @@ handle, can use the API that makes the most sense for the use cases and
 requirements at hand.
 
 See the
-[`ConnectionConfiguration`](../java/snarl/com/clarkparsia/stardog/api/ConnectionConfiguration.html)
+[`ConnectionConfiguration`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html)
 API docs or the [administration section](../admin/) for more information
 on connection strings.
 
@@ -129,19 +128,19 @@ on connection strings.
 We discuss the security sytem in Stardog in the
 [security](../security) chapter in greater detail.
 
-When logged into a
-[StardogDBMS](../java/snarl/com/clarkparsia/stardog/StardogDBMS.html)
+When logged into the Stardog
+[DBMS](../java/snarl/com/complexible/stardog/api/admin/AdminConnection.html)
 you can access all security related features detailed in the security
 section using any of the core security interfaces for [managing
-users](../java/snarl/com/clarkparsia/stardog/security/UserManager.html),
-[roles](../java/snarl/com/clarkparsia/stardog/security/RoleManager.html)
+users](../java/snarl/com/complexible/stardog/security/UserManager.html),
+[roles](../java/snarl/com/complexible/stardog/security/RoleManager.html)
 and
-[permissions](../java/snarl/com/clarkparsia/stardog/security/PermissionManager.html)
+[permissions](../java/snarl/com/complexible/stardog/security/PermissionManager.html)
 
 [Shiro](http://shiro.apache.org) is used internally as the core of the
 security framework, but unlike previous versions, you do not need to
 configure Shiro directly. All management can be done via the
-command-line or via the security API provided by StardogDBMS
+command-line or via the security API provided by `AdminConnection`
 
 ### Using SNARL
 
@@ -169,10 +168,10 @@ database within the transaction.
 
 By default, RDF added will go into the default context unless specified
 otherwise. As shown, you can use
-[Adder](../java/snarl/com/clarkparsia/stardog/api/Adder.html) directly
+[Adder](../java/snarl/com/complexible/stardog/api/Adder.html) directly
 to add statements and graphs to the database, and if you want to add
 data from a file or input stream, you use an
-[`io()`](../java/snarl/com/clarkparsia/stardog/api/IO.html), `format()`,
+[`io()`](../java/snarl/com/complexible/stardog/api/IO.html), `format()`,
 and `stream()` chain of method invocations.
 
 See the [SNARL API](../java/snarl) Javadocs for all the gory details.
@@ -182,7 +181,7 @@ See the [SNARL API](../java/snarl) Javadocs for all the gory details.
 <gist>1045573?file=SNARLRemoveData.java</gist>
 
 Let's look at
-[removing](../java/snarl/com/clarkparsia/stardog/api/Remover.html) data
+[removing](../java/snarl/com/complexible/stardog/api/Remover.html) data
 via SNARL; in the example above, you can see that file or stream-based
 removal is symmetric to file or stream-based addition, i.e., calling
 `remove()` in an `io()` chain with a file or stream call. See the SNARL
@@ -280,18 +279,18 @@ SPARQL `regex` filter.
 ### SNARL Connection Views
 
 
-SNARL [`Connections`](../java/snarl/com/clarkparsia/stardog/api/Connection.html#)
+SNARL [`Connections`](../java/snarl/com/complexible/stardog/api/Connection.html#)
 support obtaining a specified type of `Connection`. This provides the
 ability to extend and enhance the features available to a Connection
 while maintaining the standard, simple Connection API. The Connection
-[`as`](../java/snarl/com/clarkparsia/stardog/api/Connection.html#as())
+[`as`](../java/snarl/com/complexible/stardog/api/Connection.html#as())
 method takes as a parameter the interface, which must be a sub-type of a
 Connection, that you would like to use. `as` will either return the
 Connection as the view you've specified, or it will throw an exception
 if the view could not be obtained for some reason.
 
 An example of obtaining an instance of a
-[`SearchConnection`](../java/snarl/com/clarkparsia/stardog/api/search/SearchConnection.html)
+[`SearchConnection`](../java/snarl/com/complexible/stardog/api/search/SearchConnection.html)
 to use Stardog's full-text search support would look like this:
 
 <gist>1085116?file=SearchConnectionView.java</gist>
