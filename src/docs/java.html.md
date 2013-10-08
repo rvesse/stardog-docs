@@ -95,18 +95,18 @@ package) class is where the initial action takes place:
 <gist>1045578?file=L4044.java</gist>
 
 The
-[`to()`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html#to())
+[`to()`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html#to()
 method takes a `Database Name` (as a string); and then
-[`connect()`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html#connect())
+[`connect()`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html#connect()
 actually connects to the database using all specified properties on the
 configuration. This class and its constructor methods are used for *all* of Stardog's
 Java APIs: SNARL (native Stardog API), Sesame, Jena, as well as HTTP and
 SNARL protocol. In the latter cases, you must also call
-[`url()`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html#url(java.lang.String))
+[`server`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html#server(java.lang.String)
 and pass it a valid URL to the Stardog server using the HTTP or SNARL
 protocols.
 
-Without the call to `url()`, `ConnectionConfiguration` will attempt
+Without the call to `server()`, `ConnectionConfiguration` will attempt
 to connect to a local, embedded version of the Stardog server. The
 `Connection` still operates in the standard client-server mode, the only
 difference is that the server is running in the *same* JVM as your
