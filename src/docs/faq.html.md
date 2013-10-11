@@ -70,3 +70,28 @@ load, what gives?
 the server, sending big files over a network kind of defeats the purpose
 of blazing fast bulk loading. If you want to bulk load files from your
 machine to a remote server, copy them to the server and bulk load them.
+
+## Concurrency control
+
+**Question:** What kind of isolation level does Stardog support for concurrent connections and transactions?
+
+**Answer:** A Stardog connection will run in `READ COMMITTED` isolation level if it has not started an explicit transaction and will run in `READ COMMITTED SNAPSHOT` isolation level if it has started a transaction. In either mode, uncommitted changes will only be visible to the connection that made the changes and no other connection can see those values before they are committed. Thus, 'dirty reads' can never occur. Neither mode locks the database so if there are conflicting changes the latest commit wins.
+
+The difference between `READ COMMITTED` and `READ COMMITTED SNAPSHOT` isolation levels is that in the former case a connection will see updates committed but another connection immediately whereas in the latter case connection will see a transactionally consistent snapshot of the data as it existed at the start of the transaction and not see any updates. 
+
+We illustrate the difference between these two levels with the following example where initially the database contains a single triple `:x :value 1`.
+
+Time | Connection 1 | Connection 2 | Connection 3
+-----|--------------|--------------|-------------
+0    | SELECT ?val {?x :val ?val}<br>#reads 1 | SELECT ?val {?x :val ?val}<br>#reads 1 | SELECT ?val {?x :val ?val}<br>#reads 1
+1    | BEGIN TX     |              |
+2    | INSERT {:x :value 2}<br>DELETE {:x :value ?old} | |
+3    | SELECT ?val {?x :val ?val}<br>#reads 2 | SELECT ?val {?x :val ?val}<br>#reads 1 | SELECT ?val {?x :val ?val}<br>#reads 1
+4    |              |              |BEGIN TX 
+6    | COMMIT       |              |
+7    | SELECT ?val {?x :val ?val}<br>#reads 2 | SELECT ?val {?x :val ?val}<br>#reads 2 | SELECT ?val {?x :val ?val}<br>#reads 1
+8    |              |              | INSERT { :x :value 3 }<br>DELETE {:x :value ?old}
+9    |              |              | COMMIT
+10   | SELECT ?val {?x :val ?val}<br>#reads 3 | SELECT ?val {?x :val ?val}<br>#reads 3 | SELECT ?val {?x :val ?val}<br>#reads 3
+
+
