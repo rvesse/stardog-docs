@@ -162,7 +162,7 @@ GET | POST /{db}/query
 The SPARQL endpoint for the database. The valid Accept types are listed
 above in the `HTTP Headers` section.
 
-To issue SPARQL queries with reasoning over HTTP, see the [Using Reasoning](http://www.stardog.com/docs/owl2/#reasoning) section of the [Reasoning](http://www.stardog.com/docs/owl2/) chapter.
+To issue SPARQL queries with reasoning over HTTP, see the [Using Reasoning](http://docs.stardog.com/owl2/#reasoning) section of the [Reasoning](http://docs.stardog.com/owl2/) chapter.
 
 ### Query Plan
 
