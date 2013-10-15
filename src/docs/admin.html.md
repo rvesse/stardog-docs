@@ -1056,14 +1056,37 @@ This is specified when creating a database by setting the property
 `search.reindex.mode` to "sync", "async", or to a valid cron expression.
 The default is "sync".
 
-### Recovering From Transaction Failures
+### Transactions
 
-In Stardog 1.2 we introduced a new transaction subsystem written from
-scratch for use in Stardog. This transaction framework—which we call
-"erg"—is mostly maintenance free; but there are some rare conditions in
+Stardog has had native ACID transactions from its initial release. In 1.2 we introduced a new transaction subsystem written from
+scratch. 
+
+### Concurrency Control & Isolation Levels
+
+A Stardog connection will run in `READ COMMITTED` isolation level if it has not started an explicit transaction and will run in `READ COMMITTED SNAPSHOT` isolation level if it has started a transaction. In either mode, uncommitted changes will only be visible to the connection that made the changes: no other connection can see those values before they are committed. Thus, 'dirty reads' can never occur. Neither mode locks the database; if there are conflicting changes, the latest commit wins.
+
+The difference between `READ COMMITTED` and `READ COMMITTED SNAPSHOT` isolation levels is that in the former case a connection will see updates committed by another connection immediately, whereas in the latter case a connection will see a transactionally consistent snapshot of the data as it existed at the start of the transaction and will not see any updates. 
+
+We illustrate the difference between these two levels with the following example where initially the database contains a single triple `:x :value 1`.
+
+Time | Connection 1 | Connection 2 | Connection 3
+-----|--------------|--------------|-------------
+0    | SELECT ?val {?x :val ?val}<br>#reads 1 | SELECT ?val {?x :val ?val}<br>#reads 1 | SELECT ?val {?x :val ?val}<br>#reads 1
+1    | BEGIN TX     |              |
+2    | INSERT {:x :value 2}<br>DELETE {:x :value ?old} | |
+3    | SELECT ?val {?x :val ?val}<br>#reads 2 | SELECT ?val {?x :val ?val}<br>#reads 1 | SELECT ?val {?x :val ?val}<br>#reads 1
+4    |              |              |BEGIN TX 
+6    | COMMIT       |              |
+7    | SELECT ?val {?x :val ?val}<br>#reads 2 | SELECT ?val {?x :val ?val}<br>#reads 2 | SELECT ?val {?x :val ?val}<br>#reads 1
+8    |              |              | INSERT { :x :value 3 }<br>DELETE {:x :value ?old}
+9    |              |              | COMMIT
+10   | SELECT ?val {?x :val ?val}<br>#reads 3 | SELECT ?val {?x :val ?val}<br>#reads 3 | SELECT ?val {?x :val ?val}<br>#reads 3
+
+### Commit Failure Autorecovery
+
+Stardog's transaction framework, which we call
+`erg`, is mostly maintenance free; but there are some rare conditions in
 which manual intervention may be needed.
-
-#### Commit Failure Autorecovery
 
 Stardog's strategy for recovering automatically from (the very unlikely
 event of) commit failure is as follows:
@@ -1071,14 +1094,14 @@ event of) commit failure is as follows:
 -   Stardog will automatically roll back the transaction upon a commit
     failure;
 -   Stardog automatically takes the affected database offline for
-    maintenance;The probability of recovering from a catastrophic
+    maintenance;<fn>The probability of recovering from a catastrophic
     transaction failure is inversely proportional to the number of
     subsequent write attempts; hence, Stardog offlines the database to
-    prevent subsequent write attempts and, hence, to increase the
-    likelihood of recovery. then
+    prevent subsequent write attempts and to increase the
+    likelihood of recovery.</fn> then
 -   Stardog will then begin recovery automatically, bringing the
     recovered database back online once that task is successful so that
-    it can resume operations.
+    operations may resume.
 
 With an appropriate logging configuration for production usage (at least
 error-level logging), log messages for the preceding recovery operations
