@@ -18,19 +18,6 @@ controlled. Resources are identified by their *type* and their *name*. A
 particular resource is denoted as `type_prefix:name`. The valid resource
 types with their prefixes are shown below.
 
-<!-- 
-|             |          Grouping           ||
-First Header  | Second Header | Third Header |
- ------------ | :-----------: | -----------: |
-Content       |          *Long Cell*        ||
-Content       |   **Cell**    |         Cell |
-
-New section   |     More      |         Data |
-And more      |            And more          |
-[Prototype table]
-
--->
-
 |  Resource        | Prefix     | Description                                       |
 |---------------   | -------    |  -----------                                      |
 | User             | `user`     | A user (e.g., `user:admin`)                       |
@@ -197,46 +184,47 @@ List role permissions
 
 To ensure that Stardog's RBAC access control implementation will be
 effective, all non-administrator access to Stardog databases should
-occur over network (i.e., non-native) database connections. [^1]
+occur over network (i.e., non-native) database connections.<fn>In other words, embedded Stardog access is inherently *insecure* and should be used accordingly.</fn>
 
 To ensure the confidentiality of user
 authentication credentials when using remote connections, the Stardog
 server should only accept connections that are secured with SSL. This
 section describes how Stardog can be configured to use SSL for data
 confidentiality and server authentication. It does not address using SSL
-for client authentication. [^2] 
-
-[^1]: In other words, embedded or native Stardog access is inherently *insecure* and
-should be used accordingly.
-
-[^2]: Stardog <t>version</t> does not support client authentication using X.509 certificates instead of passphrases.
-
+for client authentication.<fn>Stardog <t>version</t> does not support client authentication using X.509 certificates instead of passphrases.</fn>
 
 ### Configuring Stardog to use SSL
 
-Stardog <t>version</t>'s HTTP server does not include support for SSL; it must be
-deployed with other components to provide SSL support. The two primary
-ways to accomplish such a deployment are both described below: 
+Stardog <t>version</t>'s HTTP server includes native support for SSL. The SNARL server (via `snarls://`) also supports SSL. Stardog may also be deployed securely using two other methods:
 
 - HTTPS reverse proxying; and 
 - SSL-enabled application server.
 
+However, in many cases, it's just easier to use Stardog's native SSL support.
+
+To enable Stardog to optionally support SSL connections, just pass `--enable-ssl` to the server start command.  If you want to require the server to only use SSL, that is, to reject any non-SSL connections, then use `--require-ssl`.
+
+When starting from the command line, Stardog will use the standard Java properties for specifying keystore information:
+
+- `javax.net.ssl.keyStorePassword`  (the password)
+- `javax.net.ssl.keyStore` (location of the keystore)
+- `javax.net.ssl.keyStoreType` (type of keystore, defaults to JKS)
+
+These properties are checked first in `stardog.properties`; then in JVM args passed in from the command line, eg `-Djavax.net.ssl.keyStorePassword=mypwd`. If you're creating a Server progammatically via `ServerBuilder`, you can specify values for these properties using the appropriate `ServerOptions` when creating the server.  These values will override anything specified in `stardog.properties` or via normal JVM args.
+
 #### HTTPS Reverse Proxying
 
-An HTTPS reverse proxy [^3] may be used to secure Stardog client-server connections if the Stardog server is run using the command-line tool or deployed as a servlet. In
+An HTTPS reverse proxy<fn> Reverse proxying may be useful beyond SSL
+layering—it may be used to distribute load across multiple Stardog
+servers. For general documentation of reverse proxying with lighttpd,
+see [the fine documentation](http://redmine.lighttpd.net/wiki/lighttpd/Docs:ModProxy);
+likewise for [Apache](http://httpd.apache.org/docs/2.2/mod/mod_proxy.html#forwardreverse).
+</fn> may be used to secure Stardog client-server connections if the Stardog server is run using the command-line tool or deployed as a servlet. In
 the following two sections, we describe how to use [Apache]() and
 [lighttpd]() as HTTPS reverse proxies for Stardog. These configurations
 can be used for new reverse proxy deployments or can be modified to
 augment existing reverse proxies with SSL. Of course other solutions may
 be used; these are illustrative of the general technique and approach.
-
-[^3]: Reverse proxying may be useful beyond SSL
-layering—it may be used to distribute load across multiple Stardog
-servers. For general documentation of reverse proxying with lighttpd,
-see [the fine documentation](http://redmine.lighttpd.net/wiki/lighttpd/Docs:ModProxy);
-likewise for [Apache](http://httpd.apache.org/docs/2.2/mod/mod_proxy.html#forwardreverse).
-
-<t>secnote</t>
 
 In this approach, the network connection between Stardog
 clients and the proxy server is secured using SSL. But the connection
@@ -254,14 +242,12 @@ prohibit connections from servers other than the proxy server.
 HTTPS reverse proxying depends on having a certificate and private key
 on the proxy server. A cheap and easy deployment strategy is to use a
 self-signed certificate. Creating such a certificate is documented
-elsewhere and not repeated here. [^4] Alternately, an
-SSL cert can be obtained from a commercial certificate authority.
-
-[^4]: For example, see [the
+elsewhere and not repeated here.<fn>For example, see [the
 example](http://docs.oracle.com/javaee/1.4/tutorial/doc/Security6.html)
 creating a certificate with the Java keytool; or [an
 example](http://www.openssl.org/docs/apps/req.html) generating a self
-signed root certificate using the openssl req tool.
+signed root certificate using the openssl req tool.</fn> Alternately, an
+SSL cert can be obtained from a commercial certificate authority.
 
 ##### Reverse Proxy with lighttpd
 
@@ -280,20 +266,21 @@ port 12345 of the lighttpd host.
     server.document-root = "/dev/null"
 
 This configuration directs lighttpd to use the certificate and private
-key in server.pem for SSL connections. [^5]
-
-
-[^5]: lighttpd can be configured to
+key in server.pem for SSL connections.<fn>lighttpd can be configured to
 present chaining certificates with the server certificate. This may be
 necessary if the server certificate is not directly signed by a trusted
 authority, but chains to a trusted authority. For details on this
 configuration see [the docs](http://redmine.lighttpd.net/wiki/lighttpd/Docs:SSL) (the
-ssl.ca-file option).
+ssl.ca-file option).</fn>
 
 ##### Reverse Proxy with Apache 2
 
 Apache httpd can be configured to provide an SSL layer for remote
-connections. The following partial configuration file [^6] allows clients to use
+connections. The following partial configuration file<fn>A complete
+configuration file is not provided because the minimal configuration
+file required by Apache is more detailed than the configuration file
+required by lighttpd.The configuration directives shown are those
+necessary to enable SSL and reverse proxying.</fn> allows clients to use
 HTTPS connections with the Apache proxy, which communicates with a
 Stardog HTTP server listening on port 12345 of the Apache host.
 
@@ -301,12 +288,6 @@ Stardog HTTP server listening on port 12345 of the Apache host.
     SSLCertificateFile        server.pem
     <Directory /> SSLRequireSSL </Directory>
     ProxyPass        /        http://127.0.0.1:12345/
-
-[^6]: A complete
-configuration file is not provided because the minimal configuration
-file required by Apache is more detailed than the configuration file
-required by lighttpd.The configuration directives shown are those
-necessary to enable SSL and reverse proxying. 
 
 This configuration depends on the SSL certificate and private key being
 located in the `server.pem` file in the Apache server root. It also
@@ -316,7 +297,10 @@ configuration file.
 
 #### SSL-Enabled App Server
 
-Stardog may also be deployed as a servlet in a  container or app server that can provide SSL support. For example, if Stardog is deployed into a default Resin Server, [^7]
+Stardog may also be deployed as a servlet in a container or app server that can provide SSL support. For example, if Stardog is deployed into a default Resin Server,<fn>See [Resin](http://caucho.com/resin/) for more info; it supports SSL using
+JSSE in the open source version and using OpenSSL in the professional
+version. Resin’s SSL support is [well
+documented](http://www.caucho.com/resin-4.0/admin/security-ssl.xtp).</fn>
 then the following configuration would enable SSL on the server using
 the certificate and private key stored in the Java KeyStore at
 `server-keystore.jks`.
@@ -328,11 +312,6 @@ the certificate and private key stored in the Java KeyStore at
             </jsse-ssl>
     </http>
 
-[^7]: See [Resin](http://caucho.com/resin/) for more info; it supports SSL using
-JSSE in the open source version and using OpenSSL in the professional
-version. Resin’s SSL support is [well
-documented](http://www.caucho.com/resin-4.0/admin/security-ssl.xtp).
-
 Other Java app servers support SSL including GlassFish, Tomcat, and
 JBoss. The configuration of SSL for each application server is
 implementation specific; consult the relevant server’s
@@ -341,7 +320,7 @@ documentation.
 ### Configuring Stardog Client to use SSL
 
 Stardog HTTP client supports SSL when the `https:`
-scheme is used in the database connection string. For example, the
+scheme is used in the database connection string; likewise, it uses SSL for SNARL when the connection string uses the `snarls:` scheme. For example, the
 following invocation of the Stardog command line utility will initiate
 an SSL connection to a remote database:
 
@@ -357,10 +336,8 @@ certificate that was not issued by an authority that the client trusts.
 The Stardog HTTP client driver uses standard Java security components to
 access a store of trusted certificates. By default, it trusts a list of
 certificates installed with the Java runtime environment, but it can be
-configured to use a custom trust store. [^8]
-
-[^8]: The Stardog HTTP client driver uses an X509TrustManager. The details of how a trust store is selected to initialize the trust manager are
-[described in the docs](http://docs.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#X509TrustManager).
+configured to use a custom trust store.<fn>The Stardog HTTP client driver uses an X509TrustManager. The details of how a trust store is selected to initialize the trust manager are
+[described in the docs](http://docs.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#X509TrustManager).</fn>
 
 The client driver can be directed to use a specific Java KeyStore file
 as a trust store by setting the `javax.net.ssl.trustStore` system
@@ -369,14 +346,11 @@ should contain the issuer of the server’s certificate. Standard Java tools can
 initializes it with the certificate in `my-trusted-server.crt`. The tool
 will prompt for a passphrase to associate with the trust store. This is
 not used to encrypt its contents, but can be used to ensure its
-integrity. [^9]
+integrity.<fn>See the `javax.net.ssl.trustStorePassword` system property
+[documentation](http://docs.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#X509TrustManager).</fn>
 
     $ keytool -importcert  -keystore my-truststore.jks \
             -alias stardog-server -file my-trusted-server.crt
-
-
-[^9]: See the `javax.net.ssl.trustStorePassword` system property
-[documentation](http://docs.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#X509TrustManager).
 
 The following Stardog command line invocation uses the newly created
 truststore.
@@ -397,10 +371,8 @@ the keytool invocation.
 
 A client may also fail to authenticate to the server if the hostname in the
 Stardog database connection string does not match a name contained in
-the server certificate. [^10] 
-
-[^10]: The matching algorithm used is [described](http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html)
-in the Apache docs about `BrowserCompatHostnameVerifier`.
+the server certificate.<fn>The matching algorithm used is [described](http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html)
+in the Apache docs about `BrowserCompatHostnameVerifier`.</fn>
 
 This will cause an error message like the following
 
@@ -413,8 +385,8 @@ matches the certificate.
 
 ## Securing Stardog on Linux
 
-This section describes one approach to installing Stardog on Linux---or
-another Unix-like operating system---with the goal of restricting
+This section describes one approach to installing Stardog on Linux--or
+another Unix-like operating system--with the goal of restricting
 unauthorized access to Stardog data. The approach detailed below is not
 the only effective way to secure a Stardog installation. Stardog
 administrators should customize their installation for the requirements
@@ -429,12 +401,12 @@ Many of the snippets will need to be run with elevated permissions.
 <t>secnote</t>
 
 Make sure that you know what you're doing before you copy any of the
-snippets of shell code or configuration syntax into a real Linux system. We trust us; and you probably should trust us; that said, *trust but verify*. *You've been warned.*
+snippets of shell code or configuration syntax into a real Linux system. We trust us and you probably should trust us; that said, *trust but verify*. *You've been warned.*
 
 ### Creating A Basic Stardog Environment
 
 The Stardog library files should be copied from the distribution
-directory into a permanent location in the host system---we're big fans of the `/opt`--and--`/var` approach, but your needs may vary. The snippet
+directory into a permanent location in the host system--we're big fans of the `/opt`--and--`/var` approach, but your needs may vary. The snippet
 below chooses a common location and uses a versioning string to
 facilitate parallel installs of different Stardog releases. An
 administrator may choose any location.
