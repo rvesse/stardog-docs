@@ -1,3 +1,113 @@
+2.0.2 Changes
+----------------------------------------------------------------------------
+* ADDED: Support for the "Accept-Encoding: gzip" header over HTTP; enables sending of gzipped responses.
+
+* ADDED: Graph store protocol to support gzipped content
+
+* MODIFIED: Improved load progress monitor based on the number of bytes read
+
+* MODIFIED: Deprecated the SD-Connection-String header, now specified as a parameter to the request
+
+* MODIFIED: Updated to Guava 15
+
+* FIXED: Correctly handling specifying the dataset over SPARQL protocol
+
+* FIXED: Bug in literal canonicalization
+
+* FIXED: Bogus warnings about absorption from Pellet
+
+* FIXED: Re-indexing of searchable databases regardless of whether or not the search index needs to be updated
+
+* FIXED: Pressing key shortcut multiple times for the help in the web console displayed the help multiple times
+
+* FIXED: Construct queries do not produce results
+
+* FIXED: Not able to add properties to individuals in web console
+
+* FIXED: Query over partitioned graphs in Jena does not work
+
+* FIXED: Using :textMatch in a query against a non-searchable database causes the web console to spin forever
+
+* FIXED: Typing a number in query panel results paper gives an error
+
+* FIXED: Blank lines pre-pended to SPARQL queries in web console
+
+* FIXED: Negative execution times for queries when retrieved over SNARL protocol
+
+* FIXED: HTTP server accepting gzip files for data add/remove commands
+
+* FIXED: Strict parsing turns off RDF/XML parser checks some of which are very memory intensive
+
+* FIXED: Disabled BNode caching in N-Triples parser which are very memory intensive
+
+* FIXED: 400 errors when db name is included in connection string header
+
+* FIXED: Loading of database options in CLI so they can correctly be set
+
+* FIXED: Evaluation of queries using distinct with a complex, expression-based sort in the order by clause
+
+* FIXED: Correctly send challenge response in all cases to avoid a browser caching bad credentials
+
+* FIXED: Bug in proof rendering over HTTP
+
+* FIXED: SWRL rules containing non-atomic body atoms could cause incorrect results
+
+* FIXED: 'db status' admin CLI command returned an incorrect size for the database
+
+* FIXED: HTTP server OOM when a large Content-Length for an incoming POST is used
+
+* FIXED: Transactions state on the client was not correctly cleared in some error cases
+
+* FIXED: Handling of large gzipped files in the HTTP protocol
+
+* FIXED: Translation of rules with star-shaped body atoms
+
+2.0.1 Changes
+----------------------------------------------------------------------------
+* ADDED: Support for GZip encoded files in the HTTP protocol
+
+* ADDED: More extensive reasoning functionality exposed via ReasoningConnection
+
+* FIXED: System DB corruption due to starting two Stardog servers using same home directory
+
+* FIXED: Exporting data in web console occasionally hangs
+
+* FIXED: 5822 is no longer the default port for HTTP protocol
+
+* FIXED: Context indexes sometimes out of date after a named graph update
+
+* FIXED: --disable-security flag actually disables security complete, works for both HTTP & SNARL protocols
+
+* FIXED: Error when using user supplied prefixes in a query via the web console
+
+* FIXED: Multiple key shortcut dialogs can be displayed at once
+
+* FIXED: IO error with large responses over HTTP
+
+* FIXED: Web console loading issues in Windows 7
+
+* FIXED: DB corruption when multiple Stardog servers are started at once
+
+* FIXED: Improved handling of completely unbound patterns during reasoning avoiding incomplete results
+
+* FIXED: Better error response from server when authentication fails
+
+* FIXED: Resolved concurrency issue in ICV guard mode validation when competing threads are attempting to validate & commit
+
+* FIXED: .bat files can be run from outside of the bin directory and better respect setting STARDOG_HOME environment variable
+
+* MODIFIED: Unified SPARQL & SWRL UUID functions
+
+* MODIFIED: Better handling of duplicate results in construct queries including when projection uses fully-qualified results
+
+* MODIFIED: Improved feedback for adding/removing data via the web console
+
+* MODIFIED: External links opened in new tab in web console
+
+* MODIFIED: Reduced memory overhead of streaming modifications
+
+* MODIFIED: Improved bulk load performance for files without named graphs (RDF/XML, Turtle, etc.) 
+
 2.0 Changes
 ----------------------------------------------------------------------------
 * ADDED: SPARQL Update
@@ -27,6 +137,10 @@
 * ADDED: CLI commands to obfuscate RDF data and SPARQL queries for sharing sensitive data
 
 * ADDED: Type detection of variables in queries with reasoning
+
+* ADDED: Ability to load server-side files via the SNARL API
+
+* ADDED: Support for Sesame directSubClassOf, directSubPropertyOf
 
 * FIXED: Filter expression inlining when used with a group-by expression
 
@@ -59,6 +173,26 @@
 * FIXED: Corner case in sameterm inlining where the expression was incorrectly bound
 
 * FIXED: Bug in query answering where the variable used in a group by was not bound
+
+* FIXED: The command 'server start' now supports --logfile option on Windows too
+
+* FIXED: Handling of limit & offset in searches on the CLI
+
+* FIXED: Parse error for small threshold values in search queries
+
+* FIXED: NPE during the evaluation of some FILTER EXISTS queries where the predicate is not bound
+
+* FIXED: Filter comparison for literals of unequal datatypes when the literals are inlined into the query
+
+* MODIFIED: Printing search results in a formatted table
+
+* MODIFIED: Using a single namespace for Stardog extensions & default URIs
+
+* MODIFIED: Better error messages for malformed literals which create value errors during query evaluation
+
+* MODIFIED: Removed unused -u,-p,-P flags from server start
+
+* MODIFIED: Search results on CLI sorted by score
 
 * MODIFIED: Minimized roundtrips to security module to reduce overhead
 
