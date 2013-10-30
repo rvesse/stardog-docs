@@ -35,8 +35,18 @@ for RDF that works with Stardog.
 
 ## Creating & Administering Databases
 
-`StardogServer` provides some limited administrative functionality by
-implementing the [Servers API][]
+The `StardogServer` class provides some limited administrative functionality by
+implementing the dotNetRDF [Servers API][]
+
+dotNetRDF actually provides several classes for administering a Stardog server:
+
+- [StardogServer](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.Management.StardogServer) - Connection for the current version of Stardog
+- [StardogV2Server](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.Management.StardogV2Server) - Connection for Stardog V2 servers
+- [StardogV1Server](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.Management.StardogV1Server) - Connection for Stardog V1 servers
+
+This provides backwards compatibility for users who wish to communicate with 
+older versions of Stardog.  Using the wrong connector for the version of 
+Stardog you are running may result in errors.
 
 [Servers API]: https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Storage/Servers
 
@@ -65,7 +75,7 @@ The following shows how to create a disk backed database with ICV guard mode ena
  at the QL reasoning type.  For more information on what the available
 properties are see [BaseStardogTemplate](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.Management.Provisioning.Stardog.BaseStardogTemplate),
 for what they mean to Stardog please refer to the [admin docs](../admin/), 
-specifically the chapter on administering a database.
+specifically the section on administering a database.
 
 <gist>5732690</gist>
 
@@ -81,9 +91,10 @@ dotNetRDF does not currently support.
 
 Connecting to a database can be done using the dotNetRDF [Storage API][],
 this provides a [StardogConnector](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.StardogConnector)
-which implements their `IStorageProvider` interface.  Making a connection
-requires at a minimum knowing the Base URI of your Stardog server and the 
-name of the database.  The Base URI is the HTTP URL that Stardog prints 
+which implements their `IStorageProvider` interface.
+
+Making a connection requires at a minimum knowing the Base URI of your Stardog server 
+and the name of the database.  The Base URI is the HTTP URL that Stardog prints 
 out when you start up the server and is typically of the form `http://machine:5820`
 where `machine` is replaced with the name of the host on which the server
 is running and `5820` changed only if you have configured Stardog to run 
@@ -94,8 +105,20 @@ on a different HTTP port than the default.  As Stardog implements comprehensive
 
 <gist>5732808</gist>
 
-Stardog allows you to specify the reasoning mode used for queries as part of
-the connection information like so:
+dotNetRDF actually provides several classes for connecting to a Stardog server:
+
+- [StardogConnector](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.StardogConnector) - Connection for the current version of Stardog
+- [StardogV2Connector](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.StardogV2Connector) - Connection for Stardog V2 servers
+- [StardogV1Connector](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.StardogV1Connector) - Connection for Stardog V1 servers
+
+This provides backwards compatibility for users who wish to communicate with older 
+versions of Stardog.  Using the wrong connector for the version of Stardog you
+are running may result in errors.
+
+----
+
+Connections to Stardog also allow you to specify the reasoning mode used for queries 
+as part of the connection information like so:
 
 <gist>5732812</gist>
   
@@ -106,7 +129,7 @@ that are already in-flight.
 
 ## Using the Storage API
 
-This chapter covers how to carry out various common operations against Stardog 
+This section covers how to carry out various common operations against Stardog 
 using dotNetRDF's [Storage API][], you may wish to refer to their 
 [Triple Store Integration][] documentation for some more generic examples of
 using this API.
@@ -114,8 +137,8 @@ using this API.
 [Triple Store Integration]: https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Triple%20Store%20Integration
   
 When using this API transactions are primarily handled for you with the connection 
-operating in auto-commit mode by default, any write operations automatically using 
-a new transaction and committing it or rolling it back as appropriate.
+operating in auto-commit mode by default, any write operations will automatical use 
+a new transaction and commit or roll it back as appropriate.
 
 Transactions may be manually managed using the `Begin()`, `Commit()` and `Rollback()` 
 methods, read operations will only use transactions when they run in the context of 
@@ -154,46 +177,57 @@ to load data is to load an entire graph from a database:
 <gist>5786161</gist>
 
 If you need more fine grained control over loading data then you should make 
-an appropriate SPARQL Query as detailed in the next section.
+an appropriate SPARQL Query as detailed later in this chapter.
 
-### Making SPARQL Queries
+### Removing Data
 
-  
+As previously mentioned the `IStorageProvider` API is graph centric, you can
+delete an entire graph from your Stardog database using the `DeleteGraph()`
+method:
 
-  <div style="font-size: small">
-    <!-- TODO: Gist for SparqlParameterizedString -->
-  </div>
+<gist>7230262</gist>
 
-  <p>We can make a <code>Query</code> object by passing a SPARQL query in the constructor. Simple. Obvious.</p>
+Alternatively if you want to remove specific triples you should use the 
+`UpdateGraph()` method as already shown in the earlier Modifying Data section
 
-  <!-- TODO Write up making queries -->
+## Making SPARQL Queries
 
-  <p>We <b>strongly</b> recommend the use of SNARL's parameterized queries over concatenating strings together in order to build your SPARQL query.  This latter
-      approach opens up the possibility for SPARQL injection attacks unless you are very careful in scrubbing your input.</p>
+You can make a SPARQL query simply by calling the `Query()` method which is
+from the [IQueryableStorage](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.IQueryableStorage)
+interface.  SPARQL queries may be passed in directly as strings like so:
 
-  <h2>Removing Data</h2>
+<gist>7230219</gist>
 
-  <div style="font-size: small">
-    <!-- TODO: Gist for DeleteGraph() -->
-  </div>
+We **strongly** recommend the use of the parameterized query support over 
+concatenating strings together in order to build your SPARQL query.  This 
+latter approach opens up the possibility for SPARQL injection attacks 
+unless you are very careful in scrubbing your input.  This can be done using
+the [SparqlParameterizedString](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Query.SparqlParameterizedString)
+class like so:
 
-  <!-- TODO: Write up removing data using UpdateGraph() -->
+<gist>7230407</gist>
 
-  <h2>Reasoning</h2>
+dotNetRDF uses the ADO.Net style `@param` to specify parameters in the query string
+which then must have values set for them using the relevant methods prior to calling
+`ToString()` to retrieve the final query string.
 
-	  <p>Stardog supports query time OWL 2 QL, EL, and RL
-		  reasoning by using a query rewriting technique.<n>In short, when reasoning
-			  is requested, a query is automatically rewritten in <i>n</i> queries, which
-			  are then executed.</n>. As mentioned earlier reasoning
-		  is enabled at the <code>StardogConnector</code> layer and then any queries
-		  executed over that connection are executed with reasoning enabled;
-		  you don't need to do anything up front when you create your database if you want to use reasoning.  The in-use reasoning mode for your connection may be changed at any time by
-		  setting the <code>Reasoning</code> property appropriately.</p>
+### Reasoning
 
-	  <p>For more information on how reasoning is supported in Stardog, check out the
-	  <a href="../owl2">reasoning section</a>.</p>
+Stardog supports various levels of reasoning by using a query rewriting technique.
+In short, when reasoning is requested, a query is automatically rewritten into *n* 
+queries, which are then executed.
+
+As mentioned earlier reasoning is enabled at the `StardogConnector` layer and then 
+any queries executed over that connection are executed with reasoning enabled; you 
+don't need to do anything up front when you create your database if you want to use 
+reasoning.  The in-use reasoning mode for your connection may be changed at any time 
+by setting the `Reasoning` property appropriately.
+
+For more information on how reasoning is supported in Stardog, check out the 
+[reasoning section](../owl2/)
 	  
-  <h2>dotNetRDF API Docs</h2>
+## dotNetRDF Documentation</h2>
 
-  <p>Please see the <a href="http://www.dotnetrdf.org/api/">dotNetRDF API</a> docs for more
-information.</p>
+Please see the [dotNetRDF API](http://www.dotnetrdf.org/api/) docs for more detailed
+information on the available APIs or see the [dotNetRDF User Guide](http://bitbucket.org/dotnetrdf/dotnetrdf/wiki/User%20Guide)
+for a more general overview of dotNetRDF.
