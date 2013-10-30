@@ -106,43 +106,55 @@ that are already in-flight.
 
 ## Using the Storage API
 
-This chapter covers how to carry out various common operations against Stardog using dotNetRDF's <a href="https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Storage%20API">Storage API</a>, you may wish to refer to their <a href="https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Triple%20Store%20Integration">Triple Store Integration</a> documentation for some more generic examples of using this API.
+This chapter covers how to carry out various common operations against Stardog 
+using dotNetRDF's [Storage API][], you may wish to refer to their 
+[Triple Store Integration][] documentation for some more generic examples of
+using this API.
+
+[Triple Store Integration]: https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Triple%20Store%20Integration
   
-      When using this API transactions are primarily handled for you with the connection operating in auto-commit mode by default, any write operations automatically using a new transaction and committing it or rolling it back as appropriate.
-      Transactions may be manually managed using the <code>Begin()</code>, <code>Commit()</code> and <code>Rollback()</code> methods, read operations will only use transactions when they run in the context of an active transaction.
+When using this API transactions are primarily handled for you with the connection 
+operating in auto-commit mode by default, any write operations automatically using 
+a new transaction and committing it or rolling it back as appropriate.
+
+Transactions may be manually managed using the `Begin()`, `Commit()` and `Rollback()` 
+methods, read operations will only use transactions when they run in the context of 
+an active transaction.
 
 ### Adding Data
-  
 
-The simplest way to add data is to call the <code>SaveGraph()</code> method which saves a RDF graph to the store.
+The simplest way to add data is to call the `SaveGraph()` method which saves a RDF 
+graph to the store.
 
 <gist>5786144</gist>
 
-	  <p>By default, RDF added will go to the named graph corresponding to the <code>BaseUri</code> property of the provided graph unless it is <code>null</code> in which case it gets added to the default graph.</p>
+By default, RDF added will go to the named graph corresponding to the `BaseUri` 
+property of the provided graph unless it is `null` in which case it gets added
+to the default graph.
 	  
-	  <p>When you use the <code>SaveGraph()</code> method the exact behaviour depends on the target graph, saving to the default graph appends data while saving to named graph overwites data.  You can inspect the <code>IOBehaviour</code> property to see all flags that apply to Stardog connectivity when used via dotNetRDF.
+When you use the `SaveGraph()` method the exact behaviour depends on the target 
+graph, saving to the default graph appends data while saving to named graph 
+overwrites data.  You can inspect the `IOBehaviour` property to see all flags 
+that apply to Stardog connectivity when used via dotNetRDF.
 	  
-	<h2>Modifying Data</h2>
+### Modifying Data
 	  
-	  <p>If you want to add/remove data from an existing graph then you can use the <code>UpdateGraph()</code> method, this takes a URI for the graph to update and collections of triples to be added and removed.  Note that removals are always processed before additions.</p>
+If you want to add/remove data from an existing graph then you can use the 
+`UpdateGraph()` method, this takes a URI for the graph to update and collections 
+of triples to be added and removed.  Note that removals are always processed 
+before additions.
 	  
-	  <div style="font-size: small">
-	    <script src="https://gist.github.com/rvesse/5833189.js"></script>
-	  </div>
+<gist>5833189</gist>
 	  
 ### Loading Data
   
-  <p>
-    Since the <code>IStorageProvider</code> API is primarily graph oriented the simplest way to load data is to load an entire graph from a database:
-  </p>
-  
-  <div style="font-size: small">
-  	<script src="https://gist.github.com/rvesse/5786161.js"></script>
-  </div>
-  
-  <p>
-    If you need more fine grained control over loading data then you should make a SPARQL Query as detailed in the next section.
-  </p>
+Since the `IStorageProvider` API is primarily graph oriented the simplest way 
+to load data is to load an entire graph from a database:
+
+<gist>5786161</gist>
+
+If you need more fine grained control over loading data then you should make 
+an appropriate SPARQL Query as detailed in the next section.
 
 ### Making SPARQL Queries
 
