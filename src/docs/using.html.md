@@ -225,7 +225,7 @@ To export data from a Stardog database back to RDF,
 [export](/docs/man/data-export.html) is used by specifying—
 
 1.  the connection string of the database to export
-2.  the export format: `N-TRIPLES, RDFXML, TURTLE, TRIG`. default is
+2.  the export format: `N-TRIPLES, RDF/XML, TURTLE, TRIG`. default is
     'N-TRIPLES'— 'TRIG' must be used when exporting the entire database
     if the database contains triples inside named graphs.
 3.  optionally, the URI of the named graph to export if you wish to

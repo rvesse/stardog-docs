@@ -21,6 +21,9 @@ Stardog 2.0 introduces the Web Console, a responsive web app for every Stardog d
 Console includes a comprehensive Linked Data management capability.
 
 ### Schema Browsing
+
+Click on the symbol ">" to expand tree view. Click on text, e.g. "Thing", to browse.
+
 ![Stardog Web Console: Schema](/img/console/schema.png "")
 
 ### Instance Browsing

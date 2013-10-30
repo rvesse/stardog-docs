@@ -11,24 +11,22 @@ toc: true
 In the [Network Programming](../network/) chapter, we looked at 
 how to interact with Stardog over a network via HTTP and SNARL
 protocols.  In this chapter we describe how to program Stardog 
-from .Net using [dotNetRDF][].
+from .Net using [dotNetRDF](http://www.dotnetrdf.org).
 
-**Note** that this is an open source library developed externally
-and so questions/issues with the .Net API should be directed to
-that project.
+**Note**: this is an open source library developed and supported by third parties; 
+questions or issues with the .Net API should be directed to
+[dotNetRDF](http://www.dotnetrdf.org).
 
 You should also be aware that dotNetRDF uses the HTTP API for all
-communication with Stardog so you <strong>must</strong> enable 
-the HTTP server to use Stardog from .Net.  This is enabled by 
+communication with Stardog so you **must** enable 
+the HTTP server to use Stardog from .Net. It's enabled by 
 default so most users should not need to do anything to fulfill
 this requirement.
-
-[dotNetRDF]: http://www.dotnetrdf.org
 
 If you're a Java developer see the [Programming with Java](../java)
 chapter.  Alternatively If you're a Spring developer, you might want
 to read the [Programming with Spring](../spring) chapter.  If you 
-prefer a ORM-style approach, you might want to checkout 
+prefer a ORM-style approach, you might want to use 
 [Empire](https://github.com/mhgrove/Empire), which is an implementation
 of [JPA](http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html) 
 for RDF that works with Stardog.
@@ -52,7 +50,7 @@ Stardog you are running may result in errors.
 
 ### Creating a Database
 
-You can create a basic disk backed database with Stardog with one line of code:
+You can create a basic disk-backed database with Stardog with one line of code:
 
 <gist>5732640</gist>
 
@@ -61,8 +59,8 @@ to always dispose of the `IStorageServer` and/or `IStorageProvider` instances yo
 create when you are done working with them.
 
 You can also use the `StardogDiskTemplate` or `StardogMemTemplate` to configure a 
-disk/memory backed database with whatever options you desire, these both derive 
-from the `BaseStardogTemplate` which contains many properties that can be used 
+disk or memory-backed database with whatever options you desire; they both derive 
+from `BaseStardogTemplate` which contains many properties that can be used 
 to configure Stardog database options:
 
 <gist>5732680</gist>
@@ -80,9 +78,7 @@ specifically the section on administering a database.
 <gist>5732690</gist>
 
 For performing other basic administrative tasks via dotNetRDF please refer to the
-[Servers API][] documentation.
-
-Also note, Stardog database administration can be performed from the 
+[Servers API][] documentation. Also note, Stardog database administration can be performed from the 
 [command line](../admin/) which is substantially more powerful and 
 supports bulk loading of data at database creation time which 
 dotNetRDF does not currently support.
@@ -99,7 +95,7 @@ out when you start up the server and is typically of the form `http://machine:58
 where `machine` is replaced with the name of the host on which the server
 is running and `5820` changed only if you have configured Stardog to run 
 on a different HTTP port than the default.  As Stardog implements comprehensive 
-[security](../security/) you will also likely require user credentials.
+[security](../security/), you will also likely require user credentials.
 
 [Storage API]: https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Storage%20API
 
@@ -115,17 +111,15 @@ This provides backwards compatibility for users who wish to communicate with old
 versions of Stardog.  Using the wrong connector for the version of Stardog you
 are running may result in errors.
 
-----
-
 Connections to Stardog also allow you to specify the reasoning mode used for queries 
 as part of the connection information like so:
 
 <gist>5732812</gist>
   
 Note that is it possible to change the reasoning mode used at any time by
-changing the value of the `Reasoning` property though remember that this 
+changing the value of the `Reasoning` property, _though remember that this 
 only affects subsequently issued queries i.e. it does not affect queries
-that are already in-flight.
+that are already in-flight_.
 
 ## Using the Storage API
 
@@ -137,11 +131,11 @@ using this API.
 [Triple Store Integration]: https://bitbucket.org/dotnetrdf/dotnetrdf/wiki/UserGuide/Triple%20Store%20Integration
   
 When using this API transactions are primarily handled for you with the connection 
-operating in auto-commit mode by default, any write operations will automatical use 
+operating in auto-commit mode by default, any write operations will automatically use 
 a new transaction and commit or roll it back as appropriate.
 
 Transactions may be manually managed using the `Begin()`, `Commit()` and `Rollback()` 
-methods, read operations will only use transactions when they run in the context of 
+methods, and read operations will only use transactions when they run in the context of 
 an active transaction.
 
 ### Adding Data
@@ -162,16 +156,16 @@ that apply to Stardog connectivity when used via dotNetRDF.
 	  
 ### Modifying Data
 	  
-If you want to add/remove data from an existing graph then you can use the 
-`UpdateGraph()` method, this takes a URI for the graph to update and collections 
-of triples to be added and removed.  Note that removals are always processed 
-before additions.
+If you want to add or remove data from an existing graph, then you can use the 
+`UpdateGraph()` method, which takes a URI for the graph to update and collections 
+of triples to be added and removed.  _Note that removals are always processed 
+before additions_.
 	  
 <gist>5833189</gist>
 	  
 ### Loading Data
   
-Since the `IStorageProvider` API is primarily graph oriented the simplest way 
+Since the `IStorageProvider` API is primarily graph-oriented the simplest way 
 to load data is to load an entire graph from a database:
 
 <gist>5786161</gist>
@@ -181,7 +175,7 @@ an appropriate SPARQL Query as detailed later in this chapter.
 
 ### Removing Data
 
-As previously mentioned the `IStorageProvider` API is graph centric, you can
+As previously mentioned the `IStorageProvider` API is graph-oriented, you can
 delete an entire graph from your Stardog database using the `DeleteGraph()`
 method:
 
@@ -215,9 +209,7 @@ which then must have values set for them using the relevant methods prior to cal
 
 Stardog supports various levels of reasoning by using a query rewriting technique.
 In short, when reasoning is requested, a query is automatically rewritten into *n* 
-queries, which are then executed.
-
-As mentioned earlier reasoning is enabled at the `StardogConnector` layer and then 
+queries, which are then executed. As mentioned earlier reasoning is enabled at the `StardogConnector` layer and then 
 any queries executed over that connection are executed with reasoning enabled; you 
 don't need to do anything up front when you create your database if you want to use 
 reasoning.  The in-use reasoning mode for your connection may be changed at any time 
