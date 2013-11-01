@@ -53,7 +53,7 @@ You can use the Web Console to search or query the new database you created by h
 
 Now, go have a drink: you've earned it.
 
-### Windows
+## Windows
 
 The following steps are carried out using the Windows command prompt which you can find under `Start > Programs > Accessories > Command Prompts` 
 or by going to `Start > Run` and typing `cmd`
@@ -104,4 +104,4 @@ Fifth, query the database:
 
 You can use the Web Console to search or query the new database you created by hitting [http://localhost:5820/myDB](http://localhost:5820/myDB) in your browser.
 
-Now, go have a drink: you've earned it.
+You should drink the whole bottle, brave Windows User!
