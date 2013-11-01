@@ -73,7 +73,7 @@ Second, copy the `stardog-license-key.bin` into the right place:
 > COPY /B stardog-license-key.bin %STARDOG_HOME%
 ```
 
-**Note** that the `/B` is required to perform a binary copy or the license file may get corrupted.
+<t>shout</t> The `/B` is required to perform a binary copy or the license file may get corrupted.
 
 Of course `stardog-license-key.bin` has to be readable by the Stardog
 process. 
