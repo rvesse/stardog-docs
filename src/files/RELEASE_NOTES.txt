@@ -1,3 +1,30 @@
+2.0.3 Changes
+----------------------------------------------------------------------------
+
+* ADDED: real manpages
+
+* ADDED: Support for punning when using reasoning & rdf:type
+
+* FIXED: Browse tab was missing classes in IE9
+
+* FIXED: Bug in Watchdog API JSON serialization
+
+* FIXED: Watchdog information in web console not visible on Windows
+
+* FIXED: Bug in rendering of columns in web console homepage in IE & FF
+
+* FIXED: Missing elements in web console in IE
+
+* FIXED: Correctly handle line breaks in proof tree serialization
+
+* FIXED: Missing final byte when formatting query results using 'Accept-Encoding: gzip,deflate'
+
+* FIXED: Parsing of queries which use the Stardog directType built-in
+
+* MODIFIED: Improved performance of web console in IE
+
+* MODIFIED: Improved group help, including full synopsis, in CLI
+
 2.0.2 Changes
 ----------------------------------------------------------------------------
 * ADDED: Support for the "Accept-Encoding: gzip" header over HTTP; enables sending of gzipped responses.

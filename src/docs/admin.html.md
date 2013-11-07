@@ -1056,12 +1056,26 @@ This is specified when creating a database by setting the property
 `search.reindex.mode` to "sync", "async", or to a valid cron expression.
 The default is "sync".
 
-### Transactions
+### Transactions and Database Guarantees
 
-Stardog has had native ACID transactions from its initial release. In 1.2 we introduced a new transaction subsystem written from
-scratch. 
+Stardog has had native ACID transactions from its initial release. In 1.2 we introduced a new transaction subsystem written from scratch. 
 
-### Concurrency Control & Isolation Levels
+#### Atomicity
+
+> By convention hot, by convention cold, but in reality atoms and void, 
+> and also in reality we know nothing, since the truth is at bottom.--Democritus
+
+Atoms in ancient Greece were thought to be uncuttable bits of simple stuff. And it's in something like this sense that databases may provide a guarantee of atomicity--groups of database actions (i.e., mutations) are irreducible and indivisible: either all of the changes happen or none of them happens.
+
+Stardog's transacted writes are atomic.
+
+#### Consistency
+
+Data stored should be valid with respect to the data model (in this case, RDF) and to the guarantees offered by the database, as well as to any appliction-specific integrity contraints that may exist. Stardog's transactions are guaranteed not to violate integrity constraints during execution. A transaction that would leave a database in an inconsistent or invalid state is aborted. 
+
+See the [ICV chapter](/icv) for a more detailed consideration of Stardog's integrity constraint mechanism.
+
+#### Isolation 
 
 A Stardog connection will run in `READ COMMITTED` isolation level if it has not started an explicit transaction and will run in `READ COMMITTED SNAPSHOT` isolation level if it has started a transaction. In either mode, uncommitted changes will only be visible to the connection that made the changes: no other connection can see those values before they are committed. Thus, 'dirty reads' can never occur. Neither mode locks the database; if there are conflicting changes, the latest commit wins.
 
@@ -1082,7 +1096,11 @@ Time | Connection 1 | Connection 2 | Connection 3
 9    |              |              | COMMIT
 10   | SELECT ?val {?x :val ?val}<br>#reads 3 | SELECT ?val {?x :val ?val}<br>#reads 3 | SELECT ?val {?x :val ?val}<br>#reads 3
 
-### Commit Failure Autorecovery
+#### Durability
+
+By default Stardog's transacted writes are durable; in some applications, in which durability of transactions is not required, a performance gain may be achieved by disabling durability.
+
+#### Commit Failure Autorecovery
 
 Stardog's transaction framework, which we call
 `erg`, is mostly maintenance free; but there are some rare conditions in
