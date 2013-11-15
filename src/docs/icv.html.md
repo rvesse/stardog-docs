@@ -84,19 +84,16 @@ This kind of constraint guarantees certain subclass and superclass
 #### Managers must be employees.
 
 ##### Constraint
-```manchester
-         Class: Manager
-    SubClassOf: Employee
+```sparql
+:Manager rdfs:subClassOf :Employee
 ```
 ##### Database A <t>i</t>
-```manchester
-    Individual: Alice
-         Types: Manager
+```sparql
+:Alice a :Manager .
 ```
 ##### Database B <t>v</t>
-```manchester
-    Individual: Alice
-         Types: Manager, Employee
+```sparql
+:Alice a :Manager , :Employee .
 ```
 This constraint says that if an RDF individual is an instance of
 `Manager`, then it must also be an instance of `Employee`. In 
@@ -112,35 +109,26 @@ properties.
 #### Only project leaders can be responsible for projects.
 
 ##### Constraint
-```manchester
-    ObjectProperty: is_responsible_for
-            Domain: Project_Leader
-             Range: Project
+```sparql
+:is_responsible_for rdfs:domain :Project_Leader
 ```
 ##### Database A <t>i</t>
-```manchester
-    Individual: Alice
-         Facts: is_responsible_for MyProject
+```sparql
+:Alice :is_responsible_for :MyProject .
 
-    Individual: MyProject
-         Types: Project
+:MyProject a :Project .
 ```
 ##### Database B <t>i</t>
-```manchester
-    Individual: Alice
-         Types: Project_Leader
-         Facts: is_responsible_for MyProject
-
-    Individual: MyProject
+```sparql
+:Alice a :Project_Leader ;
+	:is_responsible_for :MyProject .
 ```
 ##### Database C <t>v</t>
-```manchester
-    Individual: Alice
-         Types: Project_Leader
-         Facts: is_responsible_for MyProject
+```sparql
+:Alice a :Project_Leader ;
+	:is_responsible_for :MyProject .
 
-    Individual: MyProject
-         Types: Project
+:MyProject a :Project .
 ```
 This constraint says that if two RDF instances are related to each other via the property `is_responsible_for`, then 
 the range instance must be an instance of `Project_Leader` and the domain instance must be an instance of
@@ -180,19 +168,16 @@ instance of `Employee`; therefore, B is valid.
 #### A date of birth must be a date.
 
 ##### Constraint
-```manchester
-    DataProperty: DOB
-           Range: xsd:date
+```sparql
+:dob rdfs:range xsd:date
 ```
 ##### Database A <t>i</t>
-```manchester
-    Individual: Bob
-         Facts: DOB "1970-01-01"
+```sparql
+:Bob :dob "1970-01-01" .
 ```
 ##### Database B <t>v</t>
-```manchester
-    Individual: Bob
-         Facts: DOB "1970-01-01"^^xsd:date
+```sparql
+:Bob :dob "1970-01-01"^^xsd:date
 ```
 This constraint says that if an RDF instance `i` is related to a literal
 `l` via the data property `DOB`, then `l` must have the XML Schema type
@@ -208,35 +193,28 @@ in some specified relationship.
 #### Each supervisor must supervise at least one employee.
 
 ##### Constraint
-```manchester
-         Class: Supervisor
-    SubClassOf: supervises some Employee
+```sparql
+:Supervisor rdfs:subClassOf (:supervises some :Employee)
 ```
 ##### Database A <t>v</t>
-```manchester
-    Individual: Alice 
+```sparql
+:Alice a owl:Thing .
 ```
 ##### Database B <t>i</t>
-```manchester
-    Individual: Alice
-         Types: Supervisor
+```sparql
+:Alice a :Supervisor .
 ```
 ##### Database C <t>i</t>
-```manchester
-    Individual: Alice
-         Types: Supervisor
-         Facts: supervises Bob
-
-    Individual: Bob
+```sparql
+:Alice a :Supervisor ;
+	:supervises :Bob .
 ```
 ##### Database D <t>v</t>
-```manchester
-    Individual: Alice
-         Types: Supervisor
-         Facts: supervises Bob
+```sparql
+:Alice a :Supervisor ;
+	:supervises :Bob .
 
-    Individual: Bob
-         Types: Employee
+:Bob a :Employee
 ```
 This constraint says that if an RDF instance `i` is of type
 `Supervisor`, then `i` must be related to an individual `j` via the
