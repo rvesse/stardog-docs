@@ -135,14 +135,14 @@ For example, if we are explaining the inferred triple `:Alice
 rdf:type :Employee` , the root of the proof tree will show that
 inference:
 
-```
+```sparql
 INFERRED :Alice rdf:type :Employee
 ```
 
 The children of an inferred node will provide more explanation for
 that inference:
 
-```
+```sparql
 INFERRED :Alice rdf:type :Employee
     ASSERTED :Manager rdfs:subClassOf :Employee
     INFERRED :Alice rdf:type :Manager
@@ -151,7 +151,7 @@ INFERRED :Alice rdf:type :Employee
 The fully expanded proof tree will show the asserted triples and
 axioms for every inference:
 
-```
+```sparql
 INFERRED :Alice rdf:type :Employee
     ASSERTED :Manager rdfs:subClassOf :Employee
     INFERRED :Alice rdf:type :Manager
@@ -235,7 +235,7 @@ in that configuration parameter.</fn>
 Second, you represent the rules with specially constructed RDF triples. Here's
 a kind of template example:
 
-```turtle
+```sparql
 @prefix rule: <tag:stardog:api:rule:> .
 [] a rule:SPARQLRule;
    rule:content """
@@ -245,7 +245,7 @@ a kind of template example:
 
 So there's a namespace--`tag:stardog:api:rule:`--that has a predicate, `content`, and a class, `SPARQLRule`. The object of this triple contains *one* rule in Stardog Rules syntax. A more realistic example:
 
-```turtle
+```sparql
 @prefix rule: <tag:stardog:api:rule:> .
 
 [] a rule:SPARQLRule ;
@@ -271,7 +271,7 @@ Third, what are the gotchas? There are two:
 
 #### Stardog Rules Examples
 
-```turtle
+```sparql
 PREFIX rule: <tag:stardog:api:rule:>
 PREFIX : <urn:test:>
 PREFIX gr: <http://purl.org/goodrelations/v1#>
@@ -300,7 +300,7 @@ This example is self-contained: it contains some data (the `:Product...` triples
 
 Here's a more complex example that includes four rules and, again, some data.
 
-```turtle
+```sparql
 PREFIX rule: <tag:stardog:api:rule:>
 PREFIX : <urn:test:>
 

@@ -114,8 +114,8 @@ properties.
 ##### Constraint
 ```manchester
     ObjectProperty: is_responsible_for
-        Domain: Project_Leader
-         Range: Project
+            Domain: Project_Leader
+             Range: Project
 ```
 ##### Database A <t>i</t>
 ```manchester
@@ -493,7 +493,7 @@ properties.
 ##### Constraint
 ```manchester
     ObjectProperty: manages
-        SubPropertyOf: works_in
+     SubPropertyOf: works_in
 ```
 ##### Database A <t>i</t>
 ```manchester
@@ -516,8 +516,8 @@ B, `Bob` is related to `MyDepartment` via both `manages` and
 
 ##### Constraint
 ```manchester
-    ObjectProperty: is_supervisor_of
-        SubPropertyChain: manages o inverse(works_in)
+      ObjectProperty: is_supervisor_of
+    SubPropertyChain: manages o inverse(works_in)
 ```
 ##### Database A <t>i</t>
 ```manchester
