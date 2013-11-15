@@ -144,20 +144,18 @@ therefore, C is valid.
 #### Only employees can have an SSN.
 
 ##### Constraint
-```manchester
-   DataProperty: SSN
-         Domain: Employee
+```sparql
+:ssn rdfs:domain :Employee
+
 ```
 ##### Database A <t>i</t>
-```manchester
-    Individual: Bob
-         Facts: SSN "123-45-6789"
+```sparql
+:Bob :ssn "123-45-6789" .
 ```
 ##### Database B <t>v</t>
-```manchester
-    Individual: Bob
-         Types: Employee
-         Facts: SSN "123-45-6789"
+```sparql
+:Bob a :Employee ;
+	:ssn "123-45-6789" ..
 ```
 This constraint says that if an RDF instance `i` has a data assertion
 via the the property `SSN`, then `i` must be an instance of `Employee`.
@@ -230,36 +228,31 @@ is valid.
 #### Each project must have a valid project number.
 
 ##### Constraint
-```manchester
-         Class: Project
-    SubClassOf: number some integer[> 0, < 5000]
+```sparql
+:Project rdfs:subClassOf (:number some xsd:integer[>= 0, < 5000])
 ```
 ##### Database A <t>v</t>
-```manchester
-    Individual: MyProject
+```sparql
+:MyProject a owl:Thing .
 ```
 ##### Database B <t>i</t>
-```manchester
-    Individual: MyProject
-         Types: Project
+```sparql
+:MyProject a :Project
 ```
 ##### Database C <t>i</t>
-```manchester
-    Individual: MyProject
-         Types: Project
-         Facts: number "23"
+```sparql
+:MyProject a :Project ;
+	:number "23" .
 ```
 ##### Database D <t>i</t>
-```manchester
-    Individual: MyProject
-         Types: Project
-         Facts: number "6000"^^integer
+```sparql
+:MyProject a :Project ;
+	:number "6000"^^xsd:integer .
 ```
 ##### Database E <t>v</t>
-```manchester
-    Individual: MyProject
-         Types: Project
-         Facts: number "23"^^integer
+```sparql
+:MyProject a :Project ;
+	:number "23"^^xsd:integer .
 ```
 This constraint says that if an RDF instance `i` is of type `Project`,
 then `i` must be related via the property `number` to an integer between
@@ -283,40 +276,32 @@ property values.
 #### Employees must not work on more than 3 projects.
 
 ##### Constraint
-```manchester
-         Class: Employee
-    SubClassOf: works_on max 3 Project
+```sparql
+:Employee rdfs:subClassOf (:works_on max 3 :Project)
 ```
 ##### Database A <t>v</t>
-```manchester
-    Individual: Bob
+```sparql
+:Bob a owl:Thing.
 ```
 ##### Database B <t>v</t>
-```manchester
-    Individual: Bob
-         Types: Employee
-         Facts: works_on MyProject
+```sparql
+:Bob a :Employee ;
+	:works_on :MyProject .
 
-    Individual: MyProject
-         Types: Project
+:MyProject a :Project .
 ```
 ##### Database C <t>i</t>
-```manchester
-    Individual: Bob
-         Types: Employee
-         Facts: works_on MyProjectA, works_on MyProjectB, works_on MyProjectC, works_on MyProjectD
+```sparql
+:Bob a :Employee ;
+	:works_on :MyProject , :MyProjectFoo , :MyProjectBar , :MyProjectBaz .
 
-    Individual: MyProjectA
-         Types: Project
+:MyProject a :Project .
 
-    Individual: MyProjectB
-         Types: Project
+:MyProjectFoo a :Project .
 
-    Individual: MyProjectC
-         Types: Project
+:MyProjectBar a :Project .
 
-    Individual: MyProjectD
-         Types: Project
+:MyProjectBaz a :Project .
 ```
 If an RDF instance `i` is an `Employee`, then
 `i` must not be related via the property `works_on` to more than 3
@@ -332,35 +317,29 @@ Now, pay attention, because this is important. Stardog ICV implements a weak for
 #### Departments must have at least 2 employees.
 
 ##### Constraint
-```manchester
-         Class: Department
-    SubClassOf: inverse(works_in) min 2 Employee
+```sparql
+:Department rdfs:subClassOf (inverse :works_in min 2 :Employee)
 ```
 ##### Database A <t>v</t>
-```manchester
-    Individual: MyDepartment
+```sparql
+:MyDepartment a owl:NamedIndividual .
 ```
 ##### Database B <t>i</t>
-```manchester
-    Individual: MyDepartment
-         Types: Department
+```sparql
+:MyDepartment a :Department .
 
-    Individual: Bob
-         Types: Employee
-         Facts: works_in MyDepartment
+:Bob a :Employee ;
+	:works_in :MyDepartment .
 ```
 ##### Database C <t>v</t>
-```manchester
-    Individual: MyDepartment
-         Types: Department
+```sparql
+:MyDepartment a :Department .
 
-    Individual: Bob
-         Types: Employee
-         Facts: works_in MyDepartment
+:Alice a :Employee ;
+	:works_in :MyDepartment .
 
-    Individual: Alice
-         Types: Employee
-         Facts: works_in MyDepartment
+:Bob a :Employee ;
+	:works_in :MyDepartment .
 ```
 This constraint says that if an RDF instance `i` is a `Department`, then
 there should exist at least 2 instances `j` and `k` of class `Employee`
@@ -378,45 +357,37 @@ assumed to be distinct, so C is valid.
 #### Managers must manage exactly 1 department.
 
 ##### Constraint
-```manchester
-         Class: Manager
-    SubClassOf: manages exactly 1 Department
+```sparql
+:Manager rdfs:subClassOf (:manages exactly 1 :Department)
 ```
 ##### Database A <t>v</t>
-```manchester
+```sparql
     Individual: Isabella
 ```
 ##### Database B <t>i</t>
-```manchester
-    Individual: Isabella
-         Types: Manager
+```sparql
+:Isabella a :Manager .
 ```
 ##### Database C <t>i</t>
-```manchester
-    Individual: Isabella
-         Types: Manager
-         Facts: manages MyDepartment
+```sparql
+:Isabella a :Manager ;
+	:manages :MyDepartment .
 ```
 ##### Database D <t>v</t>
-```manchester
-    Individual: Isabella
-         Types: Manager
-         Facts: manages MyDepartment
+```sparql
+:Isabella a :Manager ;
+	:manages :MyDepartment .
 
-    Individual: MyDepartment
-         Types: Department
+:MyDepartment a :Department .
 ```
 ##### Database E <t>i</t>
-```manchester
-    Individual: Isabella
-         Types: Manager
-         Facts: manages MyDepartment, MyDepartment1
+```sparql
+:Isabella a :Manager ;
+	:manages :MyDepartment , :MyDepartment1 .
 
-    Individual: MyDepartment
-         Types: Department
- 
-    Individual: MyDepartment1
-         Types: Department
+:MyDepartment a :Department .
+
+:MyDepartment1 a :Department .
 ```
 This constraint says that if an RDF instance `i` is a `Manager`, then it
 must be related to exactly 1 instance of `Department` via the property
@@ -436,23 +407,20 @@ is invalid.
 #### Entities may have no more than one name.
 
 ##### Constraint
-```manchester
-    DataProperty: name
-        Characteristics: Functional
+```sparql
+:name a owl:FunctionalProperty
 ```
 ##### Database A <t>v</t>
-```manchester
-    Individual: MyDepartment
+```sparql
+:MyDepartment a owl:Thing .
 ```
 ##### Database B <t>v</t>
-```manchester
-    Individual: MyDepartment
-        Facts: name "Human Resources"
+```sparql
+:MyDepartment :name "Human Resources" .
 ```
 ##### Database C <t>i</t>
-```manchester
-    Individual: MyDepartment
-        Facts: name "Human Resources", name "Legal"
+```sparql
+:MyDepartment :name "Human Resources" , "Legal" .
 ```
 This constraint says that no RDF instance `i` can have more than 1
 assertion via the data property `name`. In A, `MyDepartment` does not have any data property assertions so A is valid.
@@ -469,19 +437,17 @@ properties.
 #### The manager of a department must work in that department.
 
 ##### Constraint
-```manchester
-    ObjectProperty: manages
-     SubPropertyOf: works_in
+```sparql
+:manages rdfs:subPropertyOf :works_in
 ```
 ##### Database A <t>i</t>
-```manchester
-    Individual: Bob
-         Facts: manages MyDepartment
+```sparql
+:Bob :manages :MyDepartment 
 ```
 ##### Database B <t>v</t>
-```manchester
-    Individual: Bob
-         Facts: manages MyDepartment, works_in MyDepartment
+```sparql
+:Bob :works_in :MyDepartment ;
+	:manages :MyDepartment .
 ```
 This constraint says that if an RDF instance `i` is related to `j` via
 the property `manages`, then `i` must also be related to `j` va the
@@ -493,31 +459,26 @@ B, `Bob` is related to `MyDepartment` via both `manages` and
 #### Department managers must supervise all the department's employees.
 
 ##### Constraint
-```manchester
-      ObjectProperty: is_supervisor_of
-    SubPropertyChain: manages o inverse(works_in)
+```sparql
+:is_supervisor_of owl:propertyChainAxiom (:manages inverse :works_in)
 ```
 ##### Database A <t>i</t>
-```manchester
-    Individual: Jose
-         Facts: manages MyDepartment, is_supervisor_of Maria
+```sparql
+:Jose :manages :MyDepartment ;
+	:is_supervisor_of :Maria .
 
-    Individual: Maria
-         Facts: works_in MyDepartment
+:Maria :works_in :MyDepartment .
 
-    Individual: Diego
-         Facts: works_in MyDepartment
+:Diego :works_in :MyDepartment .
 ```
 ##### Database B <t>v</t>
-```manchester
-    Individual: Jose
-         Facts: manages MyDepartment, is_supervisor_of Maria, is_supervisor_of Diego
+```sparql
+:Jose :manages :MyDepartment ;
+	:is_supervisor_of :Maria , :Diego .
 
-    Individual: Maria
-         Facts: works_in MyDepartment
+:Maria :works_in :MyDepartment .
 
-    Individual: Diego
-         Facts: works_in MyDepartment
+:Diego :works_in :MyDepartment .
 ```
 This constraint says that if an RDF instance `i` is related to `j` via
 the property `manages` and `k` is related to `j` via the property
@@ -540,58 +501,46 @@ one employee that works on at least one project, or manages at least one
 department.
 
 ##### Constraint
-```manchester
-         Class: Employee
-    SubClassOf: works_on some Project or
-        supervises some (Employee and works_on some Project) or
-        manages some Department
+```sparql
+:Employee rdfs:subClassOf (:works_on some (:Project or (:supervises some (:Employee and (:works_on some :Project))) or (:manages some :Department)))
 ```
 ##### Database A <t>i</t>
-```manchester
-    Individual: Esteban
-         Types: Employee
+```sparql
+:Esteban a :Employee .
 ```
 ##### Database B <t>i</t>
-```manchester
-    Individual: Esteban
-         Types: Employee
-         Facts: supervises Lucinda
+```sparql
+:Esteban a :Employee ;
+	:supervises :Lucinda .
 
-    Individual: Lucinda
-         Types: Employee
+:Lucinda a :Employee .
 ```
 ##### Database C <t>v</t>
-```manchester
-    Individual: Esteban
-         Types: Employee
-         Facts: supervises Lucinda
+```sparql
+:Esteban a :Employee ;
+	:supervises :Lucinda .
 
-    Individual: Lucinda
-         Types: Employee
-         Facts: works_on MyProject
+:Lucinda a :Employee ;
+	:works_on :MyProject .
 
-    Individual: MyProject
-         Types: Project
+:MyProject a :Project .
 ```
 ##### Database D <t>v</t>
-```manchester
-    Individual: Esteban
-         Types: Employee
-         Facts: manages MyDepartment
+```sparql
+:Esteban a :Employee ;
+	:manages :MyDepartment .
 
-    Individual: MyDepartment
-         Types: Department
+:MyDepartment a :Department .
 ```
 ##### Database E <t>v</t>
-```manchester
-    Individual: Esteban
-         Facts: manages MyDepartment, works_on MyProject
+```sparql
+:Esteban a :Employee ;
+	:manages :MyDepartment ;
+	:works_on :MyProject .
 
-    Individual: MyDepartment
-         Types: Department
+:MyDepartment a :Department .
 
-    Individual: MyProject
-         Types: Project
+:MyProject a :Project .
 ```
 This constraint says that if an individual `i` is an instance of
 `Employee`, then at least one of three conditions must be met: 
@@ -616,80 +565,68 @@ Only employees who are American citizens can work on a project that
 receives funds from a US government agency.
 
 ##### Constraint
-```manchester
-         Class: Project and receives_funds_from some US_Government_Agency
-    SubClassOf: inverse(works_on) only (Employee and nationality value "US")
+```sparql
+:Project and (:receives_funds_from some :US_Government_Agency)) rdfs:subClassOf (inverse :works_on only (:Employee and (:nationality value "US")))
 ```
 ##### Database A <t>v</t>
-```manchester
-    Individual: MyProject
-         Types: Project
-         Facts: receives_funds_from NASA
+```sparql
+:MyProject a :Project ;
+	:receives_funds_from :NASA .
 
-    Individual: NASA
-         Types: US_Government_Agency
+:NASA a :US_Government_Agency 
 ```
 ##### Database B <t>i</t>
-```manchester
-    Individual: MyProject
-         Types: Project
-         Facts: receives_funds_from NASA
+```sparql
+:MyProject a :Project ;
+	:receives_funds_from :NASA .
 
-    Individual: NASA
-         Types: US_Government_Agency
+:NASA a :US_Government_Agency .
 
-    Individual: Andy
-         Types: Employee
-         Facts: works_on MyProject
+:Andy a :Employee ;
+	:works_on :MyProject .
 ```
-##### Database C <t>i</t>
-```manchester
-    Individual: MyProject
-         Types: Project
-         Facts: receives_funds_from NASA
+##### Database C <t>v</t>
+```sparql
+:MyProject a :Project ;
+	:receives_funds_from :NASA .
 
-    Individual: NASA
-         Types: US_Government_Agency
+:NASA a :US_Government_Agency .
 
-    Individual: Andy
-         Types: Employee
-         Facts: works_on MyProject, nationality "US"
+:Andy a :Employee ;
+	:works_on :MyProject ;
+	:nationality "US" .
 ```
 ##### Database D <t>i</t>
-```manchester
-    Individual: MyProject
-         Types: Project
-         Facts: receives_funds_from NASA
+```sparql
+:MyProject a :Project ;
+	:receives_funds_from :NASA .
 
-    Individual: NASA
-         Types: US_Government_Agency
+:NASA a :US_Government_Agency .
 
-    Individual: Andy
-         Types: Employee
-         Facts: works_on MyProject, nationality "US"
+:Andy a :Employee ;
+	:works_on :MyProject ;
+	:nationality "US" .
 
-    Individual: Heidi
-         Types: Supervisor
-         Facts: works_on MyProject, nationality "US"
+:Heidi a :Supervisor ;
+	:works_on :MyProject ;
+	:nationality "US" .
 ```
 ##### Database E <t>v</t>
-```manchester
-    Individual: MyProject
-         Types: Project
-         Facts: receives_funds_from NASA
+```sparql
+:MyProject a :Project ;
+	:receives_funds_from :NASA .
 
-    Individual: NASA
-         Types: US_Government_Agency
+:NASA a :US_Government_Agency .
 
-    Individual: Andy
-         Types: Employee
-         Facts: works_on MyProject, nationality "US"
+:Andy a :Employee ;
+	:works_on :MyProject ;
+	:nationality "US" .
 
-    Individual: Heidi
-         Types: Supervisor
-         Facts: works_on MyProject, nationality "US"
+:Heidi a :Supervisor ;
+	:works_on :MyProject ;
+	:nationality "US" .
 
-         Class: Supervisor
+:Supervisor rdfs:subClassOf :Employee .
     SubClassOf: Employee
 ```
 This constraint says that if an individual `i` is an instance of
