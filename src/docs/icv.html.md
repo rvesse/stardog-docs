@@ -1,6 +1,6 @@
 ---
 quote: "It is easier to write an incorrect program than understand a correct one."
-title: "ICV"
+title: "Integrity Constraint Validation"
 layout: "default"
 related: ""
 toc: true
@@ -84,20 +84,20 @@ This kind of constraint guarantees certain subclass and superclass
 #### Managers must be employees.
 
 ##### Constraint
-
-    Class: Manager
-        SubClassOf: Employee
-
+```manchester
+         Class: Manager
+    SubClassOf: Employee
+```
 ##### Database A <t>i</t>
-
+```manchester
     Individual: Alice
          Types: Manager
-
+```
 ##### Database B <t>v</t>
-
+```manchester
     Individual: Alice
          Types: Manager, Employee
-
+```
 This constraint says that if an RDF individual is an instance of
 `Manager`, then it must also be an instance of `Employee`. In 
 A, the only instance of `Manager`, namely `Alice`, is not an instance of
@@ -112,36 +112,36 @@ properties.
 #### Only project leaders can be responsible for projects.
 
 ##### Constraint
-
+```manchester
     ObjectProperty: is_responsible_for
         Domain: Project_Leader
          Range: Project
-
+```
 ##### Database A <t>i</t>
-
+```manchester
     Individual: Alice
          Facts: is_responsible_for MyProject
 
     Individual: MyProject
          Types: Project
-
+```
 ##### Database B <t>i</t>
-
+```manchester
     Individual: Alice
          Types: Project_Leader
          Facts: is_responsible_for MyProject
 
     Individual: MyProject
-
+```
 ##### Database C <t>v</t>
-
+```manchester
     Individual: Alice
          Types: Project_Leader
          Facts: is_responsible_for MyProject
 
     Individual: MyProject
          Types: Project
-
+```
 This constraint says that if two RDF instances are related to each other via the property `is_responsible_for`, then 
 the range instance must be an instance of `Project_Leader` and the domain instance must be an instance of
 `Project`. In Database A, there is only one pair of individuals related
@@ -156,21 +156,21 @@ therefore, C is valid.
 #### Only employees can have an SSN.
 
 ##### Constraint
-
+```manchester
    DataProperty: SSN
          Domain: Employee
-
+```
 ##### Database A <t>i</t>
-
+```manchester
     Individual: Bob
          Facts: SSN "123-45-6789"
-
+```
 ##### Database B <t>v</t>
-
+```manchester
     Individual: Bob
          Types: Employee
          Facts: SSN "123-45-6789"
-
+```
 This constraint says that if an RDF instance `i` has a data assertion
 via the the property `SSN`, then `i` must be an instance of `Employee`.
 In A, `Bob` is not an instance of `Employee` but
@@ -180,20 +180,20 @@ instance of `Employee`; therefore, B is valid.
 #### A date of birth must be a date.
 
 ##### Constraint
-
+```manchester
     DataProperty: DOB
            Range: xsd:date
-
+```
 ##### Database A <t>i</t>
-
+```manchester
     Individual: Bob
          Facts: DOB "1970-01-01"
-
+```
 ##### Database B <t>v</t>
-
+```manchester
     Individual: Bob
          Facts: DOB "1970-01-01"^^xsd:date
-
+```
 This constraint says that if an RDF instance `i` is related to a literal
 `l` via the data property `DOB`, then `l` must have the XML Schema type
 `xsd:date`. In A, `Bob` is related to the untyped literal
@@ -208,36 +208,36 @@ in some specified relationship.
 #### Each supervisor must supervise at least one employee.
 
 ##### Constraint
-
-    Class: Supervisor
-        SubClassOf: supervises some Employee
-
-##### Database A
-
-    Individual: Alice <t>v</t>
-
+```manchester
+         Class: Supervisor
+    SubClassOf: supervises some Employee
+```
+##### Database A <t>v</t>
+```manchester
+    Individual: Alice 
+```
 ##### Database B <t>i</t>
-
+```manchester
     Individual: Alice
          Types: Supervisor
-
+```
 ##### Database C <t>i</t>
-
+```manchester
     Individual: Alice
          Types: Supervisor
          Facts: supervises Bob
 
     Individual: Bob
-
+```
 ##### Database D <t>v</t>
-
+```manchester
     Individual: Alice
          Types: Supervisor
          Facts: supervises Bob
 
     Individual: Bob
          Types: Employee
-
+```
 This constraint says that if an RDF instance `i` is of type
 `Supervisor`, then `i` must be related to an individual `j` via the
 property `supervises` and also that `j` must be an instance of `Employee`. 
@@ -252,37 +252,37 @@ is valid.
 #### Each project must have a valid project number.
 
 ##### Constraint
-
-    Class: Project
-        SubClassOf: number some integer[> 0, < 5000]
-
+```manchester
+         Class: Project
+    SubClassOf: number some integer[> 0, < 5000]
+```
 ##### Database A <t>v</t>
-
+```manchester
     Individual: MyProject
-
+```
 ##### Database B <t>i</t>
-
+```manchester
     Individual: MyProject
          Types: Project
-
+```
 ##### Database C <t>i</t>
-
+```manchester
     Individual: MyProject
          Types: Project
          Facts: number "23"
-
+```
 ##### Database D <t>i</t>
-
+```manchester
     Individual: MyProject
          Types: Project
          Facts: number "6000"^^integer
-
+```
 ##### Database E <t>v</t>
-
+```manchester
     Individual: MyProject
          Types: Project
          Facts: number "23"^^integer
-
+```
 This constraint says that if an RDF instance `i` is of type `Project`,
 then `i` must be related via the property `number` to an integer between
 `0` and `5000` (inclusive)--that is, projects have project numbers in a certain range.
@@ -305,25 +305,25 @@ property values.
 #### Employees must not work on more than 3 projects.
 
 ##### Constraint
-
-    Class: Employee
-        SubClassOf: works_on max 3 Project
-
+```manchester
+         Class: Employee
+    SubClassOf: works_on max 3 Project
+```
 ##### Database A <t>v</t>
-
+```manchester
     Individual: Bob
-
+```
 ##### Database B <t>v</t>
-
+```manchester
     Individual: Bob
          Types: Employee
          Facts: works_on MyProject
 
     Individual: MyProject
          Types: Project
-
+```
 ##### Database C <t>i</t>
-
+```manchester
     Individual: Bob
          Types: Employee
          Facts: works_on MyProjectA, works_on MyProjectB, works_on MyProjectC, works_on MyProjectD
@@ -339,7 +339,7 @@ property values.
 
     Individual: MyProjectD
          Types: Project
-
+```
 If an RDF instance `i` is an `Employee`, then
 `i` must not be related via the property `works_on` to more than 3
 instances of `Project`. In  A, `Bob` is not known
@@ -354,25 +354,25 @@ Now, pay attention, because this is important. Stardog ICV implements a weak for
 #### Departments must have at least 2 employees.
 
 ##### Constraint
-
-    Class: Department
-        SubClassOf: inverse(works_in) min 2 Employee
-
+```manchester
+         Class: Department
+    SubClassOf: inverse(works_in) min 2 Employee
+```
 ##### Database A <t>v</t>
-
+```manchester
     Individual: MyDepartment
-
+```
 ##### Database B <t>i</t>
-
+```manchester
     Individual: MyDepartment
          Types: Department
 
     Individual: Bob
          Types: Employee
          Facts: works_in MyDepartment
-
+```
 ##### Database C <t>v</t>
-
+```manchester
     Individual: MyDepartment
          Types: Department
 
@@ -383,7 +383,7 @@ Now, pay attention, because this is important. Stardog ICV implements a weak for
     Individual: Alice
          Types: Employee
          Facts: works_in MyDepartment
-
+```
 This constraint says that if an RDF instance `i` is a `Department`, then
 there should exist at least 2 instances `j` and `k` of class `Employee`
 which are related to `i` via the property `works_in` (or, equivalently,
@@ -400,36 +400,36 @@ assumed to be distinct, so C is valid.
 #### Managers must manage exactly 1 department.
 
 ##### Constraint
-
-    Class: Manager
-        SubClassOf: manages exactly 1 Department
-
+```manchester
+         Class: Manager
+    SubClassOf: manages exactly 1 Department
+```
 ##### Database A <t>v</t>
-
+```manchester
     Individual: Isabella
-
+```
 ##### Database B <t>i</t>
-
+```manchester
     Individual: Isabella
          Types: Manager
-
+```
 ##### Database C <t>i</t>
-
+```manchester
     Individual: Isabella
          Types: Manager
          Facts: manages MyDepartment
-
+```
 ##### Database D <t>v</t>
-
+```manchester
     Individual: Isabella
          Types: Manager
          Facts: manages MyDepartment
 
     Individual: MyDepartment
          Types: Department
-
+```
 ##### Database E <t>i</t>
-
+```manchester
     Individual: Isabella
          Types: Manager
          Facts: manages MyDepartment, MyDepartment1
@@ -439,7 +439,7 @@ assumed to be distinct, so C is valid.
  
     Individual: MyDepartment1
          Types: Department
-
+```
 This constraint says that if an RDF instance `i` is a `Manager`, then it
 must be related to exactly 1 instance of `Department` via the property
 `manages`. In A, the individual `Isabella` is not known to be
@@ -458,24 +458,24 @@ is invalid.
 #### Entities may have no more than one name.
 
 ##### Constraint
-
+```manchester
     DataProperty: name
         Characteristics: Functional
-
+```
 ##### Database A <t>v</t>
-
+```manchester
     Individual: MyDepartment
-
+```
 ##### Database B <t>v</t>
-
+```manchester
     Individual: MyDepartment
         Facts: name "Human Resources"
-
+```
 ##### Database C <t>i</t>
-
+```manchester
     Individual: MyDepartment
         Facts: name "Human Resources", name "Legal"
-
+```
 This constraint says that no RDF instance `i` can have more than 1
 assertion via the data property `name`. In A, `MyDepartment` does not have any data property assertions so A is valid.
 In B, `MyDepartment` has a single assertion via `name`, so the ontology
@@ -491,20 +491,20 @@ properties.
 #### The manager of a department must work in that department.
 
 ##### Constraint
-
+```manchester
     ObjectProperty: manages
         SubPropertyOf: works_in
-
+```
 ##### Database A <t>i</t>
-
+```manchester
     Individual: Bob
          Facts: manages MyDepartment
- 
+```
 ##### Database B <t>v</t>
-
+```manchester
     Individual: Bob
          Facts: manages MyDepartment, works_in MyDepartment
-
+```
 This constraint says that if an RDF instance `i` is related to `j` via
 the property `manages`, then `i` must also be related to `j` va the
 property `works_in`. In A, `Bob` is related to `MyDepartment`
@@ -515,12 +515,12 @@ B, `Bob` is related to `MyDepartment` via both `manages` and
 #### Department managers must supervise all the department's employees.
 
 ##### Constraint
-
+```manchester
     ObjectProperty: is_supervisor_of
         SubPropertyChain: manages o inverse(works_in)
-
+```
 ##### Database A <t>i</t>
-
+```manchester
     Individual: Jose
          Facts: manages MyDepartment, is_supervisor_of Maria
 
@@ -529,9 +529,9 @@ B, `Bob` is related to `MyDepartment` via both `manages` and
 
     Individual: Diego
          Facts: works_in MyDepartment
-
+```
 ##### Database B <t>v</t>
-
+```manchester
     Individual: Jose
          Facts: manages MyDepartment, is_supervisor_of Maria, is_supervisor_of Diego
 
@@ -540,7 +540,7 @@ B, `Bob` is related to `MyDepartment` via both `manages` and
 
     Individual: Diego
          Facts: works_in MyDepartment
-
+```
 This constraint says that if an RDF instance `i` is related to `j` via
 the property `manages` and `k` is related to `j` via the property
 `works_in`, then `i` must be related to `k` via the property
@@ -562,28 +562,28 @@ one employee that works on at least one project, or manages at least one
 department.
 
 ##### Constraint
-
-    Class: Employee
-        SubClassOf: works_on some Project or
-            supervises some (Employee and works_on some Project) or
-            manages some Department
-
+```manchester
+         Class: Employee
+    SubClassOf: works_on some Project or
+        supervises some (Employee and works_on some Project) or
+        manages some Department
+```
 ##### Database A <t>i</t>
-
+```manchester
     Individual: Esteban
          Types: Employee
-
+```
 ##### Database B <t>i</t>
-
+```manchester
     Individual: Esteban
          Types: Employee
          Facts: supervises Lucinda
 
     Individual: Lucinda
          Types: Employee
-
+```
 ##### Database C <t>v</t>
-
+```manchester
     Individual: Esteban
          Types: Employee
          Facts: supervises Lucinda
@@ -594,18 +594,18 @@ department.
 
     Individual: MyProject
          Types: Project
-
+```
 ##### Database D <t>v</t>
-
+```manchester
     Individual: Esteban
          Types: Employee
          Facts: manages MyDepartment
 
     Individual: MyDepartment
          Types: Department
-
+```
 ##### Database E <t>v</t>
-
+```manchester
     Individual: Esteban
          Facts: manages MyDepartment, works_on MyProject
 
@@ -614,7 +614,7 @@ department.
 
     Individual: MyProject
          Types: Project
-
+```
 This constraint says that if an individual `i` is an instance of
 `Employee`, then at least one of three conditions must be met: 
 
@@ -638,21 +638,21 @@ Only employees who are American citizens can work on a project that
 receives funds from a US government agency.
 
 ##### Constraint
-
-    Class: Project and receives_funds_from some US_Government_Agency
-        SubClassOf: inverse(works_on) only (Employee and nationality value "US")
-
+```manchester
+         Class: Project and receives_funds_from some US_Government_Agency
+    SubClassOf: inverse(works_on) only (Employee and nationality value "US")
+```
 ##### Database A <t>v</t>
-
+```manchester
     Individual: MyProject
          Types: Project
          Facts: receives_funds_from NASA
 
     Individual: NASA
          Types: US_Government_Agency
-
+```
 ##### Database B <t>i</t>
-
+```manchester
     Individual: MyProject
          Types: Project
          Facts: receives_funds_from NASA
@@ -663,9 +663,9 @@ receives funds from a US government agency.
     Individual: Andy
          Types: Employee
          Facts: works_on MyProject
-
+```
 ##### Database C <t>i</t>
-
+```manchester
     Individual: MyProject
          Types: Project
          Facts: receives_funds_from NASA
@@ -676,9 +676,9 @@ receives funds from a US government agency.
     Individual: Andy
          Types: Employee
          Facts: works_on MyProject, nationality "US"
-
+```
 ##### Database D <t>i</t>
-
+```manchester
     Individual: MyProject
          Types: Project
          Facts: receives_funds_from NASA
@@ -693,9 +693,9 @@ receives funds from a US government agency.
     Individual: Heidi
          Types: Supervisor
          Facts: works_on MyProject, nationality "US"
-
+```
 ##### Database E <t>v</t>
-
+```manchester
     Individual: MyProject
          Types: Project
          Facts: receives_funds_from NASA
@@ -711,9 +711,9 @@ receives funds from a US government agency.
          Types: Supervisor
          Facts: works_on MyProject, nationality "US"
 
-    Class: Supervisor
-        SubClassOf: Employee
-
+         Class: Supervisor
+    SubClassOf: Employee
+```
 This constraint says that if an individual `i` is an instance of
 `Project` and is related to an instance of `US_Government_Agency` via
 the property `receives_funds_from`, then any individual `j` which is
