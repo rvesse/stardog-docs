@@ -58,6 +58,8 @@ docpadConfig = {
         shout: '<div class="metro warning btn">NOTE</div>'
         new2: "<div class='metro label warning'>New in 2.0</div>"
         FIXME: "<div class='metro large btn warning'>@FIXME</div>"
+        v: "<div class='metro success label'>VALID</div>"
+        i: "<div class='metro danger label'>INVALID</div>"
         site:
             scripts: [
                       "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
