@@ -16,7 +16,7 @@ support [SDQ](http://weblog.clarkparsia.com/2011/03/07/sdq-information-integrati
 
 ## Querying
 
-Stardog currently supports all of the [SPARQL 1.1 Query
+Stardog currently supports the [SPARQL 1.1 Query
 language](http://www.w3.org/TR/sparql11-query/). <fn>Stardog does not support SPARQL 1.1 federation (the
 `SERVICE` keyword).</fn> Stardog also supports the [OWL 2 Direct Semantics
 entailment regime](http://www.w3.org/TR/2012/CR-sparql11-entailment-20121108/).
@@ -108,6 +108,12 @@ unaryMinus                | [fn:numeric-unary-minus](http://www.w3.org/2005/xpat
 unaryPlus                 | [fn:numeric-unary-plus](http://www.w3.org/2005/xpath-functions#numeric-unary-plus), [swrlb:unaryPlus](http://www.w3.org/2003/11/swrlb#unaryPlus)
 year                      | [fn:year-from-dateTime](http://www.w3.org/2005/xpath-functions#year-from-dateTime)
 yearMonthDuration         | [swrlb:yearMonthDuration](http://www.w3.org/2003/11/swrlb#yearMonthDuration)
+
+### `DESCRIBE`
+
+SPARQL's `DESCRIBE` keyword is deliberately underspecified; vendors are free to do, for good or bad, whatever they want. In Stardog, a `DESCRIBE <theResource>` query retrieves the predicates and objects for all the triples for which `<theResource>` is the subject. There are, of course, about seventeen thousand other ways to implement `DESCRIBE`; we've implemented four or five of them and may expose them to users in a future release of Stardog _based on user feedback and requests_.
+
+Now you know and knowing is one-quarter of the fun.
 
 ## Updating
 
