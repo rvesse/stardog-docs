@@ -192,7 +192,14 @@ in some specified relationship.
 
 ##### Constraint
 ```sparql
-:Supervisor rdfs:subClassOf (:supervises some :Employee)
+# Constraint in Terp syntax:
+# :Supervisor rdfs:subClassOf (:supervises some :Employee)
+
+:Supervisor rdfs:subClassOf
+              [ a owl:Restriction ;
+                owl:onProperty :supervises ;
+                owl:someValuesFrom :Employee
+              ] .
 ```
 ##### Database A <t>v</t>
 ```sparql
@@ -229,7 +236,18 @@ is valid.
 
 ##### Constraint
 ```sparql
-:Project rdfs:subClassOf (:number some xsd:integer[>= 0, < 5000])
+# Constraint in Terp syntax:
+# :Project rdfs:subClassOf (:number some xsd:integer[>= 0, < 5000])
+
+:Project rdfs:subClassOf
+              [ a owl:Restriction ;
+                owl:onProperty :number ;
+                owl:someValuesFrom
+                        [ a rdfs:Datatype ;
+                          owl:onDatatype xsd:integer ;
+                          owl:withRestrictions ([xsd:minInclusive 0] [ xsd:maxExclusive 5000])
+                        ]
+              ] .
 ```
 ##### Database A <t>v</t>
 ```sparql
@@ -277,7 +295,15 @@ property values.
 
 ##### Constraint
 ```sparql
-:Employee rdfs:subClassOf (:works_on max 3 :Project)
+# Constraint in Terp syntax:
+# :Employee rdfs:subClassOf (:works_on max 3 :Project)
+
+:Employee rdfs:subClassOf
+              [ a owl:Restriction ;
+                owl:onProperty :works_on;
+                owl:maxQualifiedCardinality "3"^^xsd:nonNegativeInteger ;
+                owl:onClass :Project 
+              ] .
 ```
 ##### Database A <t>v</t>
 ```sparql
@@ -318,7 +344,15 @@ Now, pay attention, because this is important. Stardog ICV implements a weak for
 
 ##### Constraint
 ```sparql
-:Department rdfs:subClassOf (inverse :works_in min 2 :Employee)
+# Constraint in Terp syntax:
+# :Department rdfs:subClassOf (inverse :works_in min 2 :Employee)
+
+:Department rdfs:subClassOf
+              [ a owl:Restriction ;
+                owl:onProperty [owl:inverseOf :works_in] ;
+                owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+                owl:onClass :Employee 
+              ] .
 ```
 ##### Database A <t>v</t>
 ```sparql
@@ -358,7 +392,15 @@ assumed to be distinct, so C is valid.
 
 ##### Constraint
 ```sparql
-:Manager rdfs:subClassOf (:manages exactly 1 :Department)
+# Constraint in Terp syntax:
+# :Manager rdfs:subClassOf (:manages exactly 1 :Department)
+
+:Manager rdfs:subClassOf
+              [ a owl:Restriction ;
+                owl:onProperty :manages ;
+                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                owl:onClass :Department 
+              ] .
 ```
 ##### Database A <t>v</t>
 ```sparql
@@ -408,7 +450,7 @@ is invalid.
 
 ##### Constraint
 ```sparql
-:name a owl:FunctionalProperty
+:name a owl:FunctionalProperty .
 ```
 ##### Database A <t>v</t>
 ```sparql
@@ -438,7 +480,7 @@ properties.
 
 ##### Constraint
 ```sparql
-:manages rdfs:subPropertyOf :works_in
+:manages rdfs:subPropertyOf :works_in .
 ```
 ##### Database A <t>i</t>
 ```sparql
@@ -460,7 +502,7 @@ B, `Bob` is related to `MyDepartment` via both `manages` and
 
 ##### Constraint
 ```sparql
-:is_supervisor_of owl:propertyChainAxiom (:manages inverse :works_in)
+:is_supervisor_of owl:propertyChainAxiom (:manages [owl:inverseOf :works_in]) .
 ```
 ##### Database A <t>i</t>
 ```sparql
@@ -502,7 +544,32 @@ department.
 
 ##### Constraint
 ```sparql
-:Employee rdfs:subClassOf (:works_on some (:Project or (:supervises some (:Employee and (:works_on some :Project))) or (:manages some :Department)))
+# Constraint in Terp syntax:
+# :Employee rdfs:subClassOf (:works_on some (:Project or (:supervises some (:Employee and (:works_on some :Project))) or (:manages some :Department)))
+
+:Employee rdfs:subClassOf
+              [ a owl:Restriction ;
+                owl:onProperty :works_on ;
+                owl:someValuesFrom
+                        [ owl:unionOf (:Project 
+                                      [ a owl:Restriction ;
+                                        owl:onProperty :supervises ;
+                                        owl:someValuesFrom
+                                              [ owl:intersectionOf (:Employee 
+                                                                    [ a owl:Restriction ;
+                                                                      owl:onProperty :works_on ;
+                                                                      owl:someValuesFrom :Project
+                                                                    ])
+                                              ]
+                                      ] 
+                                      [ a owl:Restriction ;
+                                        owl:onProperty :manages ;
+                                        owl:someValuesFrom :Department
+                                      ])
+                        ]
+              ] .
+
+
 ```
 ##### Database A <t>i</t>
 ```sparql
@@ -566,7 +633,25 @@ receives funds from a US government agency.
 
 ##### Constraint
 ```sparql
-:Project and (:receives_funds_from some :US_Government_Agency)) rdfs:subClassOf (inverse :works_on only (:Employee and (:nationality value "US")))
+# Constraint in Terp syntax:
+# :Project and (:receives_funds_from some :US_Government_Agency)) rdfs:subClassOf (inverse :works_on only (:Employee and (:nationality value "US")))
+
+[ owl:intersectionOf (:Project 
+                       [ a owl:Restriction ;
+                         owl:onProperty :receives_funds_from ;
+                         owl:someValuesFrom :US_Government_Agency
+                       ]) .
+] rdfs:subClassOf
+              [ a owl:Restriction ;
+                owl:onProperty [owl:inverseOf :works_on] ;
+                owl:allValuesFrom [ owl:intersectionOf (:Employee 
+                                                        [ a owl:Restriction ;
+                                                          owl:hasValue "US" ;
+                                                          owl:onProperty :nationality
+                                                        ])
+                                  ] 
+              ] .
+
 ```
 ##### Database A <t>v</t>
 ```sparql
