@@ -7,9 +7,9 @@ toc: true
 summary: Spring is a platform to build and run enterprise applications in Java. Stardog's Spring support makes life easier for enterprise developers who need to work with Semantic Web technology&mdash;including RDF, SPARQL, and OWL&mdash;by way of Stardog.
 ---
 
-The Spring for Stardog [source code](http://github.com/clarkparsia/stardog-spring) is available on Github. 
+The Spring for Stardog [source code](http://github.com/clarkparsia/stardog-spring) is available on Github.
 
-## Overview 
+## Overview
 
 Spring for Stardog makes it possible to rapidly build Stardog-backed applications with the Spring Framework. As with many other parts of Spring, Stardog's Spring
 integration uses the template design pattern for abstracting standard
@@ -57,7 +57,7 @@ To build Spring for Stardog, you need a release of Stardog; we use
               -DpomFile=pom.xml
 
 
-## Basic Spring 
+## Basic Spring
 
 There are three Beans to add to a Spring application context:
 
@@ -87,6 +87,8 @@ automatically mapping result set bindings into common data types. The
 parameter for a single result set.
 
 For example,
+
+<gist>4570152?file=SingleMapper.java</gist>
 
 The key methods on `SnarlTemplate` include the following:
 
@@ -132,7 +134,9 @@ configured in Spring.
 
 Here's a sample `applicationContext`:
 
-## Spring Batch 
+<gist>1115889?file=applicationContext.xml</gist>
+
+## Spring Batch
 
 In addition to the base `DataSource` and `SnarlTemplate`, Spring Batch
 support adds the following:
@@ -147,14 +151,30 @@ support adds the following:
 These beans can then be used within Spring Batch job definition, for
 example:
 
-## Examples 
+<gist>4570209?file=batchContext.xml</gist>
+
+
+## Examples
 
 ### query() with SELECT queries
 
+<gist>1115894?file=spring-select.java</gist>
+
 ### doWithGetter
+
+<gist>1115915?file=dowithgetter.java</gist>
 
 ### doWithAdder
 
+<gist>1115915?file=doWithAdder.java</gist>
+
 ### doWithRemover
 
+<gist>1115915?file=doWithRemover.java</gist>
+
 ### construct()
+
+<gist>1115915?file=construct.java</gist>
+
+
+
