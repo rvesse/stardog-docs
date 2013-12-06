@@ -4,7 +4,6 @@ title: Programming with Spring
 shortTitle: Spring
 layout: default
 toc: true
-summary: Spring is a platform to build and run enterprise applications in Java. Stardog's Spring support makes life easier for enterprise developers who need to work with Semantic Web technology&mdash;including RDF, SPARQL, and OWL&mdash;by way of Stardog.
 ---
 
 The Spring for Stardog [source code](http://github.com/clarkparsia/stardog-spring) is available on Github.
