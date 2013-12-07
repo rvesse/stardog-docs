@@ -175,5 +175,13 @@ example:
 
 <gist>1115915?file=construct.java</gist>
 
+### update()
+
+<gist>7846171?file=StardogSpringUpdate.java</gist>
+
+### ask()
+
+<gist>7846198?file=StardogSpringAsk.java</gist>
+
 
 
