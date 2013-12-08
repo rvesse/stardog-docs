@@ -16,7 +16,7 @@ The Groovy for Stardog [source
 code](http://github.com/clarkparsia/stardog-groovy) is available on
 Github.
 
-## Overview 
+## Overview
 
 Groovy for Stardog <t>springVersion</t> provides a set of Groovy API
 wrappers for developers to build applications with Stardog and take
@@ -46,7 +46,7 @@ with the Spring bindings and can use a `DataSource` to initialize the
 constructor. Combining both together creates an easy to use solution for
 other Groovy environments, such as [Grails](http://www.grails.org).
 
-## Building Groovy for Stardog 
+## Building Groovy for Stardog
 
 To build Groovy for Stardog, you need a release of Stardog; we use
 [Gradle](http://www.gradle.org/) to build Stardog for Groovy. Then,
@@ -87,4 +87,10 @@ Here are some examples of the more interesting parts of Stardog Groovy.
 
 ### `withConnection` Closure
 
-<gist>4652621?file=StardogWithConnection.groovy
+<gist>4652621?file=StardogWithConnection.groovy</gist>
+
+###  SPARQL Update Support
+
+<gist>7862684?file=StardogGroovyUpdate.groovy</gist>
+
+
