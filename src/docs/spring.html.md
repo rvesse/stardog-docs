@@ -8,6 +8,8 @@ toc: true
 
 The Spring for Stardog [source code](http://github.com/clarkparsia/stardog-spring) is available on Github.
 
+Binary releases are available on the [Github release page](https://github.com/clarkparsia/stardog-spring/releases).
+
 ## Overview
 
 Spring for Stardog makes it possible to rapidly build Stardog-backed applications with the Spring Framework. As with many other parts of Spring, Stardog's Spring

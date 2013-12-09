@@ -16,6 +16,8 @@ The Groovy for Stardog [source
 code](http://github.com/clarkparsia/stardog-groovy) is available on
 Github.
 
+Binary releases are available on the [Github release page](https://github.com/clarkparsia/stardog-groovy/releases).
+
 ## Overview
 
 Groovy for Stardog <t>springVersion</t> provides a set of Groovy API
