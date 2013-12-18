@@ -430,7 +430,7 @@ below.
 ## Database Admin
 
 Stardog is a multi-tenancacy system and will happily provide access to
-multiple, distinct, disjoint databases.
+multiple, distinct databases.
 
 ### Configuring a Database
 
@@ -504,8 +504,6 @@ reasoning.punning.enabled           | No         | false      | [DatabaseOptions
 reasoning.schema.graphs             | Yes        | default    | [DatabaseOptions.SCHEMA_GRAPHS](/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#SCHEMA_GRAPHS)
 search.enabled                      | Yes        | false      | [DatabaseOptions.SEARCHABLE](/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#SEARCHABLE)
 transactions.durable                | Yes        | false      | [DatabaseOptions.TRANSACTIONS_DURABLE](/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#TRANSACTIONS_DURABLE)
-
-
 
 #### Legal Values of Configuration Options
 
@@ -704,6 +702,46 @@ command.
       </tbody>
       <caption>Options for the Stardog <tt>create</tt> command.</caption>
 </table>
+
+<!-- 
+### Backing Up and Restoring
+
+Stardog includes both physical and logical backup utilities; logical backups are accomplished using the `export` CLI command. Physical backups and restores are accomplished using `stardog-admin db backup` and `stardog-admin db restore` respectively. These tools perform physical backups, including database metadata, rather than logical backups via some RDF serialization. They are *native* Stardog backups and can only be restored with Stardog tools. Backup may be accomplished while a database is online; backup is performed in a read transaction: reads and writes may continue, but writes performed during the backup are not reflected in the backup.
+
+#### Backup
+
+`stardog-admin db backup` assumes a default location for its output, namely, `$STARDOG_HOME/.backup`; that default may be overriden by passing a `-t` or `--to` argument. Backup sets are stored in the backup directory by database name and then in data-versioned subdirectories for each backup volume. Of course you can use a variety of OS-specific options to accomplish remote backups over some network or data protocol; those options are left as an exercise for the admin.
+
+To backup a Stardog database called `foobar`:
+
+```bash
+$ stardog-admin db backup foobar
+```
+
+To perform a remote backup, for example, pass in a specific directory that may be mounted in the current OS namespace via some network protocol, thus:
+
+```bash
+$ stardog-admin db backup --to /my/network/share/stardog-backups foobar
+```
+
+Note: Stardog's backup/restore approach is optimized for minimizing the amount of time it takes to backup a database, with the result that restore takes a bit longer than if the system were optimized for fast restores.
+
+#### Restore
+
+To restore a Stardog database from a Stardog backup volume, simply pass a fully-qualfied path to the volume in question. Note that a database with the 
+
+Restores a database from its backup. The location of the backup should be the full path to the backup, not the location of the backup directory as specified in your Stardog configuration. There no no need to specify the name of the database to restore as that is persisted in the backup. As such, a database with the name of the database being restored cannot exist in order for the restore to be successful, that is, if you're restoring a database called 'foo' from its backup, 'foo' cannot currently exist.
+
+Restore a database from its backup:
+
+    $ stardog-admin db restore $STARDOG_HOME/.backups/myDb/2012-06-21
+
+Three cases:
+
+* offline db, restore it
+* restore while db is online, stardog will swap at the last second, minimizing offline time
+* restore to a new database with a unique name, leaving 'old' database alone completely
+-->
 
 ### Namespace Prefix Bindings
 
