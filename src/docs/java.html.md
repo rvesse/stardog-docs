@@ -454,3 +454,74 @@ API. See [What 1.x Means](/compatibility) for more information about API stabili
 Anything marked `@VisibleForTesting` is just that, visible as a
 consequence of test case requirements; don't write any important code
 that depends on functions with this annotation.
+
+## Support for Maven
+
+Like Maven generated archives, Stardog client jars now contain Maven
+meta information (pom.xml and pom.properties files).  Dependency information
+is included in the pom.xml files and the pom.properties files include some
+basic properties. Located in the stardog distribution bin directory, the
+script `mavenInstall` (`mavenInstall.bat` for Windows systems) will install
+the stardog client jars into the local maven repository.
+
+The following table summarizes the type of client to be built and its
+associated stardog dependency.
+
+Type of Client               | Stardog Dependency 
+:--------------------------  | :------------------ 
+snarl client                 | com.complexible.stardog.protocols.snarl:client:2.1
+http client                  | com.complexible.stardog.protocols.http:client:2.1
+reasoning snarl client       | com.complexible.stardog.reasoning.snarl:client:2.1
+reasoning http client        | com.complexible.stardog.reasoning.http:client:2.1
+search snarl client          | com.complexible.stardog.search.snarl:client:2.1
+search http client           | com.complexible.stardog.search.http:client:2.1
+icv snarl client             | com.complexible.stardog.icv.snarl:client:2.1
+icv http client              | com.complexible.stardog.icv.http:client:2.1
+empire client                | com.complexible.stardog:empire:2.1
+jena snarl client            | com.complexible.stardog:jena:2.1 com.complexible.stardog.protocols.snarl:client:2.1
+jena http client             | com.complexible.stardog:jena:2.1 com.complexible.stardog.protocols.http:client:2.1
+sesame snarl client          | com.complexible.stardog:sesame:2.1 com.complexible.stardog.protocols.snarl:client:2.1
+sesame http client           | com.complexible.stardog:sesame:2.1 com.complexible.stardog.protocols.http:client:2.1
+
+The following example shows how a stardog snarl client can be built using
+the [Gradle](http://www.gradle.org) build automation tool. The listing below
+is a `build.gradle` file that includes the necessary dependency for a
+stardog snarl client.
+
+```javastardog
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'application'
+    
+    mainClassName = "com.complexible.stardog.examples.api.ConnectionAPIExample"
+    
+    sourceCompatibility = 1.5
+    version = '1.0'
+    jar {
+        manifest {
+            attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
+        }
+    }
+    
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    
+    dependencies {
+    //  Use the following line for a stardog snarl client
+        compile ('com.complexible.stardog.protocols.snarl:client:2.1')
+    }
+    
+    test {
+        systemProperties 'property': 'value'
+    }
+    
+    uploadArchives {
+        repositories {
+            flatDir {
+                dirs 'repos'
+            }
+        }
+    }
+```
