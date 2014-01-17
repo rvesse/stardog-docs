@@ -209,14 +209,59 @@ which then must have values set for them using the relevant methods prior to cal
 
 Stardog supports various levels of reasoning by using a query rewriting technique.
 In short, when reasoning is requested, a query is automatically rewritten into *n* 
-queries, which are then executed. As mentioned earlier reasoning is enabled at the `StardogConnector` layer and then 
-any queries executed over that connection are executed with reasoning enabled; you 
-don't need to do anything up front when you create your database if you want to use 
-reasoning.  The in-use reasoning mode for your connection may be changed at any time 
-by setting the `Reasoning` property appropriately.
+queries, which are then executed. As mentioned earlier reasoning is enabled at the 
+`StardogConnector` layer and then any queries executed over that connection are 
+executed with reasoning enabled; you don't need to do anything up front when you 
+create your database if you want to use reasoning.  The in-use reasoning mode for 
+your connection may be changed at any time by setting the `Reasoning` property 
+appropriately.
 
 For more information on how reasoning is supported in Stardog, check out the 
 [reasoning section](../owl2/)
+
+
+## Making SPARQL Updates
+
+From dotNetRDF 1.0.3 onwards it is possible to make native SPARQL updates against Stardog 
+when using the `StardogV2Connector` or the `StardogConnector`.  SPARQL Updates are
+made simply by calling the `Update()` method which is from the 
+[IUpdateableStorage](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Storage.IUpdateableStorage)
+interface.  SPARQL Updates may be passed in directly as strings like so:
+
+<gist>8019566</gist>
+
+We **strongly** recommend the use of the parameterized update support over 
+concatenating strings together in order to build your SPARQL update.  This 
+latter approach opens up the possibility for SPARQL injection attacks 
+unless you are very careful in scrubbing your input.  This can be done using
+the [SparqlParameterizedString](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Query.SparqlParameterizedString)
+class like so:
+
+<gist>8019591</gist>
+
+dotNetRDF uses the ADO.Net style `@param` to specify parameters in the query string
+which then must have values set for them using the relevant methods prior to calling
+`ToString()` to retrieve the final query string.
+
+### Approximating Stardog Updates
+
+Even when using older versions of dotNetRDF or older versions of Stardog which do not
+support SPARQL Update natively it is still possible to perform SPARQL Updates on
+Stardog using dotNetRDF's approximated update support.
+
+To do this you create a [GenericUpdateProcessor](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Update.GenericUpdateProcessor)
+instance which wraps your `IStorageProvider` instance.  This provides a `ProcessCommandSet()`
+method which takes in a [SparqlUpdateCommandSet](http://www.dotnetrdf.org/api/index.asp?Topic=VDS.RDF.Update.SparqlUpdateCommandSet)
+instance and executes it against the underlying store.  Where the underlying store does
+not support SPARQL Update natively it does its best to translate the update commands into
+their equivalent Storage API operations to execute the update as faithfully as possible.
+
+<gist>8019694</gist>
+
+**Note:** You can safely use the `GenericUpdateProcessor` even with newer versions of
+dotNetRDF and Stardog where native SPARQL Update is supported since if the underlying
+store supports SPARQL Update natively the `GenericUpdateProcessor` delegates execution
+to the stores `Update()` method.
 	  
 ## dotNetRDF Documentation</h2>
 
