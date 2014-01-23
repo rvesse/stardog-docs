@@ -164,9 +164,9 @@ but, using the SNARL API, it is easy to create a tree widget
 in a GUI to show the explanation tree, such that users can expand and
 collapse details in the explanation.
 
-Another feature of proof trees is the ability to merge multiple 
-explanations into a single proof tree with multiple branches when 
-explanations have common statements. Consider the following example 
+Another feature of proof trees is the ability to merge multiple
+explanations into a single proof tree with multiple branches when
+explanations have common statements. Consider the following example
 database:
 
 
@@ -178,6 +178,7 @@ database:
 :supervises rdfs:domain :Manager
 :ResearchProject rdfs:subClassOf :Project
 :projectID rdfs:domain :Project
+
 # instance data
 :Alice :supervises :Bob
 :Alice :manages :ProjectX
@@ -185,24 +186,20 @@ database:
 :ProjectX :projectID "123-45-6789"
 ```
 
-In this database, there are three different unique explanations 
-for the inference `:Alice rdf:type :Employee`. The triples
-in each explanation is hown in the following table:
+In this database, there are three different unique explanations
+for the inference `:Alice rdf:type :Employee`:
 
-<table>
-<tr>
-<td>Explanation 1</td><td>Explanation 2</td><td>Explanation 3</td>
-</tr>
-<tr>
-<td>
+##### Explanation 1
+
 ```sparql
 :Manager rdfs:subClassOf :Employee
 :ProjectManager rdfs:subClassOf :Manager
 :supervises rdfs:domain :Manager
 :Alice :supervises :Bob
 ```
-</td>
-<td>
+
+##### Explanation 2
+
 ```sparql
 :Manager rdfs:subClassOf :Employee
 :ProjectManager rdfs:subClassOf :Manager
@@ -211,8 +208,8 @@ in each explanation is hown in the following table:
 :Alice :manages :ProjectX
 :ProjectX a :ResearchProject
 ```
-</td>
-<td>
+##### Explanation 3
+
 ```sparql
 :Manager rdfs:subClassOf :Employee
 :ProjectManager rdfs:subClassOf :Manager
@@ -221,15 +218,12 @@ in each explanation is hown in the following table:
 :Alice :manages :ProjectX
 :ProjectX :projectID "123-45-6789"
 ```
-</td>
-</tr>
-</table> 
 
-Note that, all three explanations have some triples in common but
-when explanations are retrieved separately it is hard to see how
+All three explanations have some triples in common; but
+when explanations are retrieved separately, it is hard to see how
 these explanations are related. When explanations are merged, we
 get a single proof tree where alternatives for subtrees of the
-proof are shown inline. In indented text rendering, the merged 
+proof are shown inline. In indented text rendering, the merged
 tree for the above explanations would look as follows:
 
 ```sparql
@@ -250,15 +244,16 @@ INFERRED :Alice a :Employee
             ASSERTED :ResearchProject rdfs:subClassOf :Project
             ASSERTED :ProjectX a :ResearchProject
 ```
+
 In the merged proof tree, alternatives for an
-explanation is shown with a number id. In the above tree, 
+explanation is shown with a number id. In the above tree,
 `:Alice a :Manager` is the first inference for which we have
 multiple explanations so it gets the id `1`. Then each alternative
-explanation gets an id appended to this (so explanations `1.1` and 
+explanation gets an id appended to this (so explanations `1.1` and
 `1.2` are both alternative explanations for inference `1`). We
 also have multiple explanations for inference `:ProjectX a :Project`
 so its alternatives get ids `2.1` and `2.2`.
-Again, a tree widget in a GUI can show this proof tree in a more 
+Again, a tree widget in a GUI can show this proof tree in a more
 user-friendly way.
 
 
@@ -562,7 +557,7 @@ predicates:
 -   `sp:directSubPropertyOf`
 -   `sp:strictSubPropertyOf`
 
-Where the `sp` prefix binds to `tag:stardog:api:property:`. Stardog also recognizes `sesame:directType`, 
+Where the `sp` prefix binds to `tag:stardog:api:property:`. Stardog also recognizes `sesame:directType`,
 `sesame:directSubClassOf`, and `sesame:strictSubClassOf` predicates where the prefix `sesame` binds to
 `http://www.openrdf.org/schema/sesame#`.
 
@@ -577,7 +572,7 @@ equivalent triple pattern; that is, you can just write the predicate rather than
                                              :c1 owl:equivalentClass :c2 .
                                           }
 ```
-    
+
 ```sparql
 # c1 is a strict subclass of c2 and there is no c3 between c1 and c2 in the strict subclass hierarchy
 
@@ -602,19 +597,19 @@ The predicates `sp:directSubPropertyOf` and `sp:strictSubPropertyOf` are defined
 
 ### New Individuals with SWRL
 
-Stardog also supports a special predicate that extends the expressivity of SWRL rules. According to the SWLR spec, 
+Stardog also supports a special predicate that extends the expressivity of SWRL rules. According to the SWLR spec,
 you can't create new individuals (i.e., new instances of classes) in a SWRL rule.
 
-**Note:** Don't get hung up by the tech vocabulary here..."new individual" just means that you can't have a rule 
+**Note:** Don't get hung up by the tech vocabulary here..."new individual" just means that you can't have a rule
 that adds a new instance of some RDF or OWL class as a result of the rule firing.
 
-This restriction is well-motivated as it can easily cause rules to be non-terminating, that is, they never reach 
+This restriction is well-motivated as it can easily cause rules to be non-terminating, that is, they never reach
 a fixed point, which causes big problems. Stardog's user-defined rules weakens this restriction in some crucial
 aspects, subject to the following restrictions, conditions, and warnings.
 
 **This special predicate is basically a loaded gun with which you may shoot yourselves in the foot if you aren't very careful.**
 
-So despite the general restriction in SWRL, in Stardog we actually can create new individuals with a rule by using 
+So despite the general restriction in SWRL, in Stardog we actually can create new individuals with a rule by using
 the function `UUID()` as follows:
 
 ```sparql
@@ -629,7 +624,7 @@ THEN {
 
 **Note:** Alternatively, we can use the predicate `<http://www.w3.org/ns/sparql#UUID>` as a unary SWRL built-in.
 
-This rule will create a *random* URI for each instance of the class `:Person` and also assert that each new instance 
+This rule will create a *random* URI for each instance of the class `:Person` and also assert that each new instance
 is an instance of `:Parent`.
 
 #### Remarks
