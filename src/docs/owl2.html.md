@@ -91,15 +91,15 @@ details on specifying the reasoning level programmatically.
 
 Currently, the API has two methods:
 
--   `isConsistent()`, which can be used to check if the current KB is
+-   `isConsistent()`, which can be used to check if the current DB is
     consistent with respect to the reasoning level.
 -   `isSatisfiable(URI theURIClass)`, which can be used to check if the
-    given class if satisfiable with respect to the current KB and
+    given class if satisfiable with respect to the current DB and
     reasoning level.
 
 ## Explaining Reasoning Results
 
-Stardog can be used to check if the current KB logically entails a set
+Stardog can be used to check if the current DB logically entails a set
 of triples; moreover, Stardog can explain why this is so. An explanation
 of an inference is the minimum set of statements explicitly stored in
 the database that together justify or warrant the inference.
@@ -160,9 +160,107 @@ INFERRED :Alice rdf:type :Employee
 ```
 
 The CLI explanation command prints the proof tree using indented text;
-but, using the SNARL API, it is simple to create a tree widget
+but, using the SNARL API, it is easy to create a tree widget
 in a GUI to show the explanation tree, such that users can expand and
 collapse details in the explanation.
+
+Another feature of proof trees is the ability to merge multiple 
+explanations into a single proof tree with multiple branches when 
+explanations have common statements. Consider the following example 
+database:
+
+
+```sparql
+#schema
+:Manager rdfs:subClassOf :Employee
+:ProjectManager rdfs:subClassOf :Manager
+:ProjectManager owl:equivalentClass (:manages some :Project)
+:supervises rdfs:domain :Manager
+:ResearchProject rdfs:subClassOf :Project
+:projectID rdfs:domain :Project
+# instance data
+:Alice :supervises :Bob
+:Alice :manages :ProjectX
+:ProjectX a :ResearchProject
+:ProjectX :projectID "123-45-6789"
+```
+
+In this database, there are three different unique explanations 
+for the inference `:Alice rdf:type :Employee`. The triples
+in each explanation is hown in the following table:
+
+<table>
+<tr>
+<td>Explanation 1</td><td>Explanation 2</td><td>Explanation 3</td>
+</tr>
+<tr>
+<td>
+```sparql
+:Manager rdfs:subClassOf :Employee
+:ProjectManager rdfs:subClassOf :Manager
+:supervises rdfs:domain :Manager
+:Alice :supervises :Bob
+```
+</td>
+<td>
+```sparql
+:Manager rdfs:subClassOf :Employee
+:ProjectManager rdfs:subClassOf :Manager
+:ProjectManager owl:equivalentClass (:manages some :Project)
+:ResearchProject rdfs:subClassOf :Project
+:Alice :manages :ProjectX
+:ProjectX a :ResearchProject
+```
+</td>
+<td>
+```sparql
+:Manager rdfs:subClassOf :Employee
+:ProjectManager rdfs:subClassOf :Manager
+:ProjectManager owl:equivalentClass (:manages some :Project)
+:projectID rdfs:domain :Project
+:Alice :manages :ProjectX
+:ProjectX :projectID "123-45-6789"
+```
+</td>
+</tr>
+</table> 
+
+Note that, all three explanations have some triples in common but
+when explanations are retrieved separately it is hard to see how
+these explanations are related. When explanations are merged, we
+get a single proof tree where alternatives for subtrees of the
+proof are shown inline. In indented text rendering, the merged 
+tree for the above explanations would look as follows:
+
+```sparql
+INFERRED :Alice a :Employee
+   ASSERTED :Manager rdfs:subClassOf :Employee
+   1.1) INFERRED :Alice a :Manager
+      ASSERTED :supervises rdfs:domain :Manager
+      ASSERTED :Alice :supervises :Bob
+   1.2) INFERRED :Alice a :Manager
+      ASSERTED :ProjectManager rdfs:subClassOf :Manager
+      INFERRED :Alice a :ProjectManager
+         ASSERTED :ProjectManager owl:equivalentClass (:manages some :Project)
+         ASSERTED :Alice :manages :ProjectX
+         2.1) INFERRED :ProjectX a :Project
+            ASSERTED :projectID rdfs:domain :Project
+            ASSERTED :ProjectX :projectID "123-45-6789"
+         2.2) INFERRED :ProjectX a :Project
+            ASSERTED :ResearchProject rdfs:subClassOf :Project
+            ASSERTED :ProjectX a :ResearchProject
+```
+In the merged proof tree, alternatives for an
+explanation is shown with a number id. In the above tree, 
+`:Alice a :Manager` is the first inference for which we have
+multiple explanations so it gets the id `1`. Then each alternative
+explanation gets an id appended to this (so explanations `1.1` and 
+`1.2` are both alternative explanations for inference `1`). We
+also have multiple explanations for inference `:ProjectX a :Project`
+so its alternatives get ids `2.1` and `2.2`.
+Again, a tree widget in a GUI can show this proof tree in a more 
+user-friendly way.
+
 
 
 
