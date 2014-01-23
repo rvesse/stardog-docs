@@ -8,6 +8,14 @@ toc: true
 
 This page briefly lists major features and other notable changes to Stardog from 1.0 to 2.0; it will be updated for each new release. For a complete list of changes, including notable bug fixes, see the [Release Notes](/docs/RELEASE_NOTES.txt).
 
+## 2.1
+
+- Database repair, backup & restore utilities
+- Improved query scalability by flowing intermediate results off-heap or onto disk; requires a JDK that supports `sun.misc.Unsafe`
+- [Performance](/performance): significant improvement in performance of bulk loading and total scalability of a database
+- Generation of multiple proofs for inferences & inconsistencies; proofs for integrity constraint violations
+- Reduced memory footprint of queries while being executed
+
 ## 2.0
 
 - [SPARQL 1.1 Update](/using/#sd-Updating); the most requested feature ever!

@@ -18,7 +18,7 @@ Stardog command-line interface is comprehensively documented in `man` pages that
 
 ## `stardog-admin` CLI
 
-1. [`db copy`](/man/db-copy.html), [`db create`](/man/db-create.html), [`db drop`](/man/db-drop.html), [`db list`](/man/db-list.html), [`db migrate`](/man/db-migrate.html), [`db offline`](/man/db-offline.html), [`db online`](/man/db-online.html), [`db optimize`](/man/db-optimize.html), [`db status`](/man/db-status.html)
+1. [`db backup`](/man/db-backup.html), [`db copy`](/man/db-copy.html), [`db create`](/man/db-create.html), [`db drop`](/man/db-drop.html), [`db list`](/man/db-list.html), [`db migrate`](/man/db-migrate.html), [`db offline`](/man/db-offline.html), [`db online`](/man/db-online.html), [`db optimize`](/man/db-optimize.html), [`db restore`](/man/db-restore.html), [`db status`](/man/db-status.html)
 2. [`metadata get`](/man/metadata-get.html), [`metadata set`](/man/metadata-set.html)
 3. [`role add`](/man/role-add.html), [`role grant`](/man/role-grant.html), [`role list`](/man/role-list.html), [`role permission`](/man/role-permission.html), [`role remove`](/man/role-remove.html), [`role revoke`](/man/role-revoke.html)
 4. [`server start`](/man/server-start.html), [`server stop`](/man/server-stop.html)

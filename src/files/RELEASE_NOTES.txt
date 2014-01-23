@@ -1,7 +1,84 @@
+2.1 Changes
+----------------------------------------------------------------------------
+
+* ADDED: Support for bzip2 compressed input files (with extension .bz2)
+
+* ADDED: Auto-repair mechanism for common types of index errors
+
+* ADDED: Generation of multiple proofs for inferences & inconsistencies
+
+* ADDED: Database repair, backup & restore utilities
+
+* ADDED: FROM/FROM NAMED 'default' can be used as an alias to query default graph
+
+* ADDED: 'dbms-admin:shutdown' permission to allow non-superusers which hold that permission, to shutdown the server
+
+* ADDED: Improved query scalability by flowing intermediate results off-heap or onto disk.  Note: flowing off-heap requires an Oracle JDK due to its use of sun.misc.Unsafe
+
+* ADDED: Significant improvement in performance of bulk loading and total scalability of a database
+
+* ADDED: Named Graph information in proofs
+
+* ADDED: Proofs for integrity constraint violations
+
+* FIXED: NaN displayed in waldo search results
+
+* FIXED: Web console hangs when using with SSL
+
+* FIXED: Log redirection at startup messes up the logger output
+
+* FIXED: Over-eager update plan caching resulting in different update queries executing the same update
+
+* FIXED: Search index is not needlessly rebuilt on stardog
+
+* FIXED: HTTP server on OpenJDK does not always close connections
+
+* FIXED: Web console not loading on Win7 when Stardog is run as a service
+
+* FIXED: Stardog Rules do not use the pre-defined database namespaces
+
+* FIXED: Encoding of special characters in web console
+
+* FIXED: Issue in query optimizer where a more optimal plan could accidentally get discarded
+
+* FIXED: Built-in values (such as owl:Thing) used inside filters are not correctly recognized
+
+* FIXED: Queries using reasoning and FILTER NOT EXISTS could return incomplete results
+
+* FIXED: Cannot shutdown server over HTTP if security is disabled
+
+* FIXED: Functions with zero args, such as BNODE(), can produce incorrect results
+
+* FIXED: now() returns the time the server started, not the actual current time
+
+* FIXED: Asking for the types of a class yields an exception
+
+* FIXED: Axioms using HasValue expressions can case type queries to produce incorrect results
+
+* FIXED: Value for subject in THEN clause is not returned
+
+* FIXED: BIND optimizer can incorrectly order the BIND expressions
+
+* FIXED: IF-THEN rules might fail to recognize term types
+
+* FIXED: Windows service does not always shut down cleanly
+
+* MODIFIED: Reduced memory footprint of queries while being executed
+
+* MODIFIED: Optimizing a database will also rebuild its search index
+
+* MODIFIED: Make database namespaces meta property creatable
+
+* MODIFIED: Database meta properties cannot be re-initialized to prevent malicious users from changing their behavior
+
+* MODIFIED: Updated to Netty 4.0.14
+
+* MODIFIED: Updated to Sesame 2.7.7
+
 2.0.3 Changes
 ----------------------------------------------------------------------------
 
-* ADDED: real manpages
+* ADDED: manpages
 
 * ADDED: Support for punning when using reasoning & rdf:type
 
