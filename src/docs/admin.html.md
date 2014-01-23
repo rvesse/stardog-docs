@@ -707,27 +707,31 @@ command.
 
 Repairs a corrupted Stardog database. This command needs exclusive
 access to your Stardog home directory and therefore requires the Stardog
-server to be not running. This also means that the command can only be
+server not to be running.  This also means that the command can only be
 run on the machine where the Stardog home directory is located at and
 you will not be able to start the Stardog server while this command is
 running. Please note that the repair process can take considerable
-amount of time for large databases. If the built-in Stardog system
+time for large databases. If the built-in Stardog system
 database is corrupted then you can use the database name 'system' as the
-repair argument.
+repair argument. If an I/O error or an index exception occurs while querying a DB, the DB might be corrupted and repaired with the repair command. If the errors occur during executing admin commands, then the system DB might have been corrupted. System database corruptions can also cause other problems including authorization errors.
 
-If an I/O error or an index exception occurs while querying a DB, the DB might be corrupted and repaired with the repair command. If the errors occur during executing admin commands then the system DB might have been corrupted. System DB corruptions can also cause other problems including authorization errors. If the system DB is corrupted then use the 'db repair system' command.
+To repair the database myDB:
 
-Repair the database myDB:
+```bash
 $ stardog-admin db repair myDB
-       
-Repair the system database:
+```
+
+To repair the system database:
+
+```bash
 $ stardog-admin db repair system
+```
 
 ### Backing Up and Restoring
 
 Stardog includes both physical and logical backup utilities; logical backups are accomplished using the `export` CLI command. Physical backups and restores are accomplished using `stardog-admin db backup` and `stardog-admin db restore` respectively. These tools perform physical backups, including database metadata, rather than logical backups via some RDF serialization. They are *native* Stardog backups and can only be restored with Stardog tools. Backup may be accomplished while a database is online; backup is performed in a read transaction: reads and writes may continue, but writes performed during the backup are not reflected in the backup.
 
-See the man pages for `backup` and `restore` for details. @@
+See the man pages for `backup` and `restore` for details.
 
 #### Backup
 
@@ -868,12 +872,11 @@ till you've tested the effects of a change in a non-production system.
 Stardog supports loading data from compressed files directly: there's
 no need to uncompress files before loading since compressed input may be faster to load. In any event, loading compressed data is the recommended way to load large input files.Stardog supports GZIP and ZIP compressions natively.<fn>In Stardog <t>version</t> compressed data may only be loaded at database creation time. We will support adding compressed data to an existing database in a future release.</fn>
 
-#### GZIP
+#### GZIP and BZIP2
 
-A file
-passed to `create` will be treated as compressed if the file name ends with '.gz'. The RDF
+A file passed to `create` will be treated as compressed if the file name ends with '.gz' or '.bz2'. The RDF
 format of the file is determined by the extension that comes before
-'.gz'. If a file named 'test.ttl.gz' is used as input, Stardog will
+'.gz' or '.bz2'. For exammple, if a file named 'test.ttl.gz' is used as input, Stardog will
 perform GZIP decompression during loading and parse the file with Turtle
 parser. All the formats supported by Stardog (RDF/XML, Turtle, Trig,
 etc.) can be used with GZIP compression.
@@ -1160,7 +1163,7 @@ Time | Connection 1 | Connection 2 | Connection 3
 
 #### Durability
 
-By default Stardog's transacted writes are durable; in some applications, in which durability of transactions is not required, a performance gain may be achieved by disabling durability.
+By default Stardog's transacted writes are not durable; in some applications, in which durability of transactions is  required, durability should be enabled.
 
 #### Commit Failure Autorecovery
 
