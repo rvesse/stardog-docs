@@ -52,7 +52,7 @@ docpadConfig = {
     templateData:
         # Specify some site properties
         version: "2.1" #update me on new release
-        springVersion: "2.0.0"
+        springVersion: "2.1"
         reldate: "23 January 2014"
         secnote: '<div class="metro danger label">Security Notice</div>'
         shout: '<div class="metro warning btn">NOTE</div>'
