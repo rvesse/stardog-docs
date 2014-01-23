@@ -63,6 +63,11 @@ Administering Stardog Server, databases, including configuration and deployment 
 ### [Security](/security)
 <%- @partial("security.html")%>
 
+<!--
+### [High Availability](/ha)
+<%- @partial("ha.html")%>
+-->
+
 ## Programming Stardog
 
 Everything from reasoning, data validation, and SPARQL to programming Stardog with Java, JavaScript, and many other languages, as well as the documentation for Stardog Web.

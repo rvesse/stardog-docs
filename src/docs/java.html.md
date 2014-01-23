@@ -9,7 +9,7 @@ toc: true
 ## Introduction
 
 In the [Network Programming](../network/) chapter, we look at how to
-interact with Stardog over a network via HTTP and SNARL protocol. In this 
+interact with Stardog over a network via HTTP and SNARL protocol. In this
 chapter we describe how to program Stardog from Java using SNARL
 (**Stardog Native API for the RDF Language**), Sesame, and Jena. We prefer
 SNARL to Sesame to Jena and recommend, all other things being equal,
@@ -84,7 +84,7 @@ database.
 Also note, Stardog database administration can be performed from the
 [command line](../admin/).
 
-### Creating a Connection String 
+### Creating a Connection String
 
 As you can see, the
 [`ConnectionConfiguration`](../java/snarl/com/complexible/stardog/api/ConnectionConfiguration.html)
@@ -123,7 +123,7 @@ See the
 API docs or the [administration section](../admin/) for more information
 on connection strings.
 
-### Managing Security 
+### Managing Security
 
 We discuss the security sytem in Stardog in the
 [security](../security) chapter in greater detail.
@@ -299,7 +299,7 @@ to use Stardog's full-text search support would look like this:
 
 Please see [SNARL API](../java/snarl/) docs for more information.
 
-## Using Sesame 
+## Using Sesame
 
 Stardog supports the [Sesame
 API](http://www.openrdf.org/doc/sesame/users/ch07.html); thus, for the
@@ -329,7 +329,7 @@ is too heavyweight for most use cases. You can enable
 `autoCommit` and it will work as expected; but **we recommend
 leaving it disabled**.
 
-## Using Jena 
+## Using Jena
 
 Stardog supports Jena via a Sesame-Jena bridge, so it's got more
 overhead than Sesame or SNARL. YMMV. There two points in the Jena
@@ -389,13 +389,13 @@ Stardog generally tries to be as lazy as possible; but in client-server
 mode, since state is maintained on the client, there are fewer chances
 to be lazy and more interactions with the server.
 
-## Embedded Stardog 
+## Embedded Stardog
 
 In addition to the `url()` issue, the other key difference between
 client-server and embedded Stardog is, of course, Java classpath woes.
 As of Stardog <t>version</t>, there is one classpath issue to watch out for: if you're using Jena in embedded mode, then Jena's libraries should
 be on the classpath *after* Stardog's, because of conflicting Lucene
-JARs. 
+JARs.
 
 Please let us know if you find any other conflicts among JARs or other
 classpath issues.
@@ -465,10 +465,12 @@ script `mavenInstall` (`mavenInstall.bat` for Windows systems) will install
 the stardog client jars into the local maven repository.
 
 The following table summarizes the type of client to be built and its
-associated stardog dependency.
+associated stardog dependency.  The stardog dependency list below follows
+the [Gradle](http://www.gradle.org) convention, and is of the form:
+`groupId:artifactId:version`.
 
-Type of Client               | Stardog Dependency 
-:--------------------------  | :------------------ 
+Type of Client               | Stardog Dependency
+:--------------------------  | :------------------
 snarl client                 | com.complexible.stardog.protocols.snarl:client:2.1
 http client                  | com.complexible.stardog.protocols.http:client:2.1
 reasoning snarl client       | com.complexible.stardog.reasoning.snarl:client:2.1
@@ -492,9 +494,9 @@ stardog snarl client.
     apply plugin: 'java'
     apply plugin: 'eclipse'
     apply plugin: 'application'
-    
+
     mainClassName = "com.complexible.stardog.examples.api.ConnectionAPIExample"
-    
+
     sourceCompatibility = 1.5
     version = '1.0'
     jar {
@@ -502,21 +504,21 @@ stardog snarl client.
             attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
         }
     }
-    
+
     repositories {
         mavenLocal()
         mavenCentral()
     }
-    
+
     dependencies {
     //  Use the following line for a stardog snarl client
         compile ('com.complexible.stardog.protocols.snarl:client:2.1')
     }
-    
+
     test {
         systemProperties 'property': 'value'
     }
-    
+
     uploadArchives {
         repositories {
             flatDir {

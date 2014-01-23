@@ -50,7 +50,7 @@ And for the very laziest among us, these work too:
 
 ``` bash
 $ stardog
- 
+
 $ stardog-admin
 ```
 
@@ -106,7 +106,7 @@ The most commonly used stardog commands are:
     query       Commands which query a Stardog database
     reasoning   Commands which use the reasoning capabilities of a Stardog database
     version     Prints information about this version of Stardog
-    
+
 See 'stardog help ' for more information on a specific command.
 ```
 
@@ -335,7 +335,7 @@ The following twiddly knobs for Stardog Server are available in
 
 ### Starting & Stopping the Server
 
-**Note**: Unlike the other `stardog-admin` subcommands, starting the 
+**Note**: Unlike the other `stardog-admin` subcommands, starting the
 server may only be run locally, i.e., on the same machine
 the Stardog Server will run on.
 
@@ -353,7 +353,7 @@ To specify parameters:
 $ stardog-admin server start --logfile mystardog.log --port=8080
 ```
 
-Note: the port can be specified using the property `--port`. 
+Note: the port can be specified using the property `--port`.
 The HTTP interface can be disabled by using the flag
 `--no-http` and the SNARL interface via `--no-snarl`.
 
@@ -375,12 +375,12 @@ network interface for Stardog to bind to using the `--bind` property of `server 
 
 Stardog includes integration with JMX called Watchdog.  In addition to providing
 some basic JVM information, Watchdog also exports information about the Stardog
-DBMS configuration as well as stats for all of the databases within the system, 
+DBMS configuration as well as stats for all of the databases within the system,
 such as the total number of open connections, size, and average query time.
 
 #### Accessing Watchdog
 
-To access Watchdog, you can simply use a tool like VisualVM or JConsole 
+To access Watchdog, you can simply use a tool like VisualVM or JConsole
 to attach to the process running the JVM, or connect directly to the JMX server.
 
 You can also access information from Watchdog in the web console for the database,
@@ -392,7 +392,7 @@ containing the information available via JMX.
 By default, Watchdog will bind an RMI server for remote access on port 5833.  If you
 want to change which port Watchdog binds the remote server to, you can set the property
 `watchdog.port` via `stardog.properties` find in your `$STARDOG_HOME`.  If you wish
-to disable remote access to JMX altogether you can set `watchdog.remote.access` to `false` 
+to disable remote access to JMX altogether you can set `watchdog.remote.access` to `false`
 in `stardog.properties`.  Finally, if you wish to disable Watchdog completely, just
 set `watchdog.enabled` to `false` in `stardog.properties`.
 
@@ -406,8 +406,8 @@ pass a different value to `--home`.
 
 ### Access & Audit Logging
 
-See the `stardog.properties` file (in the distribution) for a complete 
-discussion of how access and audit logging work in Stardog Server. 
+See the `stardog.properties` file (in the distribution) for a complete
+discussion of how access and audit logging work in Stardog Server.
 Basically, audit logging is a
 superset of the events in access logging. Access logging covers the most
 commonly required logging events; you should consider enabling audit
@@ -479,8 +479,8 @@ remains online.
 
 The following table summarizes the options:
 
-Config Option                       | Mutability | Default    | API                 
-:---------------------------------  | :--------  | :--------  | :------------------ 
+Config Option                       | Mutability | Default    | API
+:---------------------------------  | :--------  | :--------  | :------------------
 database.archetypes                 | Yes        |            | [DatabaseOptions.ARCHETYPES](/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#ARCHETYPES)
 database.name                       | No         |            | [DatabaseOptions.NAME](/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#NAME)
 database.namespaces                 | Yes        | rdf, rdfs, xsd, owl, stardog | [DatabaseOptions.NAMESPACES](/java/snarl/com/complexible/stardog/db/DatabaseOptions.html#NAMESPACES)
@@ -703,10 +703,31 @@ command.
       <caption>Options for the Stardog <tt>create</tt> command.</caption>
 </table>
 
-<!-- 
+### Repairing a Database
+
+Repairs a corrupted Stardog database. This command needs exclusive
+access to your Stardog home directory and therefore requires the Stardog
+server to be not running. This also means that the command can only be
+run on the machine where the Stardog home directory is located at and
+you will not be able to start the Stardog server while this command is
+running. Please note that the repair process can take considerable
+amount of time for large databases. If the built-in Stardog system
+database is corrupted then you can use the database name 'system' as the
+repair argument.
+
+If an I/O error or an index exception occurs while querying a DB, the DB might be corrupted and repaired with the repair command. If the errors occur during executing admin commands then the system DB might have been corrupted. System DB corruptions can also cause other problems including authorization errors. If the system DB is corrupted then use the 'db repair system' command.
+
+Repair the database myDB:
+$ stardog-admin db repair myDB
+       
+Repair the system database:
+$ stardog-admin db repair system
+
 ### Backing Up and Restoring
 
 Stardog includes both physical and logical backup utilities; logical backups are accomplished using the `export` CLI command. Physical backups and restores are accomplished using `stardog-admin db backup` and `stardog-admin db restore` respectively. These tools perform physical backups, including database metadata, rather than logical backups via some RDF serialization. They are *native* Stardog backups and can only be restored with Stardog tools. Backup may be accomplished while a database is online; backup is performed in a read transaction: reads and writes may continue, but writes performed during the backup are not reflected in the backup.
+
+See the man pages for `backup` and `restore` for details. @@
 
 #### Backup
 
@@ -728,20 +749,23 @@ Note: Stardog's backup/restore approach is optimized for minimizing the amount o
 
 #### Restore
 
-To restore a Stardog database from a Stardog backup volume, simply pass a fully-qualfied path to the volume in question. Note that a database with the 
-
-Restores a database from its backup. The location of the backup should be the full path to the backup, not the location of the backup directory as specified in your Stardog configuration. There no no need to specify the name of the database to restore as that is persisted in the backup. As such, a database with the name of the database being restored cannot exist in order for the restore to be successful, that is, if you're restoring a database called 'foo' from its backup, 'foo' cannot currently exist.
+To restore a Stardog database from a Stardog backup volume, simply pass a fully-qualfied path to the volume in question. The location of the backup should be the full path to the backup, not the location of the backup directory as specified in your Stardog configuration. There is no need to specify the name of the database to restore.
 
 Restore a database from its backup:
 
     $ stardog-admin db restore $STARDOG_HOME/.backups/myDb/2012-06-21
 
-Three cases:
 
-* offline db, restore it
-* restore while db is online, stardog will swap at the last second, minimizing offline time
-* restore to a new database with a unique name, leaving 'old' database alone completely
--->
+##### One-time Database Migrations for Backup
+
+The new backup system, introduced in Stardog 2.1, cannot directly backup databases created in versions before 2.1. These databases must be explicitly migrated in order to use the new backup system; this is a one-time operation per database and is accomplished by running
+
+```bash
+$ stardog-admin db migrate foobar
+```
+
+in order to migrate a database called `foobar`. Again, this is a one-time operation only and all databases created with 2.1 (or greater) do not require it.
+
 
 ### Namespace Prefix Bindings
 
@@ -841,12 +865,12 @@ till you've tested the effects of a change in a non-production system.
 
 ### Loading Compressed Data
 
-Stardog supports loading data from compressed files directly: there's 
+Stardog supports loading data from compressed files directly: there's
 no need to uncompress files before loading since compressed input may be faster to load. In any event, loading compressed data is the recommended way to load large input files.Stardog supports GZIP and ZIP compressions natively.<fn>In Stardog <t>version</t> compressed data may only be loaded at database creation time. We will support adding compressed data to an existing database in a future release.</fn>
 
 #### GZIP
 
-A file 
+A file
 passed to `create` will be treated as compressed if the file name ends with '.gz'. The RDF
 format of the file is determined by the extension that comes before
 '.gz'. If a file named 'test.ttl.gz' is used as input, Stardog will
@@ -854,7 +878,7 @@ perform GZIP decompression during loading and parse the file with Turtle
 parser. All the formats supported by Stardog (RDF/XML, Turtle, Trig,
 etc.) can be used with GZIP compression.
 
-#### ZIP 
+#### ZIP
 
 The ZIP support works differently since zipped files can contain
 multiple files. When an input file name ends with '.zip', Stardog
@@ -1096,11 +1120,11 @@ The default is "sync".
 
 ### Transactions and Database Guarantees
 
-Stardog has had native ACID transactions from its initial release. In 1.2 we introduced a new transaction subsystem written from scratch. 
+Stardog has had native ACID transactions from its initial release. In 1.2 we introduced a new transaction subsystem written from scratch.
 
 #### Atomicity
 
-> By convention hot, by convention cold, but in reality atoms and void, 
+> By convention hot, by convention cold, but in reality atoms and void,
 > and also in reality we know nothing, since the truth is at bottom.--Democritus
 
 Atoms in ancient Greece were thought to be uncuttable bits of simple stuff. And it's in something like this sense that databases may provide a guarantee of atomicity--groups of database actions (i.e., mutations) are irreducible and indivisible: either all of the changes happen or none of them happens.
@@ -1109,15 +1133,15 @@ Stardog's transacted writes are atomic.
 
 #### Consistency
 
-Data stored should be valid with respect to the data model (in this case, RDF) and to the guarantees offered by the database, as well as to any appliction-specific integrity contraints that may exist. Stardog's transactions are guaranteed not to violate integrity constraints during execution. A transaction that would leave a database in an inconsistent or invalid state is aborted. 
+Data stored should be valid with respect to the data model (in this case, RDF) and to the guarantees offered by the database, as well as to any appliction-specific integrity contraints that may exist. Stardog's transactions are guaranteed not to violate integrity constraints during execution. A transaction that would leave a database in an inconsistent or invalid state is aborted.
 
 See the [ICV chapter](/icv) for a more detailed consideration of Stardog's integrity constraint mechanism.
 
-#### Isolation 
+#### Isolation
 
 A Stardog connection will run in `READ COMMITTED` isolation level if it has not started an explicit transaction and will run in `READ COMMITTED SNAPSHOT` isolation level if it has started a transaction. In either mode, uncommitted changes will only be visible to the connection that made the changes: no other connection can see those values before they are committed. Thus, 'dirty reads' can never occur. Neither mode locks the database; if there are conflicting changes, the latest commit wins.
 
-The difference between `READ COMMITTED` and `READ COMMITTED SNAPSHOT` isolation levels is that in the former case a connection will see updates committed by another connection immediately, whereas in the latter case a connection will see a transactionally consistent snapshot of the data as it existed at the start of the transaction and will not see any updates. 
+The difference between `READ COMMITTED` and `READ COMMITTED SNAPSHOT` isolation levels is that in the former case a connection will see updates committed by another connection immediately, whereas in the latter case a connection will see a transactionally consistent snapshot of the data as it existed at the start of the transaction and will not see any updates.
 
 We illustrate the difference between these two levels with the following example where initially the database contains a single triple `:x :value 1`.
 
@@ -1127,7 +1151,7 @@ Time | Connection 1 | Connection 2 | Connection 3
 1    | BEGIN TX     |              |
 2    | INSERT {:x :value 2}<br>DELETE {:x :value ?old} | |
 3    | SELECT ?val {?x :val ?val}<br>#reads 2 | SELECT ?val {?x :val ?val}<br>#reads 1 | SELECT ?val {?x :val ?val}<br>#reads 1
-4    |              |              |BEGIN TX 
+4    |              |              |BEGIN TX
 6    | COMMIT       |              |
 7    | SELECT ?val {?x :val ?val}<br>#reads 2 | SELECT ?val {?x :val ?val}<br>#reads 2 | SELECT ?val {?x :val ?val}<br>#reads 1
 8    |              |              | INSERT { :x :value 3 }<br>DELETE {:x :value ?old}
@@ -1184,7 +1208,8 @@ for you:
     strategy](#index-strategies)
 
 ## Capacity Planning
-The primary system resources used by Stardog are CPU, memory, and disk.<fn>Of course Stardog also uses file handles and sockets, but we don't discuss those here.</fn> In
+The primary system resources used by Stardog are CPU, memory, and disk.<fn>Of
+course Stardog also uses file handles and sockets, but we don't discuss those here.</fn> In
 what follows we primarily discuss memory and disk. Stardog will take
 advantage of multiple CPUs, cores, and core-based threads in data
 loading and in throughput-heavy or multi-user loads. And obviously
@@ -1208,37 +1233,42 @@ increasing JVM memory too close to total system memory is not usually
 prudent as it will tend to increase Garbage Collection (GC) time in the
 JVM.
 
-The following table shows minimum recommended JVM memory and system
-memory requirements for Stardog:
+The following table shows recommended JVM memory and system
+memory requirements for Stardog:<fn>Note: these are very conservative values and are somewhat dataset specific. Yr data may require less memory.</fn>
 
 <table dir="ltr" border="1" cellspacing="0" cellpadding="2" summary="Stardog memory usage">
       <thead>
         <tr>
           <th># triples</th>
           <th>JVM memory</th>
-          <th>System memory</th>
+          <th>Off-heap memory</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>10 million</td>
-          <td>2GB</td>
-          <td>4GB</td>
-        </tr>
-        <tr>
           <td>100 million</td>
           <td>3GB</td>
-          <td>8GB</td>
+          <td>3GB</td>
         </tr>
         <tr>
           <td>1 billion</td>
           <td>4GB</td>
-          <td>16GB</td>
+          <td>8GB</td>
         </tr>
         <tr>
           <td>10 billion</td>
           <td>8GB</td>
           <td>64GB</td>
+        </tr>
+        <tr>
+          <td>20 billion</td>
+          <td>16GB</td>
+          <td>128GB</td>
+        </tr>
+        <tr>
+          <td>50 billion</td>
+          <td>32GB</td>
+          <td>256GB</td>
         </tr>
       </tbody>
       <caption>Recommended memory resources</caption>
@@ -1249,9 +1279,14 @@ works fine for most small to medium database sizes (up to 100 million
 triples). As the database size increases, we recommend increasing JVM
 memory. You can increase the JVM memory for Stardog by setting the
 system property `STARDOG_JAVA_ARGS` using the standard JVM options. For
-example, you can set this property to `"-Xms4g -Xmx4g"` to increase the
-JVM memory to 4GB. We recommend setting the minimum heap size (`-Xms`
-option) as close to the max heap size (`-Xmx` option) as possible.
+example, you can set this property to `"-Xms4g -Xmx4g -XX:MaxDirectMemorySize=8g"`
+to increase the JVM memory to 4GB and off-heap to 8GB. We recommend
+setting the minimum heap size (`-Xms` option) as close to
+the max heap size (`-Xmx` option) as possible.
+
+##### System Memory and JVM Memory
+
+Stardog 2.1 moved to an off-heap, custom memory allocation scheme. Please note that the memory provisioning recommendations above are for two kinds of memory allocations for the JVM in which Stardog will run. The first is for memory that the JVM will manage explicitly (i.e., "JVM memory"); and the second, i.e., "Off-heap memory" is for memory that Stardog will manage explicitly, i.e., off the JVM heap, but for which the JVM should be notified via the `MaxDirectMemorySize` property. In most cases, this should be somewhat less than the total memory available to the underlying operating system as requirements dictate.
 
 #### Disk usage
 
@@ -1270,14 +1305,6 @@ used by a Stardog database:
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>10 million</td>
-          <td>700MB - 1GB</td>
-        </tr>
-        <tr>
-          <td>100 million</td>
-          <td>7GB - 10GB</td>
-        </tr>
         <tr>
           <td>1 billion</td>
           <td>70GB - 100GB</td>
