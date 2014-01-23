@@ -464,6 +464,10 @@ basic properties. Located in the stardog distribution bin directory, the
 script `mavenInstall` (`mavenInstall.bat` for Windows systems) will install
 the stardog client jars into the local maven repository.
 
+Note: Only client dependencies are provided, which does not include running
+the server in the embedded mode.  For those use cases, the server jars must
+still be included.
+
 The following table summarizes the type of client to be built and its
 associated stardog dependency.  The stardog dependency list below follows
 the [Gradle](http://www.gradle.org) convention, and is of the form:
@@ -485,45 +489,3 @@ jena http client             | com.complexible.stardog:jena:2.1 com.complexible.
 sesame snarl client          | com.complexible.stardog:sesame:2.1 com.complexible.stardog.protocols.snarl:client:2.1
 sesame http client           | com.complexible.stardog:sesame:2.1 com.complexible.stardog.protocols.http:client:2.1
 
-The following example shows how a stardog snarl client can be built using
-the [Gradle](http://www.gradle.org) build automation tool. The listing below
-is a `build.gradle` file that includes the necessary dependency for a
-stardog snarl client.
-
-```gradle
-    apply plugin: 'java'
-    apply plugin: 'eclipse'
-    apply plugin: 'application'
-
-    mainClassName = "com.complexible.stardog.examples.api.ConnectionAPIExample"
-
-    sourceCompatibility = 1.5
-    version = '1.0'
-    jar {
-        manifest {
-            attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
-        }
-    }
-
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-
-    dependencies {
-    //  Use the following line for a stardog snarl client
-        compile ('com.complexible.stardog.protocols.snarl:client:2.1')
-    }
-
-    test {
-        systemProperties 'property': 'value'
-    }
-
-    uploadArchives {
-        repositories {
-            flatDir {
-                dirs 'repos'
-            }
-        }
-    }
-```
