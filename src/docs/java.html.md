@@ -488,7 +488,7 @@ the [Gradle](http://www.gradle.org) build automation tool. The listing below
 is a `build.gradle` file that includes the necessary dependency for a
 stardog snarl client.
 
-```javastardog
+```gradle
     apply plugin: 'java'
     apply plugin: 'eclipse'
     apply plugin: 'application'
