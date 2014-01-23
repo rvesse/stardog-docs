@@ -738,6 +738,24 @@ instance of `Employee` and, consequently, E is valid.
 
 If you made it this far, you deserve a drink!
 
+
+## Explaining ICV Violations
+
+ICV violations can be explained using [proof trees](../owl2#sd-Proof-Trees)
+similar to inferences. The following command will explain the IC violations
+for constraints stored in the database:
+
+```bash
+$ stardog icv explain --reasoning EL "myDB" 
+```
+
+It is possible to explain violations for external constraints by passing the
+file with constraints as an additional argument:
+
+```bash
+$ stardog icv explain --reasoning EL "myDB" constraints.ttl
+```
+
 ## Using ICV Programmatically
 
 This section will describe how to use Stardog ICV via the SNARL APIs. For 
