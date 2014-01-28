@@ -164,6 +164,15 @@ above in the `HTTP Headers` section.
 
 To issue SPARQL queries with reasoning over HTTP, see the [Using Reasoning](http://docs.stardog.com/owl2/#reasoning) section of the [Reasoning](http://docs.stardog.com/owl2/) chapter.
 
+### SPARQL update
+
+```httpstring
+GET | POST /{db}/update
+```
+
+The SPARQL endpoint for updating the database with SPARQL Update. The valid Accept types are
+`application/sparql-update` `or application/x-www-form-urlencoded`.
+
 ### Query Plan
 
 ```httpstardog
@@ -299,13 +308,13 @@ Returns whether or not the database is consistent w.r.t to the TBox.
 
 ```httpstardog
 GET /{db}/icv → RDF
-```     
+```
 
 Returns the integrity constraints for the specified database serialized in any supported RDF format.
 
 ### Adding Integrity Constraints
 
-```httpstardog 
+```httpstardog
 POST /{db}/icv/add
 ```
 
@@ -319,7 +328,7 @@ unable to be added.
 
 ```httpstardog
 POST /{db}/icv/remove
-```   
+```
 
 Accepts a set of valid Integrity constraints serialized in any RDF
 format supported by Stardog and removes them from the database in a
@@ -329,8 +338,8 @@ remove; `500` indicates an error.
 ### Clearing Integrity Constraints
 
 ```httpstardog
-POST /{db}/icv/clear 
-```      
+POST /{db}/icv/clear
+```
 
 Drops **all** integrity constraints for a database. `200` indicates all
 constraints were successfully dropped; `500` indicates an error.
