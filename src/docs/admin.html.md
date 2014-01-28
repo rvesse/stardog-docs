@@ -316,7 +316,7 @@ The following twiddly knobs for Stardog Server are available in
 9.  `http.max.connections`: The next two parameters control the maximum
     number of simultaneous connections for a client; for more
     information, see the [relevant Apache
-    docs](%20http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html).
+    docs](http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html).
 10. `http.max.get.query.length`: The length in characters of the longest
     SPARQL query that will be serialized via HTTP `GET`; queries longer
     are serialized via `POST`.
@@ -331,6 +331,17 @@ The following twiddly knobs for Stardog Server are available in
     and you don't want those bnodes to be smushed into a single node in
     the database, then this configuration option should be disabled (set
     to `FALSE`).
+12. `load.parser.count`, `load.processor.count`: Determines the number of parser and
+     processor threads, respectively, to be used during bulk loading
+     of data at database creation time. The default values are `3`
+     and `4` respectively, but they may be set higher, to good effect,
+     if you have mulitcore CPUs. The former is effective only if multiple
+     input files are being processed; the latter is effective even
+     if a single file is processed as input. The heuristic for these settings is
+
+     * the value of `load.parser.count` + `load.processor.count` should neither exceed `10` nor be equal to or greater than the number of available cores
+     * the two values should be roughly equal
+     * the values don't have much effect unless or until you're loading billions of triples
 
 ### Starting & Stopping the Server
 
