@@ -339,7 +339,7 @@ The following twiddly knobs for Stardog Server are available in
      input files are being processed; the latter is effective even
      if a single file is processed as input. The heuristic for these settings is
 
-     * the value of `load.parser.count` + `load.processor.count` should neither exceed `10` nor be equal to or greater than the number of available cores
+     * the value of `load.parser.count` + `load.processor.count` should neither exceed `20` nor be equal to or greater than the number of available cores
      * the two values should be roughly equal
      * the values don't have much effect unless or until you're loading billions of triples
 
