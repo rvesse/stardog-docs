@@ -287,7 +287,7 @@ Properties file—file in `STARDOG_HOME`. To change the behavior of a
 running Stardog Server, it is necessary to restart it.
 
 The following twiddly knobs for Stardog Server are available in
-`stardog.properties`:
+`stardog.properties`:<fn>For more details about configuring these values, see the `examples/stardog.properties` file that is distributed with Stardog.</fn>
 
 1.  `strict.parsing`: Controls whether Stardog parses RDF strictly
     (`true`, the default) or laxly (`false`)
@@ -300,9 +300,8 @@ The following twiddly knobs for Stardog Server are available in
     [Query Management](#manage-queries) section below for details.
 4.  `logging.[access,audit].[enabled,type,file]`: Controls whether and
     how Stardog logs server events; described in detail below.
-5.  `logging.slow_query.enabled`
-6.  `logging.slow_query.time`
-7.  `logging.slow_query.type`: The three slow query logging options are
+5.  `logging.slow_query.enabled`, `logging.slow_query.time`, `logging.slow_query.type`:
+    The three slow query logging options are
     used in the following way. To enable logging of slow queries, set
     `enabled` to `true`. To define what counts as a "slow" query, set
     `time` to a time duration value (positive integer plus "h", "m",
