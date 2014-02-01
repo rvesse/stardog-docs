@@ -137,6 +137,10 @@ Here's a sample `applicationContext`:
 
 <gist>1115889?file=applicationContext.xml</gist>
 
+Another example with reasoning and credentials set in the factory bean:
+
+<gist>8747480?file=stardog-spring.xml</gist>
+
 ## Spring Batch
 
 In addition to the base `DataSource` and `SnarlTemplate`, Spring Batch
