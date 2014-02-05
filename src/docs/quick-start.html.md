@@ -6,6 +6,10 @@ related: ""
 toc: false
 ---
 
+## Prerequisites
+
+Stardog runs on Java 6, Java 7, and is entirely untested on Java 8 (YMMV). Stardog runs best on, but does not require, a 64-bit JVM and one that supports `sun.misc.Unsafe`.
+
 ## Linux/Unix/OS X
 
 First, tell Stardog where its home directory (where databases and other
@@ -26,7 +30,7 @@ $ cp stardog-license-key.bin $STARDOG_HOME
 ```
 
 Of course `stardog-license-key.bin` has to be readable by the Stardog
-process. 
+process.
 
 <t>shout</t> Stardog won't run without a valid `stardog-license-key.bin` in `STARDOG_HOME`.
 
@@ -55,7 +59,7 @@ Now, go have a drink: you've earned it.
 
 ## Windows
 
-The following steps are carried out using the Windows command prompt which you can find under `Start > Programs > Accessories > Command Prompts` 
+The following steps are carried out using the Windows command prompt which you can find under `Start > Programs > Accessories > Command Prompts`
 or by going to `Start > Run` and typing `cmd`
 
 First, tell Stardog where its home directory (where databases and other
@@ -76,7 +80,7 @@ Second, copy the `stardog-license-key.bin` into the right place:
 <t>shout</t> The `/B` is required to perform a binary copy or the license file may get corrupted.
 
 Of course `stardog-license-key.bin` has to be readable by the Stardog
-process. 
+process.
 
 <t>shout</t> Stardog won't run without a valid `stardog-license-key.bin` in `STARDOG_HOME`.
 
