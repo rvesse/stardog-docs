@@ -1,3 +1,40 @@
+2.1.1 Changes
+----------------------------------------------------------------------------
+
+* ADDED: Several new SPARQL filter functions from the .NetRDF library
+
+* ADDED: Allow RDF strings to be passed as input to explain command
+
+* ADDED: CLI explain option to return multiple explanations
+
+* FIXED: Explanation generation with SPARQL rules
+
+* FIXED: Explanation merging to handle more cases 
+
+* FIXED: Obfuscation CLI commands to work with config files
+
+* FIXED: Obfuscation CLI commands to handle SPARQL rules properly
+
+* FIXED: Regex filter persisted over multiple queries
+
+* FIXED: Cast exception during describe query evaluation over named graphs
+
+* FIXED: Properties which are both symmetric and transitive are not handled correctly
+
+* FIXED: Incorrect mime-types sent to server for file references
+
+* FIXED: Some optionals, when mixed with distinct, still do not return distinct results
+
+* FIXED: Large numbers of unique BNodes in nq, trig, and trix formats cause RIO to use too much memory
+
+* FIXED: Buffers used during bulk loading can take up too much memory when large literals are used
+
+* MODIFIED: Fallback handling of access to sun.misc.Unsafe for JDK's which do not support it
+
+* MODIFIED: Improved filter pushing optimization
+
+* MODIFIED: Warning printed from 'role grant' command when multiple actions are provided
+
 2.1 Changes
 ----------------------------------------------------------------------------
 
