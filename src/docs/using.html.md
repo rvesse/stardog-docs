@@ -11,8 +11,7 @@ execute queries against RDF data which it has under direct
 management.<fn>This implies that Stardog will not retrieve data from the Web
 or from any other network via HTTP URLs in order to query that data. If
 you want to query data using Stardog, you must add that data to a new or
-existing Stardog database. A future version of Stardog will
-support [SDQ](http://weblog.clarkparsia.com/2011/03/07/sdq-information-integration-i%0An-the-real-world/), a distributed query system, that will lift this restriction.</fn> Stardog supports the [SPARQL](http://www.cambridgesemantics.com/2008/09/sparql-by-example) query language, a W3C standard.
+existing Stardog database.</fn> Stardog supports the [SPARQL](http://www.cambridgesemantics.com/2008/09/sparql-by-example) query language, a W3C standard.
 
 ## Querying
 
