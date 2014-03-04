@@ -314,7 +314,7 @@ The following twiddly knobs for Stardog Server are available in
     milliseconds,connections may idle before being automatically closed
     by the server.
 9.  `http.max.connections`: The next two parameters control the maximum
-    number of simultaneous connections for a client; for more
+    number of simultaneous connections that the Stardog client will use; for more
     information, see the [relevant Apache
     docs](http://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html).
 10. `http.max.get.query.length`: The length in characters of the longest
